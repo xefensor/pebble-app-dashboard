@@ -20,5 +20,12 @@ for the starting brief and distinguish proposals from settled requirements.
 - Preserve existing repositories and published artifacts. Do not create a remote
   or publish this repository as part of a request for local setup.
 
-There is no package manifest, SDK build, test suite or release artifact yet.
-Do not describe design notes as working or physically tested behavior.
+`previews/` contains a browser-only design prototype with fictional data. Its
+capture script verifies canvas bounds, palette and simulated navigation; it is
+not a native test suite. Keep preview controls disconnected from real phone APIs.
+The user wants Timer Pause/Resume later. The opening-screen goal is two current
+activities, latest notification, pinned items and controls; the layout is still
+being discussed. Latest notification is distinct from Dynamic's short alert.
+
+There is no package manifest, SDK build or installable release artifact yet.
+Do not describe previews as native captures or physically tested behavior.

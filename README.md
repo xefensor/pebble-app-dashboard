@@ -2,9 +2,24 @@
 
 A separate Pebble watchapp for plugin readings, controls and current activities.
 
-**Status: product discussion, 4 November 2026.** This repository contains the
-starting brief only. No watch UI, SDK project or installable build exists yet.
-The repository is local and has no remote.
+**Status: design previews, 4 November 2026.** The repository contains a starting
+brief and an interactive browser prototype. No native watch UI, SDK project or
+installable build exists yet. The repository is local and has no remote.
+
+## Preview
+
+Open [the interactive comparison](previews/index.html), or view the exported
+[light overview](previews/overview-light.png),
+[dark overview](previews/overview-dark.png),
+[other activity types](previews/alternate-activities.png) and
+[detail screens](previews/detail-overview.png).
+
+The three opening-screen proposals are Snapshot, Activity focus and One list.
+Each uses a 200 × 228 canvas, the suite's font sources and Pebble's 64-colour
+palette. Use the drawn watch buttons or keyboard arrows/Enter/Escape. Examples,
+theme, activity order and notification body visibility are selectable. These
+are synthetic design previews, not emulator captures or functioning plugins.
+See [preview notes](previews/README.md) for scope and regeneration.
 
 ## Existing direction
 
@@ -19,12 +34,21 @@ The repository is local and has no remote.
 - Keep text static. User-driven list navigation and local visible-clock ticking
   are compatible with this; automatic text scrolling is not.
 
-## Starting proposal for discussion
+## Current discussion
 
-One overview could combine pinned favourites with current activities. Pinned
-readings and controls would keep their saved positions; temporary activities
-could appear below them. Music could have a tailored detail view with available
-playback controls, while other items use appropriate reading/activity views.
+When opening Dashboard through Quick Launch, the user wants to see two current
+activities, the latest notification, pinned readings and controls. The previews
+compare how much can remain visible at once and what needs button navigation.
+Both activity positions support different types; Music has its own playback
+detail proposal. No proposal is selected yet.
+
+The user also wants Timer Pause/Resume inside Dashboard, deferred until later.
+This is recorded scope, not an implemented Timer command capability.
+
+Latest notification is a separate product idea from Dynamic's temporary new-
+notification activity. Its availability and privacy lifetime need implementation;
+do not persist private bodies, retain withdrawn/redacted content, replay an alert,
+or show the same notice twice when it is already one of the activities.
 
 Overview composition, list versus grid, navigation, control placement, defaults
 and capacity limits are open decisions. No row count, pixel layout or transport

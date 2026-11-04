@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Dashboard — watch layout studies</title>
+  <link rel="stylesheet" href="preview.css">
+  <script src="dashboard.js" defer></script>
+</head>
+<body>
+<main>
+  <header class="page-header">
+    <div class="eyebrow"><span class="brand-mark" aria-hidden="true">D</span> PEBBLE DASHBOARD <span class="study-label">LAYOUT STUDY 01</span></div>
+    <h1>What should be there when you open it?</h1>
+    <p class="intro">Two activities. Your latest notification. Pinned readings and controls.<br>Three ways to fit them on the same 200 × 228 screen.</p>
+  </header>
+  <section class="toolbar" aria-label="Preview settings">
+    <label>Example <select id="scenario"><option value="timer-media">Timer + music</option><option value="workout-navigation">Workout + directions</option><option value="long">Long text + long timer</option><option value="quiet">Nothing running</option></select></label>
+    <div class="toolbar-right">
+      <label class="check"><input id="message-preview" type="checkbox" checked> Message preview</label>
+      <label class="check"><input id="actual-size" type="checkbox"> Actual size</label>
+      <button id="swap" type="button">Swap activities</button>
+      <button id="theme" type="button" aria-pressed="false">Dark screens</button>
+      <button id="reset" type="button">Quick launch again</button>
+    </div>
+  </section>
+  <section class="studies" aria-label="Dashboard layouts">
+    <article class="study" data-layout="snapshot">
+      <div class="study-title"><span>01</span><h2>Snapshot</h2></div>
+      <p class="description">Both activities, a message, two readings and two controls—all visible.</p>
+      <div class="watch-area">
+        <div class="watch" data-layout="snapshot">
+          <canvas width="200" height="228" tabindex="0" role="img" aria-label="Snapshot Dashboard preview"></canvas>
+          <button class="hardware back" data-key="back" aria-label="Snapshot: Back">‹</button>
+          <button class="hardware up" data-key="up" aria-label="Snapshot: Up">⌃</button>
+          <button class="hardware select" data-key="select" aria-label="Snapshot: Select">●</button>
+          <button class="hardware down" data-key="down" aria-label="Snapshot: Down">⌄</button>
+        </div>
+      </div>
+      <p class="tradeoff">Everything has a place. Longer activity content needs its detail view.</p>
+    </article>
+    <article class="study" data-layout="focus">
+      <div class="study-title"><span>02</span><h2>Activity focus</h2></div>
+      <p class="description">Give one activity more space; keep the second and your shortcuts in view.</p>
+      <div class="watch-area">
+        <div class="watch" data-layout="focus">
+          <canvas width="200" height="228" tabindex="0" role="img" aria-label="Activity focus Dashboard preview"></canvas>
+          <button class="hardware back" data-key="back" aria-label="Activity focus: Back">‹</button>
+          <button class="hardware up" data-key="up" aria-label="Activity focus: Up">⌃</button>
+          <button class="hardware select" data-key="select" aria-label="Activity focus: Select">●</button>
+          <button class="hardware down" data-key="down" aria-label="Activity focus: Down">⌄</button>
+        </div>
+      </div>
+      <p class="tradeoff">More room for a countdown or headline. Pinned readings become compact.</p>
+    </article>
+    <article class="study" data-layout="list">
+      <div class="study-title"><span>03</span><h2>One list</h2></div>
+      <p class="description">Two activities, a message, a reading and a command appear first. Move down for more.</p>
+      <div class="watch-area">
+        <div class="watch" data-layout="list">
+          <canvas width="200" height="228" tabindex="0" role="img" aria-label="List Dashboard preview"></canvas>
+          <button class="hardware back" data-key="back" aria-label="List: Back">‹</button>
+          <button class="hardware up" data-key="up" aria-label="List: Up">⌃</button>
+          <button class="hardware select" data-key="select" aria-label="List: Select">●</button>
+          <button class="hardware down" data-key="down" aria-label="List: Down">⌄</button>
+        </div>
+      </div>
+      <p class="tradeoff">More room for each row and more items below. Some favourites take a button press to reach.</p>
+    </article>
+  </section>
+  <div class="interaction-help"><strong>Try the watch buttons.</strong> Up / Down moves focus. Select opens details or the named control. Back returns. You can also focus a screen and use ↑ ↓ Enter Esc.</div>
+  <p id="status" class="status" role="status" aria-live="polite">Loading local fonts…</p>
+  <section class="notes">
+    <div><h3>Same content, different emphasis</h3><p>Weather, phone battery, a light and Find phone are examples. Either activity position can show any supported activity. Try the workout and directions example.</p></div>
+    <div><h3>Timer controls come later</h3><p>The timer detail offers Open Timer. Pause/Resume inside Dashboard is planned for a later step. Music shows a proposed playback view.</p></div>
+    <div><h3>A preview for discussion</h3><p>Fictional data; clocks are frozen for comparison. Buttons simulate navigation and controls. These are code-rendered concepts, not watch/emulator captures or an installed app. Latest-notification availability and privacy still need implementation.</p></div>
+  </section>
+</main>
+</body>
+</html>

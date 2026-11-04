@@ -1,0 +1,7566 @@
+{
+  "result": "PASS",
+  "scope": "Code-native Chromium design previews with synthetic data; not a Pebble SDK build, native screenshot, live plugin or physical-watch test.",
+  "dimensions": [
+    200,
+    228
+  ],
+  "captureScriptSha256": "69b7aaba6b5105ac68799e18f312f52c4faf1622d6297407d0648d43c274cc10",
+  "sourceHashes": {
+    "assets/fonts/Fredoka-Bold-Clock.ttf": "526d2361818275d1f9d1df6ce1835095058b84ec989e50e22f271237cc304000",
+    "assets/fonts/OFL-Fredoka.txt": "5c9e7eee5c6b25f4b05b8d53b2e470ea4962f9ced742d044a98f7d95d1375bab",
+    "assets/fonts/OFL-RobotoCondensed.txt": "0e4cc6ece88573545be2ed25835363662a6182ba4a4c1b5c8feda52add30e8a6",
+    "assets/fonts/RobotoCondensed-Bold.ttf": "6e949e8aa3f6e0b4db88aacafccf0c0e55e708c4564c8f3d145792adbbf80ef6",
+    "dashboard.js": "21abc40d309577773b6e440e89a1e35448eeeca8edd59c9ba44b626c9676c341",
+    "index.html": "3ce77421bf642fa9727d7e1baab636410917682f361f8950a27ef733d8ce042c",
+    "preview.css": "14b5575259124e036afdacdcdb10bf6aa47a4f7e7e9ac4c0ac8fdd11e330ee8e"
+  },
+  "scenarios": [
+    "timer-media",
+    "workout-navigation",
+    "long",
+    "quiet"
+  ],
+  "layouts": [
+    "snapshot",
+    "focus",
+    "list"
+  ],
+  "idle": {
+    "staticPixels": true,
+    "repeatingIntervals": 0,
+    "framesBefore": {
+      "intervals": 0,
+      "framesScheduled": 0,
+      "framesRun": 0
+    },
+    "framesAfter": {
+      "intervals": 0,
+      "framesScheduled": 0,
+      "framesRun": 0
+    }
+  },
+  "selectedChecks": [
+    {
+      "layout": "snapshot",
+      "selectionCanReachLatestNotificationAndControl": true,
+      "selectedControlVisible": true
+    },
+    {
+      "layout": "focus",
+      "selectionCanReachLatestNotificationAndControl": true,
+      "selectedControlVisible": true
+    },
+    {
+      "layout": "list",
+      "selectionCanReachLatestNotificationAndControl": true,
+      "selectedControlVisible": true
+    }
+  ],
+  "readingDetails": [
+    {
+      "layout": "snapshot",
+      "detailSelectReturns": true,
+      "selectedReadingRetained": true
+    },
+    {
+      "layout": "focus",
+      "detailSelectReturns": true,
+      "selectedReadingRetained": true
+    },
+    {
+      "layout": "list",
+      "detailSelectReturns": true,
+      "selectedReadingRetained": true
+    }
+  ],
+  "privacy": [
+    {
+      "layout": "snapshot",
+      "bodyReplaced": true
+    },
+    {
+      "layout": "focus",
+      "bodyReplaced": true
+    },
+    {
+      "layout": "list",
+      "bodyReplaced": true
+    }
+  ],
+  "keyboard": [
+    {
+      "layout": "snapshot",
+      "arrowDown": true,
+      "enter": true,
+      "escape": true
+    },
+    {
+      "layout": "focus",
+      "arrowDown": true,
+      "enter": true,
+      "escape": true
+    },
+    {
+      "layout": "list",
+      "arrowDown": true,
+      "enter": true,
+      "escape": true
+    }
+  ],
+  "browserExceptions": [],
+  "captures": [
+    {
+      "file": "screens/snapshot-light.png",
+      "layout": "snapshot",
+      "scenario": "timer-media",
+      "theme": "light",
+      "swapped": false,
+      "messagePreview": true,
+      "mode": "overview",
+      "selectedId": "activity-0",
+      "visibleIds": [
+        "activity-0",
+        "activity-1",
+        "notification",
+        "pin-weather",
+        "pin-phone",
+        "control-light",
+        "control-find"
+      ],
+      "boundsViolations": [],
+      "text": [
+        {
+          "source": "Dashboard",
+          "shown": "Dashboard",
+          "size": 16,
+          "bounds": {
+            "x": 8,
+            "y": 3,
+            "width": 68.3671875,
+            "height": 12
+          }
+        },
+        {
+          "source": "13:42",
+          "shown": "13:42",
+          "size": 14,
+          "bounds": {
+            "x": 159.8779296875,
+            "y": 4,
+            "width": 32.1220703125,
+            "height": 11
+          }
+        },
+        {
+          "source": "Tea",
+          "shown": "Tea",
+          "size": 16,
+          "bounds": {
+            "x": 36,
+            "y": 32,
+            "width": 23.875,
+            "height": 12
+          }
+        },
+        {
+          "source": "02:31",
+          "shown": "02:31",
+          "size": 26,
+          "bounds": {
+            "x": 130.30393981933594,
+            "y": 26,
+            "width": 59.69606018066406,
+            "height": 19
+          }
+        },
+        {
+          "source": "Night Drive",
+          "shown": "Night Drive",
+          "size": 16,
+          "bounds": {
+            "x": 40,
+            "y": 60,
+            "width": 71.5546875,
+            "height": 15
+          }
+        },
+        {
+          "source": "The Midnight",
+          "shown": "The Midnight",
+          "size": 14,
+          "bounds": {
+            "x": 40,
+            "y": 76,
+            "width": 74.142578125,
+            "height": 14
+          }
+        },
+        {
+          "source": "Sam",
+          "shown": "Sam",
+          "size": 16,
+          "bounds": {
+            "x": 32,
+            "y": 98,
+            "width": 28.0390625,
+            "height": 12
+          }
+        },
+        {
+          "source": "Signal · 2m",
+          "shown": "Signal · 2m",
+          "size": 12,
+          "bounds": {
+            "x": 135.970703125,
+            "y": 100,
+            "width": 54.029296875,
+            "height": 13
+          }
+        },
+        {
+          "source": "At the entrance.",
+          "shown": "At the entrance.",
+          "size": 16,
+          "bounds": {
+            "x": 10,
+            "y": 117,
+            "width": 103.0859375,
+            "height": 12
+          }
+        },
+        {
+          "source": "Weather",
+          "shown": "Weather",
+          "size": 12,
+          "bounds": {
+            "x": 29,
+            "y": 145,
+            "width": 39.69140625,
+            "height": 10
+          }
+        },
+        {
+          "source": "13°C",
+          "shown": "13°C",
+          "size": 23,
+          "bounds": {
+            "x": 12,
+            "y": 156,
+            "width": 44.941986083984375,
+            "height": 17
+          }
+        },
+        {
+          "source": "Phone",
+          "shown": "Phone",
+          "size": 12,
+          "bounds": {
+            "x": 127,
+            "y": 145,
+            "width": 30.345703125,
+            "height": 10
+          }
+        },
+        {
+          "source": "76%",
+          "shown": "76%",
+          "size": 23,
+          "bounds": {
+            "x": 110,
+            "y": 156,
+            "width": 41.906005859375,
+            "height": 18
+          }
+        },
+        {
+          "source": "Light on",
+          "shown": "Light on",
+          "size": 14,
+          "bounds": {
+            "x": 29,
+            "y": 189.5,
+            "width": 45.541015625,
+            "height": 14
+          }
+        },
+        {
+          "source": "Find phone",
+          "shown": "Find phone",
+          "size": 14,
+          "bounds": {
+            "x": 127,
+            "y": 189.5,
+            "width": 61.6259765625,
+            "height": 14
+          }
+        },
+        {
+          "source": "Select: Open",
+          "shown": "Select: Open",
+          "size": 12,
+          "bounds": {
+            "x": 8,
+            "y": 215,
+            "width": 61.0546875,
+            "height": 13
+          }
+        },
+        {
+          "source": "1/7",
+          "shown": "1/7",
+          "size": 12,
+          "bounds": {
+            "x": 175.88671875,
+            "y": 216,
+            "width": 16.11328125,
+            "height": 10
+          }
+        }
+      ],
+      "regions": [
+        {
+          "id": "activity-0",
+          "x": 4,
+          "y": 22,
+          "width": 192,
+          "height": 32,
+          "selected": true
+        },
+        {
+          "id": "activity-1",
+          "x": 4,
+          "y": 58,
+          "width": 192,
+          "height": 32,
+          "selected": false
+        },
+        {
+          "id": "notification",
+          "x": 4,
+          "y": 95,
+          "width": 192,
+          "height": 41,
+          "selected": false
+        },
+        {
+          "id": "pin-weather",
+          "x": 4,
+          "y": 141,
+          "width": 94,
+          "height": 37,
+          "selected": false
+        },
+        {
+          "id": "pin-phone",
+          "x": 102,
+          "y": 141,
+          "width": 94,
+          "height": 37,
+          "selected": false
+        },
+        {
+          "id": "control-light",
+          "x": 4,
+          "y": 183,
+          "width": 94,
+          "height": 25,
+          "selected": false
+        },
+        {
+          "id": "control-find",
+          "x": 102,
+          "y": 183,
+          "width": 94,
+          "height": 25,
+          "selected": false
+        }
+      ],
+      "width": 200,
+      "height": 228,
+      "bytes": 9203,
+      "sha256": "6d1f640ce571447acd7aa832e3331b6a3a16175f454afde5b26e15d058ca3480",
+      "palette": {
+        "opaque": true,
+        "quantized": true,
+        "colors": 15
+      }
+    },
+    {
+      "file": "screens/focus-light.png",
+      "layout": "focus",
+      "scenario": "timer-media",
+      "theme": "light",
+      "swapped": false,
+      "messagePreview": true,
+      "mode": "overview",
+      "selectedId": "activity-0",
+      "visibleIds": [
+        "activity-0",
+        "activity-1",
+        "notification",
+        "pin-weather",
+        "pin-phone",
+        "control-light",
+        "control-find"
+      ],
+      "boundsViolations": [],
+      "text": [
+        {
+          "source": "Dashboard",
+          "shown": "Dashboard",
+          "size": 16,
+          "bounds": {
+            "x": 8,
+            "y": 3,
+            "width": 68.3671875,
+            "height": 12
+          }
+        },
+        {
+          "source": "13:42",
+          "shown": "13:42",
+          "size": 14,
+          "bounds": {
+            "x": 159.8779296875,
+            "y": 4,
+            "width": 32.1220703125,
+            "height": 11
+          }
+        },
+        {
+          "source": "02:31",
+          "shown": "02:31",
+          "size": 43,
+          "bounds": {
+            "x": 50.636024475097656,
+            "y": 30,
+            "width": 98.72795104980469,
+            "height": 31
+          }
+        },
+        {
+          "source": "Tea",
+          "shown": "Tea",
+          "size": 14,
+          "bounds": {
+            "x": 101.0546875,
+            "y": 66,
+            "width": 20.890625,
+            "height": 11
+          }
+        },
+        {
+          "source": "Night Drive",
+          "shown": "Night Drive",
+          "size": 16,
+          "bounds": {
+            "x": 40,
+            "y": 86,
+            "width": 71.5546875,
+            "height": 15
+          }
+        },
+        {
+          "source": "The Midnight",
+          "shown": "The Midnight",
+          "size": 14,
+          "bounds": {
+            "x": 40,
+            "y": 102,
+            "width": 74.142578125,
+            "height": 14
+          }
+        },
+        {
+          "source": "Sam",
+          "shown": "Sam",
+          "size": 16,
+          "bounds": {
+            "x": 32,
+            "y": 124,
+            "width": 28.0390625,
+            "height": 12
+          }
+        },
+        {
+          "source": "Signal · 2m",
+          "shown": "Signal · 2m",
+          "size": 12,
+          "bounds": {
+            "x": 135.970703125,
+            "y": 126,
+            "width": 54.029296875,
+            "height": 13
+          }
+        },
+        {
+          "source": "At the entrance.",
+          "shown": "At the entrance.",
+          "size": 16,
+          "bounds": {
+            "x": 10,
+            "y": 143,
+            "width": 103.0859375,
+            "height": 12
+          }
+        },
+        {
+          "source": "13°C",
+          "shown": "13°C",
+          "size": 20,
+          "bounds": {
+            "x": 51.9200439453125,
+            "y": 168,
+            "width": 39.0799560546875,
+            "height": 14
+          }
+        },
+        {
+          "source": "76%",
+          "shown": "76%",
+          "size": 20,
+          "bounds": {
+            "x": 152.56004333496094,
+            "y": 167,
+            "width": 36.43995666503906,
+            "height": 16
+          }
+        },
+        {
+          "source": "Light on",
+          "shown": "Light on",
+          "size": 14,
+          "bounds": {
+            "x": 29,
+            "y": 196,
+            "width": 45.541015625,
+            "height": 14
+          }
+        },
+        {
+          "source": "Find phone",
+          "shown": "Find phone",
+          "size": 14,
+          "bounds": {
+            "x": 127,
+            "y": 196,
+            "width": 61.6259765625,
+            "height": 14
+          }
+        },
+        {
+          "source": "Select: Open",
+          "shown": "Select: Open",
+          "size": 12,
+          "bounds": {
+            "x": 8,
+            "y": 215,
+            "width": 61.0546875,
+            "height": 13
+          }
+        },
+        {
+          "source": "1/7",
+          "shown": "1/7",
+          "size": 12,
+          "bounds": {
+            "x": 175.88671875,
+            "y": 216,
+            "width": 16.11328125,
+            "height": 10
+          }
+        }
+      ],
+      "regions": [
+        {
+          "id": "activity-0",
+          "x": 4,
+          "y": 23,
+          "width": 192,
+          "height": 57,
+          "selected": true
+        },
+        {
+          "id": "activity-1",
+          "x": 4,
+          "y": 84,
+          "width": 192,
+          "height": 32,
+          "selected": false
+        },
+        {
+          "id": "notification",
+          "x": 4,
+          "y": 121,
+          "width": 192,
+          "height": 38,
+          "selected": false
+        },
+        {
+          "id": "pin-weather",
+          "x": 4,
+          "y": 164,
+          "width": 94,
+          "height": 24,
+          "selected": false
+        },
+        {
+          "id": "pin-phone",
+          "x": 102,
+          "y": 164,
+          "width": 94,
+          "height": 24,
+          "selected": false
+        },
+        {
+          "id": "control-light",
+          "x": 4,
+          "y": 192,
+          "width": 94,
+          "height": 20,
+          "selected": false
+        },
+        {
+          "id": "control-find",
+          "x": 102,
+          "y": 192,
+          "width": 94,
+          "height": 20,
+          "selected": false
+        }
+      ],
+      "width": 200,
+      "height": 228,
+      "bytes": 9134,
+      "sha256": "84dcb0c9d03d0ddc7838f474f3c1f741943ce99166e2ed50adab566134857883",
+      "palette": {
+        "opaque": true,
+        "quantized": true,
+        "colors": 15
+      }
+    },
+    {
+      "file": "screens/list-light.png",
+      "layout": "list",
+      "scenario": "timer-media",
+      "theme": "light",
+      "swapped": false,
+      "messagePreview": true,
+      "mode": "overview",
+      "selectedId": "activity-0",
+      "visibleIds": [
+        "activity-0",
+        "activity-1",
+        "notification",
+        "pin-weather",
+        "control-find"
+      ],
+      "boundsViolations": [],
+      "text": [
+        {
+          "source": "Dashboard",
+          "shown": "Dashboard",
+          "size": 16,
+          "bounds": {
+            "x": 8,
+            "y": 3,
+            "width": 68.3671875,
+            "height": 12
+          }
+        },
+        {
+          "source": "13:42",
+          "shown": "13:42",
+          "size": 14,
+          "bounds": {
+            "x": 159.8779296875,
+            "y": 4,
+            "width": 32.1220703125,
+            "height": 11
+          }
+        },
+        {
+          "source": "Tea",
+          "shown": "Tea",
+          "size": 16,
+          "bounds": {
+            "x": 36,
+            "y": 35,
+            "width": 23.875,
+            "height": 12
+          }
+        },
+        {
+          "source": "02:31",
+          "shown": "02:31",
+          "size": 26,
+          "bounds": {
+            "x": 130.30393981933594,
+            "y": 29,
+            "width": 59.69606018066406,
+            "height": 19
+          }
+        },
+        {
+          "source": "Night Drive",
+          "shown": "Night Drive",
+          "size": 16,
+          "bounds": {
+            "x": 40,
+            "y": 63,
+            "width": 71.5546875,
+            "height": 15
+          }
+        },
+        {
+          "source": "The Midnight",
+          "shown": "The Midnight",
+          "size": 14,
+          "bounds": {
+            "x": 40,
+            "y": 79,
+            "width": 74.142578125,
+            "height": 14
+          }
+        },
+        {
+          "source": "Sam · Signal",
+          "shown": "Sam · Signal",
+          "size": 14,
+          "bounds": {
+            "x": 37,
+            "y": 99,
+            "width": 70.109375,
+            "height": 14
+          }
+        },
+        {
+          "source": "At the entrance.",
+          "shown": "At the entrance.",
+          "size": 16,
+          "bounds": {
+            "x": 37,
+            "y": 114,
+            "width": 103.0859375,
+            "height": 12
+          }
+        },
+        {
+          "source": "Weather",
+          "shown": "Weather",
+          "size": 17,
+          "bounds": {
+            "x": 37,
+            "y": 143,
+            "width": 56.2294921875,
+            "height": 12
+          }
+        },
+        {
+          "source": "13°C",
+          "shown": "13°C",
+          "size": 25,
+          "bounds": {
+            "x": 136.14981079101562,
+            "y": 139,
+            "width": 48.850189208984375,
+            "height": 18
+          }
+        },
+        {
+          "source": "Find phone",
+          "shown": "Find phone",
+          "size": 18,
+          "bounds": {
+            "x": 37,
+            "y": 177,
+            "width": 79.2333984375,
+            "height": 18
+          }
+        },
+        {
+          "source": "Select: Open",
+          "shown": "Select: Open",
+          "size": 12,
+          "bounds": {
+            "x": 8,
+            "y": 215,
+            "width": 61.0546875,
+            "height": 13
+          }
+        },
+        {
+          "source": "1/7",
+          "shown": "1/7",
+          "size": 12,
+          "bounds": {
+            "x": 175.88671875,
+            "y": 216,
+            "width": 16.11328125,
+            "height": 10
+          }
+        }
+      ],
+      "regions": [
+        {
+          "id": "activity-0",
+          "x": 4,
+          "y": 25,
+          "width": 192,
+          "height": 32,
+          "selected": true
+        },
+        {
+          "id": "activity-1",
+          "x": 4,
+          "y": 61,
+          "width": 192,
+          "height": 32,
+          "selected": false
+        },
+        {
+          "id": "notification",
+          "x": 4,
+          "y": 97,
+          "width": 188,
+          "height": 32,
+          "selected": false
+        },
+        {
+          "id": "pin-weather",
+          "x": 4,
+          "y": 133,
+          "width": 188,
+          "height": 32,
+          "selected": false
+        },
+        {
+          "id": "control-find",
+          "x": 4,
+          "y": 169,
+          "width": 188,
+          "height": 32,
+          "selected": false
+        }
+      ],
+      "width": 200,
+      "height": 228,
+      "bytes": 8269,
+      "sha256": "6712132491a3095850884bb97827d95697072411ef89b6dd30bf6269ebae3e28",
+      "palette": {
+        "opaque": true,
+        "quantized": true,
+        "colors": 15
+      }
+    },
+    {
+      "file": "screens/snapshot-dark.png",
+      "layout": "snapshot",
+      "scenario": "timer-media",
+      "theme": "dark",
+      "swapped": false,
+      "messagePreview": true,
+      "mode": "overview",
+      "selectedId": "activity-0",
+      "visibleIds": [
+        "activity-0",
+        "activity-1",
+        "notification",
+        "pin-weather",
+        "pin-phone",
+        "control-light",
+        "control-find"
+      ],
+      "boundsViolations": [],
+      "text": [
+        {
+          "source": "Dashboard",
+          "shown": "Dashboard",
+          "size": 16,
+          "bounds": {
+            "x": 8,
+            "y": 3,
+            "width": 68.3671875,
+            "height": 12
+          }
+        },
+        {
+          "source": "13:42",
+          "shown": "13:42",
+          "size": 14,
+          "bounds": {
+            "x": 159.8779296875,
+            "y": 4,
+            "width": 32.1220703125,
+            "height": 11
+          }
+        },
+        {
+          "source": "Tea",
+          "shown": "Tea",
+          "size": 16,
+          "bounds": {
+            "x": 36,
+            "y": 32,
+            "width": 23.875,
+            "height": 12
+          }
+        },
+        {
+          "source": "02:31",
+          "shown": "02:31",
+          "size": 26,
+          "bounds": {
+            "x": 130.30393981933594,
+            "y": 26,
+            "width": 59.69606018066406,
+            "height": 19
+          }
+        },
+        {
+          "source": "Night Drive",
+          "shown": "Night Drive",
+          "size": 16,
+          "bounds": {
+            "x": 40,
+            "y": 60,
+            "width": 71.5546875,
+            "height": 15
+          }
+        },
+        {
+          "source": "The Midnight",
+          "shown": "The Midnight",
+          "size": 14,
+          "bounds": {
+            "x": 40,
+            "y": 76,
+            "width": 74.142578125,
+            "height": 14
+          }
+        },
+        {
+          "source": "Sam",
+          "shown": "Sam",
+          "size": 16,
+          "bounds": {
+            "x": 32,
+            "y": 98,
+            "width": 28.0390625,
+            "height": 12
+          }
+        },
+        {
+          "source": "Signal · 2m",
+          "shown": "Signal · 2m",
+          "size": 12,
+          "bounds": {
+            "x": 135.970703125,
+            "y": 100,
+            "width": 54.029296875,
+            "height": 13
+          }
+        },
+        {
+          "source": "At the entrance.",
+          "shown": "At the entrance.",
+          "size": 16,
+          "bounds": {
+            "x": 10,
+            "y": 117,
+            "width": 103.0859375,
+            "height": 12
+          }
+        },
+        {
+          "source": "Weather",
+          "shown": "Weather",
+          "size": 12,
+          "bounds": {
+            "x": 29,
+            "y": 145,
+            "width": 39.69140625,
+            "height": 10
+          }
+        },
+        {
+          "source": "13°C",
+          "shown": "13°C",
+          "size": 23,
+          "bounds": {
+            "x": 12,
+            "y": 156,
+            "width": 44.941986083984375,
+            "height": 17
+          }
+        },
+        {
+          "source": "Phone",
+          "shown": "Phone",
+          "size": 12,
+          "bounds": {
+            "x": 127,
+            "y": 145,
+            "width": 30.345703125,
+            "height": 10
+          }
+        },
+        {
+          "source": "76%",
+          "shown": "76%",
+          "size": 23,
+          "bounds": {
+            "x": 110,
+            "y": 156,
+            "width": 41.906005859375,
+            "height": 18
+          }
+        },
+        {
+          "source": "Light on",
+          "shown": "Light on",
+          "size": 14,
+          "bounds": {
+            "x": 29,
+            "y": 189.5,
+            "width": 45.541015625,
+            "height": 14
+          }
+        },
+        {
+          "source": "Find phone",
+          "shown": "Find phone",
+          "size": 14,
+          "bounds": {
+            "x": 127,
+            "y": 189.5,
+            "width": 61.6259765625,
+            "height": 14
+          }
+        },
+        {
+          "source": "Select: Open",
+          "shown": "Select: Open",
+          "size": 12,
+          "bounds": {
+            "x": 8,
+            "y": 215,
+            "width": 61.0546875,
+            "height": 13
+          }
+        },
+        {
+          "source": "1/7",
+          "shown": "1/7",
+          "size": 12,
+          "bounds": {
+            "x": 175.88671875,
+            "y": 216,
+            "width": 16.11328125,
+            "height": 10
+          }
+        }
+      ],
+      "regions": [
+        {
+          "id": "activity-0",
+          "x": 4,
+          "y": 22,
+          "width": 192,
+          "height": 32,
+          "selected": true
+        },
+        {
+          "id": "activity-1",
+          "x": 4,
+          "y": 58,
+          "width": 192,
+          "height": 32,
+          "selected": false
+        },
+        {
+          "id": "notification",
+          "x": 4,
+          "y": 95,
+          "width": 192,
+          "height": 41,
+          "selected": false
+        },
+        {
+          "id": "pin-weather",
+          "x": 4,
+          "y": 141,
+          "width": 94,
+          "height": 37,
+          "selected": false
+        },
+        {
+          "id": "pin-phone",
+          "x": 102,
+          "y": 141,
+          "width": 94,
+          "height": 37,
+          "selected": false
+        },
+        {
+          "id": "control-light",
+          "x": 4,
+          "y": 183,
+          "width": 94,
+          "height": 25,
+          "selected": false
+        },
+        {
+          "id": "control-find",
+          "x": 102,
+          "y": 183,
+          "width": 94,
+          "height": 25,
+          "selected": false
+        }
+      ],
+      "width": 200,
+      "height": 228,
+      "bytes": 9528,
+      "sha256": "917c833d4fc50e6a4efc82e6d70bdba14e9bcfc678945a9805e57f7cdbfb138b",
+      "palette": {
+        "opaque": true,
+        "quantized": true,
+        "colors": 15
+      }
+    },
+    {
+      "file": "screens/focus-dark.png",
+      "layout": "focus",
+      "scenario": "timer-media",
+      "theme": "dark",
+      "swapped": false,
+      "messagePreview": true,
+      "mode": "overview",
+      "selectedId": "activity-0",
+      "visibleIds": [
+        "activity-0",
+        "activity-1",
+        "notification",
+        "pin-weather",
+        "pin-phone",
+        "control-light",
+        "control-find"
+      ],
+      "boundsViolations": [],
+      "text": [
+        {
+          "source": "Dashboard",
+          "shown": "Dashboard",
+          "size": 16,
+          "bounds": {
+            "x": 8,
+            "y": 3,
+            "width": 68.3671875,
+            "height": 12
+          }
+        },
+        {
+          "source": "13:42",
+          "shown": "13:42",
+          "size": 14,
+          "bounds": {
+            "x": 159.8779296875,
+            "y": 4,
+            "width": 32.1220703125,
+            "height": 11
+          }
+        },
+        {
+          "source": "02:31",
+          "shown": "02:31",
+          "size": 43,
+          "bounds": {
+            "x": 50.636024475097656,
+            "y": 30,
+            "width": 98.72795104980469,
+            "height": 31
+          }
+        },
+        {
+          "source": "Tea",
+          "shown": "Tea",
+          "size": 14,
+          "bounds": {
+            "x": 101.0546875,
+            "y": 66,
+            "width": 20.890625,
+            "height": 11
+          }
+        },
+        {
+          "source": "Night Drive",
+          "shown": "Night Drive",
+          "size": 16,
+          "bounds": {
+            "x": 40,
+            "y": 86,
+            "width": 71.5546875,
+            "height": 15
+          }
+        },
+        {
+          "source": "The Midnight",
+          "shown": "The Midnight",
+          "size": 14,
+          "bounds": {
+            "x": 40,
+            "y": 102,
+            "width": 74.142578125,
+            "height": 14
+          }
+        },
+        {
+          "source": "Sam",
+          "shown": "Sam",
+          "size": 16,
+          "bounds": {
+            "x": 32,
+            "y": 124,
+            "width": 28.0390625,
+            "height": 12
+          }
+        },
+        {
+          "source": "Signal · 2m",
+          "shown": "Signal · 2m",
+          "size": 12,
+          "bounds": {
+            "x": 135.970703125,
+            "y": 126,
+            "width": 54.029296875,
+            "height": 13
+          }
+        },
+        {
+          "source": "At the entrance.",
+          "shown": "At the entrance.",
+          "size": 16,
+          "bounds": {
+            "x": 10,
+            "y": 143,
+            "width": 103.0859375,
+            "height": 12
+          }
+        },
+        {
+          "source": "13°C",
+          "shown": "13°C",
+          "size": 20,
+          "bounds": {
+            "x": 51.9200439453125,
+            "y": 168,
+            "width": 39.0799560546875,
+            "height": 14
+          }
+        },
+        {
+          "source": "76%",
+          "shown": "76%",
+          "size": 20,
+          "bounds": {
+            "x": 152.56004333496094,
+            "y": 167,
+            "width": 36.43995666503906,
+            "height": 16
+          }
+        },
+        {
+          "source": "Light on",
+          "shown": "Light on",
+          "size": 14,
+          "bounds": {
+            "x": 29,
+            "y": 196,
+            "width": 45.541015625,
+            "height": 14
+          }
+        },
+        {
+          "source": "Find phone",
+          "shown": "Find phone",
+          "size": 14,
+          "bounds": {
+            "x": 127,
+            "y": 196,
+            "width": 61.6259765625,
+            "height": 14
+          }
+        },
+        {
+          "source": "Select: Open",
+          "shown": "Select: Open",
+          "size": 12,
+          "bounds": {
+            "x": 8,
+            "y": 215,
+            "width": 61.0546875,
+            "height": 13
+          }
+        },
+        {
+          "source": "1/7",
+          "shown": "1/7",
+          "size": 12,
+          "bounds": {
+            "x": 175.88671875,
+            "y": 216,
+            "width": 16.11328125,
+            "height": 10
+          }
+        }
+      ],
+      "regions": [
+        {
+          "id": "activity-0",
+          "x": 4,
+          "y": 23,
+          "width": 192,
+          "height": 57,
+          "selected": true
+        },
+        {
+          "id": "activity-1",
+          "x": 4,
+          "y": 84,
+          "width": 192,
+          "height": 32,
+          "selected": false
+        },
+        {
+          "id": "notification",
+          "x": 4,
+          "y": 121,
+          "width": 192,
+          "height": 38,
+          "selected": false
+        },
+        {
+          "id": "pin-weather",
+          "x": 4,
+          "y": 164,
+          "width": 94,
+          "height": 24,
+          "selected": false
+        },
+        {
+          "id": "pin-phone",
+          "x": 102,
+          "y": 164,
+          "width": 94,
+          "height": 24,
+          "selected": false
+        },
+        {
+          "id": "control-light",
+          "x": 4,
+          "y": 192,
+          "width": 94,
+          "height": 20,
+          "selected": false
+        },
+        {
+          "id": "control-find",
+          "x": 102,
+          "y": 192,
+          "width": 94,
+          "height": 20,
+          "selected": false
+        }
+      ],
+      "width": 200,
+      "height": 228,
+      "bytes": 9630,
+      "sha256": "c714849f3cf3cec3668a284d22c2f4eebd9dc5a04a06997c1d333cc8bbc411b1",
+      "palette": {
+        "opaque": true,
+        "quantized": true,
+        "colors": 15
+      }
+    },
+    {
+      "file": "screens/list-dark.png",
+      "layout": "list",
+      "scenario": "timer-media",
+      "theme": "dark",
+      "swapped": false,
+      "messagePreview": true,
+      "mode": "overview",
+      "selectedId": "activity-0",
+      "visibleIds": [
+        "activity-0",
+        "activity-1",
+        "notification",
+        "pin-weather",
+        "control-find"
+      ],
+      "boundsViolations": [],
+      "text": [
+        {
+          "source": "Dashboard",
+          "shown": "Dashboard",
+          "size": 16,
+          "bounds": {
+            "x": 8,
+            "y": 3,
+            "width": 68.3671875,
+            "height": 12
+          }
+        },
+        {
+          "source": "13:42",
+          "shown": "13:42",
+          "size": 14,
+          "bounds": {
+            "x": 159.8779296875,
+            "y": 4,
+            "width": 32.1220703125,
+            "height": 11
+          }
+        },
+        {
+          "source": "Tea",
+          "shown": "Tea",
+          "size": 16,
+          "bounds": {
+            "x": 36,
+            "y": 35,
+            "width": 23.875,
+            "height": 12
+          }
+        },
+        {
+          "source": "02:31",
+          "shown": "02:31",
+          "size": 26,
+          "bounds": {
+            "x": 130.30393981933594,
+            "y": 29,
+            "width": 59.69606018066406,
+            "height": 19
+          }
+        },
+        {
+          "source": "Night Drive",
+          "shown": "Night Drive",
+          "size": 16,
+          "bounds": {
+            "x": 40,
+            "y": 63,
+            "width": 71.5546875,
+            "height": 15
+          }
+        },
+        {
+          "source": "The Midnight",
+          "shown": "The Midnight",
+          "size": 14,
+          "bounds": {
+            "x": 40,
+            "y": 79,
+            "width": 74.142578125,
+            "height": 14
+          }
+        },
+        {
+          "source": "Sam · Signal",
+          "shown": "Sam · Signal",
+          "size": 14,
+          "bounds": {
+            "x": 37,
+            "y": 99,
+            "width": 70.109375,
+            "height": 14
+          }
+        },
+        {
+          "source": "At the entrance.",
+          "shown": "At the entrance.",
+          "size": 16,
+          "bounds": {
+            "x": 37,
+            "y": 114,
+            "width": 103.0859375,
+            "height": 12
+          }
+        },
+        {
+          "source": "Weather",
+          "shown": "Weather",
+          "size": 17,
+          "bounds": {
+            "x": 37,
+            "y": 143,
+            "width": 56.2294921875,
+            "height": 12
+          }
+        },
+        {
+          "source": "13°C",
+          "shown": "13°C",
+          "size": 25,
+          "bounds": {
+            "x": 136.14981079101562,
+            "y": 139,
+            "width": 48.850189208984375,
+            "height": 18
+          }
+        },
+        {
+          "source": "Find phone",
+          "shown": "Find phone",
+          "size": 18,
+          "bounds": {
+            "x": 37,
+            "y": 177,
+            "width": 79.2333984375,
+            "height": 18
+          }
+        },
+        {
+          "source": "Select: Open",
+          "shown": "Select: Open",
+          "size": 12,
+          "bounds": {
+            "x": 8,
+            "y": 215,
+            "width": 61.0546875,
+            "height": 13
+          }
+        },
+        {
+          "source": "1/7",
+          "shown": "1/7",
+          "size": 12,
+          "bounds": {
+            "x": 175.88671875,
+            "y": 216,
+            "width": 16.11328125,
+            "height": 10
+          }
+        }
+      ],
+      "regions": [
+        {
+          "id": "activity-0",
+          "x": 4,
+          "y": 25,
+          "width": 192,
+          "height": 32,
+          "selected": true
+        },
+        {
+          "id": "activity-1",
+          "x": 4,
+          "y": 61,
+          "width": 192,
+          "height": 32,
+          "selected": false
+        },
+        {
+          "id": "notification",
+          "x": 4,
+          "y": 97,
+          "width": 188,
+          "height": 32,
+          "selected": false
+        },
+        {
+          "id": "pin-weather",
+          "x": 4,
+          "y": 133,
+          "width": 188,
+          "height": 32,
+          "selected": false
+        },
+        {
+          "id": "control-find",
+          "x": 4,
+          "y": 169,
+          "width": 188,
+          "height": 32,
+          "selected": false
+        }
+      ],
+      "width": 200,
+      "height": 228,
+      "bytes": 8537,
+      "sha256": "7a6db155a2892630a24820342c9fa39d557ad6fc31bbbe33636d3a1751b0b134",
+      "palette": {
+        "opaque": true,
+        "quantized": true,
+        "colors": 15
+      }
+    },
+    {
+      "file": "screens/snapshot-workout-navigation.png",
+      "layout": "snapshot",
+      "scenario": "workout-navigation",
+      "theme": "light",
+      "swapped": false,
+      "messagePreview": true,
+      "mode": "overview",
+      "selectedId": "activity-0",
+      "visibleIds": [
+        "activity-0",
+        "activity-1",
+        "notification",
+        "pin-weather",
+        "pin-phone",
+        "control-light",
+        "control-find"
+      ],
+      "boundsViolations": [],
+      "text": [
+        {
+          "source": "Dashboard",
+          "shown": "Dashboard",
+          "size": 16,
+          "bounds": {
+            "x": 8,
+            "y": 3,
+            "width": 68.3671875,
+            "height": 12
+          }
+        },
+        {
+          "source": "13:42",
+          "shown": "13:42",
+          "size": 14,
+          "bounds": {
+            "x": 159.8779296875,
+            "y": 4,
+            "width": 32.1220703125,
+            "height": 11
+          }
+        },
+        {
+          "source": "Evening run",
+          "shown": "Evening run",
+          "size": 16,
+          "bounds": {
+            "x": 36,
+            "y": 32,
+            "width": 75.25,
+            "height": 15
+          }
+        },
+        {
+          "source": "6.2 km",
+          "shown": "6.2 km",
+          "size": 23,
+          "bounds": {
+            "x": 126.71630859375,
+            "y": 27,
+            "width": 63.28369140625,
+            "height": 18
+          }
+        },
+        {
+          "source": "Oak Street",
+          "shown": "Oak Street",
+          "size": 16,
+          "bounds": {
+            "x": 36,
+            "y": 68,
+            "width": 67.5859375,
+            "height": 12
+          }
+        },
+        {
+          "source": "200 m",
+          "shown": "200 m",
+          "size": 23,
+          "bounds": {
+            "x": 132.76953125,
+            "y": 64,
+            "width": 57.23046875,
+            "height": 17
+          }
+        },
+        {
+          "source": "Sam",
+          "shown": "Sam",
+          "size": 16,
+          "bounds": {
+            "x": 32,
+            "y": 98,
+            "width": 28.0390625,
+            "height": 12
+          }
+        },
+        {
+          "source": "Signal · 2m",
+          "shown": "Signal · 2m",
+          "size": 12,
+          "bounds": {
+            "x": 135.970703125,
+            "y": 100,
+            "width": 54.029296875,
+            "height": 13
+          }
+        },
+        {
+          "source": "Meet at the bridge.",
+          "shown": "Meet at the bridge.",
+          "size": 16,
+          "bounds": {
+            "x": 10,
+            "y": 117,
+            "width": 121.8359375,
+            "height": 15
+          }
+        },
+        {
+          "source": "Weather",
+          "shown": "Weather",
+          "size": 12,
+          "bounds": {
+            "x": 29,
+            "y": 145,
+            "width": 39.69140625,
+            "height": 10
+          }
+        },
+        {
+          "source": "13°C",
+          "shown": "13°C",
+          "size": 23,
+          "bounds": {
+            "x": 12,
+            "y": 156,
+            "width": 44.941986083984375,
+            "height": 17
+          }
+        },
+        {
+          "source": "Phone",
+          "shown": "Phone",
+          "size": 12,
+          "bounds": {
+            "x": 127,
+            "y": 145,
+            "width": 30.345703125,
+            "height": 10
+          }
+        },
+        {
+          "source": "76%",
+          "shown": "76%",
+          "size": 23,
+          "bounds": {
+            "x": 110,
+            "y": 156,
+            "width": 41.906005859375,
+            "height": 18
+          }
+        },
+        {
+          "source": "Light on",
+          "shown": "Light on",
+          "size": 14,
+          "bounds": {
+            "x": 29,
+            "y": 189.5,
+            "width": 45.541015625,
+            "height": 14
+          }
+        },
+        {
+          "source": "Find phone",
+          "shown": "Find phone",
+          "size": 14,
+          "bounds": {
+            "x": 127,
+            "y": 189.5,
+            "width": 61.6259765625,
+            "height": 14
+          }
+        },
+        {
+          "source": "Select: Open",
+          "shown": "Select: Open",
+          "size": 12,
+          "bounds": {
+            "x": 8,
+            "y": 215,
+            "width": 61.0546875,
+            "height": 13
+          }
+        },
+        {
+          "source": "1/7",
+          "shown": "1/7",
+          "size": 12,
+          "bounds": {
+            "x": 175.88671875,
+            "y": 216,
+            "width": 16.11328125,
+            "height": 10
+          }
+        }
+      ],
+      "regions": [
+        {
+          "id": "activity-0",
+          "x": 4,
+          "y": 22,
+          "width": 192,
+          "height": 32,
+          "selected": true
+        },
+        {
+          "id": "activity-1",
+          "x": 4,
+          "y": 58,
+          "width": 192,
+          "height": 32,
+          "selected": false
+        },
+        {
+          "id": "notification",
+          "x": 4,
+          "y": 95,
+          "width": 192,
+          "height": 41,
+          "selected": false
+        },
+        {
+          "id": "pin-weather",
+          "x": 4,
+          "y": 141,
+          "width": 94,
+          "height": 37,
+          "selected": false
+        },
+        {
+          "id": "pin-phone",
+          "x": 102,
+          "y": 141,
+          "width": 94,
+          "height": 37,
+          "selected": false
+        },
+        {
+          "id": "control-light",
+          "x": 4,
+          "y": 183,
+          "width": 94,
+          "height": 25,
+          "selected": false
+        },
+        {
+          "id": "control-find",
+          "x": 102,
+          "y": 183,
+          "width": 94,
+          "height": 25,
+          "selected": false
+        }
+      ],
+      "width": 200,
+      "height": 228,
+      "bytes": 9378,
+      "sha256": "57216737ca520803552ef24af0e4ac84c365446d4f8857a23d388fd4d0b846ff",
+      "palette": {
+        "opaque": true,
+        "quantized": true,
+        "colors": 7
+      }
+    },
+    {
+      "file": "screens/focus-workout-navigation.png",
+      "layout": "focus",
+      "scenario": "workout-navigation",
+      "theme": "light",
+      "swapped": false,
+      "messagePreview": true,
+      "mode": "overview",
+      "selectedId": "activity-0",
+      "visibleIds": [
+        "activity-0",
+        "activity-1",
+        "notification",
+        "pin-weather",
+        "pin-phone",
+        "control-light",
+        "control-find"
+      ],
+      "boundsViolations": [],
+      "text": [
+        {
+          "source": "Dashboard",
+          "shown": "Dashboard",
+          "size": 16,
+          "bounds": {
+            "x": 8,
+            "y": 3,
+            "width": 68.3671875,
+            "height": 12
+          }
+        },
+        {
+          "source": "13:42",
+          "shown": "13:42",
+          "size": 14,
+          "bounds": {
+            "x": 159.8779296875,
+            "y": 4,
+            "width": 32.1220703125,
+            "height": 11
+          }
+        },
+        {
+          "source": "6.2 km",
+          "shown": "6.2 km",
+          "size": 43,
+          "bounds": {
+            "x": 40.843505859375,
+            "y": 28,
+            "width": 118.31298828125,
+            "height": 32
+          }
+        },
+        {
+          "source": "Evening run",
+          "shown": "Evening run",
+          "size": 14,
+          "bounds": {
+            "x": 78.578125,
+            "y": 66,
+            "width": 65.84375,
+            "height": 14
+          }
+        },
+        {
+          "source": "Oak Street",
+          "shown": "Oak Street",
+          "size": 16,
+          "bounds": {
+            "x": 36,
+            "y": 94,
+            "width": 67.5859375,
+            "height": 12
+          }
+        },
+        {
+          "source": "200 m",
+          "shown": "200 m",
+          "size": 23,
+          "bounds": {
+            "x": 132.76953125,
+            "y": 90,
+            "width": 57.23046875,
+            "height": 17
+          }
+        },
+        {
+          "source": "Sam",
+          "shown": "Sam",
+          "size": 16,
+          "bounds": {
+            "x": 32,
+            "y": 124,
+            "width": 28.0390625,
+            "height": 12
+          }
+        },
+        {
+          "source": "Signal · 2m",
+          "shown": "Signal · 2m",
+          "size": 12,
+          "bounds": {
+            "x": 135.970703125,
+            "y": 126,
+            "width": 54.029296875,
+            "height": 13
+          }
+        },
+        {
+          "source": "Meet at the bridge.",
+          "shown": "Meet at the bridge.",
+          "size": 16,
+          "bounds": {
+            "x": 10,
+            "y": 143,
+            "width": 121.8359375,
+            "height": 15
+          }
+        },
+        {
+          "source": "13°C",
+          "shown": "13°C",
+          "size": 20,
+          "bounds": {
+            "x": 51.9200439453125,
+            "y": 168,
+            "width": 39.0799560546875,
+            "height": 14
+          }
+        },
+        {
+          "source": "76%",
+          "shown": "76%",
+          "size": 20,
+          "bounds": {
+            "x": 152.56004333496094,
+            "y": 167,
+            "width": 36.43995666503906,
+            "height": 16
+          }
+        },
+        {
+          "source": "Light on",
+          "shown": "Light on",
+          "size": 14,
+          "bounds": {
+            "x": 29,
+            "y": 196,
+            "width": 45.541015625,
+            "height": 14
+          }
+        },
+        {
+          "source": "Find phone",
+          "shown": "Find phone",
+          "size": 14,
+          "bounds": {
+            "x": 127,
+            "y": 196,
+            "width": 61.6259765625,
+            "height": 14
+          }
+        },
+        {
+          "source": "Select: Open",
+          "shown": "Select: Open",
+          "size": 12,
+          "bounds": {
+            "x": 8,
+            "y": 215,
+            "width": 61.0546875,
+            "height": 13
+          }
+        },
+        {
+          "source": "1/7",
+          "shown": "1/7",
+          "size": 12,
+          "bounds": {
+            "x": 175.88671875,
+            "y": 216,
+            "width": 16.11328125,
+            "height": 10
+          }
+        }
+      ],
+      "regions": [
+        {
+          "id": "activity-0",
+          "x": 4,
+          "y": 23,
+          "width": 192,
+          "height": 57,
+          "selected": true
+        },
+        {
+          "id": "activity-1",
+          "x": 4,
+          "y": 84,
+          "width": 192,
+          "height": 32,
+          "selected": false
+        },
+        {
+          "id": "notification",
+          "x": 4,
+          "y": 121,
+          "width": 192,
+          "height": 38,
+          "selected": false
+        },
+        {
+          "id": "pin-weather",
+          "x": 4,
+          "y": 164,
+          "width": 94,
+          "height": 24,
+          "selected": false
+        },
+        {
+          "id": "pin-phone",
+          "x": 102,
+          "y": 164,
+          "width": 94,
+          "height": 24,
+          "selected": false
+        },
+        {
+          "id": "control-light",
+          "x": 4,
+          "y": 192,
+          "width": 94,
+          "height": 20,
+          "selected": false
+        },
+        {
+          "id": "control-find",
+          "x": 102,
+          "y": 192,
+          "width": 94,
+          "height": 20,
+          "selected": false
+        }
+      ],
+      "width": 200,
+      "height": 228,
+      "bytes": 9229,
+      "sha256": "d029ed0126ef0e998c8b2115a05b2d4a0cdafa6d252dc8b117cf6bd738ae0a90",
+      "palette": {
+        "opaque": true,
+        "quantized": true,
+        "colors": 7
+      }
+    },
+    {
+      "file": "screens/list-workout-navigation.png",
+      "layout": "list",
+      "scenario": "workout-navigation",
+      "theme": "light",
+      "swapped": false,
+      "messagePreview": true,
+      "mode": "overview",
+      "selectedId": "activity-0",
+      "visibleIds": [
+        "activity-0",
+        "activity-1",
+        "notification",
+        "pin-weather",
+        "control-find"
+      ],
+      "boundsViolations": [],
+      "text": [
+        {
+          "source": "Dashboard",
+          "shown": "Dashboard",
+          "size": 16,
+          "bounds": {
+            "x": 8,
+            "y": 3,
+            "width": 68.3671875,
+            "height": 12
+          }
+        },
+        {
+          "source": "13:42",
+          "shown": "13:42",
+          "size": 14,
+          "bounds": {
+            "x": 159.8779296875,
+            "y": 4,
+            "width": 32.1220703125,
+            "height": 11
+          }
+        },
+        {
+          "source": "Evening run",
+          "shown": "Evening run",
+          "size": 16,
+          "bounds": {
+            "x": 36,
+            "y": 35,
+            "width": 75.25,
+            "height": 15
+          }
+        },
+        {
+          "source": "6.2 km",
+          "shown": "6.2 km",
+          "size": 23,
+          "bounds": {
+            "x": 126.71630859375,
+            "y": 30,
+            "width": 63.28369140625,
+            "height": 18
+          }
+        },
+        {
+          "source": "Oak Street",
+          "shown": "Oak Street",
+          "size": 16,
+          "bounds": {
+            "x": 36,
+            "y": 71,
+            "width": 67.5859375,
+            "height": 12
+          }
+        },
+        {
+          "source": "200 m",
+          "shown": "200 m",
+          "size": 23,
+          "bounds": {
+            "x": 132.76953125,
+            "y": 67,
+            "width": 57.23046875,
+            "height": 17
+          }
+        },
+        {
+          "source": "Sam · Signal",
+          "shown": "Sam · Signal",
+          "size": 14,
+          "bounds": {
+            "x": 37,
+            "y": 99,
+            "width": 70.109375,
+            "height": 14
+          }
+        },
+        {
+          "source": "Meet at the bridge.",
+          "shown": "Meet at the bridge.",
+          "size": 16,
+          "bounds": {
+            "x": 37,
+            "y": 114,
+            "width": 121.8359375,
+            "height": 15
+          }
+        },
+        {
+          "source": "Weather",
+          "shown": "Weather",
+          "size": 17,
+          "bounds": {
+            "x": 37,
+            "y": 143,
+            "width": 56.2294921875,
+            "height": 12
+          }
+        },
+        {
+          "source": "13°C",
+          "shown": "13°C",
+          "size": 25,
+          "bounds": {
+            "x": 136.14981079101562,
+            "y": 139,
+            "width": 48.850189208984375,
+            "height": 18
+          }
+        },
+        {
+          "source": "Find phone",
+          "shown": "Find phone",
+          "size": 18,
+          "bounds": {
+            "x": 37,
+            "y": 177,
+            "width": 79.2333984375,
+            "height": 18
+          }
+        },
+        {
+          "source": "Select: Open",
+          "shown": "Select: Open",
+          "size": 12,
+          "bounds": {
+            "x": 8,
+            "y": 215,
+            "width": 61.0546875,
+            "height": 13
+          }
+        },
+        {
+          "source": "1/7",
+          "shown": "1/7",
+          "size": 12,
+          "bounds": {
+            "x": 175.88671875,
+            "y": 216,
+            "width": 16.11328125,
+            "height": 10
+          }
+        }
+      ],
+      "regions": [
+        {
+          "id": "activity-0",
+          "x": 4,
+          "y": 25,
+          "width": 192,
+          "height": 32,
+          "selected": true
+        },
+        {
+          "id": "activity-1",
+          "x": 4,
+          "y": 61,
+          "width": 192,
+          "height": 32,
+          "selected": false
+        },
+        {
+          "id": "notification",
+          "x": 4,
+          "y": 97,
+          "width": 188,
+          "height": 32,
+          "selected": false
+        },
+        {
+          "id": "pin-weather",
+          "x": 4,
+          "y": 133,
+          "width": 188,
+          "height": 32,
+          "selected": false
+        },
+        {
+          "id": "control-find",
+          "x": 4,
+          "y": 169,
+          "width": 188,
+          "height": 32,
+          "selected": false
+        }
+      ],
+      "width": 200,
+      "height": 228,
+      "bytes": 8473,
+      "sha256": "24edababb0dc0f5321be1ab9daf0af0b0d7ee34bc651733cf66e0fa6ce601214",
+      "palette": {
+        "opaque": true,
+        "quantized": true,
+        "colors": 7
+      }
+    },
+    {
+      "file": "screens/snapshot-media-first.png",
+      "layout": "snapshot",
+      "scenario": "timer-media",
+      "theme": "light",
+      "swapped": true,
+      "messagePreview": true,
+      "mode": "overview",
+      "selectedId": "activity-1",
+      "visibleIds": [
+        "activity-1",
+        "activity-0",
+        "notification",
+        "pin-weather",
+        "pin-phone",
+        "control-light",
+        "control-find"
+      ],
+      "boundsViolations": [],
+      "text": [
+        {
+          "source": "Dashboard",
+          "shown": "Dashboard",
+          "size": 16,
+          "bounds": {
+            "x": 8,
+            "y": 3,
+            "width": 68.3671875,
+            "height": 12
+          }
+        },
+        {
+          "source": "13:42",
+          "shown": "13:42",
+          "size": 14,
+          "bounds": {
+            "x": 159.8779296875,
+            "y": 4,
+            "width": 32.1220703125,
+            "height": 11
+          }
+        },
+        {
+          "source": "Night Drive",
+          "shown": "Night Drive",
+          "size": 16,
+          "bounds": {
+            "x": 40,
+            "y": 24,
+            "width": 71.5546875,
+            "height": 15
+          }
+        },
+        {
+          "source": "The Midnight",
+          "shown": "The Midnight",
+          "size": 14,
+          "bounds": {
+            "x": 40,
+            "y": 40,
+            "width": 74.142578125,
+            "height": 14
+          }
+        },
+        {
+          "source": "Tea",
+          "shown": "Tea",
+          "size": 16,
+          "bounds": {
+            "x": 36,
+            "y": 68,
+            "width": 23.875,
+            "height": 12
+          }
+        },
+        {
+          "source": "02:31",
+          "shown": "02:31",
+          "size": 26,
+          "bounds": {
+            "x": 130.30393981933594,
+            "y": 62,
+            "width": 59.69606018066406,
+            "height": 19
+          }
+        },
+        {
+          "source": "Sam",
+          "shown": "Sam",
+          "size": 16,
+          "bounds": {
+            "x": 32,
+            "y": 98,
+            "width": 28.0390625,
+            "height": 12
+          }
+        },
+        {
+          "source": "Signal · 2m",
+          "shown": "Signal · 2m",
+          "size": 12,
+          "bounds": {
+            "x": 135.970703125,
+            "y": 100,
+            "width": 54.029296875,
+            "height": 13
+          }
+        },
+        {
+          "source": "At the entrance.",
+          "shown": "At the entrance.",
+          "size": 16,
+          "bounds": {
+            "x": 10,
+            "y": 117,
+            "width": 103.0859375,
+            "height": 12
+          }
+        },
+        {
+          "source": "Weather",
+          "shown": "Weather",
+          "size": 12,
+          "bounds": {
+            "x": 29,
+            "y": 145,
+            "width": 39.69140625,
+            "height": 10
+          }
+        },
+        {
+          "source": "13°C",
+          "shown": "13°C",
+          "size": 23,
+          "bounds": {
+            "x": 12,
+            "y": 156,
+            "width": 44.941986083984375,
+            "height": 17
+          }
+        },
+        {
+          "source": "Phone",
+          "shown": "Phone",
+          "size": 12,
+          "bounds": {
+            "x": 127,
+            "y": 145,
+            "width": 30.345703125,
+            "height": 10
+          }
+        },
+        {
+          "source": "76%",
+          "shown": "76%",
+          "size": 23,
+          "bounds": {
+            "x": 110,
+            "y": 156,
+            "width": 41.906005859375,
+            "height": 18
+          }
+        },
+        {
+          "source": "Light on",
+          "shown": "Light on",
+          "size": 14,
+          "bounds": {
+            "x": 29,
+            "y": 189.5,
+            "width": 45.541015625,
+            "height": 14
+          }
+        },
+        {
+          "source": "Find phone",
+          "shown": "Find phone",
+          "size": 14,
+          "bounds": {
+            "x": 127,
+            "y": 189.5,
+            "width": 61.6259765625,
+            "height": 14
+          }
+        },
+        {
+          "source": "Select: Open",
+          "shown": "Select: Open",
+          "size": 12,
+          "bounds": {
+            "x": 8,
+            "y": 215,
+            "width": 61.0546875,
+            "height": 13
+          }
+        },
+        {
+          "source": "1/7",
+          "shown": "1/7",
+          "size": 12,
+          "bounds": {
+            "x": 175.88671875,
+            "y": 216,
+            "width": 16.11328125,
+            "height": 10
+          }
+        }
+      ],
+      "regions": [
+        {
+          "id": "activity-1",
+          "x": 4,
+          "y": 22,
+          "width": 192,
+          "height": 32,
+          "selected": true
+        },
+        {
+          "id": "activity-0",
+          "x": 4,
+          "y": 58,
+          "width": 192,
+          "height": 32,
+          "selected": false
+        },
+        {
+          "id": "notification",
+          "x": 4,
+          "y": 95,
+          "width": 192,
+          "height": 41,
+          "selected": false
+        },
+        {
+          "id": "pin-weather",
+          "x": 4,
+          "y": 141,
+          "width": 94,
+          "height": 37,
+          "selected": false
+        },
+        {
+          "id": "pin-phone",
+          "x": 102,
+          "y": 141,
+          "width": 94,
+          "height": 37,
+          "selected": false
+        },
+        {
+          "id": "control-light",
+          "x": 4,
+          "y": 183,
+          "width": 94,
+          "height": 25,
+          "selected": false
+        },
+        {
+          "id": "control-find",
+          "x": 102,
+          "y": 183,
+          "width": 94,
+          "height": 25,
+          "selected": false
+        }
+      ],
+      "width": 200,
+      "height": 228,
+      "bytes": 9170,
+      "sha256": "2f589273894857a768bfcc6939cf180e73bb582b39dbe20cac5b9c0c76cfe8bf",
+      "palette": {
+        "opaque": true,
+        "quantized": true,
+        "colors": 15
+      }
+    },
+    {
+      "file": "screens/focus-media-first.png",
+      "layout": "focus",
+      "scenario": "timer-media",
+      "theme": "light",
+      "swapped": true,
+      "messagePreview": true,
+      "mode": "overview",
+      "selectedId": "activity-1",
+      "visibleIds": [
+        "activity-1",
+        "activity-0",
+        "notification",
+        "pin-weather",
+        "pin-phone",
+        "control-light",
+        "control-find"
+      ],
+      "boundsViolations": [],
+      "text": [
+        {
+          "source": "Dashboard",
+          "shown": "Dashboard",
+          "size": 16,
+          "bounds": {
+            "x": 8,
+            "y": 3,
+            "width": 68.3671875,
+            "height": 12
+          }
+        },
+        {
+          "source": "13:42",
+          "shown": "13:42",
+          "size": 14,
+          "bounds": {
+            "x": 159.8779296875,
+            "y": 4,
+            "width": 32.1220703125,
+            "height": 11
+          }
+        },
+        {
+          "source": "Night Drive",
+          "shown": "Night Drive",
+          "size": 20,
+          "bounds": {
+            "x": 10,
+            "y": 44,
+            "width": 89.443359375,
+            "height": 19
+          }
+        },
+        {
+          "source": "The Midnight",
+          "shown": "The Midnight",
+          "size": 14,
+          "bounds": {
+            "x": 33,
+            "y": 66,
+            "width": 74.142578125,
+            "height": 14
+          }
+        },
+        {
+          "source": "Tea",
+          "shown": "Tea",
+          "size": 16,
+          "bounds": {
+            "x": 36,
+            "y": 94,
+            "width": 23.875,
+            "height": 12
+          }
+        },
+        {
+          "source": "02:31",
+          "shown": "02:31",
+          "size": 26,
+          "bounds": {
+            "x": 130.30393981933594,
+            "y": 88,
+            "width": 59.69606018066406,
+            "height": 19
+          }
+        },
+        {
+          "source": "Sam",
+          "shown": "Sam",
+          "size": 16,
+          "bounds": {
+            "x": 32,
+            "y": 124,
+            "width": 28.0390625,
+            "height": 12
+          }
+        },
+        {
+          "source": "Signal · 2m",
+          "shown": "Signal · 2m",
+          "size": 12,
+          "bounds": {
+            "x": 135.970703125,
+            "y": 126,
+            "width": 54.029296875,
+            "height": 13
+          }
+        },
+        {
+          "source": "At the entrance.",
+          "shown": "At the entrance.",
+          "size": 16,
+          "bounds": {
+            "x": 10,
+            "y": 143,
+            "width": 103.0859375,
+            "height": 12
+          }
+        },
+        {
+          "source": "13°C",
+          "shown": "13°C",
+          "size": 20,
+          "bounds": {
+            "x": 51.9200439453125,
+            "y": 168,
+            "width": 39.0799560546875,
+            "height": 14
+          }
+        },
+        {
+          "source": "76%",
+          "shown": "76%",
+          "size": 20,
+          "bounds": {
+            "x": 152.56004333496094,
+            "y": 167,
+            "width": 36.43995666503906,
+            "height": 16
+          }
+        },
+        {
+          "source": "Light on",
+          "shown": "Light on",
+          "size": 14,
+          "bounds": {
+            "x": 29,
+            "y": 196,
+            "width": 45.541015625,
+            "height": 14
+          }
+        },
+        {
+          "source": "Find phone",
+          "shown": "Find phone",
+          "size": 14,
+          "bounds": {
+            "x": 127,
+            "y": 196,
+            "width": 61.6259765625,
+            "height": 14
+          }
+        },
+        {
+          "source": "Select: Open",
+          "shown": "Select: Open",
+          "size": 12,
+          "bounds": {
+            "x": 8,
+            "y": 215,
+            "width": 61.0546875,
+            "height": 13
+          }
+        },
+        {
+          "source": "1/7",
+          "shown": "1/7",
+          "size": 12,
+          "bounds": {
+            "x": 175.88671875,
+            "y": 216,
+            "width": 16.11328125,
+            "height": 10
+          }
+        }
+      ],
+      "regions": [
+        {
+          "id": "activity-1",
+          "x": 4,
+          "y": 23,
+          "width": 192,
+          "height": 57,
+          "selected": true
+        },
+        {
+          "id": "activity-0",
+          "x": 4,
+          "y": 84,
+          "width": 192,
+          "height": 32,
+          "selected": false
+        },
+        {
+          "id": "notification",
+          "x": 4,
+          "y": 121,
+          "width": 192,
+          "height": 38,
+          "selected": false
+        },
+        {
+          "id": "pin-weather",
+          "x": 4,
+          "y": 164,
+          "width": 94,
+          "height": 24,
+          "selected": false
+        },
+        {
+          "id": "pin-phone",
+          "x": 102,
+          "y": 164,
+          "width": 94,
+          "height": 24,
+          "selected": false
+        },
+        {
+          "id": "control-light",
+          "x": 4,
+          "y": 192,
+          "width": 94,
+          "height": 20,
+          "selected": false
+        },
+        {
+          "id": "control-find",
+          "x": 102,
+          "y": 192,
+          "width": 94,
+          "height": 20,
+          "selected": false
+        }
+      ],
+      "width": 200,
+      "height": 228,
+      "bytes": 8905,
+      "sha256": "1a2ffaa130c0e9f03c0638d6f2ef2fd1d2411dcec459660c848679f18291ed9b",
+      "palette": {
+        "opaque": true,
+        "quantized": true,
+        "colors": 13
+      }
+    },
+    {
+      "file": "screens/list-media-first.png",
+      "layout": "list",
+      "scenario": "timer-media",
+      "theme": "light",
+      "swapped": true,
+      "messagePreview": true,
+      "mode": "overview",
+      "selectedId": "activity-1",
+      "visibleIds": [
+        "activity-1",
+        "activity-0",
+        "notification",
+        "pin-weather",
+        "control-find"
+      ],
+      "boundsViolations": [],
+      "text": [
+        {
+          "source": "Dashboard",
+          "shown": "Dashboard",
+          "size": 16,
+          "bounds": {
+            "x": 8,
+            "y": 3,
+            "width": 68.3671875,
+            "height": 12
+          }
+        },
+        {
+          "source": "13:42",
+          "shown": "13:42",
+          "size": 14,
+          "bounds": {
+            "x": 159.8779296875,
+            "y": 4,
+            "width": 32.1220703125,
+            "height": 11
+          }
+        },
+        {
+          "source": "Night Drive",
+          "shown": "Night Drive",
+          "size": 16,
+          "bounds": {
+            "x": 40,
+            "y": 27,
+            "width": 71.5546875,
+            "height": 15
+          }
+        },
+        {
+          "source": "The Midnight",
+          "shown": "The Midnight",
+          "size": 14,
+          "bounds": {
+            "x": 40,
+            "y": 43,
+            "width": 74.142578125,
+            "height": 14
+          }
+        },
+        {
+          "source": "Tea",
+          "shown": "Tea",
+          "size": 16,
+          "bounds": {
+            "x": 36,
+            "y": 71,
+            "width": 23.875,
+            "height": 12
+          }
+        },
+        {
+          "source": "02:31",
+          "shown": "02:31",
+          "size": 26,
+          "bounds": {
+            "x": 130.30393981933594,
+            "y": 65,
+            "width": 59.69606018066406,
+            "height": 19
+          }
+        },
+        {
+          "source": "Sam · Signal",
+          "shown": "Sam · Signal",
+          "size": 14,
+          "bounds": {
+            "x": 37,
+            "y": 99,
+            "width": 70.109375,
+            "height": 14
+          }
+        },
+        {
+          "source": "At the entrance.",
+          "shown": "At the entrance.",
+          "size": 16,
+          "bounds": {
+            "x": 37,
+            "y": 114,
+            "width": 103.0859375,
+            "height": 12
+          }
+        },
+        {
+          "source": "Weather",
+          "shown": "Weather",
+          "size": 17,
+          "bounds": {
+            "x": 37,
+            "y": 143,
+            "width": 56.2294921875,
+            "height": 12
+          }
+        },
+        {
+          "source": "13°C",
+          "shown": "13°C",
+          "size": 25,
+          "bounds": {
+            "x": 136.14981079101562,
+            "y": 139,
+            "width": 48.850189208984375,
+            "height": 18
+          }
+        },
+        {
+          "source": "Find phone",
+          "shown": "Find phone",
+          "size": 18,
+          "bounds": {
+            "x": 37,
+            "y": 177,
+            "width": 79.2333984375,
+            "height": 18
+          }
+        },
+        {
+          "source": "Select: Open",
+          "shown": "Select: Open",
+          "size": 12,
+          "bounds": {
+            "x": 8,
+            "y": 215,
+            "width": 61.0546875,
+            "height": 13
+          }
+        },
+        {
+          "source": "1/7",
+          "shown": "1/7",
+          "size": 12,
+          "bounds": {
+            "x": 175.88671875,
+            "y": 216,
+            "width": 16.11328125,
+            "height": 10
+          }
+        }
+      ],
+      "regions": [
+        {
+          "id": "activity-1",
+          "x": 4,
+          "y": 25,
+          "width": 192,
+          "height": 32,
+          "selected": true
+        },
+        {
+          "id": "activity-0",
+          "x": 4,
+          "y": 61,
+          "width": 192,
+          "height": 32,
+          "selected": false
+        },
+        {
+          "id": "notification",
+          "x": 4,
+          "y": 97,
+          "width": 188,
+          "height": 32,
+          "selected": false
+        },
+        {
+          "id": "pin-weather",
+          "x": 4,
+          "y": 133,
+          "width": 188,
+          "height": 32,
+          "selected": false
+        },
+        {
+          "id": "control-find",
+          "x": 4,
+          "y": 169,
+          "width": 188,
+          "height": 32,
+          "selected": false
+        }
+      ],
+      "width": 200,
+      "height": 228,
+      "bytes": 8251,
+      "sha256": "befb9afdc56d5002a06b080e6f63ae9f4369f8b07c71ba2fe45665062b598476",
+      "palette": {
+        "opaque": true,
+        "quantized": true,
+        "colors": 15
+      }
+    },
+    {
+      "file": "screens/snapshot-long.png",
+      "layout": "snapshot",
+      "scenario": "long",
+      "theme": "light",
+      "swapped": false,
+      "messagePreview": true,
+      "mode": "overview",
+      "selectedId": "activity-0",
+      "visibleIds": [
+        "activity-0",
+        "activity-1",
+        "notification",
+        "pin-weather",
+        "pin-phone",
+        "control-light",
+        "control-find"
+      ],
+      "boundsViolations": [],
+      "text": [
+        {
+          "source": "Dashboard",
+          "shown": "Dashboard",
+          "size": 16,
+          "bounds": {
+            "x": 8,
+            "y": 3,
+            "width": 68.3671875,
+            "height": 12
+          }
+        },
+        {
+          "source": "13:42",
+          "shown": "13:42",
+          "size": 14,
+          "bounds": {
+            "x": 159.8779296875,
+            "y": 4,
+            "width": 32.1220703125,
+            "height": 11
+          }
+        },
+        {
+          "source": "Overnight timer",
+          "shown": "Overnig…",
+          "size": 16,
+          "bounds": {
+            "x": 36,
+            "y": 32,
+            "width": 60.328125,
+            "height": 15
+          }
+        },
+        {
+          "source": "12:34:56",
+          "shown": "12:34:56",
+          "size": 26,
+          "bounds": {
+            "x": 98.55792236328125,
+            "y": 26,
+            "width": 91.44207763671875,
+            "height": 19
+          }
+        },
+        {
+          "source": "Better Than the Cyberpunk We Got",
+          "shown": "Better Than the Cybe…",
+          "size": 16,
+          "bounds": {
+            "x": 40,
+            "y": 60,
+            "width": 145.265625,
+            "height": 15
+          }
+        },
+        {
+          "source": "The Midnight",
+          "shown": "The Midnight",
+          "size": 14,
+          "bounds": {
+            "x": 40,
+            "y": 76,
+            "width": 74.142578125,
+            "height": 14
+          }
+        },
+        {
+          "source": "Alexandra",
+          "shown": "Alexandra",
+          "size": 16,
+          "bounds": {
+            "x": 32,
+            "y": 98,
+            "width": 64.65625,
+            "height": 12
+          }
+        },
+        {
+          "source": "Signal · 2m",
+          "shown": "Signal · 2m",
+          "size": 12,
+          "bounds": {
+            "x": 135.970703125,
+            "y": 100,
+            "width": 54.029296875,
+            "height": 13
+          }
+        },
+        {
+          "source": "Can you bring the blue bag to the entrance?",
+          "shown": "Can you bring the blue ba…",
+          "size": 16,
+          "bounds": {
+            "x": 10,
+            "y": 117,
+            "width": 173.0546875,
+            "height": 15
+          }
+        },
+        {
+          "source": "Weather",
+          "shown": "Weather",
+          "size": 12,
+          "bounds": {
+            "x": 29,
+            "y": 145,
+            "width": 39.69140625,
+            "height": 10
+          }
+        },
+        {
+          "source": "13°C",
+          "shown": "13°C",
+          "size": 23,
+          "bounds": {
+            "x": 12,
+            "y": 156,
+            "width": 44.941986083984375,
+            "height": 17
+          }
+        },
+        {
+          "source": "Phone",
+          "shown": "Phone",
+          "size": 12,
+          "bounds": {
+            "x": 127,
+            "y": 145,
+            "width": 30.345703125,
+            "height": 10
+          }
+        },
+        {
+          "source": "76%",
+          "shown": "76%",
+          "size": 23,
+          "bounds": {
+            "x": 110,
+            "y": 156,
+            "width": 41.906005859375,
+            "height": 18
+          }
+        },
+        {
+          "source": "Light on",
+          "shown": "Light on",
+          "size": 14,
+          "bounds": {
+            "x": 29,
+            "y": 189.5,
+            "width": 45.541015625,
+            "height": 14
+          }
+        },
+        {
+          "source": "Find phone",
+          "shown": "Find phone",
+          "size": 14,
+          "bounds": {
+            "x": 127,
+            "y": 189.5,
+            "width": 61.6259765625,
+            "height": 14
+          }
+        },
+        {
+          "source": "Select: Open",
+          "shown": "Select: Open",
+          "size": 12,
+          "bounds": {
+            "x": 8,
+            "y": 215,
+            "width": 61.0546875,
+            "height": 13
+          }
+        },
+        {
+          "source": "1/7",
+          "shown": "1/7",
+          "size": 12,
+          "bounds": {
+            "x": 175.88671875,
+            "y": 216,
+            "width": 16.11328125,
+            "height": 10
+          }
+        }
+      ],
+      "regions": [
+        {
+          "id": "activity-0",
+          "x": 4,
+          "y": 22,
+          "width": 192,
+          "height": 32,
+          "selected": true
+        },
+        {
+          "id": "activity-1",
+          "x": 4,
+          "y": 58,
+          "width": 192,
+          "height": 32,
+          "selected": false
+        },
+        {
+          "id": "notification",
+          "x": 4,
+          "y": 95,
+          "width": 192,
+          "height": 41,
+          "selected": false
+        },
+        {
+          "id": "pin-weather",
+          "x": 4,
+          "y": 141,
+          "width": 94,
+          "height": 37,
+          "selected": false
+        },
+        {
+          "id": "pin-phone",
+          "x": 102,
+          "y": 141,
+          "width": 94,
+          "height": 37,
+          "selected": false
+        },
+        {
+          "id": "control-light",
+          "x": 4,
+          "y": 183,
+          "width": 94,
+          "height": 25,
+          "selected": false
+        },
+        {
+          "id": "control-find",
+          "x": 102,
+          "y": 183,
+          "width": 94,
+          "height": 25,
+          "selected": false
+        }
+      ],
+      "width": 200,
+      "height": 228,
+      "bytes": 10531,
+      "sha256": "06ca3cce163fefa91010bcff69cecf173a33d1eccdbfaad76d371f3f3b74be8b",
+      "palette": {
+        "opaque": true,
+        "quantized": true,
+        "colors": 15
+      }
+    },
+    {
+      "file": "screens/focus-long.png",
+      "layout": "focus",
+      "scenario": "long",
+      "theme": "light",
+      "swapped": false,
+      "messagePreview": true,
+      "mode": "overview",
+      "selectedId": "activity-0",
+      "visibleIds": [
+        "activity-0",
+        "activity-1",
+        "notification",
+        "pin-weather",
+        "pin-phone",
+        "control-light",
+        "control-find"
+      ],
+      "boundsViolations": [],
+      "text": [
+        {
+          "source": "Dashboard",
+          "shown": "Dashboard",
+          "size": 16,
+          "bounds": {
+            "x": 8,
+            "y": 3,
+            "width": 68.3671875,
+            "height": 12
+          }
+        },
+        {
+          "source": "13:42",
+          "shown": "13:42",
+          "size": 14,
+          "bounds": {
+            "x": 159.8779296875,
+            "y": 4,
+            "width": 32.1220703125,
+            "height": 11
+          }
+        },
+        {
+          "source": "12:34:56",
+          "shown": "12:34:56",
+          "size": 43,
+          "bounds": {
+            "x": 24.384536743164062,
+            "y": 30,
+            "width": 151.23092651367188,
+            "height": 31
+          }
+        },
+        {
+          "source": "Overnight timer",
+          "shown": "Overnight timer",
+          "size": 14,
+          "bounds": {
+            "x": 67.76025390625,
+            "y": 66,
+            "width": 87.4794921875,
+            "height": 14
+          }
+        },
+        {
+          "source": "Better Than the Cyberpunk We Got",
+          "shown": "Better Than the Cybe…",
+          "size": 16,
+          "bounds": {
+            "x": 40,
+            "y": 86,
+            "width": 145.265625,
+            "height": 15
+          }
+        },
+        {
+          "source": "The Midnight",
+          "shown": "The Midnight",
+          "size": 14,
+          "bounds": {
+            "x": 40,
+            "y": 102,
+            "width": 74.142578125,
+            "height": 14
+          }
+        },
+        {
+          "source": "Alexandra",
+          "shown": "Alexandra",
+          "size": 16,
+          "bounds": {
+            "x": 32,
+            "y": 124,
+            "width": 64.65625,
+            "height": 12
+          }
+        },
+        {
+          "source": "Signal · 2m",
+          "shown": "Signal · 2m",
+          "size": 12,
+          "bounds": {
+            "x": 135.970703125,
+            "y": 126,
+            "width": 54.029296875,
+            "height": 13
+          }
+        },
+        {
+          "source": "Can you bring the blue bag to the entrance?",
+          "shown": "Can you bring the blue ba…",
+          "size": 16,
+          "bounds": {
+            "x": 10,
+            "y": 143,
+            "width": 173.0546875,
+            "height": 15
+          }
+        },
+        {
+          "source": "13°C",
+          "shown": "13°C",
+          "size": 20,
+          "bounds": {
+            "x": 51.9200439453125,
+            "y": 168,
+            "width": 39.0799560546875,
+            "height": 14
+          }
+        },
+        {
+          "source": "76%",
+          "shown": "76%",
+          "size": 20,
+          "bounds": {
+            "x": 152.56004333496094,
+            "y": 167,
+            "width": 36.43995666503906,
+            "height": 16
+          }
+        },
+        {
+          "source": "Light on",
+          "shown": "Light on",
+          "size": 14,
+          "bounds": {
+            "x": 29,
+            "y": 196,
+            "width": 45.541015625,
+            "height": 14
+          }
+        },
+        {
+          "source": "Find phone",
+          "shown": "Find phone",
+          "size": 14,
+          "bounds": {
+            "x": 127,
+            "y": 196,
+            "width": 61.6259765625,
+            "height": 14
+          }
+        },
+        {
+          "source": "Select: Open",
+          "shown": "Select: Open",
+          "size": 12,
+          "bounds": {
+            "x": 8,
+            "y": 215,
+            "width": 61.0546875,
+            "height": 13
+          }
+        },
+        {
+          "source": "1/7",
+          "shown": "1/7",
+          "size": 12,
+          "bounds": {
+            "x": 175.88671875,
+            "y": 216,
+            "width": 16.11328125,
+            "height": 10
+          }
+        }
+      ],
+      "regions": [
+        {
+          "id": "activity-0",
+          "x": 4,
+          "y": 23,
+          "width": 192,
+          "height": 57,
+          "selected": true
+        },
+        {
+          "id": "activity-1",
+          "x": 4,
+          "y": 84,
+          "width": 192,
+          "height": 32,
+          "selected": false
+        },
+        {
+          "id": "notification",
+          "x": 4,
+          "y": 121,
+          "width": 192,
+          "height": 38,
+          "selected": false
+        },
+        {
+          "id": "pin-weather",
+          "x": 4,
+          "y": 164,
+          "width": 94,
+          "height": 24,
+          "selected": false
+        },
+        {
+          "id": "pin-phone",
+          "x": 102,
+          "y": 164,
+          "width": 94,
+          "height": 24,
+          "selected": false
+        },
+        {
+          "id": "control-light",
+          "x": 4,
+          "y": 192,
+          "width": 94,
+          "height": 20,
+          "selected": false
+        },
+        {
+          "id": "control-find",
+          "x": 102,
+          "y": 192,
+          "width": 94,
+          "height": 20,
+          "selected": false
+        }
+      ],
+      "width": 200,
+      "height": 228,
+      "bytes": 10912,
+      "sha256": "c9dd9f9aefe471451fe339e17710828bfc04112dbd2316df5a12e0ab0c15972f",
+      "palette": {
+        "opaque": true,
+        "quantized": true,
+        "colors": 15
+      }
+    },
+    {
+      "file": "screens/list-long.png",
+      "layout": "list",
+      "scenario": "long",
+      "theme": "light",
+      "swapped": false,
+      "messagePreview": true,
+      "mode": "overview",
+      "selectedId": "activity-0",
+      "visibleIds": [
+        "activity-0",
+        "activity-1",
+        "notification",
+        "pin-weather",
+        "control-find"
+      ],
+      "boundsViolations": [],
+      "text": [
+        {
+          "source": "Dashboard",
+          "shown": "Dashboard",
+          "size": 16,
+          "bounds": {
+            "x": 8,
+            "y": 3,
+            "width": 68.3671875,
+            "height": 12
+          }
+        },
+        {
+          "source": "13:42",
+          "shown": "13:42",
+          "size": 14,
+          "bounds": {
+            "x": 159.8779296875,
+            "y": 4,
+            "width": 32.1220703125,
+            "height": 11
+          }
+        },
+        {
+          "source": "Overnight timer",
+          "shown": "Overnig…",
+          "size": 16,
+          "bounds": {
+            "x": 36,
+            "y": 35,
+            "width": 60.328125,
+            "height": 15
+          }
+        },
+        {
+          "source": "12:34:56",
+          "shown": "12:34:56",
+          "size": 26,
+          "bounds": {
+            "x": 98.55792236328125,
+            "y": 29,
+            "width": 91.44207763671875,
+            "height": 19
+          }
+        },
+        {
+          "source": "Better Than the Cyberpunk We Got",
+          "shown": "Better Than the Cybe…",
+          "size": 16,
+          "bounds": {
+            "x": 40,
+            "y": 63,
+            "width": 145.265625,
+            "height": 15
+          }
+        },
+        {
+          "source": "The Midnight",
+          "shown": "The Midnight",
+          "size": 14,
+          "bounds": {
+            "x": 40,
+            "y": 79,
+            "width": 74.142578125,
+            "height": 14
+          }
+        },
+        {
+          "source": "Alexandra · Signal",
+          "shown": "Alexandra · Signal",
+          "size": 14,
+          "bounds": {
+            "x": 37,
+            "y": 99,
+            "width": 102.1494140625,
+            "height": 14
+          }
+        },
+        {
+          "source": "Can you bring the blue bag to the entrance?",
+          "shown": "Can you bring the blu…",
+          "size": 16,
+          "bounds": {
+            "x": 37,
+            "y": 114,
+            "width": 146.25,
+            "height": 15
+          }
+        },
+        {
+          "source": "Weather",
+          "shown": "Weather",
+          "size": 17,
+          "bounds": {
+            "x": 37,
+            "y": 143,
+            "width": 56.2294921875,
+            "height": 12
+          }
+        },
+        {
+          "source": "13°C",
+          "shown": "13°C",
+          "size": 25,
+          "bounds": {
+            "x": 136.14981079101562,
+            "y": 139,
+            "width": 48.850189208984375,
+            "height": 18
+          }
+        },
+        {
+          "source": "Find phone",
+          "shown": "Find phone",
+          "size": 18,
+          "bounds": {
+            "x": 37,
+            "y": 177,
+            "width": 79.2333984375,
+            "height": 18
+          }
+        },
+        {
+          "source": "Select: Open",
+          "shown": "Select: Open",
+          "size": 12,
+          "bounds": {
+            "x": 8,
+            "y": 215,
+            "width": 61.0546875,
+            "height": 13
+          }
+        },
+        {
+          "source": "1/7",
+          "shown": "1/7",
+          "size": 12,
+          "bounds": {
+            "x": 175.88671875,
+            "y": 216,
+            "width": 16.11328125,
+            "height": 10
+          }
+        }
+      ],
+      "regions": [
+        {
+          "id": "activity-0",
+          "x": 4,
+          "y": 25,
+          "width": 192,
+          "height": 32,
+          "selected": true
+        },
+        {
+          "id": "activity-1",
+          "x": 4,
+          "y": 61,
+          "width": 192,
+          "height": 32,
+          "selected": false
+        },
+        {
+          "id": "notification",
+          "x": 4,
+          "y": 97,
+          "width": 188,
+          "height": 32,
+          "selected": false
+        },
+        {
+          "id": "pin-weather",
+          "x": 4,
+          "y": 133,
+          "width": 188,
+          "height": 32,
+          "selected": false
+        },
+        {
+          "id": "control-find",
+          "x": 4,
+          "y": 169,
+          "width": 188,
+          "height": 32,
+          "selected": false
+        }
+      ],
+      "width": 200,
+      "height": 228,
+      "bytes": 9409,
+      "sha256": "838f5b1b903af3f39fd084e46a83f288542d401b0dd3072f0880527f951e04cc",
+      "palette": {
+        "opaque": true,
+        "quantized": true,
+        "colors": 15
+      }
+    },
+    {
+      "file": "screens/snapshot-quiet.png",
+      "layout": "snapshot",
+      "scenario": "quiet",
+      "theme": "light",
+      "swapped": false,
+      "messagePreview": true,
+      "mode": "overview",
+      "selectedId": "pin-weather",
+      "visibleIds": [
+        "pin-weather",
+        "pin-phone",
+        "control-light",
+        "control-find"
+      ],
+      "boundsViolations": [],
+      "text": [
+        {
+          "source": "Dashboard",
+          "shown": "Dashboard",
+          "size": 16,
+          "bounds": {
+            "x": 8,
+            "y": 3,
+            "width": 68.3671875,
+            "height": 12
+          }
+        },
+        {
+          "source": "13:42",
+          "shown": "13:42",
+          "size": 14,
+          "bounds": {
+            "x": 159.8779296875,
+            "y": 4,
+            "width": 32.1220703125,
+            "height": 11
+          }
+        },
+        {
+          "source": "No live activities",
+          "shown": "No live activities",
+          "size": 18,
+          "bounds": {
+            "x": 39.84765625,
+            "y": 64,
+            "width": 120.3046875,
+            "height": 14
+          }
+        },
+        {
+          "source": "Your favourites are ready",
+          "shown": "Your favourites are ready",
+          "size": 14,
+          "bounds": {
+            "x": 29.18994140625,
+            "y": 88,
+            "width": 141.6201171875,
+            "height": 14
+          }
+        },
+        {
+          "source": "Weather",
+          "shown": "Weather",
+          "size": 12,
+          "bounds": {
+            "x": 29,
+            "y": 116,
+            "width": 39.69140625,
+            "height": 10
+          }
+        },
+        {
+          "source": "13°C",
+          "shown": "13°C",
+          "size": 23,
+          "bounds": {
+            "x": 12,
+            "y": 144,
+            "width": 44.941986083984375,
+            "height": 17
+          }
+        },
+        {
+          "source": "Phone",
+          "shown": "Phone",
+          "size": 12,
+          "bounds": {
+            "x": 127,
+            "y": 116,
+            "width": 30.345703125,
+            "height": 10
+          }
+        },
+        {
+          "source": "76%",
+          "shown": "76%",
+          "size": 23,
+          "bounds": {
+            "x": 110,
+            "y": 144,
+            "width": 41.906005859375,
+            "height": 18
+          }
+        },
+        {
+          "source": "Light on",
+          "shown": "Light on",
+          "size": 14,
+          "bounds": {
+            "x": 29,
+            "y": 185,
+            "width": 45.541015625,
+            "height": 14
+          }
+        },
+        {
+          "source": "Find phone",
+          "shown": "Find phone",
+          "size": 14,
+          "bounds": {
+            "x": 127,
+            "y": 185,
+            "width": 61.6259765625,
+            "height": 14
+          }
+        },
+        {
+          "source": "Select: Open",
+          "shown": "Select: Open",
+          "size": 12,
+          "bounds": {
+            "x": 8,
+            "y": 215,
+            "width": 61.0546875,
+            "height": 13
+          }
+        },
+        {
+          "source": "1/4",
+          "shown": "1/4",
+          "size": 12,
+          "bounds": {
+            "x": 175.88671875,
+            "y": 216,
+            "width": 16.11328125,
+            "height": 10
+          }
+        }
+      ],
+      "regions": [
+        {
+          "id": "pin-weather",
+          "x": 4,
+          "y": 112,
+          "width": 94,
+          "height": 54,
+          "selected": true
+        },
+        {
+          "id": "pin-phone",
+          "x": 102,
+          "y": 112,
+          "width": 94,
+          "height": 54,
+          "selected": false
+        },
+        {
+          "id": "control-light",
+          "x": 4,
+          "y": 177,
+          "width": 94,
+          "height": 28,
+          "selected": false
+        },
+        {
+          "id": "control-find",
+          "x": 102,
+          "y": 177,
+          "width": 94,
+          "height": 28,
+          "selected": false
+        }
+      ],
+      "width": 200,
+      "height": 228,
+      "bytes": 7667,
+      "sha256": "42def2cea27c21072036f7c688de14bb467a5285457734a9bf466b04298a31e0",
+      "palette": {
+        "opaque": true,
+        "quantized": true,
+        "colors": 7
+      }
+    },
+    {
+      "file": "screens/focus-quiet.png",
+      "layout": "focus",
+      "scenario": "quiet",
+      "theme": "light",
+      "swapped": false,
+      "messagePreview": true,
+      "mode": "overview",
+      "selectedId": "pin-weather",
+      "visibleIds": [
+        "pin-weather",
+        "pin-phone",
+        "control-light",
+        "control-find"
+      ],
+      "boundsViolations": [],
+      "text": [
+        {
+          "source": "Dashboard",
+          "shown": "Dashboard",
+          "size": 16,
+          "bounds": {
+            "x": 8,
+            "y": 3,
+            "width": 68.3671875,
+            "height": 12
+          }
+        },
+        {
+          "source": "13:42",
+          "shown": "13:42",
+          "size": 14,
+          "bounds": {
+            "x": 159.8779296875,
+            "y": 4,
+            "width": 32.1220703125,
+            "height": 11
+          }
+        },
+        {
+          "source": "Dashboard",
+          "shown": "Dashboard",
+          "size": 16,
+          "bounds": {
+            "x": 8,
+            "y": 3,
+            "width": 68.3671875,
+            "height": 12
+          }
+        },
+        {
+          "source": "13:42",
+          "shown": "13:42",
+          "size": 14,
+          "bounds": {
+            "x": 159.8779296875,
+            "y": 4,
+            "width": 32.1220703125,
+            "height": 11
+          }
+        },
+        {
+          "source": "No live activities",
+          "shown": "No live activities",
+          "size": 18,
+          "bounds": {
+            "x": 39.84765625,
+            "y": 64,
+            "width": 120.3046875,
+            "height": 14
+          }
+        },
+        {
+          "source": "Your favourites are ready",
+          "shown": "Your favourites are ready",
+          "size": 14,
+          "bounds": {
+            "x": 29.18994140625,
+            "y": 88,
+            "width": 141.6201171875,
+            "height": 14
+          }
+        },
+        {
+          "source": "Weather",
+          "shown": "Weather",
+          "size": 12,
+          "bounds": {
+            "x": 29,
+            "y": 116,
+            "width": 39.69140625,
+            "height": 10
+          }
+        },
+        {
+          "source": "13°C",
+          "shown": "13°C",
+          "size": 23,
+          "bounds": {
+            "x": 12,
+            "y": 144,
+            "width": 44.941986083984375,
+            "height": 17
+          }
+        },
+        {
+          "source": "Phone",
+          "shown": "Phone",
+          "size": 12,
+          "bounds": {
+            "x": 127,
+            "y": 116,
+            "width": 30.345703125,
+            "height": 10
+          }
+        },
+        {
+          "source": "76%",
+          "shown": "76%",
+          "size": 23,
+          "bounds": {
+            "x": 110,
+            "y": 144,
+            "width": 41.906005859375,
+            "height": 18
+          }
+        },
+        {
+          "source": "Light on",
+          "shown": "Light on",
+          "size": 14,
+          "bounds": {
+            "x": 29,
+            "y": 185,
+            "width": 45.541015625,
+            "height": 14
+          }
+        },
+        {
+          "source": "Find phone",
+          "shown": "Find phone",
+          "size": 14,
+          "bounds": {
+            "x": 127,
+            "y": 185,
+            "width": 61.6259765625,
+            "height": 14
+          }
+        },
+        {
+          "source": "Select: Open",
+          "shown": "Select: Open",
+          "size": 12,
+          "bounds": {
+            "x": 8,
+            "y": 215,
+            "width": 61.0546875,
+            "height": 13
+          }
+        },
+        {
+          "source": "1/4",
+          "shown": "1/4",
+          "size": 12,
+          "bounds": {
+            "x": 175.88671875,
+            "y": 216,
+            "width": 16.11328125,
+            "height": 10
+          }
+        }
+      ],
+      "regions": [
+        {
+          "id": "pin-weather",
+          "x": 4,
+          "y": 112,
+          "width": 94,
+          "height": 54,
+          "selected": true
+        },
+        {
+          "id": "pin-phone",
+          "x": 102,
+          "y": 112,
+          "width": 94,
+          "height": 54,
+          "selected": false
+        },
+        {
+          "id": "control-light",
+          "x": 4,
+          "y": 177,
+          "width": 94,
+          "height": 28,
+          "selected": false
+        },
+        {
+          "id": "control-find",
+          "x": 102,
+          "y": 177,
+          "width": 94,
+          "height": 28,
+          "selected": false
+        }
+      ],
+      "width": 200,
+      "height": 228,
+      "bytes": 7671,
+      "sha256": "b1b36c66eb78a4a54724199b11fc97dc96e48ee84fe9471087c40277ce98703d",
+      "palette": {
+        "opaque": true,
+        "quantized": true,
+        "colors": 7
+      }
+    },
+    {
+      "file": "screens/list-quiet.png",
+      "layout": "list",
+      "scenario": "quiet",
+      "theme": "light",
+      "swapped": false,
+      "messagePreview": true,
+      "mode": "overview",
+      "selectedId": "pin-weather",
+      "visibleIds": [
+        "pin-weather",
+        "control-find",
+        "pin-phone",
+        "control-light"
+      ],
+      "boundsViolations": [],
+      "text": [
+        {
+          "source": "Dashboard",
+          "shown": "Dashboard",
+          "size": 16,
+          "bounds": {
+            "x": 8,
+            "y": 3,
+            "width": 68.3671875,
+            "height": 12
+          }
+        },
+        {
+          "source": "13:42",
+          "shown": "13:42",
+          "size": 14,
+          "bounds": {
+            "x": 159.8779296875,
+            "y": 4,
+            "width": 32.1220703125,
+            "height": 11
+          }
+        },
+        {
+          "source": "Weather",
+          "shown": "Weather",
+          "size": 17,
+          "bounds": {
+            "x": 37,
+            "y": 35,
+            "width": 56.2294921875,
+            "height": 12
+          }
+        },
+        {
+          "source": "13°C",
+          "shown": "13°C",
+          "size": 25,
+          "bounds": {
+            "x": 136.14981079101562,
+            "y": 31,
+            "width": 48.850189208984375,
+            "height": 18
+          }
+        },
+        {
+          "source": "Find phone",
+          "shown": "Find phone",
+          "size": 18,
+          "bounds": {
+            "x": 37,
+            "y": 69,
+            "width": 79.2333984375,
+            "height": 18
+          }
+        },
+        {
+          "source": "Phone",
+          "shown": "Phone",
+          "size": 17,
+          "bounds": {
+            "x": 37,
+            "y": 107,
+            "width": 42.98974609375,
+            "height": 12
+          }
+        },
+        {
+          "source": "76%",
+          "shown": "76%",
+          "size": 25,
+          "bounds": {
+            "x": 139.4498291015625,
+            "y": 102,
+            "width": 45.5501708984375,
+            "height": 20
+          }
+        },
+        {
+          "source": "Kitchen light",
+          "shown": "Kitchen light",
+          "size": 16,
+          "bounds": {
+            "x": 37,
+            "y": 135,
+            "width": 81.140625,
+            "height": 15
+          }
+        },
+        {
+          "source": "On · select to turn off",
+          "shown": "On · select to turn off",
+          "size": 14,
+          "bounds": {
+            "x": 37,
+            "y": 151,
+            "width": 119.5673828125,
+            "height": 11
+          }
+        },
+        {
+          "source": "Select: Open",
+          "shown": "Select: Open",
+          "size": 12,
+          "bounds": {
+            "x": 8,
+            "y": 215,
+            "width": 61.0546875,
+            "height": 13
+          }
+        },
+        {
+          "source": "1/4",
+          "shown": "1/4",
+          "size": 12,
+          "bounds": {
+            "x": 175.88671875,
+            "y": 216,
+            "width": 16.11328125,
+            "height": 10
+          }
+        }
+      ],
+      "regions": [
+        {
+          "id": "pin-weather",
+          "x": 4,
+          "y": 25,
+          "width": 188,
+          "height": 32,
+          "selected": true
+        },
+        {
+          "id": "control-find",
+          "x": 4,
+          "y": 61,
+          "width": 188,
+          "height": 32,
+          "selected": false
+        },
+        {
+          "id": "pin-phone",
+          "x": 4,
+          "y": 97,
+          "width": 188,
+          "height": 32,
+          "selected": false
+        },
+        {
+          "id": "control-light",
+          "x": 4,
+          "y": 133,
+          "width": 188,
+          "height": 32,
+          "selected": false
+        }
+      ],
+      "width": 200,
+      "height": 228,
+      "bytes": 7191,
+      "sha256": "436fb1b264b6dbcff67ff924660ee9a55c4978d4bb7dae9e375f2bc310dffdb4",
+      "palette": {
+        "opaque": true,
+        "quantized": true,
+        "colors": 7
+      }
+    },
+    {
+      "file": "screens/focus-long-media-first.png",
+      "layout": "focus",
+      "scenario": "long",
+      "theme": "light",
+      "swapped": true,
+      "messagePreview": true,
+      "mode": "overview",
+      "selectedId": "activity-1",
+      "visibleIds": [
+        "activity-1",
+        "activity-0",
+        "notification",
+        "pin-weather",
+        "pin-phone",
+        "control-light",
+        "control-find"
+      ],
+      "boundsViolations": [],
+      "text": [
+        {
+          "source": "Dashboard",
+          "shown": "Dashboard",
+          "size": 16,
+          "bounds": {
+            "x": 8,
+            "y": 3,
+            "width": 68.3671875,
+            "height": 12
+          }
+        },
+        {
+          "source": "13:42",
+          "shown": "13:42",
+          "size": 14,
+          "bounds": {
+            "x": 159.8779296875,
+            "y": 4,
+            "width": 32.1220703125,
+            "height": 11
+          }
+        },
+        {
+          "source": "Better Than the",
+          "shown": "Better Than the",
+          "size": 20,
+          "bounds": {
+            "x": 10,
+            "y": 22,
+            "width": 123.974609375,
+            "height": 15
+          }
+        },
+        {
+          "source": "Cyberpunk We Got",
+          "shown": "Cyberpunk We Got",
+          "size": 20,
+          "bounds": {
+            "x": 10,
+            "y": 44,
+            "width": 147.109375,
+            "height": 19
+          }
+        },
+        {
+          "source": "The Midnight",
+          "shown": "The Midnight",
+          "size": 14,
+          "bounds": {
+            "x": 33,
+            "y": 66,
+            "width": 74.142578125,
+            "height": 14
+          }
+        },
+        {
+          "source": "Overnight timer",
+          "shown": "Overnig…",
+          "size": 16,
+          "bounds": {
+            "x": 36,
+            "y": 94,
+            "width": 60.328125,
+            "height": 15
+          }
+        },
+        {
+          "source": "12:34:56",
+          "shown": "12:34:56",
+          "size": 26,
+          "bounds": {
+            "x": 98.55792236328125,
+            "y": 88,
+            "width": 91.44207763671875,
+            "height": 19
+          }
+        },
+        {
+          "source": "Alexandra",
+          "shown": "Alexandra",
+          "size": 16,
+          "bounds": {
+            "x": 32,
+            "y": 124,
+            "width": 64.65625,
+            "height": 12
+          }
+        },
+        {
+          "source": "Signal · 2m",
+          "shown": "Signal · 2m",
+          "size": 12,
+          "bounds": {
+            "x": 135.970703125,
+            "y": 126,
+            "width": 54.029296875,
+            "height": 13
+          }
+        },
+        {
+          "source": "Can you bring the blue bag to the entrance?",
+          "shown": "Can you bring the blue ba…",
+          "size": 16,
+          "bounds": {
+            "x": 10,
+            "y": 143,
+            "width": 173.0546875,
+            "height": 15
+          }
+        },
+        {
+          "source": "13°C",
+          "shown": "13°C",
+          "size": 20,
+          "bounds": {
+            "x": 51.9200439453125,
+            "y": 168,
+            "width": 39.0799560546875,
+            "height": 14
+          }
+        },
+        {
+          "source": "76%",
+          "shown": "76%",
+          "size": 20,
+          "bounds": {
+            "x": 152.56004333496094,
+            "y": 167,
+            "width": 36.43995666503906,
+            "height": 16
+          }
+        },
+        {
+          "source": "Light on",
+          "shown": "Light on",
+          "size": 14,
+          "bounds": {
+            "x": 29,
+            "y": 196,
+            "width": 45.541015625,
+            "height": 14
+          }
+        },
+        {
+          "source": "Find phone",
+          "shown": "Find phone",
+          "size": 14,
+          "bounds": {
+            "x": 127,
+            "y": 196,
+            "width": 61.6259765625,
+            "height": 14
+          }
+        },
+        {
+          "source": "Select: Open",
+          "shown": "Select: Open",
+          "size": 12,
+          "bounds": {
+            "x": 8,
+            "y": 215,
+            "width": 61.0546875,
+            "height": 13
+          }
+        },
+        {
+          "source": "1/7",
+          "shown": "1/7",
+          "size": 12,
+          "bounds": {
+            "x": 175.88671875,
+            "y": 216,
+            "width": 16.11328125,
+            "height": 10
+          }
+        }
+      ],
+      "regions": [
+        {
+          "id": "activity-1",
+          "x": 4,
+          "y": 23,
+          "width": 192,
+          "height": 57,
+          "selected": true
+        },
+        {
+          "id": "activity-0",
+          "x": 4,
+          "y": 84,
+          "width": 192,
+          "height": 32,
+          "selected": false
+        },
+        {
+          "id": "notification",
+          "x": 4,
+          "y": 121,
+          "width": 192,
+          "height": 38,
+          "selected": false
+        },
+        {
+          "id": "pin-weather",
+          "x": 4,
+          "y": 164,
+          "width": 94,
+          "height": 24,
+          "selected": false
+        },
+        {
+          "id": "pin-phone",
+          "x": 102,
+          "y": 164,
+          "width": 94,
+          "height": 24,
+          "selected": false
+        },
+        {
+          "id": "control-light",
+          "x": 4,
+          "y": 192,
+          "width": 94,
+          "height": 20,
+          "selected": false
+        },
+        {
+          "id": "control-find",
+          "x": 102,
+          "y": 192,
+          "width": 94,
+          "height": 20,
+          "selected": false
+        }
+      ],
+      "width": 200,
+      "height": 228,
+      "bytes": 11014,
+      "sha256": "2675652b1bbfeb3db6ff5806deac0f9834ff1a5f08bb659adcc99343f328bbfd",
+      "palette": {
+        "opaque": true,
+        "quantized": true,
+        "colors": 13
+      }
+    },
+    {
+      "file": "screens/snapshot-notification-private.png",
+      "layout": "snapshot",
+      "scenario": "timer-media",
+      "theme": "light",
+      "swapped": false,
+      "messagePreview": false,
+      "mode": "overview",
+      "selectedId": "activity-0",
+      "visibleIds": [
+        "activity-0",
+        "activity-1",
+        "notification",
+        "pin-weather",
+        "pin-phone",
+        "control-light",
+        "control-find"
+      ],
+      "boundsViolations": [],
+      "text": [
+        {
+          "source": "Dashboard",
+          "shown": "Dashboard",
+          "size": 16,
+          "bounds": {
+            "x": 8,
+            "y": 3,
+            "width": 68.3671875,
+            "height": 12
+          }
+        },
+        {
+          "source": "13:42",
+          "shown": "13:42",
+          "size": 14,
+          "bounds": {
+            "x": 159.8779296875,
+            "y": 4,
+            "width": 32.1220703125,
+            "height": 11
+          }
+        },
+        {
+          "source": "Tea",
+          "shown": "Tea",
+          "size": 16,
+          "bounds": {
+            "x": 36,
+            "y": 32,
+            "width": 23.875,
+            "height": 12
+          }
+        },
+        {
+          "source": "02:31",
+          "shown": "02:31",
+          "size": 26,
+          "bounds": {
+            "x": 130.30393981933594,
+            "y": 26,
+            "width": 59.69606018066406,
+            "height": 19
+          }
+        },
+        {
+          "source": "Night Drive",
+          "shown": "Night Drive",
+          "size": 16,
+          "bounds": {
+            "x": 40,
+            "y": 60,
+            "width": 71.5546875,
+            "height": 15
+          }
+        },
+        {
+          "source": "The Midnight",
+          "shown": "The Midnight",
+          "size": 14,
+          "bounds": {
+            "x": 40,
+            "y": 76,
+            "width": 74.142578125,
+            "height": 14
+          }
+        },
+        {
+          "source": "Sam",
+          "shown": "Sam",
+          "size": 16,
+          "bounds": {
+            "x": 32,
+            "y": 98,
+            "width": 28.0390625,
+            "height": 12
+          }
+        },
+        {
+          "source": "Signal · 2m",
+          "shown": "Signal · 2m",
+          "size": 12,
+          "bounds": {
+            "x": 135.970703125,
+            "y": 100,
+            "width": 54.029296875,
+            "height": 13
+          }
+        },
+        {
+          "source": "New message",
+          "shown": "New message",
+          "size": 16,
+          "bounds": {
+            "x": 10,
+            "y": 117,
+            "width": 88.578125,
+            "height": 15
+          }
+        },
+        {
+          "source": "Weather",
+          "shown": "Weather",
+          "size": 12,
+          "bounds": {
+            "x": 29,
+            "y": 145,
+            "width": 39.69140625,
+            "height": 10
+          }
+        },
+        {
+          "source": "13°C",
+          "shown": "13°C",
+          "size": 23,
+          "bounds": {
+            "x": 12,
+            "y": 156,
+            "width": 44.941986083984375,
+            "height": 17
+          }
+        },
+        {
+          "source": "Phone",
+          "shown": "Phone",
+          "size": 12,
+          "bounds": {
+            "x": 127,
+            "y": 145,
+            "width": 30.345703125,
+            "height": 10
+          }
+        },
+        {
+          "source": "76%",
+          "shown": "76%",
+          "size": 23,
+          "bounds": {
+            "x": 110,
+            "y": 156,
+            "width": 41.906005859375,
+            "height": 18
+          }
+        },
+        {
+          "source": "Light on",
+          "shown": "Light on",
+          "size": 14,
+          "bounds": {
+            "x": 29,
+            "y": 189.5,
+            "width": 45.541015625,
+            "height": 14
+          }
+        },
+        {
+          "source": "Find phone",
+          "shown": "Find phone",
+          "size": 14,
+          "bounds": {
+            "x": 127,
+            "y": 189.5,
+            "width": 61.6259765625,
+            "height": 14
+          }
+        },
+        {
+          "source": "Select: Open",
+          "shown": "Select: Open",
+          "size": 12,
+          "bounds": {
+            "x": 8,
+            "y": 215,
+            "width": 61.0546875,
+            "height": 13
+          }
+        },
+        {
+          "source": "1/7",
+          "shown": "1/7",
+          "size": 12,
+          "bounds": {
+            "x": 175.88671875,
+            "y": 216,
+            "width": 16.11328125,
+            "height": 10
+          }
+        }
+      ],
+      "regions": [
+        {
+          "id": "activity-0",
+          "x": 4,
+          "y": 22,
+          "width": 192,
+          "height": 32,
+          "selected": true
+        },
+        {
+          "id": "activity-1",
+          "x": 4,
+          "y": 58,
+          "width": 192,
+          "height": 32,
+          "selected": false
+        },
+        {
+          "id": "notification",
+          "x": 4,
+          "y": 95,
+          "width": 192,
+          "height": 41,
+          "selected": false
+        },
+        {
+          "id": "pin-weather",
+          "x": 4,
+          "y": 141,
+          "width": 94,
+          "height": 37,
+          "selected": false
+        },
+        {
+          "id": "pin-phone",
+          "x": 102,
+          "y": 141,
+          "width": 94,
+          "height": 37,
+          "selected": false
+        },
+        {
+          "id": "control-light",
+          "x": 4,
+          "y": 183,
+          "width": 94,
+          "height": 25,
+          "selected": false
+        },
+        {
+          "id": "control-find",
+          "x": 102,
+          "y": 183,
+          "width": 94,
+          "height": 25,
+          "selected": false
+        }
+      ],
+      "width": 200,
+      "height": 228,
+      "bytes": 9186,
+      "sha256": "d170cc31adcd1ffda2e6ce701cae7f8b505f64b334584438019fa920927e78b7",
+      "palette": {
+        "opaque": true,
+        "quantized": true,
+        "colors": 15
+      }
+    },
+    {
+      "file": "screens/focus-notification-private.png",
+      "layout": "focus",
+      "scenario": "timer-media",
+      "theme": "light",
+      "swapped": false,
+      "messagePreview": false,
+      "mode": "overview",
+      "selectedId": "activity-0",
+      "visibleIds": [
+        "activity-0",
+        "activity-1",
+        "notification",
+        "pin-weather",
+        "pin-phone",
+        "control-light",
+        "control-find"
+      ],
+      "boundsViolations": [],
+      "text": [
+        {
+          "source": "Dashboard",
+          "shown": "Dashboard",
+          "size": 16,
+          "bounds": {
+            "x": 8,
+            "y": 3,
+            "width": 68.3671875,
+            "height": 12
+          }
+        },
+        {
+          "source": "13:42",
+          "shown": "13:42",
+          "size": 14,
+          "bounds": {
+            "x": 159.8779296875,
+            "y": 4,
+            "width": 32.1220703125,
+            "height": 11
+          }
+        },
+        {
+          "source": "02:31",
+          "shown": "02:31",
+          "size": 43,
+          "bounds": {
+            "x": 50.636024475097656,
+            "y": 30,
+            "width": 98.72795104980469,
+            "height": 31
+          }
+        },
+        {
+          "source": "Tea",
+          "shown": "Tea",
+          "size": 14,
+          "bounds": {
+            "x": 101.0546875,
+            "y": 66,
+            "width": 20.890625,
+            "height": 11
+          }
+        },
+        {
+          "source": "Night Drive",
+          "shown": "Night Drive",
+          "size": 16,
+          "bounds": {
+            "x": 40,
+            "y": 86,
+            "width": 71.5546875,
+            "height": 15
+          }
+        },
+        {
+          "source": "The Midnight",
+          "shown": "The Midnight",
+          "size": 14,
+          "bounds": {
+            "x": 40,
+            "y": 102,
+            "width": 74.142578125,
+            "height": 14
+          }
+        },
+        {
+          "source": "Sam",
+          "shown": "Sam",
+          "size": 16,
+          "bounds": {
+            "x": 32,
+            "y": 124,
+            "width": 28.0390625,
+            "height": 12
+          }
+        },
+        {
+          "source": "Signal · 2m",
+          "shown": "Signal · 2m",
+          "size": 12,
+          "bounds": {
+            "x": 135.970703125,
+            "y": 126,
+            "width": 54.029296875,
+            "height": 13
+          }
+        },
+        {
+          "source": "New message",
+          "shown": "New message",
+          "size": 16,
+          "bounds": {
+            "x": 10,
+            "y": 143,
+            "width": 88.578125,
+            "height": 15
+          }
+        },
+        {
+          "source": "13°C",
+          "shown": "13°C",
+          "size": 20,
+          "bounds": {
+            "x": 51.9200439453125,
+            "y": 168,
+            "width": 39.0799560546875,
+            "height": 14
+          }
+        },
+        {
+          "source": "76%",
+          "shown": "76%",
+          "size": 20,
+          "bounds": {
+            "x": 152.56004333496094,
+            "y": 167,
+            "width": 36.43995666503906,
+            "height": 16
+          }
+        },
+        {
+          "source": "Light on",
+          "shown": "Light on",
+          "size": 14,
+          "bounds": {
+            "x": 29,
+            "y": 196,
+            "width": 45.541015625,
+            "height": 14
+          }
+        },
+        {
+          "source": "Find phone",
+          "shown": "Find phone",
+          "size": 14,
+          "bounds": {
+            "x": 127,
+            "y": 196,
+            "width": 61.6259765625,
+            "height": 14
+          }
+        },
+        {
+          "source": "Select: Open",
+          "shown": "Select: Open",
+          "size": 12,
+          "bounds": {
+            "x": 8,
+            "y": 215,
+            "width": 61.0546875,
+            "height": 13
+          }
+        },
+        {
+          "source": "1/7",
+          "shown": "1/7",
+          "size": 12,
+          "bounds": {
+            "x": 175.88671875,
+            "y": 216,
+            "width": 16.11328125,
+            "height": 10
+          }
+        }
+      ],
+      "regions": [
+        {
+          "id": "activity-0",
+          "x": 4,
+          "y": 23,
+          "width": 192,
+          "height": 57,
+          "selected": true
+        },
+        {
+          "id": "activity-1",
+          "x": 4,
+          "y": 84,
+          "width": 192,
+          "height": 32,
+          "selected": false
+        },
+        {
+          "id": "notification",
+          "x": 4,
+          "y": 121,
+          "width": 192,
+          "height": 38,
+          "selected": false
+        },
+        {
+          "id": "pin-weather",
+          "x": 4,
+          "y": 164,
+          "width": 94,
+          "height": 24,
+          "selected": false
+        },
+        {
+          "id": "pin-phone",
+          "x": 102,
+          "y": 164,
+          "width": 94,
+          "height": 24,
+          "selected": false
+        },
+        {
+          "id": "control-light",
+          "x": 4,
+          "y": 192,
+          "width": 94,
+          "height": 20,
+          "selected": false
+        },
+        {
+          "id": "control-find",
+          "x": 102,
+          "y": 192,
+          "width": 94,
+          "height": 20,
+          "selected": false
+        }
+      ],
+      "width": 200,
+      "height": 228,
+      "bytes": 9230,
+      "sha256": "906f72a6ee8e5a8907cb00824ae626426b67beeb6152baefe6c01f24aadcbe06",
+      "palette": {
+        "opaque": true,
+        "quantized": true,
+        "colors": 15
+      }
+    },
+    {
+      "file": "screens/list-notification-private.png",
+      "layout": "list",
+      "scenario": "timer-media",
+      "theme": "light",
+      "swapped": false,
+      "messagePreview": false,
+      "mode": "overview",
+      "selectedId": "activity-0",
+      "visibleIds": [
+        "activity-0",
+        "activity-1",
+        "notification",
+        "pin-weather",
+        "control-find"
+      ],
+      "boundsViolations": [],
+      "text": [
+        {
+          "source": "Dashboard",
+          "shown": "Dashboard",
+          "size": 16,
+          "bounds": {
+            "x": 8,
+            "y": 3,
+            "width": 68.3671875,
+            "height": 12
+          }
+        },
+        {
+          "source": "13:42",
+          "shown": "13:42",
+          "size": 14,
+          "bounds": {
+            "x": 159.8779296875,
+            "y": 4,
+            "width": 32.1220703125,
+            "height": 11
+          }
+        },
+        {
+          "source": "Tea",
+          "shown": "Tea",
+          "size": 16,
+          "bounds": {
+            "x": 36,
+            "y": 35,
+            "width": 23.875,
+            "height": 12
+          }
+        },
+        {
+          "source": "02:31",
+          "shown": "02:31",
+          "size": 26,
+          "bounds": {
+            "x": 130.30393981933594,
+            "y": 29,
+            "width": 59.69606018066406,
+            "height": 19
+          }
+        },
+        {
+          "source": "Night Drive",
+          "shown": "Night Drive",
+          "size": 16,
+          "bounds": {
+            "x": 40,
+            "y": 63,
+            "width": 71.5546875,
+            "height": 15
+          }
+        },
+        {
+          "source": "The Midnight",
+          "shown": "The Midnight",
+          "size": 14,
+          "bounds": {
+            "x": 40,
+            "y": 79,
+            "width": 74.142578125,
+            "height": 14
+          }
+        },
+        {
+          "source": "Sam · Signal",
+          "shown": "Sam · Signal",
+          "size": 14,
+          "bounds": {
+            "x": 37,
+            "y": 99,
+            "width": 70.109375,
+            "height": 14
+          }
+        },
+        {
+          "source": "New message",
+          "shown": "New message",
+          "size": 16,
+          "bounds": {
+            "x": 37,
+            "y": 114,
+            "width": 88.578125,
+            "height": 15
+          }
+        },
+        {
+          "source": "Weather",
+          "shown": "Weather",
+          "size": 17,
+          "bounds": {
+            "x": 37,
+            "y": 143,
+            "width": 56.2294921875,
+            "height": 12
+          }
+        },
+        {
+          "source": "13°C",
+          "shown": "13°C",
+          "size": 25,
+          "bounds": {
+            "x": 136.14981079101562,
+            "y": 139,
+            "width": 48.850189208984375,
+            "height": 18
+          }
+        },
+        {
+          "source": "Find phone",
+          "shown": "Find phone",
+          "size": 18,
+          "bounds": {
+            "x": 37,
+            "y": 177,
+            "width": 79.2333984375,
+            "height": 18
+          }
+        },
+        {
+          "source": "Select: Open",
+          "shown": "Select: Open",
+          "size": 12,
+          "bounds": {
+            "x": 8,
+            "y": 215,
+            "width": 61.0546875,
+            "height": 13
+          }
+        },
+        {
+          "source": "1/7",
+          "shown": "1/7",
+          "size": 12,
+          "bounds": {
+            "x": 175.88671875,
+            "y": 216,
+            "width": 16.11328125,
+            "height": 10
+          }
+        }
+      ],
+      "regions": [
+        {
+          "id": "activity-0",
+          "x": 4,
+          "y": 25,
+          "width": 192,
+          "height": 32,
+          "selected": true
+        },
+        {
+          "id": "activity-1",
+          "x": 4,
+          "y": 61,
+          "width": 192,
+          "height": 32,
+          "selected": false
+        },
+        {
+          "id": "notification",
+          "x": 4,
+          "y": 97,
+          "width": 188,
+          "height": 32,
+          "selected": false
+        },
+        {
+          "id": "pin-weather",
+          "x": 4,
+          "y": 133,
+          "width": 188,
+          "height": 32,
+          "selected": false
+        },
+        {
+          "id": "control-find",
+          "x": 4,
+          "y": 169,
+          "width": 188,
+          "height": 32,
+          "selected": false
+        }
+      ],
+      "width": 200,
+      "height": 228,
+      "bytes": 8255,
+      "sha256": "574ce963225b25ccea551cc89752ed3a0271c78e7cb8a90607d36cb1f6bd495b",
+      "palette": {
+        "opaque": true,
+        "quantized": true,
+        "colors": 15
+      }
+    },
+    {
+      "file": "screens/snapshot-notification-selected.png",
+      "layout": "snapshot",
+      "scenario": "timer-media",
+      "theme": "light",
+      "swapped": false,
+      "messagePreview": true,
+      "mode": "overview",
+      "selectedId": "notification",
+      "visibleIds": [
+        "activity-0",
+        "activity-1",
+        "notification",
+        "pin-weather",
+        "pin-phone",
+        "control-light",
+        "control-find"
+      ],
+      "boundsViolations": [],
+      "text": [
+        {
+          "source": "Dashboard",
+          "shown": "Dashboard",
+          "size": 16,
+          "bounds": {
+            "x": 8,
+            "y": 3,
+            "width": 68.3671875,
+            "height": 12
+          }
+        },
+        {
+          "source": "13:42",
+          "shown": "13:42",
+          "size": 14,
+          "bounds": {
+            "x": 159.8779296875,
+            "y": 4,
+            "width": 32.1220703125,
+            "height": 11
+          }
+        },
+        {
+          "source": "Tea",
+          "shown": "Tea",
+          "size": 16,
+          "bounds": {
+            "x": 36,
+            "y": 32,
+            "width": 23.875,
+            "height": 12
+          }
+        },
+        {
+          "source": "02:31",
+          "shown": "02:31",
+          "size": 26,
+          "bounds": {
+            "x": 130.30393981933594,
+            "y": 26,
+            "width": 59.69606018066406,
+            "height": 19
+          }
+        },
+        {
+          "source": "Night Drive",
+          "shown": "Night Drive",
+          "size": 16,
+          "bounds": {
+            "x": 40,
+            "y": 60,
+            "width": 71.5546875,
+            "height": 15
+          }
+        },
+        {
+          "source": "The Midnight",
+          "shown": "The Midnight",
+          "size": 14,
+          "bounds": {
+            "x": 40,
+            "y": 76,
+            "width": 74.142578125,
+            "height": 14
+          }
+        },
+        {
+          "source": "Sam",
+          "shown": "Sam",
+          "size": 16,
+          "bounds": {
+            "x": 32,
+            "y": 98,
+            "width": 28.0390625,
+            "height": 12
+          }
+        },
+        {
+          "source": "Signal · 2m",
+          "shown": "Signal · 2m",
+          "size": 12,
+          "bounds": {
+            "x": 135.970703125,
+            "y": 100,
+            "width": 54.029296875,
+            "height": 13
+          }
+        },
+        {
+          "source": "At the entrance.",
+          "shown": "At the entrance.",
+          "size": 16,
+          "bounds": {
+            "x": 10,
+            "y": 117,
+            "width": 103.0859375,
+            "height": 12
+          }
+        },
+        {
+          "source": "Weather",
+          "shown": "Weather",
+          "size": 12,
+          "bounds": {
+            "x": 29,
+            "y": 145,
+            "width": 39.69140625,
+            "height": 10
+          }
+        },
+        {
+          "source": "13°C",
+          "shown": "13°C",
+          "size": 23,
+          "bounds": {
+            "x": 12,
+            "y": 156,
+            "width": 44.941986083984375,
+            "height": 17
+          }
+        },
+        {
+          "source": "Phone",
+          "shown": "Phone",
+          "size": 12,
+          "bounds": {
+            "x": 127,
+            "y": 145,
+            "width": 30.345703125,
+            "height": 10
+          }
+        },
+        {
+          "source": "76%",
+          "shown": "76%",
+          "size": 23,
+          "bounds": {
+            "x": 110,
+            "y": 156,
+            "width": 41.906005859375,
+            "height": 18
+          }
+        },
+        {
+          "source": "Light on",
+          "shown": "Light on",
+          "size": 14,
+          "bounds": {
+            "x": 29,
+            "y": 189.5,
+            "width": 45.541015625,
+            "height": 14
+          }
+        },
+        {
+          "source": "Find phone",
+          "shown": "Find phone",
+          "size": 14,
+          "bounds": {
+            "x": 127,
+            "y": 189.5,
+            "width": 61.6259765625,
+            "height": 14
+          }
+        },
+        {
+          "source": "Select: Open",
+          "shown": "Select: Open",
+          "size": 12,
+          "bounds": {
+            "x": 8,
+            "y": 215,
+            "width": 61.0546875,
+            "height": 13
+          }
+        },
+        {
+          "source": "3/7",
+          "shown": "3/7",
+          "size": 12,
+          "bounds": {
+            "x": 175.88671875,
+            "y": 216,
+            "width": 16.11328125,
+            "height": 10
+          }
+        }
+      ],
+      "regions": [
+        {
+          "id": "activity-0",
+          "x": 4,
+          "y": 22,
+          "width": 192,
+          "height": 32,
+          "selected": false
+        },
+        {
+          "id": "activity-1",
+          "x": 4,
+          "y": 58,
+          "width": 192,
+          "height": 32,
+          "selected": false
+        },
+        {
+          "id": "notification",
+          "x": 4,
+          "y": 95,
+          "width": 192,
+          "height": 41,
+          "selected": true
+        },
+        {
+          "id": "pin-weather",
+          "x": 4,
+          "y": 141,
+          "width": 94,
+          "height": 37,
+          "selected": false
+        },
+        {
+          "id": "pin-phone",
+          "x": 102,
+          "y": 141,
+          "width": 94,
+          "height": 37,
+          "selected": false
+        },
+        {
+          "id": "control-light",
+          "x": 4,
+          "y": 183,
+          "width": 94,
+          "height": 25,
+          "selected": false
+        },
+        {
+          "id": "control-find",
+          "x": 102,
+          "y": 183,
+          "width": 94,
+          "height": 25,
+          "selected": false
+        }
+      ],
+      "width": 200,
+      "height": 228,
+      "bytes": 9195,
+      "sha256": "80464adbfdefc875ca2864dff431f14c7c550f9e1b71b81fdec84b9b81b20a72",
+      "palette": {
+        "opaque": true,
+        "quantized": true,
+        "colors": 15
+      }
+    },
+    {
+      "file": "screens/snapshot-control-selected.png",
+      "layout": "snapshot",
+      "scenario": "timer-media",
+      "theme": "light",
+      "swapped": false,
+      "messagePreview": true,
+      "mode": "overview",
+      "selectedId": "control-find",
+      "visibleIds": [
+        "activity-0",
+        "activity-1",
+        "notification",
+        "pin-weather",
+        "pin-phone",
+        "control-light",
+        "control-find"
+      ],
+      "boundsViolations": [],
+      "text": [
+        {
+          "source": "Dashboard",
+          "shown": "Dashboard",
+          "size": 16,
+          "bounds": {
+            "x": 8,
+            "y": 3,
+            "width": 68.3671875,
+            "height": 12
+          }
+        },
+        {
+          "source": "13:42",
+          "shown": "13:42",
+          "size": 14,
+          "bounds": {
+            "x": 159.8779296875,
+            "y": 4,
+            "width": 32.1220703125,
+            "height": 11
+          }
+        },
+        {
+          "source": "Tea",
+          "shown": "Tea",
+          "size": 16,
+          "bounds": {
+            "x": 36,
+            "y": 32,
+            "width": 23.875,
+            "height": 12
+          }
+        },
+        {
+          "source": "02:31",
+          "shown": "02:31",
+          "size": 26,
+          "bounds": {
+            "x": 130.30393981933594,
+            "y": 26,
+            "width": 59.69606018066406,
+            "height": 19
+          }
+        },
+        {
+          "source": "Night Drive",
+          "shown": "Night Drive",
+          "size": 16,
+          "bounds": {
+            "x": 40,
+            "y": 60,
+            "width": 71.5546875,
+            "height": 15
+          }
+        },
+        {
+          "source": "The Midnight",
+          "shown": "The Midnight",
+          "size": 14,
+          "bounds": {
+            "x": 40,
+            "y": 76,
+            "width": 74.142578125,
+            "height": 14
+          }
+        },
+        {
+          "source": "Sam",
+          "shown": "Sam",
+          "size": 16,
+          "bounds": {
+            "x": 32,
+            "y": 98,
+            "width": 28.0390625,
+            "height": 12
+          }
+        },
+        {
+          "source": "Signal · 2m",
+          "shown": "Signal · 2m",
+          "size": 12,
+          "bounds": {
+            "x": 135.970703125,
+            "y": 100,
+            "width": 54.029296875,
+            "height": 13
+          }
+        },
+        {
+          "source": "At the entrance.",
+          "shown": "At the entrance.",
+          "size": 16,
+          "bounds": {
+            "x": 10,
+            "y": 117,
+            "width": 103.0859375,
+            "height": 12
+          }
+        },
+        {
+          "source": "Weather",
+          "shown": "Weather",
+          "size": 12,
+          "bounds": {
+            "x": 29,
+            "y": 145,
+            "width": 39.69140625,
+            "height": 10
+          }
+        },
+        {
+          "source": "13°C",
+          "shown": "13°C",
+          "size": 23,
+          "bounds": {
+            "x": 12,
+            "y": 156,
+            "width": 44.941986083984375,
+            "height": 17
+          }
+        },
+        {
+          "source": "Phone",
+          "shown": "Phone",
+          "size": 12,
+          "bounds": {
+            "x": 127,
+            "y": 145,
+            "width": 30.345703125,
+            "height": 10
+          }
+        },
+        {
+          "source": "76%",
+          "shown": "76%",
+          "size": 23,
+          "bounds": {
+            "x": 110,
+            "y": 156,
+            "width": 41.906005859375,
+            "height": 18
+          }
+        },
+        {
+          "source": "Light on",
+          "shown": "Light on",
+          "size": 14,
+          "bounds": {
+            "x": 29,
+            "y": 189.5,
+            "width": 45.541015625,
+            "height": 14
+          }
+        },
+        {
+          "source": "Find phone",
+          "shown": "Find phone",
+          "size": 14,
+          "bounds": {
+            "x": 127,
+            "y": 189.5,
+            "width": 61.6259765625,
+            "height": 14
+          }
+        },
+        {
+          "source": "Select: Ring",
+          "shown": "Select: Ring",
+          "size": 12,
+          "bounds": {
+            "x": 8,
+            "y": 215,
+            "width": 57.83203125,
+            "height": 13
+          }
+        },
+        {
+          "source": "7/7",
+          "shown": "7/7",
+          "size": 12,
+          "bounds": {
+            "x": 175.88671875,
+            "y": 216,
+            "width": 16.11328125,
+            "height": 10
+          }
+        }
+      ],
+      "regions": [
+        {
+          "id": "activity-0",
+          "x": 4,
+          "y": 22,
+          "width": 192,
+          "height": 32,
+          "selected": false
+        },
+        {
+          "id": "activity-1",
+          "x": 4,
+          "y": 58,
+          "width": 192,
+          "height": 32,
+          "selected": false
+        },
+        {
+          "id": "notification",
+          "x": 4,
+          "y": 95,
+          "width": 192,
+          "height": 41,
+          "selected": false
+        },
+        {
+          "id": "pin-weather",
+          "x": 4,
+          "y": 141,
+          "width": 94,
+          "height": 37,
+          "selected": false
+        },
+        {
+          "id": "pin-phone",
+          "x": 102,
+          "y": 141,
+          "width": 94,
+          "height": 37,
+          "selected": false
+        },
+        {
+          "id": "control-light",
+          "x": 4,
+          "y": 183,
+          "width": 94,
+          "height": 25,
+          "selected": false
+        },
+        {
+          "id": "control-find",
+          "x": 102,
+          "y": 183,
+          "width": 94,
+          "height": 25,
+          "selected": true
+        }
+      ],
+      "width": 200,
+      "height": 228,
+      "bytes": 9227,
+      "sha256": "d68ae3f841631655619abd98d36031d068c7cbf1502c60345e8b34b2fee6da15",
+      "palette": {
+        "opaque": true,
+        "quantized": true,
+        "colors": 15
+      }
+    },
+    {
+      "file": "screens/focus-notification-selected.png",
+      "layout": "focus",
+      "scenario": "timer-media",
+      "theme": "light",
+      "swapped": false,
+      "messagePreview": true,
+      "mode": "overview",
+      "selectedId": "notification",
+      "visibleIds": [
+        "activity-0",
+        "activity-1",
+        "notification",
+        "pin-weather",
+        "pin-phone",
+        "control-light",
+        "control-find"
+      ],
+      "boundsViolations": [],
+      "text": [
+        {
+          "source": "Dashboard",
+          "shown": "Dashboard",
+          "size": 16,
+          "bounds": {
+            "x": 8,
+            "y": 3,
+            "width": 68.3671875,
+            "height": 12
+          }
+        },
+        {
+          "source": "13:42",
+          "shown": "13:42",
+          "size": 14,
+          "bounds": {
+            "x": 159.8779296875,
+            "y": 4,
+            "width": 32.1220703125,
+            "height": 11
+          }
+        },
+        {
+          "source": "02:31",
+          "shown": "02:31",
+          "size": 43,
+          "bounds": {
+            "x": 50.636024475097656,
+            "y": 30,
+            "width": 98.72795104980469,
+            "height": 31
+          }
+        },
+        {
+          "source": "Tea",
+          "shown": "Tea",
+          "size": 14,
+          "bounds": {
+            "x": 101.0546875,
+            "y": 66,
+            "width": 20.890625,
+            "height": 11
+          }
+        },
+        {
+          "source": "Night Drive",
+          "shown": "Night Drive",
+          "size": 16,
+          "bounds": {
+            "x": 40,
+            "y": 86,
+            "width": 71.5546875,
+            "height": 15
+          }
+        },
+        {
+          "source": "The Midnight",
+          "shown": "The Midnight",
+          "size": 14,
+          "bounds": {
+            "x": 40,
+            "y": 102,
+            "width": 74.142578125,
+            "height": 14
+          }
+        },
+        {
+          "source": "Sam",
+          "shown": "Sam",
+          "size": 16,
+          "bounds": {
+            "x": 32,
+            "y": 124,
+            "width": 28.0390625,
+            "height": 12
+          }
+        },
+        {
+          "source": "Signal · 2m",
+          "shown": "Signal · 2m",
+          "size": 12,
+          "bounds": {
+            "x": 135.970703125,
+            "y": 126,
+            "width": 54.029296875,
+            "height": 13
+          }
+        },
+        {
+          "source": "At the entrance.",
+          "shown": "At the entrance.",
+          "size": 16,
+          "bounds": {
+            "x": 10,
+            "y": 143,
+            "width": 103.0859375,
+            "height": 12
+          }
+        },
+        {
+          "source": "13°C",
+          "shown": "13°C",
+          "size": 20,
+          "bounds": {
+            "x": 51.9200439453125,
+            "y": 168,
+            "width": 39.0799560546875,
+            "height": 14
+          }
+        },
+        {
+          "source": "76%",
+          "shown": "76%",
+          "size": 20,
+          "bounds": {
+            "x": 152.56004333496094,
+            "y": 167,
+            "width": 36.43995666503906,
+            "height": 16
+          }
+        },
+        {
+          "source": "Light on",
+          "shown": "Light on",
+          "size": 14,
+          "bounds": {
+            "x": 29,
+            "y": 196,
+            "width": 45.541015625,
+            "height": 14
+          }
+        },
+        {
+          "source": "Find phone",
+          "shown": "Find phone",
+          "size": 14,
+          "bounds": {
+            "x": 127,
+            "y": 196,
+            "width": 61.6259765625,
+            "height": 14
+          }
+        },
+        {
+          "source": "Select: Open",
+          "shown": "Select: Open",
+          "size": 12,
+          "bounds": {
+            "x": 8,
+            "y": 215,
+            "width": 61.0546875,
+            "height": 13
+          }
+        },
+        {
+          "source": "3/7",
+          "shown": "3/7",
+          "size": 12,
+          "bounds": {
+            "x": 175.88671875,
+            "y": 216,
+            "width": 16.11328125,
+            "height": 10
+          }
+        }
+      ],
+      "regions": [
+        {
+          "id": "activity-0",
+          "x": 4,
+          "y": 23,
+          "width": 192,
+          "height": 57,
+          "selected": false
+        },
+        {
+          "id": "activity-1",
+          "x": 4,
+          "y": 84,
+          "width": 192,
+          "height": 32,
+          "selected": false
+        },
+        {
+          "id": "notification",
+          "x": 4,
+          "y": 121,
+          "width": 192,
+          "height": 38,
+          "selected": true
+        },
+        {
+          "id": "pin-weather",
+          "x": 4,
+          "y": 164,
+          "width": 94,
+          "height": 24,
+          "selected": false
+        },
+        {
+          "id": "pin-phone",
+          "x": 102,
+          "y": 164,
+          "width": 94,
+          "height": 24,
+          "selected": false
+        },
+        {
+          "id": "control-light",
+          "x": 4,
+          "y": 192,
+          "width": 94,
+          "height": 20,
+          "selected": false
+        },
+        {
+          "id": "control-find",
+          "x": 102,
+          "y": 192,
+          "width": 94,
+          "height": 20,
+          "selected": false
+        }
+      ],
+      "width": 200,
+      "height": 228,
+      "bytes": 9188,
+      "sha256": "12d8b5c44a1488b1bd3bab10dfabe5532f9913f4eb7ba8b018e8f01a1578bf0d",
+      "palette": {
+        "opaque": true,
+        "quantized": true,
+        "colors": 15
+      }
+    },
+    {
+      "file": "screens/focus-control-selected.png",
+      "layout": "focus",
+      "scenario": "timer-media",
+      "theme": "light",
+      "swapped": false,
+      "messagePreview": true,
+      "mode": "overview",
+      "selectedId": "control-find",
+      "visibleIds": [
+        "activity-0",
+        "activity-1",
+        "notification",
+        "pin-weather",
+        "pin-phone",
+        "control-light",
+        "control-find"
+      ],
+      "boundsViolations": [],
+      "text": [
+        {
+          "source": "Dashboard",
+          "shown": "Dashboard",
+          "size": 16,
+          "bounds": {
+            "x": 8,
+            "y": 3,
+            "width": 68.3671875,
+            "height": 12
+          }
+        },
+        {
+          "source": "13:42",
+          "shown": "13:42",
+          "size": 14,
+          "bounds": {
+            "x": 159.8779296875,
+            "y": 4,
+            "width": 32.1220703125,
+            "height": 11
+          }
+        },
+        {
+          "source": "02:31",
+          "shown": "02:31",
+          "size": 43,
+          "bounds": {
+            "x": 50.636024475097656,
+            "y": 30,
+            "width": 98.72795104980469,
+            "height": 31
+          }
+        },
+        {
+          "source": "Tea",
+          "shown": "Tea",
+          "size": 14,
+          "bounds": {
+            "x": 101.0546875,
+            "y": 66,
+            "width": 20.890625,
+            "height": 11
+          }
+        },
+        {
+          "source": "Night Drive",
+          "shown": "Night Drive",
+          "size": 16,
+          "bounds": {
+            "x": 40,
+            "y": 86,
+            "width": 71.5546875,
+            "height": 15
+          }
+        },
+        {
+          "source": "The Midnight",
+          "shown": "The Midnight",
+          "size": 14,
+          "bounds": {
+            "x": 40,
+            "y": 102,
+            "width": 74.142578125,
+            "height": 14
+          }
+        },
+        {
+          "source": "Sam",
+          "shown": "Sam",
+          "size": 16,
+          "bounds": {
+            "x": 32,
+            "y": 124,
+            "width": 28.0390625,
+            "height": 12
+          }
+        },
+        {
+          "source": "Signal · 2m",
+          "shown": "Signal · 2m",
+          "size": 12,
+          "bounds": {
+            "x": 135.970703125,
+            "y": 126,
+            "width": 54.029296875,
+            "height": 13
+          }
+        },
+        {
+          "source": "At the entrance.",
+          "shown": "At the entrance.",
+          "size": 16,
+          "bounds": {
+            "x": 10,
+            "y": 143,
+            "width": 103.0859375,
+            "height": 12
+          }
+        },
+        {
+          "source": "13°C",
+          "shown": "13°C",
+          "size": 20,
+          "bounds": {
+            "x": 51.9200439453125,
+            "y": 168,
+            "width": 39.0799560546875,
+            "height": 14
+          }
+        },
+        {
+          "source": "76%",
+          "shown": "76%",
+          "size": 20,
+          "bounds": {
+            "x": 152.56004333496094,
+            "y": 167,
+            "width": 36.43995666503906,
+            "height": 16
+          }
+        },
+        {
+          "source": "Light on",
+          "shown": "Light on",
+          "size": 14,
+          "bounds": {
+            "x": 29,
+            "y": 196,
+            "width": 45.541015625,
+            "height": 14
+          }
+        },
+        {
+          "source": "Find phone",
+          "shown": "Find phone",
+          "size": 14,
+          "bounds": {
+            "x": 127,
+            "y": 196,
+            "width": 61.6259765625,
+            "height": 14
+          }
+        },
+        {
+          "source": "Select: Ring",
+          "shown": "Select: Ring",
+          "size": 12,
+          "bounds": {
+            "x": 8,
+            "y": 215,
+            "width": 57.83203125,
+            "height": 13
+          }
+        },
+        {
+          "source": "7/7",
+          "shown": "7/7",
+          "size": 12,
+          "bounds": {
+            "x": 175.88671875,
+            "y": 216,
+            "width": 16.11328125,
+            "height": 10
+          }
+        }
+      ],
+      "regions": [
+        {
+          "id": "activity-0",
+          "x": 4,
+          "y": 23,
+          "width": 192,
+          "height": 57,
+          "selected": false
+        },
+        {
+          "id": "activity-1",
+          "x": 4,
+          "y": 84,
+          "width": 192,
+          "height": 32,
+          "selected": false
+        },
+        {
+          "id": "notification",
+          "x": 4,
+          "y": 121,
+          "width": 192,
+          "height": 38,
+          "selected": false
+        },
+        {
+          "id": "pin-weather",
+          "x": 4,
+          "y": 164,
+          "width": 94,
+          "height": 24,
+          "selected": false
+        },
+        {
+          "id": "pin-phone",
+          "x": 102,
+          "y": 164,
+          "width": 94,
+          "height": 24,
+          "selected": false
+        },
+        {
+          "id": "control-light",
+          "x": 4,
+          "y": 192,
+          "width": 94,
+          "height": 20,
+          "selected": false
+        },
+        {
+          "id": "control-find",
+          "x": 102,
+          "y": 192,
+          "width": 94,
+          "height": 20,
+          "selected": true
+        }
+      ],
+      "width": 200,
+      "height": 228,
+      "bytes": 9155,
+      "sha256": "1802c1f7412b7dd28f7bb6958c39446e0f9423d9ecff5a5da53f251fb5243e9c",
+      "palette": {
+        "opaque": true,
+        "quantized": true,
+        "colors": 15
+      }
+    },
+    {
+      "file": "screens/list-notification-selected.png",
+      "layout": "list",
+      "scenario": "timer-media",
+      "theme": "light",
+      "swapped": false,
+      "messagePreview": true,
+      "mode": "overview",
+      "selectedId": "notification",
+      "visibleIds": [
+        "activity-0",
+        "activity-1",
+        "notification",
+        "pin-weather",
+        "control-find"
+      ],
+      "boundsViolations": [],
+      "text": [
+        {
+          "source": "Dashboard",
+          "shown": "Dashboard",
+          "size": 16,
+          "bounds": {
+            "x": 8,
+            "y": 3,
+            "width": 68.3671875,
+            "height": 12
+          }
+        },
+        {
+          "source": "13:42",
+          "shown": "13:42",
+          "size": 14,
+          "bounds": {
+            "x": 159.8779296875,
+            "y": 4,
+            "width": 32.1220703125,
+            "height": 11
+          }
+        },
+        {
+          "source": "Tea",
+          "shown": "Tea",
+          "size": 16,
+          "bounds": {
+            "x": 36,
+            "y": 35,
+            "width": 23.875,
+            "height": 12
+          }
+        },
+        {
+          "source": "02:31",
+          "shown": "02:31",
+          "size": 26,
+          "bounds": {
+            "x": 130.30393981933594,
+            "y": 29,
+            "width": 59.69606018066406,
+            "height": 19
+          }
+        },
+        {
+          "source": "Night Drive",
+          "shown": "Night Drive",
+          "size": 16,
+          "bounds": {
+            "x": 40,
+            "y": 63,
+            "width": 71.5546875,
+            "height": 15
+          }
+        },
+        {
+          "source": "The Midnight",
+          "shown": "The Midnight",
+          "size": 14,
+          "bounds": {
+            "x": 40,
+            "y": 79,
+            "width": 74.142578125,
+            "height": 14
+          }
+        },
+        {
+          "source": "Sam · Signal",
+          "shown": "Sam · Signal",
+          "size": 14,
+          "bounds": {
+            "x": 37,
+            "y": 99,
+            "width": 70.109375,
+            "height": 14
+          }
+        },
+        {
+          "source": "At the entrance.",
+          "shown": "At the entrance.",
+          "size": 16,
+          "bounds": {
+            "x": 37,
+            "y": 114,
+            "width": 103.0859375,
+            "height": 12
+          }
+        },
+        {
+          "source": "Weather",
+          "shown": "Weather",
+          "size": 17,
+          "bounds": {
+            "x": 37,
+            "y": 143,
+            "width": 56.2294921875,
+            "height": 12
+          }
+        },
+        {
+          "source": "13°C",
+          "shown": "13°C",
+          "size": 25,
+          "bounds": {
+            "x": 136.14981079101562,
+            "y": 139,
+            "width": 48.850189208984375,
+            "height": 18
+          }
+        },
+        {
+          "source": "Find phone",
+          "shown": "Find phone",
+          "size": 18,
+          "bounds": {
+            "x": 37,
+            "y": 177,
+            "width": 79.2333984375,
+            "height": 18
+          }
+        },
+        {
+          "source": "Select: Open",
+          "shown": "Select: Open",
+          "size": 12,
+          "bounds": {
+            "x": 8,
+            "y": 215,
+            "width": 61.0546875,
+            "height": 13
+          }
+        },
+        {
+          "source": "3/7",
+          "shown": "3/7",
+          "size": 12,
+          "bounds": {
+            "x": 175.88671875,
+            "y": 216,
+            "width": 16.11328125,
+            "height": 10
+          }
+        }
+      ],
+      "regions": [
+        {
+          "id": "activity-0",
+          "x": 4,
+          "y": 25,
+          "width": 192,
+          "height": 32,
+          "selected": false
+        },
+        {
+          "id": "activity-1",
+          "x": 4,
+          "y": 61,
+          "width": 192,
+          "height": 32,
+          "selected": false
+        },
+        {
+          "id": "notification",
+          "x": 4,
+          "y": 97,
+          "width": 188,
+          "height": 32,
+          "selected": true
+        },
+        {
+          "id": "pin-weather",
+          "x": 4,
+          "y": 133,
+          "width": 188,
+          "height": 32,
+          "selected": false
+        },
+        {
+          "id": "control-find",
+          "x": 4,
+          "y": 169,
+          "width": 188,
+          "height": 32,
+          "selected": false
+        }
+      ],
+      "width": 200,
+      "height": 228,
+      "bytes": 8337,
+      "sha256": "47d6d6e21eba4e6dc63561f2093c420f9ee402df2f8adf634b3410a3fa4baa78",
+      "palette": {
+        "opaque": true,
+        "quantized": true,
+        "colors": 15
+      }
+    },
+    {
+      "file": "screens/list-control-selected.png",
+      "layout": "list",
+      "scenario": "timer-media",
+      "theme": "light",
+      "swapped": false,
+      "messagePreview": true,
+      "mode": "overview",
+      "selectedId": "control-find",
+      "visibleIds": [
+        "activity-1",
+        "notification",
+        "pin-weather",
+        "control-find",
+        "pin-phone"
+      ],
+      "boundsViolations": [],
+      "text": [
+        {
+          "source": "Dashboard",
+          "shown": "Dashboard",
+          "size": 16,
+          "bounds": {
+            "x": 8,
+            "y": 3,
+            "width": 68.3671875,
+            "height": 12
+          }
+        },
+        {
+          "source": "13:42",
+          "shown": "13:42",
+          "size": 14,
+          "bounds": {
+            "x": 159.8779296875,
+            "y": 4,
+            "width": 32.1220703125,
+            "height": 11
+          }
+        },
+        {
+          "source": "Night Drive",
+          "shown": "Night Drive",
+          "size": 16,
+          "bounds": {
+            "x": 40,
+            "y": 27,
+            "width": 71.5546875,
+            "height": 15
+          }
+        },
+        {
+          "source": "The Midnight",
+          "shown": "The Midnight",
+          "size": 14,
+          "bounds": {
+            "x": 40,
+            "y": 43,
+            "width": 74.142578125,
+            "height": 14
+          }
+        },
+        {
+          "source": "Sam · Signal",
+          "shown": "Sam · Signal",
+          "size": 14,
+          "bounds": {
+            "x": 37,
+            "y": 63,
+            "width": 70.109375,
+            "height": 14
+          }
+        },
+        {
+          "source": "At the entrance.",
+          "shown": "At the entrance.",
+          "size": 16,
+          "bounds": {
+            "x": 37,
+            "y": 78,
+            "width": 103.0859375,
+            "height": 12
+          }
+        },
+        {
+          "source": "Weather",
+          "shown": "Weather",
+          "size": 17,
+          "bounds": {
+            "x": 37,
+            "y": 107,
+            "width": 56.2294921875,
+            "height": 12
+          }
+        },
+        {
+          "source": "13°C",
+          "shown": "13°C",
+          "size": 25,
+          "bounds": {
+            "x": 136.14981079101562,
+            "y": 103,
+            "width": 48.850189208984375,
+            "height": 18
+          }
+        },
+        {
+          "source": "Find phone",
+          "shown": "Find phone",
+          "size": 18,
+          "bounds": {
+            "x": 37,
+            "y": 141,
+            "width": 79.2333984375,
+            "height": 18
+          }
+        },
+        {
+          "source": "Phone",
+          "shown": "Phone",
+          "size": 17,
+          "bounds": {
+            "x": 37,
+            "y": 179,
+            "width": 42.98974609375,
+            "height": 12
+          }
+        },
+        {
+          "source": "76%",
+          "shown": "76%",
+          "size": 25,
+          "bounds": {
+            "x": 139.4498291015625,
+            "y": 174,
+            "width": 45.5501708984375,
+            "height": 20
+          }
+        },
+        {
+          "source": "Select: Ring",
+          "shown": "Select: Ring",
+          "size": 12,
+          "bounds": {
+            "x": 8,
+            "y": 215,
+            "width": 57.83203125,
+            "height": 13
+          }
+        },
+        {
+          "source": "5/7",
+          "shown": "5/7",
+          "size": 12,
+          "bounds": {
+            "x": 175.88671875,
+            "y": 216,
+            "width": 16.11328125,
+            "height": 10
+          }
+        }
+      ],
+      "regions": [
+        {
+          "id": "activity-1",
+          "x": 4,
+          "y": 25,
+          "width": 192,
+          "height": 32,
+          "selected": false
+        },
+        {
+          "id": "notification",
+          "x": 4,
+          "y": 61,
+          "width": 188,
+          "height": 32,
+          "selected": false
+        },
+        {
+          "id": "pin-weather",
+          "x": 4,
+          "y": 97,
+          "width": 188,
+          "height": 32,
+          "selected": false
+        },
+        {
+          "id": "control-find",
+          "x": 4,
+          "y": 133,
+          "width": 188,
+          "height": 32,
+          "selected": true
+        },
+        {
+          "id": "pin-phone",
+          "x": 4,
+          "y": 169,
+          "width": 188,
+          "height": 32,
+          "selected": false
+        }
+      ],
+      "width": 200,
+      "height": 228,
+      "bytes": 8159,
+      "sha256": "2b8303e0f171a9f94cecdbf90a8bbb0916e9437632c938c4436d81a7ca4a0c6f",
+      "palette": {
+        "opaque": true,
+        "quantized": true,
+        "colors": 15
+      }
+    },
+    {
+      "file": "screens/detail-activity-0.png",
+      "layout": "focus",
+      "scenario": "timer-media",
+      "theme": "light",
+      "swapped": false,
+      "messagePreview": true,
+      "mode": "detail",
+      "selectedId": "activity-0",
+      "visibleIds": [
+        "activity-0",
+        "activity-1",
+        "notification",
+        "pin-weather",
+        "pin-phone",
+        "control-light",
+        "control-find"
+      ],
+      "boundsViolations": [],
+      "text": [
+        {
+          "source": "Timer",
+          "shown": "Timer",
+          "size": 16,
+          "bounds": {
+            "x": 8,
+            "y": 3,
+            "width": 37.53125,
+            "height": 12
+          }
+        },
+        {
+          "source": "13:42",
+          "shown": "13:42",
+          "size": 14,
+          "bounds": {
+            "x": 159.8779296875,
+            "y": 4,
+            "width": 32.1220703125,
+            "height": 11
+          }
+        },
+        {
+          "source": "02:31",
+          "shown": "02:31",
+          "size": 48,
+          "bounds": {
+            "x": 44.89588928222656,
+            "y": 58,
+            "width": 110.20822143554688,
+            "height": 35
+          }
+        },
+        {
+          "source": "Tea",
+          "shown": "Tea",
+          "size": 18,
+          "bounds": {
+            "x": 91,
+            "y": 111,
+            "width": 26.859375,
+            "height": 13
+          }
+        },
+        {
+          "source": "Open Timer",
+          "shown": "Open Timer",
+          "size": 18,
+          "bounds": {
+            "x": 58.1904296875,
+            "y": 179,
+            "width": 83.619140625,
+            "height": 18
+          }
+        },
+        {
+          "source": "Select: Open app",
+          "shown": "Select: Open app",
+          "size": 12,
+          "bounds": {
+            "x": 8,
+            "y": 215,
+            "width": 81.357421875,
+            "height": 13
+          }
+        },
+        {
+          "source": "Back",
+          "shown": "Back",
+          "size": 12,
+          "bounds": {
+            "x": 168.357421875,
+            "y": 215,
+            "width": 23.642578125,
+            "height": 10
+          }
+        }
+      ],
+      "regions": [
+        {
+          "id": "activity-0",
+          "x": 7,
+          "y": 171,
+          "width": 186,
+          "height": 31,
+          "selected": true
+        }
+      ],
+      "width": 200,
+      "height": 228,
+      "bytes": 5314,
+      "sha256": "d51529ee0e54979b13a62a16e5f77ecb026a72b825f9172c553ec1ce873d8279",
+      "palette": {
+        "opaque": true,
+        "quantized": true,
+        "colors": 7
+      }
+    },
+    {
+      "file": "screens/detail-activity-1.png",
+      "layout": "focus",
+      "scenario": "timer-media",
+      "theme": "light",
+      "swapped": false,
+      "messagePreview": true,
+      "mode": "detail",
+      "selectedId": "activity-1",
+      "visibleIds": [
+        "activity-0",
+        "activity-1",
+        "notification",
+        "pin-weather",
+        "pin-phone",
+        "control-light",
+        "control-find"
+      ],
+      "boundsViolations": [],
+      "text": [
+        {
+          "source": "Music",
+          "shown": "Music",
+          "size": 16,
+          "bounds": {
+            "x": 8,
+            "y": 3,
+            "width": 38.65625,
+            "height": 12
+          }
+        },
+        {
+          "source": "13:42",
+          "shown": "13:42",
+          "size": 14,
+          "bounds": {
+            "x": 159.8779296875,
+            "y": 4,
+            "width": 32.1220703125,
+            "height": 11
+          }
+        },
+        {
+          "source": "Night Drive",
+          "shown": "Night Drive",
+          "size": 24,
+          "bounds": {
+            "x": 9,
+            "y": 73,
+            "width": 107.33203125,
+            "height": 23
+          }
+        },
+        {
+          "source": "The Midnight",
+          "shown": "The Midnight",
+          "size": 17,
+          "bounds": {
+            "x": 58,
+            "y": 107,
+            "width": 90.0302734375,
+            "height": 15
+          }
+        },
+        {
+          "source": "Playing",
+          "shown": "Playing",
+          "size": 14,
+          "bounds": {
+            "x": 58,
+            "y": 128,
+            "width": 41.78125,
+            "height": 14
+          }
+        },
+        {
+          "source": "Select: Pause",
+          "shown": "Select: Pause",
+          "size": 12,
+          "bounds": {
+            "x": 8,
+            "y": 215,
+            "width": 65.7890625,
+            "height": 10
+          }
+        },
+        {
+          "source": "Back",
+          "shown": "Back",
+          "size": 12,
+          "bounds": {
+            "x": 168.357421875,
+            "y": 215,
+            "width": 23.642578125,
+            "height": 10
+          }
+        }
+      ],
+      "regions": [],
+      "width": 200,
+      "height": 228,
+      "bytes": 5369,
+      "sha256": "5237a9a55ed9dd71ce741ae139bac5827d84aaa55ecd317e5a443e37adfd7a4c",
+      "palette": {
+        "opaque": true,
+        "quantized": true,
+        "colors": 14
+      }
+    },
+    {
+      "file": "screens/detail-notification.png",
+      "layout": "focus",
+      "scenario": "timer-media",
+      "theme": "light",
+      "swapped": false,
+      "messagePreview": true,
+      "mode": "detail",
+      "selectedId": "notification",
+      "visibleIds": [
+        "activity-0",
+        "activity-1",
+        "notification",
+        "pin-weather",
+        "pin-phone",
+        "control-light",
+        "control-find"
+      ],
+      "boundsViolations": [],
+      "text": [
+        {
+          "source": "Signal",
+          "shown": "Signal",
+          "size": 16,
+          "bounds": {
+            "x": 8,
+            "y": 3,
+            "width": 40.1640625,
+            "height": 15
+          }
+        },
+        {
+          "source": "13:42",
+          "shown": "13:42",
+          "size": 14,
+          "bounds": {
+            "x": 159.8779296875,
+            "y": 4,
+            "width": 32.1220703125,
+            "height": 11
+          }
+        },
+        {
+          "source": "Sam",
+          "shown": "Sam",
+          "size": 24,
+          "bounds": {
+            "x": 9,
+            "y": 30,
+            "width": 42.05859375,
+            "height": 17
+          }
+        },
+        {
+          "source": "2m ago",
+          "shown": "2m ago",
+          "size": 14,
+          "bounds": {
+            "x": 9,
+            "y": 57,
+            "width": 41.2958984375,
+            "height": 14
+          }
+        },
+        {
+          "source": "At the entrance.",
+          "shown": "At the entrance.",
+          "size": 19,
+          "bounds": {
+            "x": 9,
+            "y": 85,
+            "width": 122.41455078125,
+            "height": 14
+          }
+        },
+        {
+          "source": "Open notifications",
+          "shown": "Open notifications",
+          "size": 17,
+          "bounds": {
+            "x": 37.723388671875,
+            "y": 181,
+            "width": 124.55322265625,
+            "height": 15
+          }
+        },
+        {
+          "source": "Select: Open app",
+          "shown": "Select: Open app",
+          "size": 12,
+          "bounds": {
+            "x": 8,
+            "y": 215,
+            "width": 81.357421875,
+            "height": 13
+          }
+        },
+        {
+          "source": "Back",
+          "shown": "Back",
+          "size": 12,
+          "bounds": {
+            "x": 168.357421875,
+            "y": 215,
+            "width": 23.642578125,
+            "height": 10
+          }
+        }
+      ],
+      "regions": [
+        {
+          "id": "notification",
+          "x": 7,
+          "y": 171,
+          "width": 186,
+          "height": 31,
+          "selected": true
+        }
+      ],
+      "width": 200,
+      "height": 228,
+      "bytes": 5546,
+      "sha256": "14f62d508a57cffc77a5a6f268a391befe7dc538c43a1af28ade937943c8c78f",
+      "palette": {
+        "opaque": true,
+        "quantized": true,
+        "colors": 4
+      }
+    },
+    {
+      "file": "screens/detail-control-light.png",
+      "layout": "focus",
+      "scenario": "timer-media",
+      "theme": "light",
+      "swapped": false,
+      "messagePreview": true,
+      "mode": "overview",
+      "selectedId": "control-light",
+      "visibleIds": [
+        "activity-0",
+        "activity-1",
+        "notification",
+        "pin-weather",
+        "pin-phone",
+        "control-light",
+        "control-find"
+      ],
+      "boundsViolations": [],
+      "text": [
+        {
+          "source": "Dashboard",
+          "shown": "Dashboard",
+          "size": 16,
+          "bounds": {
+            "x": 8,
+            "y": 3,
+            "width": 68.3671875,
+            "height": 12
+          }
+        },
+        {
+          "source": "13:42",
+          "shown": "13:42",
+          "size": 14,
+          "bounds": {
+            "x": 159.8779296875,
+            "y": 4,
+            "width": 32.1220703125,
+            "height": 11
+          }
+        },
+        {
+          "source": "02:31",
+          "shown": "02:31",
+          "size": 43,
+          "bounds": {
+            "x": 50.636024475097656,
+            "y": 30,
+            "width": 98.72795104980469,
+            "height": 31
+          }
+        },
+        {
+          "source": "Tea",
+          "shown": "Tea",
+          "size": 14,
+          "bounds": {
+            "x": 101.0546875,
+            "y": 66,
+            "width": 20.890625,
+            "height": 11
+          }
+        },
+        {
+          "source": "Night Drive",
+          "shown": "Night Drive",
+          "size": 16,
+          "bounds": {
+            "x": 40,
+            "y": 86,
+            "width": 71.5546875,
+            "height": 15
+          }
+        },
+        {
+          "source": "The Midnight",
+          "shown": "The Midnight",
+          "size": 14,
+          "bounds": {
+            "x": 40,
+            "y": 102,
+            "width": 74.142578125,
+            "height": 14
+          }
+        },
+        {
+          "source": "Sam",
+          "shown": "Sam",
+          "size": 16,
+          "bounds": {
+            "x": 32,
+            "y": 124,
+            "width": 28.0390625,
+            "height": 12
+          }
+        },
+        {
+          "source": "Signal · 2m",
+          "shown": "Signal · 2m",
+          "size": 12,
+          "bounds": {
+            "x": 135.970703125,
+            "y": 126,
+            "width": 54.029296875,
+            "height": 13
+          }
+        },
+        {
+          "source": "At the entrance.",
+          "shown": "At the entrance.",
+          "size": 16,
+          "bounds": {
+            "x": 10,
+            "y": 143,
+            "width": 103.0859375,
+            "height": 12
+          }
+        },
+        {
+          "source": "13°C",
+          "shown": "13°C",
+          "size": 20,
+          "bounds": {
+            "x": 51.9200439453125,
+            "y": 168,
+            "width": 39.0799560546875,
+            "height": 14
+          }
+        },
+        {
+          "source": "76%",
+          "shown": "76%",
+          "size": 20,
+          "bounds": {
+            "x": 152.56004333496094,
+            "y": 167,
+            "width": 36.43995666503906,
+            "height": 16
+          }
+        },
+        {
+          "source": "Light off",
+          "shown": "Light off",
+          "size": 14,
+          "bounds": {
+            "x": 29,
+            "y": 196,
+            "width": 47.82421875,
+            "height": 14
+          }
+        },
+        {
+          "source": "Find phone",
+          "shown": "Find phone",
+          "size": 14,
+          "bounds": {
+            "x": 127,
+            "y": 196,
+            "width": 61.6259765625,
+            "height": 14
+          }
+        },
+        {
+          "source": "Select: Toggle",
+          "shown": "Select: Toggle",
+          "size": 12,
+          "bounds": {
+            "x": 8,
+            "y": 215,
+            "width": 69.55078125,
+            "height": 13
+          }
+        },
+        {
+          "source": "6/7",
+          "shown": "6/7",
+          "size": 12,
+          "bounds": {
+            "x": 175.88671875,
+            "y": 216,
+            "width": 16.11328125,
+            "height": 10
+          }
+        }
+      ],
+      "regions": [
+        {
+          "id": "activity-0",
+          "x": 4,
+          "y": 23,
+          "width": 192,
+          "height": 57,
+          "selected": false
+        },
+        {
+          "id": "activity-1",
+          "x": 4,
+          "y": 84,
+          "width": 192,
+          "height": 32,
+          "selected": false
+        },
+        {
+          "id": "notification",
+          "x": 4,
+          "y": 121,
+          "width": 192,
+          "height": 38,
+          "selected": false
+        },
+        {
+          "id": "pin-weather",
+          "x": 4,
+          "y": 164,
+          "width": 94,
+          "height": 24,
+          "selected": false
+        },
+        {
+          "id": "pin-phone",
+          "x": 102,
+          "y": 164,
+          "width": 94,
+          "height": 24,
+          "selected": false
+        },
+        {
+          "id": "control-light",
+          "x": 4,
+          "y": 192,
+          "width": 94,
+          "height": 20,
+          "selected": true
+        },
+        {
+          "id": "control-find",
+          "x": 102,
+          "y": 192,
+          "width": 94,
+          "height": 20,
+          "selected": false
+        }
+      ],
+      "width": 200,
+      "height": 228,
+      "bytes": 9218,
+      "sha256": "0ff0151638f1f4bea8acaf4c03404f568b1cabc60491a8bb3539c6e8dea9a39b",
+      "palette": {
+        "opaque": true,
+        "quantized": true,
+        "colors": 15
+      }
+    }
+  ],
+  "contactSheets": [
+    {
+      "file": "overview-light.png",
+      "width": 1312,
+      "height": 666,
+      "sha256": "2b6ba68a105d4dea96cbd398dfde81477db62a8da56d9c35ba7dbb14da3cf9c9"
+    },
+    {
+      "file": "overview-dark.png",
+      "width": 1312,
+      "height": 666,
+      "sha256": "88d49c375b1f67a09597f6cb5076b2279b51feb99185fe72830e362ee472f75d"
+    },
+    {
+      "file": "alternate-activities.png",
+      "width": 1312,
+      "height": 666,
+      "sha256": "613e87420f7fcdd6cbf220caae2736b12fcb8880fa55c3b9556ca3fe7aa04e26"
+    },
+    {
+      "file": "media-first.png",
+      "width": 1312,
+      "height": 666,
+      "sha256": "a9d96c415fb5678c5bda9cb436088dc318caaa72daedba993e020369e3652843"
+    },
+    {
+      "file": "detail-overview.png",
+      "width": 884,
+      "height": 1218,
+      "sha256": "f84918323e48e32dd3038077748936984405c4c2aac1739c87619c830e4dce63"
+    }
+  ]
+}
