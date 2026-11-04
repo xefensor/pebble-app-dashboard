@@ -1,0 +1,73 @@
+{
+  "session": 1,
+  "request": 1,
+  "sequence": 1,
+  "now": 2000000000,
+  "status": 1,
+  "dark": false,
+  "activitiesTotal": 6,
+  "pinsTotal": 12,
+  "mode": 0,
+  "total": 4,
+  "offset": 0,
+  "items": [
+    {
+      "token": 1,
+      "version": 1,
+      "validUntil": 2000003600,
+      "flags": 258,
+      "kind": 1,
+      "role": 0,
+      "title": "Slow cook",
+      "subtitle": "",
+      "value": "02:31",
+      "appLabel": "Timer",
+      "actionLabel": "",
+      "name": "Timer",
+      "clockMode": 1,
+      "anchor": 2000045296
+    },
+    {
+      "token": 3,
+      "version": 1,
+      "validUntil": 2000003600,
+      "flags": 1034,
+      "kind": 3,
+      "role": 1,
+      "title": "Long sender name",
+      "subtitle": "Meet at the north entrance after lunch.",
+      "value": "",
+      "appLabel": "Notifications",
+      "actionLabel": "",
+      "name": "Signal"
+    },
+    {
+      "token": 4,
+      "version": 1,
+      "validUntil": 2000003600,
+      "flags": 2,
+      "kind": 4,
+      "role": 2,
+      "title": "Balcony",
+      "subtitle": "",
+      "value": "−13.5°C",
+      "appLabel": "Weather",
+      "actionLabel": "",
+      "name": ""
+    },
+    {
+      "token": 5,
+      "version": 1,
+      "validUntil": 2000003600,
+      "flags": 1,
+      "kind": 6,
+      "role": 2,
+      "title": "Kitchen light",
+      "subtitle": "",
+      "value": "100%",
+      "appLabel": "",
+      "actionLabel": "Toggle",
+      "name": ""
+    }
+  ]
+}

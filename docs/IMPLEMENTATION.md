@@ -1,4 +1,4 @@
-# Dashboard 0.1 implementation contract
+# Dashboard 0.2 implementation contract
 
 Local stock-SDK Emery app, UUID `f76f9fc1-2944-4248-bcc5-3eea2af0183b`.
 The approved Snapshot and contextual input rules in README.md take precedence
@@ -101,7 +101,10 @@ Native results validate session and request; stale replies never update UI.
 32-byte header: magic DSH1 at0; session u32@4; request u32@8; sequence u32@12;
 UTC seconds u32@16; mode u8@20; status u8@21; count u8@22; theme flags u8@23
 (bit0 dark); total u16@24; offset u16@26; activitiesTotal u16@28;pinsTotal u16@30.
-Up to7 overview items /5 list items /1 media item. No private data persisted.
+The protocol ceiling remains7 overview items /5 list items /1 detail item.
+Dashboard 0.2 sends only4 overview items: one activity, one notification and two
+pins. The wire ceiling remains compatible; it is not the visible layout. No
+private data persisted.
 
 Each item has44-byte header: token u32@0; version u32@4; validUntil u32@8;
 flags u16@12; kind u8@14; clockMode u8@15; anchor u32@16; baseSeconds u32@20;
@@ -139,13 +142,17 @@ never a bare enlarged summary. Pin default action remains a direct tap.
 
 ## Native presentation/lifecycle
 
-Snapshot reserves two activity rows, one latest-notification card and four
-mixed pin tiles. Missing sections show useful empty states; do not inject fake
-data. Music detail adds previous/play/next controls only where working actions
-exist. Optional artwork/icon and source clocks are local watch rendering.
+Snapshot reserves one large activity card, one latest-notification card and two
+mixed pin rows, with a right-side contextual action bar. Missing sections show
+useful empty states; do not inject fake data. Built-in Weather and battery pins
+need only source icon and whole value; specific devices/action-only pins keep
+meaningful identity. Music tap dispatches play/pause slot1 directly only when
+declared; hold opens the verified associated Music app. Generic activities can
+still open useful labelled controls. Optional artwork/icon and source clocks are
+local watch rendering.
 No automatic text scrolling or repeating idle redraw; tick only visible running
 clocks/minute header. One native AppMessage dispatcher and bounded pending view.
 Retain selection by token, never auto-run new items when a source disappears.
-Group Back restores overview selection; Music Back restores originating item.
+Group Back restores overview selection; controls Back restores the originating item.
 Native loading/offline/permission failures stay navigable. New view requests
 invalidate old responses; timed-out requests cannot leave an indefinite spinner.

@@ -56,6 +56,16 @@ static void clocks(void){
   db_item_value(&item,1000,text,sizeof(text));assert(!strcmp(text,"--"));
   item.valid_until=1000;assert(!db_item_actionable(&item,1000)&&!db_item_capability_current(&item,1000));
 }
+static void direct_media_action(void){
+  DbItem item={.token=2,.version=1,.valid_until=2000,.role=DB_ROLE_ACTIVITY,.kind=DB_MUSIC,.flags=DB_ACTION|DB_IS_MEDIA|DB_MEDIA_PREVIOUS|DB_MEDIA_TOGGLE|DB_MEDIA_NEXT};
+  assert(db_item_direct_action(&item,1000)==1);
+  item.flags|=DB_PAUSED;assert(db_item_direct_action(&item,1000)==1);
+  item.flags&=~DB_MEDIA_TOGGLE;assert(db_item_direct_action(&item,1000)==-1);
+  item.flags|=DB_MEDIA_TOGGLE|DB_UNAVAILABLE;assert(db_item_direct_action(&item,1000)==-1);
+  item.flags&=~DB_UNAVAILABLE;assert(db_item_direct_action(&item,2000)==-1);
+  item.flags=DB_ACTION;item.kind=DB_LIGHT;item.role=DB_ROLE_PIN;assert(db_item_direct_action(&item,1000)==0);
+  item.flags=DB_APP;assert(db_item_direct_action(&item,1000)==-1);
+}
 static void identity_and_privacy(void){
   DbState state;db_state_init(&state,5);db_state_expect(&state,7,DB_PINNED,0,0);
   DbSnapshot frame={.session=5,.request=7,.sequence=1,.now=1000,.mode=DB_PINNED,.status=DB_READY,.total=12,.count=5};
@@ -98,5 +108,5 @@ int main(int argc,char **argv){
     free(frame);printf("C parser: %d actual runtime frames accepted\n",argc-2);return 0;
   }
   for(int i=1;i<argc;i++)fixture(argv[i]);
-  clocks();identity_and_privacy();static_placeholder();printf("native model: %u binary fixtures; malformed, stale, selection, privacy and clock checks passed\n",checked);return 0;
+  clocks();direct_media_action();identity_and_privacy();static_placeholder();printf("native model: %u binary fixtures; malformed, stale, selection, privacy and clock checks passed\n",checked);return 0;
 }

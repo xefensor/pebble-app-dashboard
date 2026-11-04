@@ -196,7 +196,7 @@ test('queue clear suppresses old callbacks but waits for its real in-flight send
 
 test('runtime projects overview and bounded list pages, preserving tokens across reordering',async()=>{
   const pins=Array.from({length:12},(_,i)=>({id:'p'+i,label:'Pin '+i}));const f=runtimeFixture(minimal(pins));await flush();f.time.advance(0);
-  assert.equal(f.frame().items.length,4);const token=f.frame().items[0].token;
+  assert.equal(f.frame().items.length,2);const token=f.frame().items[0].token;
   f.runtime.message(native(f.pebble,protocol.op.VIEW,55,2,{DB_MODE:2,DB_OFFSET:7,DB_INDEX:11}));assert.equal(f.frame().offset,7);assert.equal(f.frame().items.length,5);assert.equal(f.frame().total,12);
   const saved=settings.normalize({...minimal(pins),pins:[...pins].reverse()});settings.save(f.storage,saved);
   f.runtime.message(native(f.pebble,protocol.op.VIEW,55,3,{DB_MODE:0}));assert.equal(f.frame().items.find(p=>p.title==='Pin 0')?.token,undefined);
@@ -228,6 +228,27 @@ test('runtime never normalizes malformed ACTION or CONFIRM values into a default
   }
   await flush();assert.equal(f.pebble.invocations.length,0);
   f.runtime.message(native(f.pebble,protocol.op.ACTION,55,request,{DB_TOKEN:pin.token,DB_VERSION:pin.version,DB_ACTION:0}));await flush();assert.equal(f.pebble.invocations.length,1);f.runtime.stop();
+});
+
+test('Snapshot has one activity, one notification and two pins while collections retain every item',()=>{
+  const time=clock(),pebble=sdk(),values=new Map([['dashboard.settings.v1',JSON.stringify(minimal())]]),storage={getItem:key=>values.get(key)??null,setItem:(key,value)=>values.set(key,value)};
+  const entry=(id,role)=>({_identity:id,title:id,name:id,value:'',subtitle:'',appLabel:'',actionLabel:'',controls:[],kind:0,role,flags:0,
+    validUntil:T/1000+120,_sourceValidUntil:T/1000+120,_provider:UUID,_commands:[]});
+  const data={activities:Array.from({length:3},(_,i)=>entry('activity-'+i,0)),notification:entry('notice',1),pins:Array.from({length:6},(_,i)=>entry('pin-'+i,2)),loading:false,error:'',connected:true,available:true};
+  const runtime=createRuntime({...time,pebble,storage,tokenSeed:100,createSources(){return {start(){},stop(){},snapshot:()=>data,refreshPaths(){},configuration:()=>Promise.resolve({plugins:[],instances:[],activities:[]})};}});
+  runtime.ready();runtime.message(native(pebble,protocol.op.HELLO,55,1));const frame=()=>decode(pebble.sent.filter(m=>m[protocol.keys.DB_DATA]).at(-1)[protocol.keys.DB_DATA]);
+  assert.deepEqual(frame().items.map(item=>item.title),['activity-0','notice','pin-0','pin-1']);assert.deepEqual(frame().items.map(item=>item.role),[0,1,2,2]);assert.equal(frame().total,4);
+  runtime.message(native(pebble,protocol.op.VIEW,55,2,{DB_MODE:1,DB_OFFSET:0}));assert.equal(frame().total,3);assert.equal(frame().items.length,3);
+  runtime.message(native(pebble,protocol.op.VIEW,55,3,{DB_MODE:2,DB_OFFSET:1}));assert.equal(frame().total,6);assert.equal(frame().items.length,5);assert.equal(frame().offset,1);runtime.stop();
+});
+
+test('Music tap dispatches slot one directly from Snapshot and hold retains the verified Music destination',async()=>{
+  const f=runtimeFixture(minimal(),[musicPlugin()]);await flush();f.pebble.emit('music','track',envelope(MUSIC,[{instanceId:'track',properties:{title:prop('Current song'),artist:prop('Artist'),playing:bool(true)}}]));f.time.advance(0);
+  const music=f.frame().items[0];assert.equal(f.frame().mode,protocol.mode.OVERVIEW);assert.ok(music.flags&F.MEDIA_TOGGLE);
+  const action={DB_TOKEN:music.token,DB_VERSION:music.version,DB_ACTION:1};f.runtime.message(native(f.pebble,protocol.op.ACTION,55,2,action));await flush();f.time.advance(0);
+  assert.equal(f.pebble.invocations.length,1);assert.equal(f.pebble.invocations[0].action,'set_playing');assert.deepEqual(f.pebble.invocations[0].args,{on:false});assert.equal(f.frame().mode,protocol.mode.OVERVIEW,'no intermediate Dashboard media view');
+  f.runtime.message(native(f.pebble,protocol.op.ACTION,55,2,action));await flush();assert.equal(f.pebble.invocations.length,1,'tap retry cannot toggle twice');
+  f.runtime.message(native(f.pebble,protocol.op.OPEN,55,3,{DB_TOKEN:music.token,DB_VERSION:music.version}));await flush();assert.equal(f.pebble.invocations.at(-1).action,'launch_app');assert.equal(f.pebble.invocations.at(-1).args.uuid,MUSIC_APP);assert.equal(f.frame().mode,protocol.mode.OVERVIEW);f.runtime.stop();
 });
 
 test('an essential measurement exceeding native capacity is explicit, never a partial unit',()=>{
@@ -273,7 +294,7 @@ test('real Activities summary provider reaches full Dashboard catalogue, clocks 
   const pebble=sdk([descriptor]),values=new Map([['dashboard.settings.v1',JSON.stringify(minimal())]]),storage={getItem:key=>values.get(key)??null,setItem:(key,value)=>values.set(key,value)};
   const runtime=createRuntime({...time,pebble,storage,activitiesHost:api,tokenSeed:100});runtime.ready();runtime.message(native(pebble,protocol.op.HELLO,55,1));await flush();
   const first={pluginUuid:UUID,...await publisher.source({})};pebble.emit('activity','summary',first,UUID);time.advance(0);
-  let frame=decode(pebble.sent.filter(m=>m[protocol.keys.DB_DATA]).at(-1)[protocol.keys.DB_DATA]);assert.equal(frame.items.length,2,'overview keeps two activity slots');
+  let frame=decode(pebble.sent.filter(m=>m[protocol.keys.DB_DATA]).at(-1)[protocol.keys.DB_DATA]);assert.equal(frame.items.length,1,'overview keeps one activity slot');
   assert.equal(frame.items[0].kind,protocol.kind.timer);assert.ok(frame.items[0].flags&F.COUNTDOWN);assert.ok(frame.items[0].flags&F.ACTION);
   assert.equal(frame.items[0].validUntil,T/1000+60,'native transport lease is shorter than source validity');
   runtime.message(native(pebble,protocol.op.VIEW,55,2,{DB_MODE:1,DB_OFFSET:0}));frame=decode(pebble.sent.filter(m=>m[protocol.keys.DB_DATA]).at(-1)[protocol.keys.DB_DATA]);

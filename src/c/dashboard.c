@@ -122,6 +122,11 @@ bool db_item_capability_current(const DbItem *item,uint32_t now){
   return item->role==DB_ROLE_PIN||!(item->flags&DB_UNAVAILABLE);
 }
 bool db_item_actionable(const DbItem *item,uint32_t now){return db_item_capability_current(item,now)&&(item->flags&DB_ACTION)!=0;}
+int db_item_direct_action(const DbItem *item,uint32_t now){
+  if(!db_item_actionable(item,now))return -1;
+  if(item->role==DB_ROLE_ACTIVITY&&(item->flags&DB_IS_MEDIA))return item->flags&DB_MEDIA_TOGGLE?1:-1;
+  return item->role==DB_ROLE_PIN?0:-1;
+}
 void db_item_value(const DbItem *item,uint32_t now,char *buffer,size_t size){
   if(!buffer||!size)return;
   if(!db_item_current(item,now)){snprintf(buffer,size,"--");return;}

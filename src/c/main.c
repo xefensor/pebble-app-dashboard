@@ -7,6 +7,8 @@
 
 #define SCREEN_W 200
 #define SCREEN_H 228
+#define CONTENT_W (SCREEN_W - ACTION_BAR_WIDTH)
+#define FONT_COUNT 12
 #define VIEW_TIMEOUT_MS 6000
 #define ACTION_TIMEOUT_MS 12000
 #define OUTBOX_CAPACITY 4
@@ -26,13 +28,14 @@ static int s_repeat_delta;
 static bool s_repeat_held;
 static uint32_t s_press_token,s_press_version;
 static uint8_t s_press_mode;
-static GFont s_fonts[9];
+static GFont s_fonts[FONT_COUNT];
 static uint8_t s_tick_seconds;
 static unsigned s_last_minute;
-static const uint8_t s_font_points[]={11,12,14,16,20,24,20,24,26};
+static const uint8_t s_font_points[]={11,12,14,16,20,24,20,24,26,28,32,40};
 static const uint32_t s_font_ids[]={RESOURCE_ID_FONT_BODY_11,RESOURCE_ID_FONT_BODY_12,RESOURCE_ID_FONT_BODY_14,
   RESOURCE_ID_FONT_BODY_16,RESOURCE_ID_FONT_BODY_20,RESOURCE_ID_FONT_BODY_24,
-  RESOURCE_ID_FONT_CLOCK_20,RESOURCE_ID_FONT_CLOCK_24,RESOURCE_ID_FONT_CLOCK_26};
+  RESOURCE_ID_FONT_CLOCK_20,RESOURCE_ID_FONT_CLOCK_24,RESOURCE_ID_FONT_CLOCK_26,
+  RESOURCE_ID_FONT_BODY_28,RESOURCE_ID_FONT_CLOCK_32,RESOURCE_ID_FONT_CLOCK_40};
 
 static uint32_t utc_now(void){return (uint32_t)time(NULL);}
 static uint32_t next_request(void){s_counter=s_counter>=INT32_MAX?1:s_counter+1;return s_counter;}
@@ -48,11 +51,11 @@ static GColor muted(void){return s_state.snapshot.dark?GColorLightGray:GColorDar
 static GColor stroke(void){return s_state.snapshot.dark?GColorDarkGray:GColorLightGray;}
 static GColor accent(void){return GColorPictonBlue;}
 static GFont font_at(unsigned index){
-  if(index>=9)index=3;
+  if(index>=FONT_COUNT)index=3;
   if(!s_fonts[index])s_fonts[index]=fonts_load_custom_font(resource_get_handle(s_font_ids[index]));
   return s_fonts[index]?s_fonts[index]:fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD);
 }
-static unsigned body_index(unsigned point){return point<=11?0:point<=12?1:point<=14?2:point<=16?3:point<=20?4:5;}
+static unsigned body_index(unsigned point){return point<=11?0:point<=12?1:point<=14?2:point<=16?3:point<=20?4:point<=24?5:9;}
 static int width_of(const char *value,unsigned index){
   return graphics_text_layout_get_content_size(value,font_at(index),GRect(0,0,2048,512),GTextOverflowModeFill,GTextAlignmentLeft).w;
 }
@@ -64,7 +67,7 @@ static void clean_text(char *out,size_t size,const char *value){
 }
 static void draw_text(GContext *ctx,const char *value,unsigned index,int x,int baseline,int width,GColor color,GTextAlignment alignment){
   if(width<=0)return;
-  char text[257];clean_text(text,sizeof(text),value);
+  char text[265];clean_text(text,sizeof(text),value);
   if(width_of(text,index)>width){
     while(text[0]){pop_utf8(text);size_t n=strlen(text);if(n+4>=sizeof(text))continue;memcpy(text+n,"…",4);
       if(width_of(text,index)<=width)break;
@@ -74,7 +77,7 @@ static void draw_text(GContext *ctx,const char *value,unsigned index,int x,int b
   graphics_draw_text(ctx,text,font_at(index),GRect(x,baseline-s_font_points[index],width,s_font_points[index]+12),GTextOverflowModeFill,alignment,NULL);
 }
 static void text(GContext *ctx,const char *value,unsigned point,int x,int baseline,int width,GColor color){draw_text(ctx,value,body_index(point),x,baseline,width,color,GTextAlignmentLeft);}
-static void centered(GContext *ctx,const char *value,unsigned point,int baseline,GColor color){draw_text(ctx,value,body_index(point),7,baseline,186,color,GTextAlignmentCenter);}
+static void centered(GContext *ctx,const char *value,unsigned point,int baseline,GColor color){draw_text(ctx,value,body_index(point),6,baseline,CONTENT_W-12,color,GTextAlignmentCenter);}
 static bool clock_chars(const char *text){
   const unsigned char *p=(const unsigned char *)text;
   while(*p){
@@ -86,12 +89,10 @@ static bool clock_chars(const char *text){
   return true;
 }
 static void value_text(GContext *ctx,const char *value,int x,int baseline,int width,unsigned preferred,GColor color,GTextAlignment align){
-  unsigned index=clock_chars(value)?preferred>=26?8:preferred>=24?7:6:body_index(preferred);
-  if(width_of(value,index)>width&&index>=6)index=6;
-  if(width_of(value,index)>width)index=3;
-  while(index>0&&width_of(value,index)>width)index--;
-  if(width_of(value,index)>width){text(ctx,"Too long",11,x,baseline,width,color);return;}
-  draw_text(ctx,value,index,x,baseline,width,color,align);
+  static const unsigned clocks[]={11,10,8,7,6},bodies[]={9,5,4};
+  const unsigned *choices=clock_chars(value)?clocks:bodies;unsigned count=clock_chars(value)?5:3;
+  for(unsigned i=0;i<count;i++){unsigned index=choices[i];if(s_font_points[index]<=preferred&&width_of(value,index)<=width){draw_text(ctx,value,index,x,baseline,width,color,align);return;}}
+  draw_text(ctx,"Too long",4,x,baseline,width,color,align);
 }
 static void fill(GContext *ctx,GRect bounds,GColor color,int radius){graphics_context_set_fill_color(ctx,color);graphics_fill_rect(ctx,bounds,radius,GCornersAll);}
 static void edge(GContext *ctx,GRect bounds,GColor color,int radius){graphics_context_set_stroke_color(ctx,color);graphics_context_set_stroke_width(ctx,1);graphics_draw_round_rect(ctx,bounds,radius);}
@@ -155,86 +156,75 @@ static const char *status_text(void){
   switch(s_state.snapshot.status){case DB_PERMISSION:return "Allow access on phone";case DB_ERROR:return "Data unavailable";case DB_OFFLINE:return "Connect your phone";case DB_LOADING:return "Loading sources…";default:return "Nothing here yet";}
 }
 static void header(GContext *ctx){
-  const char *title=s_state.desired_mode==DB_ACTIVITIES?"Activities":s_state.desired_mode==DB_PINNED?"Pinned":s_state.desired_mode==DB_MEDIA?(db_selected(&s_state)&&db_selected(&s_state)->kind==DB_MUSIC?"Music":"Controls"):"Dashboard";
-  text(ctx,title,16,8,16,128,foreground());
+  const char *title=s_state.desired_mode==DB_ACTIVITIES?"Activities":s_state.desired_mode==DB_PINNED?"Pinned":s_state.desired_mode==DB_MEDIA?"Controls":"Dashboard";
+  text(ctx,title,20,6,22,108,foreground());
   char right[24];
   if(s_state.desired_mode==DB_ACTIVITIES||s_state.desired_mode==DB_PINNED)snprintf(right,sizeof(right),"%u/%u",s_state.snapshot.total?s_state.selected_index+1:0,s_state.loading?0:s_state.snapshot.total);
   else{time_t now=time(NULL);struct tm *local=localtime(&now);strftime(right,sizeof(right),clock_is_24h_style()?"%H:%M":"%I:%M",local);if(!clock_is_24h_style()&&right[0]=='0')memmove(right,right+1,strlen(right));}
-  draw_text(ctx,right,2,139,16,53,muted(),GTextAlignmentRight);segment(ctx,6,20,194,20,stroke());
+  draw_text(ctx,right,3,111,22,CONTENT_W-117,muted(),GTextAlignmentRight);segment(ctx,5,25,CONTENT_W-5,25,stroke());
 }
 static bool control_available(const DbItem *item,unsigned index){const uint16_t bits[]={DB_MEDIA_PREVIOUS,DB_MEDIA_TOGGLE,DB_MEDIA_NEXT};return item&&index<3&&(item->flags&bits[index])&&db_item_actionable(item,utc_now());}
-static void footer(GContext *ctx){
-  const DbItem *item=db_selected(&s_state);char action[65]="Select: —",hold[65]="";
-  bool current=s_has_connection&&db_item_capability_current(item,utc_now());
-  if(current){
-    if(s_state.snapshot.mode==DB_MEDIA){if(control_available(item,s_state.focus))snprintf(action,sizeof(action),"Select: %s",item->controls[s_state.focus][0]?item->controls[s_state.focus]:s_state.focus==0?"Previous":s_state.focus==2?"Next":item->flags&DB_PAUSED?"Play":"Pause");}
-    else if(item->flags&DB_NOTIFICATION)snprintf(action,sizeof(action),"Select: Notifications");
-    else if(item->role==DB_ROLE_ACTIVITY&&(item->flags&(DB_MEDIA_PREVIOUS|DB_MEDIA_TOGGLE|DB_MEDIA_NEXT))&&db_item_actionable(item,utc_now()))snprintf(action,sizeof(action),"Select: Controls");
-    else if(item->flags&DB_ACTION)snprintf(action,sizeof(action),"Select: %s",item->action_label);
-    if(item->flags&DB_APP)snprintf(hold,sizeof(hold),"Hold: %s",item->app_label);
-  }
-  if(s_command.active&&item&&s_command.token==item->token)snprintf(action,sizeof(action),"%s",s_command.result==DB_PENDING?"Working…":s_command.result==DB_DENIED?"Allow on phone":s_command.result==DB_STALE?"Item changed":s_command.result==DB_SUCCESS?"Done":s_command.result==DB_FAILED?s_command.text[0]?s_command.text:"Action failed":action);
-  if(!s_has_connection)snprintf(action,sizeof(action),"Phone disconnected");
-  segment(ctx,6,204,194,204,stroke());text(ctx,action,12,8,215,113,muted());draw_text(ctx,hold,1,117,215,75,muted(),GTextAlignmentRight);
-  centered(ctx,s_state.desired_mode==DB_OVERVIEW?"Hold Up: Activities · Down: Pinned":s_state.desired_mode==DB_MEDIA?"Up / Down: choose control":"Hold Up / Down to scroll",11,227,muted());
-}
 static void item_value(const DbItem *item,char *value,size_t size){
   if(item->flags&DB_LOCAL_WATCH){BatteryChargeState battery=battery_state_service_peek();snprintf(value,size,"%u%%",battery.charge_percent);return;}
   db_item_value(item,utc_now(),value,size);
 }
-static void activity_row(GContext *ctx,const DbItem *item,int y){
-  GColor ink=panel(ctx,item,GRect(4,y+2,192,32),false),secondary=item_selected(item)?(s_state.snapshot.dark?GColorDarkGray:GColorLightGray):muted();
-  if(!db_item_current(item,utc_now())){text(ctx,"Activity unavailable",16,10,y+25,180,secondary);return;}
-  if(item->flags&DB_IS_MEDIA){picture(ctx,item,9,y+6,24,item_selected(item)?ink:accent());text(ctx,item->title,16,40,y+17,148,ink);text(ctx,item->subtitle[0]?item->subtitle:item->name,14,40,y+32,148,secondary);}
-  else{
-    picture(ctx,item,9,y+8,20,item_selected(item)?ink:accent());char value[64];item_value(item,value,sizeof(value));
-    int value_width=width_of(value,clock_chars(value)?8:5);if(value_width>152)value_width=152;
-    int label_width=190-value_width-43;
-    if(label_width>=35)text(ctx,item->title[0]?item->title:item->name,16,36,y+26,label_width,ink);
-    value_text(ctx,value,36,y+27,154,item->clock_mode?26:24,ink,GTextAlignmentRight);
-    if(!value[0])text(ctx,item->title[0]?item->title:item->name,16,36,y+26,153,ink);
+static void activity_main(GContext *ctx,const DbItem *item){
+  GColor ink=panel(ctx,item,GRect(4,29,CONTENT_W-8,73),false);
+  if(!db_item_current(item,utc_now())){text(ctx,"Activity unavailable",20,10,73,CONTENT_W-20,ink);return;}
+  if(item->flags&DB_IS_MEDIA){
+    char title[193];clean_text(title,sizeof(title),item->title);unsigned split=0;
+    if(width_of(title,5)>CONTENT_W-20){for(unsigned i=0;title[i];i++)if(title[i]==' '){char saved=title[i];title[i]=0;if(width_of(title,5)<=CONTENT_W-20)split=i;title[i]=saved;}}
+    if(split){char first[193];memcpy(first,title,split);first[split]=0;text(ctx,first,24,10,54,CONTENT_W-20,ink);text(ctx,title+split+1,24,10,77,CONTENT_W-20,ink);picture(ctx,item,10,80,20,ink);text(ctx,item->subtitle[0]?item->subtitle:item->name,20,37,100,CONTENT_W-47,ink);}
+    else{text(ctx,title,24,10,59,CONTENT_W-20,ink);picture(ctx,item,10,65,32,ink);text(ctx,item->subtitle[0]?item->subtitle:item->name,20,50,91,CONTENT_W-60,ink);}
+  }else{
+    char value[64];item_value(item,value,sizeof(value));
+    if(value[0])value_text(ctx,value,10,76,CONTENT_W-20,item->clock_mode?40:32,ink,GTextAlignmentLeft);
+    else text(ctx,item->title[0]?item->title:item->name,28,10,69,CONTENT_W-20,ink);
+    picture(ctx,item,10,79,20,ink);text(ctx,value[0]?(item->title[0]?item->title:item->name):item->subtitle,20,37,100,CONTENT_W-47,ink);
   }
 }
-static void pin_tile(GContext *ctx,const DbItem *item,int x,int y,int h){
-  GColor ink=panel(ctx,item,GRect(x,y,94,h),true),secondary=item_selected(item)?(s_state.snapshot.dark?GColorDarkGray:GColorLightGray):muted();
-  char value[64];item_value(item,value,sizeof(value));
+static bool redundant_pin_label(const DbItem *item){
+  if(item->kind==DB_WEATHER&&!strcmp(item->title,"Weather"))return true;
+  if(item->kind==DB_PHONE&&(!strcmp(item->title,"Phone")||!strcmp(item->title,"Phone battery")))return true;
+  return item->kind==DB_BATTERY&&(!strcmp(item->title,"Watch")||!strcmp(item->title,"Watch battery"));
+}
+static void pin_row(GContext *ctx,const DbItem *item,int y){
+  GColor ink=panel(ctx,item,GRect(4,y,CONTENT_W-8,32),false);char value[64];item_value(item,value,sizeof(value));
+  picture(ctx,item,9,y+4,24,ink);
   if(value[0]){
-    picture(ctx,item,x+7,y+3,12,item_selected(item)?ink:accent());text(ctx,item->title,11,x+25,y+13,64,secondary);
-    value_text(ctx,value,x+8,y+h-2,78,20,ink,GTextAlignmentLeft);
-  }else{
-    picture(ctx,item,x+6,y+(h-15)/2,15,item_selected(item)?ink:accent());text(ctx,item->title,14,x+25,y+h/2+7,64,ink);
-  }
+    if(redundant_pin_label(item))value_text(ctx,value,40,y+31,CONTENT_W-50,32,ink,GTextAlignmentLeft);
+    else{unsigned index=clock_chars(value)?8:5;int value_width=width_of(value,index);if(value_width>CONTENT_W-89)value_width=CONTENT_W-89;
+      text(ctx,item->title,20,40,y+27,CONTENT_W-53-value_width,ink);value_text(ctx,value,CONTENT_W-9-value_width,y+29,value_width,26,ink,GTextAlignmentRight);}
+  }else text(ctx,item->title,24,40,y+29,CONTENT_W-50,ink);
 }
 static void notice(GContext *ctx,const DbItem *item){
-  GColor ink=panel(ctx,item,GRect(4,92,192,38),true),secondary=item_selected(item)?(s_state.snapshot.dark?GColorDarkGray:GColorLightGray):muted();
-  if(!db_item_current(item,utc_now())){text(ctx,"No recent notification",14,10,116,180,secondary);return;}
-  picture(ctx,item,10,99,16,item_selected(item)?ink:accent());text(ctx,item->title,16,32,108,107,ink);draw_text(ctx,item->name,1,140,108,50,secondary,GTextAlignmentRight);text(ctx,item->subtitle[0]?item->subtitle:"New notification",16,10,127,178,ink);
+  GColor ink=panel(ctx,item,GRect(4,108,CONTENT_W-8,43),false);
+  if(!db_item_current(item,utc_now())){symbol(ctx,DB_NOTICE,10,117,22,ink);text(ctx,"No notifications",20,39,138,CONTENT_W-49,ink);return;}
+  picture(ctx,item,10,111,20,ink);char heading[265];
+  if(item->name[0]&&strcmp(item->name,item->title))snprintf(heading,sizeof(heading),"%s · %s",item->title,item->name);else snprintf(heading,sizeof(heading),"%s",item->title[0]?item->title:item->name);
+  text(ctx,heading,20,37,128,CONTENT_W-47,ink);text(ctx,item->subtitle[0]?item->subtitle:"New notification",20,10,150,CONTENT_W-20,ink);
 }
-static void empty_message(GContext *ctx,const char *title,const char *detail,int y){symbol(ctx,DB_TIMER,88,y,24,muted());centered(ctx,title,16,y+49,foreground());if(detail&&detail[0])centered(ctx,detail,12,y+70,muted());}
+static void empty_message(GContext *ctx,const char *title,const char *detail,int y){symbol(ctx,DB_TIMER,(CONTENT_W-28)/2,y,28,muted());centered(ctx,title,20,y+57,foreground());if(detail&&detail[0])centered(ctx,detail,20,y+84,muted());}
 static void snapshot(GContext *ctx){
-  unsigned activities=0,pins=0;const DbItem *notification=NULL;
-  for(unsigned i=0;i<s_state.snapshot.count;i++){
-    const DbItem *item=&s_state.snapshot.items[i];
-    if(item->role==DB_ROLE_ACTIVITY&&activities<2)activity_row(ctx,item,20+36*(int)activities++);
-    else if(item->role==DB_ROLE_NOTICE)notification=item;
-  }
-  bool compact=activities||notification;
-  if(!activities){centered(ctx,"No live activities",16,63,muted());if(!notification)centered(ctx,"Your pinned items are ready",12,85,muted());}
-  if(notification)notice(ctx,notification);
-  else if(compact){edge(ctx,GRect(4,92,192,38),stroke(),4);symbol(ctx,DB_NOTICE,12,103,16,muted());text(ctx,"No recent notification",14,36,117,150,muted());}
-  for(unsigned i=0;i<s_state.snapshot.count;i++)if(s_state.snapshot.items[i].role==DB_ROLE_PIN&&pins<4){pin_tile(ctx,&s_state.snapshot.items[i],4+(pins%2)*98,(compact?134:108)+(pins/2)*(compact?35:48),compact?32:44);pins++;}
-  if(!pins)centered(ctx,"Choose pins in phone settings",12,174,muted());
+  const DbItem *activity=NULL,*notification=NULL;unsigned pins=0;
+  for(unsigned i=0;i<s_state.snapshot.count;i++){const DbItem *item=&s_state.snapshot.items[i];if(item->role==DB_ROLE_ACTIVITY&&!activity)activity=item;else if(item->role==DB_ROLE_NOTICE&&!notification)notification=item;}
+  if(activity)activity_main(ctx,activity);else{symbol(ctx,DB_TIMER,12,51,28,muted());text(ctx,"No live activities",20,48,75,CONTENT_W-58,muted());}
+  segment(ctx,8,105,CONTENT_W-8,105,stroke());
+  if(notification)notice(ctx,notification);else{symbol(ctx,DB_NOTICE,10,117,22,muted());text(ctx,"No notifications",20,39,138,CONTENT_W-49,muted());}
+  segment(ctx,8,154,CONTENT_W-8,154,stroke());
+  for(unsigned i=0;i<s_state.snapshot.count;i++)if(s_state.snapshot.items[i].role==DB_ROLE_PIN&&pins<2)pin_row(ctx,&s_state.snapshot.items[i],158+35*(int)pins++);
+  if(!pins)text(ctx,"Choose pins on phone",20,10,194,CONTENT_W-20,muted());
 }
 static void list_row(GContext *ctx,const DbItem *item,int y){
-  if(item->role==DB_ROLE_ACTIVITY){activity_row(ctx,item,y);return;}
-  GColor ink=panel(ctx,item,GRect(4,y+2,188,32),false);char value[64];item_value(item,value,sizeof(value));picture(ctx,item,10,y+9,18,item_selected(item)?ink:accent());
-  if(value[0]){int value_width=width_of(value,clock_chars(value)?7:5);if(value_width>75)value_width=75;int label_width=140-value_width;if(label_width<45)label_width=45;text(ctx,item->title,16,37,y+26,label_width,ink);value_text(ctx,value,117,y+28,68,24,ink,GTextAlignmentRight);}
-  else text(ctx,item->title,20,37,y+27,146,ink);
+  GColor ink=panel(ctx,item,GRect(4,y,CONTENT_W-9,38),false);char value[64];item_value(item,value,sizeof(value));picture(ctx,item,9,y+6,26,ink);
+  if(item->flags&DB_IS_MEDIA){text(ctx,item->title,20,42,y+18,CONTENT_W-53,ink);text(ctx,item->subtitle[0]?item->subtitle:item->name,20,42,y+37,CONTENT_W-53,ink);}
+  else if(value[0]){text(ctx,item->title[0]?item->title:item->name,20,42,y+17,CONTENT_W-53,ink);value_text(ctx,value,42,y+39,CONTENT_W-53,24,ink,GTextAlignmentLeft);}
+  else text(ctx,item->title[0]?item->title:item->name,24,42,y+29,CONTENT_W-53,ink);
 }
 static void list_view(GContext *ctx){
-  if(!s_state.snapshot.count){empty_message(ctx,s_state.desired_mode==DB_ACTIVITIES?"No live activities":"No pinned items",s_state.desired_mode==DB_PINNED?"Choose items in phone settings":"",66);return;}
-  for(unsigned i=0;i<s_state.snapshot.count;i++)list_row(ctx,&s_state.snapshot.items[i],23+(int)i*36);
-  if(s_state.snapshot.total>5){int thumb=168*5/s_state.snapshot.total;if(thumb<8)thumb=8;int top=27;if(s_state.snapshot.total>5)top+=(168-thumb)*s_state.snapshot.offset/(s_state.snapshot.total-5);fill(ctx,GRect(197,27,2,168),stroke(),0);fill(ctx,GRect(197,top,2,thumb),foreground(),0);}
+  if(!s_state.snapshot.count){empty_message(ctx,s_state.desired_mode==DB_ACTIVITIES?"No live activities":"No pinned items",s_state.desired_mode==DB_PINNED?"Choose items on phone":"",66);return;}
+  for(unsigned i=0;i<s_state.snapshot.count;i++)list_row(ctx,&s_state.snapshot.items[i],27+(int)i*40);
+  if(s_state.snapshot.total>5){int thumb=200*5/s_state.snapshot.total;if(thumb<8)thumb=8;int top=27+(200-thumb)*s_state.snapshot.offset/(s_state.snapshot.total-5);fill(ctx,GRect(CONTENT_W-3,27,2,200),stroke(),0);fill(ctx,GRect(CONTENT_W-3,top,2,thumb),foreground(),0);}
 }
 static void playback_icon(GContext *ctx,unsigned index,bool paused,int x,int y,GColor color){
   graphics_context_set_fill_color(ctx,color);graphics_context_set_stroke_color(ctx,color);
@@ -250,36 +240,59 @@ static void media_view(GContext *ctx){
   if(item->flags&DB_IS_MEDIA){
     char title[193];clean_text(title,sizeof(title),item->title);
     unsigned split=0;char first[193]="",second[193]="";
-    if(width_of(title,5)>182){for(unsigned i=0;title[i];i++)if(title[i]==' '){char saved=title[i];title[i]=0;if(width_of(title,5)<=182)split=i;title[i]=saved;}}
-    if(split){memcpy(first,title,split);first[split]=0;snprintf(second,sizeof(second),"%s",title+split+1);text(ctx,first,24,9,67,182,foreground());text(ctx,second,24,9,93,182,foreground());}
-    else text(ctx,title,24,9,93,182,foreground());
-    picture(ctx,item,9,105,40,accent());text(ctx,item->subtitle,16,58,121,132,foreground());text(ctx,item->value[0]?item->value:item->flags&DB_PAUSED?"Paused":"",14,58,141,132,muted());
+    if(width_of(title,5)>CONTENT_W-20){for(unsigned i=0;title[i];i++)if(title[i]==' '){char saved=title[i];title[i]=0;if(width_of(title,5)<=CONTENT_W-20)split=i;title[i]=saved;}}
+    if(split){memcpy(first,title,split);first[split]=0;snprintf(second,sizeof(second),"%s",title+split+1);text(ctx,first,24,9,67,CONTENT_W-20,foreground());text(ctx,second,24,9,93,CONTENT_W-20,foreground());}
+    else text(ctx,title,24,9,93,CONTENT_W-20,foreground());
+    picture(ctx,item,9,105,40,accent());text(ctx,item->subtitle,16,58,121,CONTENT_W-68,foreground());text(ctx,item->value[0]?item->value:item->flags&DB_PAUSED?"Paused":"",14,58,141,CONTENT_W-68,muted());
     for(unsigned i=0;i<3;i++){
-      bool available=control_available(item,i),selected=s_state.focus==i;GColor ink=selected?background():available?foreground():muted();int x=5+i*65;
-      if(selected)fill(ctx,GRect(x,163,60,37),foreground(),5);else edge(ctx,GRect(x,163,60,37),stroke(),5);
-      playback_icon(ctx,i,(item->flags&DB_PAUSED)!=0,x+20,171,ink);
+      bool available=control_available(item,i),selected=s_state.focus==i;GColor ink=selected?background():available?foreground():muted();int x=5+i*52;
+      if(selected)fill(ctx,GRect(x,163,48,37),foreground(),5);else edge(ctx,GRect(x,163,48,37),stroke(),5);
+      playback_icon(ctx,i,(item->flags&DB_PAUSED)!=0,x+14,171,ink);
     }
   }else{
-    text(ctx,item->title,20,9,49,182,foreground());char value[64];item_value(item,value,sizeof(value));text(ctx,value[0]?value:item->subtitle,16,9,73,182,muted());
+    text(ctx,item->title,24,9,57,CONTENT_W-20,foreground());char value[64];item_value(item,value,sizeof(value));text(ctx,value[0]?value:item->subtitle,24,9,86,CONTENT_W-20,muted());
     for(unsigned i=0;i<3;i++){
-      bool available=control_available(item,i),selected=s_state.focus==i;int y=87+i*38;
-      if(selected)fill(ctx,GRect(6,y,188,33),foreground(),4);else if(available)edge(ctx,GRect(6,y,188,33),stroke(),4);
-      text(ctx,item->controls[i][0]?item->controls[i]:"Unavailable",16,14,y+25,172,selected?background():available?foreground():muted());
+      bool available=control_available(item,i),selected=s_state.focus==i;int y=98+i*42;
+      if(selected)fill(ctx,GRect(6,y,CONTENT_W-12,38),foreground(),4);else if(available)edge(ctx,GRect(6,y,CONTENT_W-12,38),stroke(),4);
+      text(ctx,item->controls[i][0]?item->controls[i]:"Unavailable",20,14,y+29,CONTENT_W-28,selected?background():available?foreground():muted());
     }
   }
 }
+static void action_bar(GContext *ctx){
+  GColor ink=background();int x=CONTENT_W+ACTION_BAR_WIDTH/2;fill(ctx,GRect(CONTENT_W,0,ACTION_BAR_WIDTH,SCREEN_H),foreground(),0);
+  if(!s_command.confirmation){segment(ctx,x-6,42,x,36,ink);segment(ctx,x,36,x+6,42,ink);segment(ctx,x-6,187,x,193,ink);segment(ctx,x,193,x+6,187,ink);}
+  if(s_state.loading||!s_state.ready)return;
+  const DbItem *item=db_selected(&s_state);if(!s_has_connection||!db_item_capability_current(item,utc_now()))return;
+  if(s_command.active&&s_command.result==DB_PENDING){for(int i=0;i<3;i++){graphics_context_set_fill_color(ctx,ink);graphics_fill_circle(ctx,GPoint(x-8+i*8,114),2);}return;}
+  if(s_command.confirmation){segment(ctx,x-7,114,x-2,120,ink);segment(ctx,x-2,120,x+8,108,ink);return;}
+  if(s_state.desired_mode==DB_MEDIA){if(control_available(item,s_state.focus)){if(item->flags&DB_IS_MEDIA)playback_icon(ctx,s_state.focus,(item->flags&DB_PAUSED)!=0,x-9,104,ink);else{segment(ctx,x-7,114,x-2,120,ink);segment(ctx,x-2,120,x+8,108,ink);}}}
+  else if(item->flags&DB_NOTIFICATION){if(item->flags&DB_APP)symbol(ctx,DB_NOTICE,x-11,103,22,ink);}
+  else if(item->role==DB_ROLE_ACTIVITY&&(item->flags&DB_IS_MEDIA)){if(db_item_direct_action(item,utc_now())==1)playback_icon(ctx,1,(item->flags&DB_PAUSED)!=0,x-9,104,ink);}
+  else if(db_item_actionable(item,utc_now())){
+    if(item->role==DB_ROLE_ACTIVITY){for(int i=0;i<3;i++){graphics_context_set_fill_color(ctx,ink);graphics_fill_circle(ctx,GPoint(x-8+i*8,114),2);}}
+    else if(item->kind==DB_LIGHT){graphics_context_set_stroke_color(ctx,ink);graphics_context_set_stroke_width(ctx,2);graphics_draw_circle(ctx,GPoint(x,115),8);fill(ctx,GRect(x-3,102,6,10),foreground(),0);segment(ctx,x,103,x,114,ink);}
+    else if(item->kind==DB_FIND)symbol(ctx,DB_FIND,x-11,103,22,ink);
+    else{segment(ctx,x+3,103,x-5,115,ink);segment(ctx,x-5,115,x+4,115,ink);segment(ctx,x+4,115,x-3,125,ink);}
+  }
+}
+static void feedback(GContext *ctx){
+  const char *label=NULL;
+  if(!s_has_connection)label="Phone disconnected";
+  else if(s_command.active&&!s_command.confirmation)label=s_command.result==DB_PENDING?"Working…":s_command.result==DB_DENIED?"Allow on phone":s_command.result==DB_STALE?"Item changed":s_command.result==DB_SUCCESS?"Done":s_command.result==DB_FAILED?(s_command.text[0]?s_command.text:"Action failed"):NULL;
+  if(label){fill(ctx,GRect(4,191,CONTENT_W-8,34),foreground(),4);text(ctx,label,20,10,218,CONTENT_W-20,background());}
+}
 static void confirm_overlay(GContext *ctx){
-  fill(ctx,GRect(8,58,184,128),background(),6);edge(ctx,GRect(8,58,184,128),foreground(),6);centered(ctx,"Confirm action?",20,88,foreground());
-  text(ctx,s_command.text[0]?s_command.text:"Run this action",14,17,113,166,muted());centered(ctx,"Select: confirm",16,145,foreground());centered(ctx,"Back: cancel",14,170,muted());
+  fill(ctx,GRect(4,57,CONTENT_W-8,139),background(),6);edge(ctx,GRect(4,57,CONTENT_W-8,139),foreground(),6);centered(ctx,"Confirm action?",20,87,foreground());
+  text(ctx,s_command.text[0]?s_command.text:"Run this action",20,12,116,CONTENT_W-24,muted());centered(ctx,"Select: confirm",20,153,foreground());centered(ctx,"Back: cancel",20,181,muted());
 }
 static void update(Layer *layer,GContext *ctx){
   (void)layer;fill(ctx,GRect(0,0,SCREEN_W,SCREEN_H),background(),0);header(ctx);
-  if(s_state.loading||!s_state.ready)empty_message(ctx,s_has_connection?"Loading…":"Phone disconnected",s_has_connection?"Waiting for plugin data":"Reconnect to load your items",66);
-  else if(s_state.snapshot.status>=DB_OFFLINE&&!s_state.snapshot.count)empty_message(ctx,status_text(),s_state.snapshot.status==DB_PERMISSION?"Open Dashboard in the phone app":"Back is always available",66);
+  if(s_state.loading||!s_state.ready)empty_message(ctx,s_has_connection?"Loading…":"Phone disconnected",s_has_connection?"Waiting for data":"Reconnect your phone",66);
+  else if(s_state.snapshot.status>=DB_OFFLINE&&!s_state.snapshot.count)empty_message(ctx,status_text(),s_state.snapshot.status==DB_PERMISSION?"Open phone settings":"Back is available",66);
   else if(s_state.desired_mode==DB_OVERVIEW)snapshot(ctx);
   else if(s_state.desired_mode==DB_MEDIA)media_view(ctx);
   else list_view(ctx);
-  footer(ctx);if(s_command.confirmation)confirm_overlay(ctx);
+  feedback(ctx);if(s_command.confirmation)confirm_overlay(ctx);action_bar(ctx);
 }
 static bool read_uint(DictionaryIterator *dict,uint32_t key,uint32_t *value){
   Tuple *t=dict_find(dict,key);if(!t||(t->type!=TUPLE_UINT&&t->type!=TUPLE_INT))return false;
@@ -463,6 +476,7 @@ static void select_click(ClickRecognizerRef recognizer,void *context){
   const DbItem *item=pressed_item();if(!s_has_connection||!db_item_capability_current(item,utc_now()))return;
   if(s_state.desired_mode==DB_MEDIA){if(control_available(item,s_state.focus))run_command(item,DB_OP_ACTION,s_state.focus,false);}
   else if(item->flags&DB_NOTIFICATION){if(item->flags&DB_APP)run_command(item,DB_OP_OPEN,0,false);}
+  else if(item->role==DB_ROLE_ACTIVITY&&(item->flags&DB_IS_MEDIA)){if(db_item_direct_action(item,utc_now())==1)run_command(item,DB_OP_ACTION,1,false);}
   else if(item->role==DB_ROLE_ACTIVITY&&db_item_actionable(item,utc_now())&&(item->flags&(DB_MEDIA_PREVIOUS|DB_MEDIA_TOGGLE|DB_MEDIA_NEXT))){
     db_state_remember(&s_state);s_state.focus=(item->flags&DB_IS_MEDIA)&&control_available(item,1)?1:control_available(item,0)?0:control_available(item,1)?1:2;
     request_view(DB_MEDIA,0,0,item->token,false);
@@ -520,7 +534,7 @@ static void deinit(void){
   stop_repeat();if(s_view_timeout)app_timer_cancel(s_view_timeout);if(s_action_timeout)app_timer_cancel(s_action_timeout);if(s_expiry_timer)app_timer_cancel(s_expiry_timer);tick_timer_service_unsubscribe();battery_state_service_unsubscribe();connection_service_unsubscribe();app_focus_service_unsubscribe();app_message_deregister_callbacks();
   if(s_canvas)layer_destroy(s_canvas);
   if(s_window)window_destroy(s_window);
-  for(unsigned i=0;i<9;i++)if(s_fonts[i])fonts_unload_custom_font(s_fonts[i]);
+  for(unsigned i=0;i<FONT_COUNT;i++)if(s_fonts[i])fonts_unload_custom_font(s_fonts[i]);
   memset(&s_state,0,sizeof(s_state));memset(&s_command,0,sizeof(s_command));
 }
 int main(void){init();if(s_window&&s_canvas)app_event_loop();deinit();return 0;}

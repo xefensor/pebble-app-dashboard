@@ -4,7 +4,9 @@
 // and no action or app launch can be invoked by this test.
 const fs=require('node:fs'),path=require('node:path'),os=require('node:os'),assert=require('node:assert/strict');
 const {spawn}=require('node:child_process'),{pathToFileURL}=require('node:url');
-const root=path.resolve(__dirname,'..'),output=path.join(root,'docs/qa/0.1.0/settings');
+const root=path.resolve(__dirname,'..');
+const version=JSON.parse(fs.readFileSync(path.join(root,'package.json'),'utf8')).version;
+const output=path.join(root,'docs/qa',version,'settings');
 const model=require('../src/pkjs/settings');
 const PLUGIN='00aabbcc-2233-4455-6677-889900aabbcc';
 let browser,socket,scratch,logFd,id=0;const requests=new Map(),exceptions=[];

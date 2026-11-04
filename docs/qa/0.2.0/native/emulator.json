@@ -1,0 +1,1547 @@
+{
+  "result": "PASS",
+  "version": "0.2.0",
+  "scope": "Real native Emery QEMU UI and AppMessage requests with an explicit fictional protocol peer; no phone JavaScript, live plugins, real app launches or physical watch.",
+  "candidatePbwSha256": "bdf1880c4527d509b1de10316b9a7f89d4e7f1d3dfa654124d0ea2af41aa7967",
+  "nativeOnlyPbwSha256": "5bafc32a3ca7da24f121a99fe15148d3dac9623eb2f2ab0b83f15da04ba693e3",
+  "nativePayloadSha256": {
+    "emery/app_resources.pbpack": "94511ccd37e0309987f80c3b1f9b9a2ce4cb3cea9453d2f56470e1d35b93fe3c",
+    "emery/manifest.json": "017255e08cf396f4deb6a5f47013c95e8e83624d96f636d894d86af4ce3378a1",
+    "emery/pebble-app.bin": "e303156b7bb4b0b1b581838a4387df02c58e3be3c7eeb7ae85eff4ad18f64c17"
+  },
+  "phoneJavascriptExecuted": false,
+  "stateDirectory": "/tmp/dashboard-emery-ufd6n_lh",
+  "session": 750550892,
+  "checks": [
+    {
+      "check": "Four-item Snapshot shows one activity, one notification and two pins; countdown advances locally",
+      "passed": true
+    },
+    {
+      "check": "Timer tap has no action or enlarged view",
+      "passed": true
+    },
+    {
+      "check": "Timer hold requests exactly one associated app and no action",
+      "passed": true
+    },
+    {
+      "check": "Primary Music tap dispatches slot1 directly; hold opens its app exactly once without toggling",
+      "passed": true
+    },
+    {
+      "check": "Music list tap is also direct; Back restores Snapshot without an intermediate media view",
+      "passed": true
+    },
+    {
+      "check": "Native captures cover primary Music states, default value/action icons, a custom pin alias and long text",
+      "passed": true
+    },
+    {
+      "check": "Notification tap directly requests native Notifications",
+      "passed": true
+    },
+    {
+      "check": "Value-only pin tap has no action or enlarged screen",
+      "passed": true
+    },
+    {
+      "check": "Unavailable reading does not disable an independent declared pin action or app route",
+      "passed": true
+    },
+    {
+      "check": "Pin with no app ignores held Select without also toggling",
+      "passed": true
+    },
+    {
+      "check": "Generic activity still opens useful labelled controls and runs its first available action",
+      "passed": true
+    },
+    {
+      "check": "Activities hold opens once; list hold pages; Back restores the Snapshot pin",
+      "passed": true
+    },
+    {
+      "check": "Held Down reaches12thpin; release adds no move, group switch or item action",
+      "passed": true
+    },
+    {
+      "check": "Held Up returns to first pin in the same collection",
+      "passed": true
+    },
+    {
+      "check": "Outdated view reply cannot replace the current native page",
+      "passed": true
+    },
+    {
+      "check": "Source revision change during Select cancels the stale press",
+      "passed": true
+    },
+    {
+      "check": "Native local focus survives insertion beyond the old page boundary",
+      "passed": true
+    },
+    {
+      "check": "Shortened private lease clears Music and notification pixels immediately",
+      "passed": true
+    },
+    {
+      "check": "SDK-reported disconnect clears private primary Music and notification regions",
+      "passed": true,
+      "sdkDebounceSeconds": 25,
+      "transportNote": "QEMU connection event and standard SDK debounce; protocol transport stays active, no real Bluetooth/phone link."
+    },
+    {
+      "check": "Empty Activities accepts navigation and no-op actions safely",
+      "passed": true
+    },
+    {
+      "check": "View timeout leaves usable UI; a matching late reply recovers",
+      "passed": true
+    },
+    {
+      "check": "Phone-runtime restart accepts sequence1 in a fresh epoch; stale prior-session frame cannot replace it",
+      "passed": true
+    }
+  ],
+  "captures": [
+    {
+      "name": "snapshot-light",
+      "file": "snapshot-light.png",
+      "sha256": "207de3c5247d39f9ece818836c3e0b3c017b912098532deb571c5a88c7045ee0",
+      "rgbSha256": "bc316c966468fc4bac89b4c7f47e76b730e52cc48becb14691278fda8b258a2a",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "snapshot-ticking",
+      "file": "snapshot-ticking.png",
+      "sha256": "6d06c0b5fbf25ae8a7a8196b9dd4790e710bbf836086a70cd3d9c887d44732b3",
+      "rgbSha256": "6cc1a0ae6ef4daef8a4d2b884c0e5f40f95fffada2d71ba839cf838cc0cb74c5",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "music-playing",
+      "file": "music-playing.png",
+      "sha256": "058a1c37c691491bd79f5bf25bd7937817d1e9824a66d6ef0a21351877db609a",
+      "rgbSha256": "2a1863dcee79bc553ec35e3ced84a71b13bb64a66ebbb19d40cfb8309f49b8f9",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "music-paused",
+      "file": "music-paused.png",
+      "sha256": "32242c84f890202688dc2c2e04ecd0eb05358c1f1b805e0d61d47e5dee3642f9",
+      "rgbSha256": "5b7caeda1fbf9a94914b5ff3ec75e875bb167d1bc721c41b18fec9dd290f025e",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "music-resumed",
+      "file": "music-resumed.png",
+      "sha256": "058a1c37c691491bd79f5bf25bd7937817d1e9824a66d6ef0a21351877db609a",
+      "rgbSha256": "2a1863dcee79bc553ec35e3ced84a71b13bb64a66ebbb19d40cfb8309f49b8f9",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "music-in-activities",
+      "file": "music-in-activities.png",
+      "sha256": "e8f91951f01367651ad9fe6faa809080f672cb4bf4c641c771ee4b2b69b98179",
+      "rgbSha256": "4a511141c5f491accf200a011f597aa684b99526cc45b216e8b5973503930c97",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "default-value-pins",
+      "file": "default-value-pins.png",
+      "sha256": "ec713e882cb6b95e88d479b474ef587b2d83449cb68b09b0c4a6d97deef5140b",
+      "rgbSha256": "a6ea1b26d79cd53b7c282435fc14d1f22d494101123ab39e4cc56aa4c68a6e0d",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "default-action-and-value-pins",
+      "file": "default-action-and-value-pins.png",
+      "sha256": "b3551eff95499d61c44b39b7572cc9ec24ae4873017012a21f8d99a05b6e6b76",
+      "rgbSha256": "a19aa1a26f106bd7177c22f14be331ec9504650026e728ab3c741d21fdd90b58",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "custom-pin-alias",
+      "file": "custom-pin-alias.png",
+      "sha256": "0aad1159ebd1fc4eef12c4d09f00a6158fea6f1519ec403d2375b5c0aeed1df0",
+      "rgbSha256": "50efdcdfa64328062a40099deac1100d7029a990581d97269a24be11773e184f",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "snapshot-long-text",
+      "file": "snapshot-long-text.png",
+      "sha256": "5d57350f8d7cd66c04be82b29a4cc34dcd8fa867af32d81ee3a41b11cb3e62ee",
+      "rgbSha256": "14eb792bdc7899e572924ae8c79282844e60cd959eb05c5bfc2e1a785f30178b",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "notification-selected",
+      "file": "notification-selected.png",
+      "sha256": "24aef61b87cb3697b84a5f09ed5840839ba8d62325b5ad77eee8e8f76634884a",
+      "rgbSha256": "afad3ede98a51604184548957f4243976a511f8125f76315dd55cd1575e33db8",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "weather-read-only",
+      "file": "weather-read-only.png",
+      "sha256": "d89a1ccc24f7a2908148052b0ccae71bcfc3a25f39becebf3093c58d2fb0811f",
+      "rgbSha256": "d0c4b226291994e10fd98ada939ed6ff6775dc01e4abf7453fbe4f4e25b092f7",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "weather-unavailable-app-available",
+      "file": "weather-unavailable-app-available.png",
+      "sha256": "a2f4a26594a1c08a36d13e50ab1aa945cb2994e2cd39cd303e5fe8e5ef140e4c",
+      "rgbSha256": "a84c439341b43c215aaef24540eb0af900b0f317b5f195388ade888029f4da9e",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "light-unavailable-action-available",
+      "file": "light-unavailable-action-available.png",
+      "sha256": "19559ea4c7d7c6e05905ea7da829ec512043febc2c8a6cd9f43f2809b6f98a4f",
+      "rgbSha256": "b15fd104d7bf0209cca03573393b59c6450e3d31f48d95c306fba8a6f100f3ca",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "light-confirmed-off",
+      "file": "light-confirmed-off.png",
+      "sha256": "9e56ef85b4634c5deb0fa2267a656d08accdc4e18ba6ad9c9700f524edf4eaaf",
+      "rgbSha256": "7ab31a9f11f0170ca17b800e0d48953605e1a41fda5ee6aebab5d4fe9bd1b771",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "all-activities",
+      "file": "all-activities.png",
+      "sha256": "e3423b78354445710aed3c1e1ec0b065eceba25825b706790cc42f0411a89e6e",
+      "rgbSha256": "9a7dfeea20d1f0709197f18c26e0031fa1a6c47658c024c763f07c93abda7e31",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "activities-last",
+      "file": "activities-last.png",
+      "sha256": "f2203e1d8b9911d20b76e7429c800acc00e47d104f4c1be336643cc55e550396",
+      "rgbSha256": "d8e814a70c4cf17b99bcf1fd744ce8e91ccebc824b81ee601674bf0373ee789e",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "generic-activity-controls",
+      "file": "generic-activity-controls.png",
+      "sha256": "798bc4fca4ee836629a5ee9fc804606ff198ad5c082f3ed89be00d9dd4dd0285",
+      "rgbSha256": "598bc62bb6b8724015617f17e68497d81d35ba48becc6df6bee216db5863e2f4",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "all-pinned",
+      "file": "all-pinned.png",
+      "sha256": "e19c99dfe1b41be3e0c05238381d51e9cca6423aacd9a47207c283cc99df7639",
+      "rgbSha256": "13812b33acc3dfd873c45ed8df6550b7314e7aeb2559e3395b5f7d4eb0566eab",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "pinned-last",
+      "file": "pinned-last.png",
+      "sha256": "5734a70e6ca0da09ab061ebfc27f70b1d5a70bae12a84cfee8042b31ca29f370",
+      "rgbSha256": "f7455cf5bf74959f86a5a697117a161a4236e73775360cd022244f7b1aa73b3b",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "pinned-stable-before-stale",
+      "file": "pinned-stable-before-stale.png",
+      "sha256": "e19c99dfe1b41be3e0c05238381d51e9cca6423aacd9a47207c283cc99df7639",
+      "rgbSha256": "13812b33acc3dfd873c45ed8df6550b7314e7aeb2559e3395b5f7d4eb0566eab",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "pinned-stable-after-stale",
+      "file": "pinned-stable-after-stale.png",
+      "sha256": "e19c99dfe1b41be3e0c05238381d51e9cca6423aacd9a47207c283cc99df7639",
+      "rgbSha256": "13812b33acc3dfd873c45ed8df6550b7314e7aeb2559e3395b5f7d4eb0566eab",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "pinned-live-insert",
+      "file": "pinned-live-insert.png",
+      "sha256": "db50a0f967b7f3c6d2e968d9efa121a45fe0c275827d7194c0a47b7284066276",
+      "rgbSha256": "3ec7b5e0ab54b9daf9641a224b7141674c3bb9f0d94c1df497ce2257a5a0d4df",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "pinned-dark",
+      "file": "pinned-dark.png",
+      "sha256": "8c5adcbd0c13d2b82e6b62f95ba73bfc10724a8873b006139e247272b248553b",
+      "rgbSha256": "572f7987c8d60d7f3850879f45c979b24bd5cdb4ce952b15bb6bd47de740580f",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "snapshot-dark",
+      "file": "snapshot-dark.png",
+      "sha256": "a902b7c8cc0a44fa0e6d1686a024515aabc009e4b790f3380e06e43e96ba4571",
+      "rgbSha256": "5e70fc37d1cf4f367681e06555dc23575a163ebe8d4668e277280cfb1d91f196",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "private-lease-expired",
+      "file": "private-lease-expired.png",
+      "sha256": "cfe5056a1cd1c7f49f2f16f31573e5e4e09623ab37fe0dfc2bf36ba4669898d0",
+      "rgbSha256": "7807e41cbbf6dbc3319b83b23a2f758643fb858dd94b96f14ff32fd964d96c9d",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "private-source-restored",
+      "file": "private-source-restored.png",
+      "sha256": "a902b7c8cc0a44fa0e6d1686a024515aabc009e4b790f3380e06e43e96ba4571",
+      "rgbSha256": "5e70fc37d1cf4f367681e06555dc23575a163ebe8d4668e277280cfb1d91f196",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "phone-disconnected",
+      "file": "phone-disconnected.png",
+      "sha256": "bff256c2785ce4bf8b4039945f753966d7e9f6f8ccfd371be12b1ee52018bd9c",
+      "rgbSha256": "6abd8012f5a9a01346381ca80daa942c8c7a84e0696bc50e29e6124c8595578f",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "activities-empty",
+      "file": "activities-empty.png",
+      "sha256": "254be7aff7cda7f8800ce5b4521db7df716129a76f2fd5bc6de68576b1d778ca",
+      "rgbSha256": "ddd56b8d9019f4abb8411ec801cc0c48621b26cd79fb1e6c3f0923d9c9530c09",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "loading",
+      "file": "loading.png",
+      "sha256": "3c0ef0d8310bbaff2d1f44d64638889a694327d38ff6c6a49b1ff198fa40fb22",
+      "rgbSha256": "1f8e1fb19c0b09390bba128679d2d8ac9be21e6c9935516b57d76f488ab76f15",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "loading-timeout",
+      "file": "loading-timeout.png",
+      "sha256": "7bdfa9dbe53818cb69c0d6995cda03b851a0082964b82e881ab73b70613404f3",
+      "rgbSha256": "6831ce0d5c8922cc47f28af4066d7d178e5256cc5d78351d3b3975fea9b00581",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "recovered-pinned",
+      "file": "recovered-pinned.png",
+      "sha256": "53f0e9408c07e5027da4351bd04172549e03b1f0bb3cdd93a9419f2316d3046c",
+      "rgbSha256": "1d36c78f38e64fa382b68ef42acdb3331f0849a6178c215de619452003dcb9af",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "phone-runtime-restarted",
+      "file": "phone-runtime-restarted.png",
+      "sha256": "bfac60777423b4200d4e887746b0f8a485e7c0efc46b91bd1ccfba7a359f1c1b",
+      "rgbSha256": "2c721e1dcc7dd5a180a8c148b8600991172dc0135eb6d3d28e24022f2c503325",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    }
+  ],
+  "requests": [
+    {
+      "4000": 1,
+      "4001": 750550891,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0
+    },
+    {
+      "4000": 7,
+      "4001": 750550891,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 1,
+      "4006": 1
+    },
+    {
+      "4000": 4,
+      "4001": 750550891,
+      "4002": 2,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 1,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 750550891,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 2,
+      "4006": 1
+    },
+    {
+      "4000": 3,
+      "4001": 750550891,
+      "4002": 3,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 2,
+      "4006": 1,
+      "4007": 1,
+      "4011": 0
+    },
+    {
+      "4000": 4,
+      "4001": 750550891,
+      "4002": 4,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 2,
+      "4006": 2
+    },
+    {
+      "4000": 3,
+      "4001": 750550891,
+      "4002": 5,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 2,
+      "4006": 2,
+      "4007": 1,
+      "4011": 0
+    },
+    {
+      "4000": 2,
+      "4001": 750550891,
+      "4002": 6,
+      "4003": 1,
+      "4004": 0,
+      "4012": 0
+    },
+    {
+      "4000": 7,
+      "4001": 750550891,
+      "4002": 6,
+      "4003": 1,
+      "4004": 0,
+      "4012": 0,
+      "4005": 2,
+      "4006": 3
+    },
+    {
+      "4000": 3,
+      "4001": 750550891,
+      "4002": 7,
+      "4003": 1,
+      "4004": 0,
+      "4012": 0,
+      "4005": 2,
+      "4006": 3,
+      "4007": 1,
+      "4011": 0
+    },
+    {
+      "4000": 4,
+      "4001": 750550891,
+      "4002": 8,
+      "4003": 1,
+      "4004": 0,
+      "4012": 0,
+      "4005": 2,
+      "4006": 4
+    },
+    {
+      "4000": 2,
+      "4001": 750550891,
+      "4002": 9,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 2,
+      "4006": 0
+    },
+    {
+      "4000": 7,
+      "4001": 750550891,
+      "4002": 9,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 2,
+      "4006": 4
+    },
+    {
+      "4000": 7,
+      "4001": 750550891,
+      "4002": 9,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 1,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 750550891,
+      "4002": 9,
+      "4003": 0,
+      "4004": 0,
+      "4012": 1,
+      "4005": 3,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 750550891,
+      "4002": 9,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 1,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 750550891,
+      "4002": 9,
+      "4003": 0,
+      "4004": 0,
+      "4012": 1,
+      "4005": 3,
+      "4006": 1
+    },
+    {
+      "4000": 4,
+      "4001": 750550891,
+      "4002": 10,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 3,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 750550891,
+      "4002": 9,
+      "4003": 0,
+      "4004": 0,
+      "4012": 2,
+      "4005": 4,
+      "4006": 1
+    },
+    {
+      "4000": 4,
+      "4001": 750550891,
+      "4002": 11,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 4,
+      "4006": 2
+    },
+    {
+      "4000": 7,
+      "4001": 750550891,
+      "4002": 9,
+      "4003": 0,
+      "4004": 0,
+      "4012": 3,
+      "4005": 5,
+      "4006": 3
+    },
+    {
+      "4000": 3,
+      "4001": 750550891,
+      "4002": 12,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 5,
+      "4006": 4,
+      "4007": 0,
+      "4011": 0
+    },
+    {
+      "4000": 2,
+      "4001": 750550891,
+      "4002": 13,
+      "4003": 1,
+      "4004": 0,
+      "4012": 0
+    },
+    {
+      "4000": 7,
+      "4001": 750550891,
+      "4002": 13,
+      "4003": 1,
+      "4004": 0,
+      "4012": 0,
+      "4005": 1,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 750550891,
+      "4002": 13,
+      "4003": 1,
+      "4004": 0,
+      "4012": 1,
+      "4005": 2,
+      "4006": 4
+    },
+    {
+      "4000": 7,
+      "4001": 750550891,
+      "4002": 13,
+      "4003": 1,
+      "4004": 0,
+      "4012": 2,
+      "4005": 9,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 750550891,
+      "4002": 13,
+      "4003": 1,
+      "4004": 0,
+      "4012": 3,
+      "4005": 10,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 750550891,
+      "4002": 13,
+      "4003": 1,
+      "4004": 0,
+      "4012": 4,
+      "4005": 11,
+      "4006": 1
+    },
+    {
+      "4000": 2,
+      "4001": 750550891,
+      "4002": 14,
+      "4003": 1,
+      "4004": 1,
+      "4012": 5
+    },
+    {
+      "4000": 7,
+      "4001": 750550891,
+      "4002": 14,
+      "4003": 1,
+      "4004": 1,
+      "4012": 5,
+      "4005": 12,
+      "4006": 1
+    },
+    {
+      "4000": 2,
+      "4001": 750550891,
+      "4002": 15,
+      "4003": 3,
+      "4004": 0,
+      "4012": 0,
+      "4005": 12,
+      "4006": 0
+    },
+    {
+      "4000": 3,
+      "4001": 750550891,
+      "4002": 16,
+      "4003": 3,
+      "4004": 0,
+      "4012": 0,
+      "4005": 12,
+      "4006": 1,
+      "4007": 0,
+      "4011": 0
+    },
+    {
+      "4000": 2,
+      "4001": 750550891,
+      "4002": 17,
+      "4003": 1,
+      "4004": 1,
+      "4012": 5,
+      "4005": 12,
+      "4006": 0
+    },
+    {
+      "4000": 7,
+      "4001": 750550891,
+      "4002": 17,
+      "4003": 1,
+      "4004": 1,
+      "4012": 5,
+      "4005": 12,
+      "4006": 1
+    },
+    {
+      "4000": 2,
+      "4001": 750550891,
+      "4002": 18,
+      "4003": 0,
+      "4004": 0,
+      "4012": 3,
+      "4005": 5,
+      "4006": 0
+    },
+    {
+      "4000": 7,
+      "4001": 750550891,
+      "4002": 18,
+      "4003": 0,
+      "4004": 0,
+      "4012": 3,
+      "4005": 5,
+      "4006": 6
+    },
+    {
+      "4000": 3,
+      "4001": 750550891,
+      "4002": 19,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 5,
+      "4006": 6,
+      "4007": 0,
+      "4011": 0
+    },
+    {
+      "4000": 2,
+      "4001": 750550891,
+      "4002": 20,
+      "4003": 2,
+      "4004": 0,
+      "4012": 0
+    },
+    {
+      "4000": 7,
+      "4001": 750550891,
+      "4002": 20,
+      "4003": 2,
+      "4004": 0,
+      "4012": 0,
+      "4005": 4,
+      "4006": 3
+    },
+    {
+      "4000": 7,
+      "4001": 750550891,
+      "4002": 20,
+      "4003": 2,
+      "4004": 0,
+      "4012": 1,
+      "4005": 5,
+      "4006": 7
+    },
+    {
+      "4000": 7,
+      "4001": 750550891,
+      "4002": 20,
+      "4003": 2,
+      "4004": 0,
+      "4012": 2,
+      "4005": 6,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 750550891,
+      "4002": 20,
+      "4003": 2,
+      "4004": 0,
+      "4012": 3,
+      "4005": 7,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 750550891,
+      "4002": 20,
+      "4003": 2,
+      "4004": 0,
+      "4012": 4,
+      "4005": 8,
+      "4006": 1
+    },
+    {
+      "4000": 2,
+      "4001": 750550891,
+      "4002": 21,
+      "4003": 2,
+      "4004": 2,
+      "4012": 5
+    },
+    {
+      "4000": 7,
+      "4001": 750550891,
+      "4002": 21,
+      "4003": 2,
+      "4004": 2,
+      "4012": 5,
+      "4005": 20,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 750550891,
+      "4002": 21,
+      "4003": 2,
+      "4004": 2,
+      "4012": 6,
+      "4005": 21,
+      "4006": 1
+    },
+    {
+      "4000": 2,
+      "4001": 750550891,
+      "4002": 22,
+      "4003": 2,
+      "4004": 4,
+      "4012": 7
+    },
+    {
+      "4000": 7,
+      "4001": 750550891,
+      "4002": 22,
+      "4003": 2,
+      "4004": 4,
+      "4012": 7,
+      "4005": 22,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 750550891,
+      "4002": 22,
+      "4003": 2,
+      "4004": 4,
+      "4012": 8,
+      "4005": 23,
+      "4006": 1
+    },
+    {
+      "4000": 2,
+      "4001": 750550891,
+      "4002": 23,
+      "4003": 2,
+      "4004": 6,
+      "4012": 9
+    },
+    {
+      "4000": 7,
+      "4001": 750550891,
+      "4002": 23,
+      "4003": 2,
+      "4004": 6,
+      "4012": 9,
+      "4005": 24,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 750550891,
+      "4002": 23,
+      "4003": 2,
+      "4004": 6,
+      "4012": 10,
+      "4005": 25,
+      "4006": 1
+    },
+    {
+      "4000": 2,
+      "4001": 750550891,
+      "4002": 24,
+      "4003": 2,
+      "4004": 7,
+      "4012": 11
+    },
+    {
+      "4000": 7,
+      "4001": 750550891,
+      "4002": 24,
+      "4003": 2,
+      "4004": 7,
+      "4012": 11,
+      "4005": 26,
+      "4006": 1
+    },
+    {
+      "4000": 4,
+      "4001": 750550891,
+      "4002": 25,
+      "4003": 2,
+      "4004": 0,
+      "4012": 0,
+      "4005": 26,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 750550891,
+      "4002": 24,
+      "4003": 2,
+      "4004": 7,
+      "4012": 10,
+      "4005": 25,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 750550891,
+      "4002": 24,
+      "4003": 2,
+      "4004": 7,
+      "4012": 9,
+      "4005": 24,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 750550891,
+      "4002": 24,
+      "4003": 2,
+      "4004": 7,
+      "4012": 8,
+      "4005": 23,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 750550891,
+      "4002": 24,
+      "4003": 2,
+      "4004": 7,
+      "4012": 7,
+      "4005": 22,
+      "4006": 1
+    },
+    {
+      "4000": 2,
+      "4001": 750550891,
+      "4002": 26,
+      "4003": 2,
+      "4004": 3,
+      "4012": 6
+    },
+    {
+      "4000": 7,
+      "4001": 750550891,
+      "4002": 26,
+      "4003": 2,
+      "4004": 3,
+      "4012": 6,
+      "4005": 21,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 750550891,
+      "4002": 26,
+      "4003": 2,
+      "4004": 3,
+      "4012": 5,
+      "4005": 20,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 750550891,
+      "4002": 26,
+      "4003": 2,
+      "4004": 3,
+      "4012": 4,
+      "4005": 8,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 750550891,
+      "4002": 26,
+      "4003": 2,
+      "4004": 3,
+      "4012": 3,
+      "4005": 7,
+      "4006": 1
+    },
+    {
+      "4000": 2,
+      "4001": 750550891,
+      "4002": 27,
+      "4003": 2,
+      "4004": 0,
+      "4012": 2
+    },
+    {
+      "4000": 7,
+      "4001": 750550891,
+      "4002": 27,
+      "4003": 2,
+      "4004": 0,
+      "4012": 2,
+      "4005": 6,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 750550891,
+      "4002": 27,
+      "4003": 2,
+      "4004": 0,
+      "4012": 1,
+      "4005": 5,
+      "4006": 7
+    },
+    {
+      "4000": 7,
+      "4001": 750550891,
+      "4002": 27,
+      "4003": 2,
+      "4004": 0,
+      "4012": 0,
+      "4005": 4,
+      "4006": 3
+    },
+    {
+      "4000": 4,
+      "4001": 750550891,
+      "4002": 28,
+      "4003": 2,
+      "4004": 0,
+      "4012": 0,
+      "4005": 4,
+      "4006": 3
+    },
+    {
+      "4000": 7,
+      "4001": 750550891,
+      "4002": 27,
+      "4003": 2,
+      "4004": 0,
+      "4012": 1,
+      "4005": 5,
+      "4006": 7
+    },
+    {
+      "4000": 7,
+      "4001": 750550891,
+      "4002": 27,
+      "4003": 2,
+      "4004": 0,
+      "4012": 0,
+      "4005": 4,
+      "4006": 3
+    },
+    {
+      "4000": 7,
+      "4001": 750550891,
+      "4002": 27,
+      "4003": 2,
+      "4004": 0,
+      "4012": 1,
+      "4005": 5,
+      "4006": 8
+    },
+    {
+      "4000": 7,
+      "4001": 750550891,
+      "4002": 27,
+      "4003": 2,
+      "4004": 0,
+      "4012": 2,
+      "4005": 6,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 750550891,
+      "4002": 27,
+      "4003": 2,
+      "4004": 0,
+      "4012": 3,
+      "4005": 7,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 750550891,
+      "4002": 27,
+      "4003": 2,
+      "4004": 0,
+      "4012": 4,
+      "4005": 8,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 750550891,
+      "4002": 27,
+      "4003": 2,
+      "4004": 1,
+      "4012": 5,
+      "4005": 8,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 750550891,
+      "4002": 27,
+      "4003": 2,
+      "4004": 1,
+      "4012": 4,
+      "4005": 7,
+      "4006": 1
+    },
+    {
+      "4000": 2,
+      "4001": 750550891,
+      "4002": 29,
+      "4003": 0,
+      "4004": 0,
+      "4012": 3,
+      "4005": 5,
+      "4006": 0
+    },
+    {
+      "4000": 7,
+      "4001": 750550891,
+      "4002": 29,
+      "4003": 0,
+      "4004": 0,
+      "4012": 3,
+      "4005": 4,
+      "4006": 3
+    },
+    {
+      "4000": 1,
+      "4001": 750550891,
+      "4002": 30,
+      "4003": 0,
+      "4004": 0,
+      "4012": 3,
+      "4005": 4,
+      "4006": 0
+    },
+    {
+      "4000": 7,
+      "4001": 750550891,
+      "4002": 30,
+      "4003": 0,
+      "4004": 0,
+      "4012": 3,
+      "4005": 4,
+      "4006": 3
+    },
+    {
+      "4000": 7,
+      "4001": 750550891,
+      "4002": 30,
+      "4003": 0,
+      "4004": 0,
+      "4012": 2,
+      "4005": 4,
+      "4006": 3
+    },
+    {
+      "4000": 2,
+      "4001": 750550891,
+      "4002": 31,
+      "4003": 1,
+      "4004": 0,
+      "4012": 0
+    },
+    {
+      "4000": 2,
+      "4001": 750550891,
+      "4002": 32,
+      "4003": 0,
+      "4004": 0,
+      "4012": 2,
+      "4005": 4,
+      "4006": 0
+    },
+    {
+      "4000": 7,
+      "4001": 750550891,
+      "4002": 32,
+      "4003": 0,
+      "4004": 0,
+      "4012": 2,
+      "4005": 4,
+      "4006": 3
+    },
+    {
+      "4000": 2,
+      "4001": 750550891,
+      "4002": 33,
+      "4003": 2,
+      "4004": 0,
+      "4012": 0
+    },
+    {
+      "4000": 7,
+      "4001": 750550891,
+      "4002": 33,
+      "4003": 2,
+      "4004": 0,
+      "4012": 2,
+      "4005": 5,
+      "4006": 8
+    },
+    {
+      "4000": 1,
+      "4001": 750550892,
+      "4002": 34,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0
+    },
+    {
+      "4000": 7,
+      "4001": 750550892,
+      "4002": 34,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 1,
+      "4006": 1
+    },
+    {
+      "4000": 4,
+      "4001": 750550892,
+      "4002": 35,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 1,
+      "4006": 1
+    }
+  ],
+  "mockActions": [
+    {
+      "4000": 3,
+      "4001": 750550891,
+      "4002": 3,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 2,
+      "4006": 1,
+      "4007": 1,
+      "4011": 0
+    },
+    {
+      "4000": 3,
+      "4001": 750550891,
+      "4002": 5,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 2,
+      "4006": 2,
+      "4007": 1,
+      "4011": 0
+    },
+    {
+      "4000": 3,
+      "4001": 750550891,
+      "4002": 7,
+      "4003": 1,
+      "4004": 0,
+      "4012": 0,
+      "4005": 2,
+      "4006": 3,
+      "4007": 1,
+      "4011": 0
+    },
+    {
+      "4000": 3,
+      "4001": 750550891,
+      "4002": 12,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 5,
+      "4006": 4,
+      "4007": 0,
+      "4011": 0
+    },
+    {
+      "4000": 3,
+      "4001": 750550891,
+      "4002": 16,
+      "4003": 3,
+      "4004": 0,
+      "4012": 0,
+      "4005": 12,
+      "4006": 1,
+      "4007": 0,
+      "4011": 0
+    },
+    {
+      "4000": 3,
+      "4001": 750550891,
+      "4002": 19,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 5,
+      "4006": 6,
+      "4007": 0,
+      "4011": 0
+    }
+  ],
+  "mockAppOpens": [
+    {
+      "4000": 4,
+      "4001": 750550891,
+      "4002": 2,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 1,
+      "4006": 1
+    },
+    {
+      "4000": 4,
+      "4001": 750550891,
+      "4002": 4,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 2,
+      "4006": 2
+    },
+    {
+      "4000": 4,
+      "4001": 750550891,
+      "4002": 8,
+      "4003": 1,
+      "4004": 0,
+      "4012": 0,
+      "4005": 2,
+      "4006": 4
+    },
+    {
+      "4000": 4,
+      "4001": 750550891,
+      "4002": 10,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 3,
+      "4006": 1
+    },
+    {
+      "4000": 4,
+      "4001": 750550891,
+      "4002": 11,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 4,
+      "4006": 2
+    },
+    {
+      "4000": 4,
+      "4001": 750550891,
+      "4002": 25,
+      "4003": 2,
+      "4004": 0,
+      "4012": 0,
+      "4005": 26,
+      "4006": 1
+    },
+    {
+      "4000": 4,
+      "4001": 750550891,
+      "4002": 28,
+      "4003": 2,
+      "4004": 0,
+      "4012": 0,
+      "4005": 4,
+      "4006": 3
+    },
+    {
+      "4000": 4,
+      "4001": 750550892,
+      "4002": 35,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 1,
+      "4006": 1
+    }
+  ],
+  "visualReview": {
+    "reviewed": true,
+    "screens": [
+      "snapshot-light",
+      "music-playing",
+      "music-paused",
+      "music-in-activities",
+      "default-action-and-value-pins",
+      "custom-pin-alias",
+      "snapshot-long-text",
+      "generic-activity-controls",
+      "all-pinned",
+      "pinned-last",
+      "snapshot-dark",
+      "private-lease-expired",
+      "phone-disconnected",
+      "activities-empty",
+      "loading",
+      "loading-timeout",
+      "phone-runtime-restarted",
+      "weather-unavailable-app-available"
+    ],
+    "finding": "Actual 200x228 native screenshots reviewed: larger Snapshot typography, distinct contextual action icons and all five list rows fit without overlaps. Countdown including 12:34:55, signed temperature with unit and percentages stay whole. Music exposes Pause while playing and Play while paused; generic controls expose an execute check. Long content, custom pin aliases and some long status strings use static ellipsis from the beginning; no text scrolling or small-font fallback is introduced. Full Pinned retains meaningful source labels such as Kitchen light. Privacy, empty, loading, timeout and recovery states remain readable and navigable."
+  },
+  "nativeSourceSha256": {
+    "src/c/dashboard.c": "c46a84fa06bd6a0d405d1a00ab83e256f28ba35b7fb6624926663cca6dd57227",
+    "src/c/dashboard.h": "598cad4ee71a3de167de8cdf58ec0ab1af57c79b8662af572b6161115cad6f6e",
+    "src/c/main.c": "f1f765aa47e5ea4ebaabff0ce9e7fba8d80acaa0aa93b1c54d11ca03ce093716"
+  },
+  "harnessSha256": {
+    "scripts/emulator-smoke.py": "aefe34ab321bf4c97571f5697b40e83641bd64276ec4092a8b542f841a529007",
+    "tests/native-peer.cjs": "706f342d802decc18dcab68ecdd2728fc1f588591e135b7d3f8afd14a85d7c09"
+  }
+}

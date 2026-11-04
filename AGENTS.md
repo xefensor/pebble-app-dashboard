@@ -1,6 +1,6 @@
 # Dashboard maintainer notes
 
-This repository contains the first local native Dashboard candidate (0.1.0),
+This repository contains the local native Dashboard candidate (0.2.0),
 its phone runtime/settings, and earlier browser design studies. Read README.md
 and docs/IMPLEMENTATION.md. Preserve UUID f76f9fc1-2944-4248-bcc5-3eea2af0183b,
 DSH1 message keys and existing published sibling apps.
@@ -25,20 +25,26 @@ DSH1 message keys and existing published sibling apps.
 `previews/` contains a browser-only design prototype with fictional data. Its
 capture script verifies canvas bounds, palette and simulated navigation; it is
 not a native test suite. Keep preview controls disconnected from real phone APIs.
-The user wants Timer Pause/Resume later. The opening-screen goal is two current
-activities, latest notification and four pinned items. Snapshot is the chosen
-overview. Tap Select opens useful activity controls (including Music), opens
+The user wants Timer Pause/Resume later. The native opening-screen goal is one
+current activity, latest notification and two pinned items, with large readable
+type and a right-side contextual action bar. Default Weather/battery pins need
+only icon and value; retain specific device/action identity where meaningful.
+Older browser previews contain more items and are historical discussion material.
+Snapshot is the chosen overview. Tap Select directly toggles Music playback when
+the exact source declares it, opens useful controls for other activities, opens
 native Notifications, or performs a pin's optional action. Pins without actions
 and summary-only activities do nothing on tap; do not add bare enlarged views.
 Timer has no Dashboard controls yet. Hold Select opens the selected item's
 optional associated app; without a destination it does nothing. Hold Up opens
 all Activities and hold Down opens all Pinned items only from the overview.
-Inside full lists these buttons repeat navigation while held; inside Music they
-keep focus within its bounded controls. Back restores the previous selection.
+Inside full lists these buttons repeat navigation while held; inside generic
+controls they keep focus within the bounded controls. Music hold opens the native
+Music app rather than adding a Dashboard playback screen. Back restores the
+previous selection.
 An overview hold opens its collection once; continuing that same hold must not
 start scrolling. A release must never add another navigation step or action.
 App hints name the destination, and activity reordering preserves selection and
-Music control focus. Real command integration must report pending/result state
+control focus. Real command integration must report pending/result state
 and only update values from confirmed source state.
 All navigation destinations are simulated intents in this browser prototype.
 Six activities and twelve mixed pins are fictional overflow examples, not a

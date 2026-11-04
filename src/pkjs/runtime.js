@@ -76,9 +76,12 @@ module.exports = function createRuntime(options) {
     if(Object.keys(identities).length>512)Object.keys(identities).forEach(function(key){if(!live[key])delete identities[key];});
     return output;
   }
+  function overview(data){
+    return data.activities.slice(0,1).concat(data.notification?[data.notification]:[],data.pins.slice(0,2));
+  }
   function snapshot() {
     var data=materialize(),items=[],total=0,offset=0,mode=view.mode;
-    if(mode===M.OVERVIEW){items=data.activities.slice(0,2).concat(data.notification?[data.notification]:[],data.pins.slice(0,4));total=items.length;}
+    if(mode===M.OVERVIEW){items=overview(data);total=items.length;}
     else if(mode===M.MEDIA){
       var selected=data.activities.filter(function(entry){return entry.token===view.token;})[0];
       if(selected && selected.flags & F.ACTION){items=[selected];total=1;}
@@ -164,7 +167,7 @@ module.exports = function createRuntime(options) {
       var focusedToken=protocol.get(payload,'DB_TOKEN'),focusedVersion=protocol.get(payload,'DB_VERSION'),focusedIndex=protocol.get(payload,'DB_INDEX');
       if(!positive(focusedToken)||!positive(focusedVersion)||!bounded(focusedIndex,65535))return;
       var current=materialize(),list=view.mode===M.ACTIVITIES?current.activities:view.mode===M.PINNED?current.pins:
-        view.mode===M.MEDIA?current.activities.filter(function(entry){return entry.token===view.token;}):current.activities.slice(0,2).concat(current.notification?[current.notification]:[],current.pins.slice(0,4));
+        view.mode===M.MEDIA?current.activities.filter(function(entry){return entry.token===view.token;}):overview(current);
       var actual=list.map(function(entry){return entry.token;}).indexOf(focusedToken);
       if(actual<0||focusedIndex>=list.length||focusedVersion>list[actual].version)return;
       view.token=focusedToken;view.index=actual;view.preserve=true;return;

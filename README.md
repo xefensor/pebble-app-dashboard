@@ -1,17 +1,17 @@
 # Dashboard
 
 A stock Pebble watchapp for current activities, the latest available notification
-and pinned readings/actions. **0.1.0 is a local Emery testing candidate.**
+and pinned readings/actions. **0.2.0 is a local Emery testing candidate.**
 
 The native app, phone runtime and bundled settings page are implemented. The
 repository has no remote. Build and portable/emulator checks are recorded under
-[docs/qa/0.1.0](docs/qa/0.1.0). Real-phone permissions/provider integration and
+[docs/qa/0.2.0](docs/qa/0.2.0). Real-phone permissions/provider integration and
 physical-watch comfort/battery still need device testing. Synthetic SDK/emulator
 fixtures are not evidence of live phone operation.
 
 ## Try the build
 
-The local build creates `dist/Dashboard-0.1.0.pbw`, a separate debug ZIP and
+The local build creates `dist/Dashboard-0.2.0.pbw`, a separate debug ZIP and
 SHA256SUMS.txt. Install that PBW using the official Pebble phone app with plugins
 enabled. Allow permissions needed by your selected readings and controls. Open
 Dashboard normally or assign it to Quick Launch in Pebble settings.
@@ -22,8 +22,11 @@ their own identities, preferences and behavior.
 
 ## On the watch
 
-Snapshot shows two current activities, one latest notification and the first
-four Pinned items. Either activity position can show any supported source.
+Snapshot shows one current activity, one latest notification and the first
+two Pinned items. The activity can come from any supported source. Fewer visible
+items make room for larger text, clocks and icons. A right-side action bar shows
+the selected item's available button actions. Weather and battery pins use an
+icon and value; specific devices and action-only pins keep meaningful names.
 Pinned is one collection: an item can expose a reading, a tap action, or both,
 plus an optional associated app destination. A light's brightness and toggle can
 belong to the same pin; toggle state comes from a real Boolean source.
@@ -31,7 +34,7 @@ belong to the same pin; toggle state comes from a real Boolean source.
 | Button | Tap | Hold |
 | --- | --- | --- |
 | Up | Previous item/control | Snapshot: Activities; list: scroll up; controls: previous control |
-| Select | Useful activity controls, native Notifications, or pin action; otherwise no-op | Associated app when available |
+| Select | Music play/pause, useful controls for other activities, native Notifications, or pin action; otherwise no-op | Associated app when available |
 | Down | Next item/control | Snapshot: Pinned; list: scroll down; controls: next control |
 | Back | Previous screen, retaining selection; exit at Snapshot | Standard OS behavior |
 
@@ -42,8 +45,9 @@ preserves selection by identity, including moves made locally within a page.
 Phone-runtime restart establishes a new native session; old replies and action
 tokens cannot acquire a different target.
 
-Music opens a playback view with only genuinely available previous/play/next
-controls. Other activities can expose up to three provider-declared controls.
+Music toggles playback directly on Select when the source declares play/pause.
+Hold Select opens the native Music app for the rest of its controls. Other
+activities can expose up to three provider-declared controls.
 Summary-only activities and pins without actions do nothing on tap. Source
 clocks tick on the watch; text stays static and starts from its beginning.
 Native redraw follows visible changes rather than automatic text scrolling.
@@ -67,8 +71,8 @@ explicit tap; discovery never reads its side-effecting source. Missing providers
 retain saved bindings and show unavailable instead of selecting another entity.
 
 The first profile allows up to 64 configured pins and a bounded phone-side
-activity catalogue. Native receives seven overview items, five list items or one
-control view at a time. The six activities/twelve pins in design examples are not
+activity catalogue. Native receives up to four overview items, five list items or
+one control view at a time. The six activities/twelve pins in design examples are not
 list limits. Dashboard owns DSH1 paging/commands; Dynamic's two-card ACT3 transport
 is unchanged. See [implementation contract](docs/IMPLEMENTATION.md).
 
@@ -105,7 +109,7 @@ immediately. Old session frames, expired bindings and stale commands are rejecte
   watch. It opens the whole app. A dispatched platform action cannot be recalled.
 - Back keeps stock behavior. PebbleOS reserves held Back to exit to the launcher;
   custom Back shortcuts remain deferred. No global success-exit override is set.
-- This is a first local build, not an appstore publication or a claim that every
+- This is a local testing build, not an appstore publication or a claim that every
   arbitrary plugin schema/action has been tested on a real phone.
 
 ## Build and validate
@@ -141,10 +145,11 @@ named synthetic UI fixture build, not the real app.
 
 ## Design previews
 
-[Interactive Snapshot](previews/snapshot.html),
+[Earlier interactive Snapshot](previews/snapshot.html),
 [browser expansion study](previews/expansion-overview.png) and
 [earlier comparison](previews/index.html) remain discussion artifacts. Actual
-native captures are in the versioned QA folder.
+native captures are in the versioned QA folder. Those browser studies predate
+the larger 0.2.0 Snapshot and its direct Music play/pause behavior.
 
 Licensed under the suite's PolyForm Noncommercial terms; see LICENSE and
 THIRD-PARTY-NOTICES.md. Activities 0.4.2 is vendored with checksum provenance.

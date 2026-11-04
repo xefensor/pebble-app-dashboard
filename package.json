@@ -1,6 +1,6 @@
 {
   "name": "pebble-app-dashboard",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "author": "Xef",
   "private": true,
   "license": "SEE LICENSE IN LICENSE",
@@ -105,6 +105,24 @@
           "name": "IMAGE_MENU_ICON",
           "file": "images/menu-icon.png",
           "menuIcon": true
+        },
+        {
+          "type": "font",
+          "name": "FONT_CLOCK_32",
+          "file": "fonts/Fredoka-Bold-Clock.ttf",
+          "characterRegex": "[0-9:.,%\u00b0CF+\u2212-]"
+        },
+        {
+          "type": "font",
+          "name": "FONT_CLOCK_40",
+          "file": "fonts/Fredoka-Bold-Clock.ttf",
+          "characterRegex": "[0-9:.,%\u00b0CF+\u2212-]"
+        },
+        {
+          "type": "font",
+          "name": "FONT_BODY_28",
+          "file": "fonts/RobotoCondensed-Bold.ttf",
+          "characterRegex": "[\\u0020-\\u017F\\u2013\\u2014\\u2019\\u2026]"
         }
       ]
     },

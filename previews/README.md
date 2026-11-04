@@ -1,5 +1,10 @@
 # Dashboard Snapshot and expansion preview
 
+This is the historical browser study used for 0.1.0. The native 0.2.0 layout
+shows one activity, one notification and two pins with a right-side action bar.
+Music now plays/pauses on Select and opens the native app on hold. See the root
+README and versioned native captures for the current implementation.
+
 Open `snapshot.html` in a browser for the selected direction. `index.html` keeps
 the earlier three-layout comparison. Everything is local; no server, download,
 account or phone connection is required. A current Chromium browser is used for
