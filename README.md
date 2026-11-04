@@ -1,17 +1,17 @@
 # Dashboard
 
 A stock Pebble watchapp for current activities, the latest available notification
-and pinned readings/actions. **0.2.1 is a local Emery testing candidate.**
+and pinned readings/actions. **0.3.0 is a local Emery testing candidate.**
 
 The native app, phone runtime and bundled settings page are implemented. The
 repository has no remote. Build and portable/emulator checks are recorded under
-[docs/qa/0.2.1](docs/qa/0.2.1). Real-phone permissions/provider integration and
+[docs/qa/0.3.0](docs/qa/0.3.0). Real-phone permissions/provider integration and
 physical-watch comfort/battery still need device testing. Synthetic SDK/emulator
 fixtures are not evidence of live phone operation.
 
 ## Try the build
 
-The local build creates `dist/Dashboard-0.2.1.pbw`, a separate debug ZIP and
+The local build creates `dist/Dashboard-0.3.0.pbw`, a separate debug ZIP and
 SHA256SUMS.txt. Install that PBW using the official Pebble phone app with plugins
 enabled. Allow permissions needed by your selected readings and controls. Open
 Dashboard normally or assign it to Quick Launch in Pebble settings.
@@ -38,6 +38,13 @@ belong to the same pin; toggle state comes from a real Boolean source.
 | Down | Next item/control | Snapshot: Pinned; list: scroll down; controls: next control |
 | Back | Previous screen, retaining selection; exit at Snapshot | Standard OS behavior |
 
+A readable button guide appears once on first use. Select dismisses it without
+performing the underlying item's action. During a deliberate Select hold, the
+header previews the actual associated app and the sidebar shows the launch icon.
+Releasing after that preview but before the hold completes cancels the gesture
+without also performing the item's tap action.
+Only the guide-dismissed preference is saved on the watch.
+
 Holds start after 600 ms; list navigation repeats every 140 ms while held.
 Opening a collection never also scrolls it; releasing adds no tap or extra step.
 Back restores the original item, viewport and control focus. Live reordering
@@ -47,12 +54,22 @@ tokens cannot acquire a different target.
 
 Music toggles playback directly on Select when the source declares play/pause.
 Hold Select opens the native Music app for the rest of its controls. Other
-activities can expose up to three provider-declared controls.
+activities can expose up to three provider-declared controls. Only present
+controls take space; navigation preserves their original action indices and
+skips absent slots. A named disabled control remains distinct from an absent one
+when the received data actually describes it.
 Summary-only activities and pins without actions do nothing on tap. Source
 clocks tick on the watch; text stays static and starts from its beginning.
 Native redraw follows visible changes rather than automatic text scrolling.
 
-Commands show pending/result feedback, require exact current bindings, and are
+Commands show static pending dots and a brief success check in the sidebar.
+Failures and connection status use the header, leaving both pins visible. A
+selected missing reading shows a short reason such as No data or Allow access;
+its independent action/app capability remains separate. Confirmation identifies
+the target and uses the action icon in the sidebar rather than repeating an
+action sentence. The idle activity area uses a neutral Nothing active state.
+
+Commands require exact current bindings and are
 never automatically replayed after timeout. Configured/provider confirmation is
 honored. A command acknowledgment does not fabricate a new reading: refreshed
 device/source data supplies the value.
@@ -154,7 +171,7 @@ named synthetic UI fixture build, not the real app.
 [browser expansion study](previews/expansion-overview.png) and
 [earlier comparison](previews/index.html) remain discussion artifacts. Actual
 native captures are in the versioned QA folder. Those browser studies predate
-the larger 0.2.1 Snapshot and its direct Music play/pause behavior.
+the larger 0.3.0 Snapshot and its direct Music play/pause behavior.
 
 Licensed under the suite's PolyForm Noncommercial terms; see LICENSE and
 THIRD-PARTY-NOTICES.md. Activities 0.4.2 is vendored with checksum provenance.

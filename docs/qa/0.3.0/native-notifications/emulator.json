@@ -1,0 +1,382 @@
+{
+  "result": "PASS",
+  "version": "0.3.0",
+  "scope": "Real native Emery QEMU UI and AppMessage requests with an explicit fictional protocol peer; no phone JavaScript, live plugins, real app launches or physical watch.",
+  "focusedNotificationsOnly": true,
+  "focusedUxOnly": false,
+  "candidatePbwSha256": "2d6cdb3c318acb6eb50a926def402a2d2048ed0bfdba21e7cf6c58dd3bad4ca1",
+  "nativeOnlyPbwSha256": "0ac47bc89106fd31778a73a35d593182a159b71118e65b39fc1dafff9514f0bb",
+  "nativePayloadSha256": {
+    "emery/app_resources.pbpack": "94511ccd37e0309987f80c3b1f9b9a2ce4cb3cea9453d2f56470e1d35b93fe3c",
+    "emery/manifest.json": "9ce6ba71325422de28d903522994461746ca6999edf705ff9249c4cff90ccd75",
+    "emery/pebble-app.bin": "8c6c22f381cd8c4109ec25fe51efefdf800e31f83fdb74d1dbdb09342d41f29a"
+  },
+  "phoneJavascriptExecuted": false,
+  "stateDirectory": "/tmp/dashboard-emery-t0fkp7ww",
+  "session": 765070440,
+  "checks": [
+    {
+      "check": "First-use native button guide explains controls; dismissal consumes Select without dispatching an action or app launch",
+      "passed": true
+    },
+    {
+      "check": "First-use guide dismissal persists across a native app restart; ordinary navigation works immediately and dispatches no action",
+      "passed": true
+    },
+    {
+      "check": "Empty Notifications is a real selectable Snapshot row; tap sends exactly one bound OPEN with current session/token/version and no ACTION",
+      "passed": true
+    },
+    {
+      "check": "Empty Notifications participates in ordinary Up/Down navigation; held Select opens once without an added tap/action",
+      "passed": true
+    },
+    {
+      "check": "Waiting/error shortcut is also selectable; source revision during a press cancels the stale OPEN before the rebound shortcut can open",
+      "passed": true
+    },
+    {
+      "check": "Private notice expiry erases its preview and keeps the row inert until an explicit current public launcher binding arrives",
+      "passed": true
+    },
+    {
+      "check": "Explicit empty launcher rebind preserves the selected row and uses its new version for exactly one OPEN",
+      "passed": true
+    },
+    {
+      "check": "Empty Notifications also remains selected and opens when no activity exists",
+      "passed": true
+    }
+  ],
+  "captures": [
+    {
+      "name": "first-use-button-guide",
+      "file": "first-use-button-guide.png",
+      "sha256": "090c51cd9f887128b03312f91f1b254b0829f7e12814ae04ba4b012b622747a2",
+      "rgbSha256": "92fd1ec24bc212d6ab14cf76a9e92ef5c0776b530b408cfff539f0d1cb7b62ed",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "first-use-guide-dismissed",
+      "file": "first-use-guide-dismissed.png",
+      "sha256": "db0d51f3be82c96fdd58e2955e48e130f45074a9d2941e703a07cb25826e7676",
+      "rgbSha256": "593e7013c8893ff1b6435efe8481deafb938583bb2db55cd872d347417d399d8",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "guide-dismissed-after-restart",
+      "file": "guide-dismissed-after-restart.png",
+      "sha256": "b8135e7f1259b99a02ac40b6c1f10643baf1bffdcb9c498a3c18f04f2b2d0770",
+      "rgbSha256": "4b17d436a44476962d9c43e2581ab54fb880526818ef28bb6255b4e2defa5309",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "empty-notifications-snapshot",
+      "file": "empty-notifications-snapshot.png",
+      "sha256": "25762b74bf164b38ad8155b25c77134e1886c34c98ecedbde641910e70563f59",
+      "rgbSha256": "df0449e83f2c0a217f9806c6a8929e8f4cc696b85dba821f504fcbc3a5b22ccd",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "empty-notifications-selected",
+      "file": "empty-notifications-selected.png",
+      "sha256": "bb95276b329d6079b4d5e259cb34a226b21b4bed659e9f0a46afe7761a3cf633",
+      "rgbSha256": "27dba9e0aaabe7ec12d7a3c0981a5183a25ae6f7b3026a383cb3bc9e5b7fd7d1",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "notifications-shortcut-waiting",
+      "file": "notifications-shortcut-waiting.png",
+      "sha256": "33b670004ecf1be677bcee1bcab40f9396068d041505495cf106bae30e30cb81",
+      "rgbSha256": "9990383dce51749f28d26a2f33aa16fdc01232834aaed2fae1b2c83eeb2fcf65",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "notification-private-preview",
+      "file": "notification-private-preview.png",
+      "sha256": "cfbe3e91aeaa1e9b056e333ff7df5e89e678c4133f3cb1f060c17bc36d62b701",
+      "rgbSha256": "693c0a8fb91e0810da8598bf522a1c69d20be578ee52e6872bdb53f608c1edbb",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "notification-expired-inert",
+      "file": "notification-expired-inert.png",
+      "sha256": "96a5fb8622f24db9c98dcde02e6264a5df6ee3648bba866928ae9c2daa15c704",
+      "rgbSha256": "3e94c39192ef0066ed463e00bc72f8a6c6d23d46db000fbd65c744f56f0c5f8b",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "empty-notifications-rebound",
+      "file": "empty-notifications-rebound.png",
+      "sha256": "2c7b8b56131b2965281993f96d832d170b68fd5cdb77bacb588d18176d003b02",
+      "rgbSha256": "b62b632220c9a90441399ff9d398d4400c0788ff86458b81a7b5fbe09369f7be",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "empty-notifications-no-activity",
+      "file": "empty-notifications-no-activity.png",
+      "sha256": "b2bfc9e042954324bb9a172f0a91f6e3712377ec5a1c8f39e97cb94476a68e06",
+      "rgbSha256": "e526a6c8d1ec3c6448c78ce502c9b6c283d40efb404a818f8fe54a1a275944f6",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    }
+  ],
+  "requests": [
+    {
+      "4000": 1,
+      "4001": 749538407,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0
+    },
+    {
+      "4000": 7,
+      "4001": 749538407,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 1,
+      "4006": 1
+    },
+    {
+      "4000": 1,
+      "4001": 765070440,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0
+    },
+    {
+      "4000": 7,
+      "4001": 765070440,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 1,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 765070440,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 1,
+      "4005": 3,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 765070440,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 1,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 765070440,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 1,
+      "4005": 3,
+      "4006": 2
+    },
+    {
+      "4000": 4,
+      "4001": 765070440,
+      "4002": 2,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 3,
+      "4006": 2
+    },
+    {
+      "4000": 7,
+      "4001": 765070440,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 2,
+      "4005": 4,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 765070440,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 1,
+      "4005": 3,
+      "4006": 2
+    },
+    {
+      "4000": 4,
+      "4001": 765070440,
+      "4002": 3,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 3,
+      "4006": 2
+    },
+    {
+      "4000": 4,
+      "4001": 765070440,
+      "4002": 4,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 3,
+      "4006": 3
+    },
+    {
+      "4000": 4,
+      "4001": 765070440,
+      "4002": 5,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 3,
+      "4006": 5
+    },
+    {
+      "4000": 7,
+      "4001": 765070440,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 3,
+      "4006": 5
+    },
+    {
+      "4000": 4,
+      "4001": 765070440,
+      "4002": 6,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 3,
+      "4006": 5
+    }
+  ],
+  "mockActions": [],
+  "mockAppOpens": [
+    {
+      "4000": 4,
+      "4001": 765070440,
+      "4002": 2,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 3,
+      "4006": 2
+    },
+    {
+      "4000": 4,
+      "4001": 765070440,
+      "4002": 3,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 3,
+      "4006": 2
+    },
+    {
+      "4000": 4,
+      "4001": 765070440,
+      "4002": 4,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 3,
+      "4006": 3
+    },
+    {
+      "4000": 4,
+      "4001": 765070440,
+      "4002": 5,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 3,
+      "4006": 5
+    },
+    {
+      "4000": 4,
+      "4001": 765070440,
+      "4002": 6,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 3,
+      "4006": 5
+    }
+  ],
+  "visualReview": {
+    "reviewed": true,
+    "screens": [
+      "empty-notifications-selected",
+      "empty-notifications-rebound",
+      "empty-notifications-no-activity"
+    ],
+    "finding": "Root reviewed these three actual empty-row transition screens. Notifications and No notifications fit; selection and the app-open glyph are clear. Rebinding preserves the row, and Nothing active fits with no activity. Both pins remain visible without overlap or scrolling."
+  },
+  "nativeSourceSha256": {
+    "src/c/dashboard.c": "983f13c5ae5be461c8eb5f3b9b626f5c8259fbb2241b9cfb8fad608fc1ce856a",
+    "src/c/dashboard.h": "e0f481066e64d49b0607800be57000770acc7956deffff69380d8dc6346bf3c2",
+    "src/c/main.c": "1c2286e1265274ae6aeb450cd95b46ab808f7e76a54cc7f33abda2864e9b73bf"
+  },
+  "harnessSha256": {
+    "scripts/emulator-smoke.py": "62b1b6ab985966f1175ee2b78a7ba46c28ce29fb8ddf83f029f9661761ba161d",
+    "tests/native-peer.cjs": "706f342d802decc18dcab68ecdd2728fc1f588591e135b7d3f8afd14a85d7c09"
+  }
+}

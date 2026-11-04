@@ -66,6 +66,7 @@ bool db_item_current(const DbItem *item,uint32_t now);
 bool db_item_capability_current(const DbItem *item,uint32_t now);
 bool db_item_actionable(const DbItem *item,uint32_t now);
 int db_item_direct_action(const DbItem *item,uint32_t now);
+bool db_control_present(const DbItem *item,unsigned index);
 void db_item_value(const DbItem *item,uint32_t now,char *buffer,size_t size);
 bool db_state_move(DbState *state,int delta,uint16_t *index);
 void db_state_remember(DbState *state);

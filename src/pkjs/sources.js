@@ -201,7 +201,7 @@ module.exports = function createSources(options) {
       entry._path=reading.category+'/'+reading.item;entry._groupKey=group&&group.key;
       entry.value=props?essentialValue(text(props[reading.property])):'';
       entry.subtitle=props?text(props.name):'';
-      if (!entry.value) { entry.flags|=F.UNAVAILABLE;entry.value='—';entry.subtitle=group&&group.error==='PERMISSION_DENIED'?'Allow on phone':'Unavailable'; }
+      if (!entry.value) { entry.flags|=F.UNAVAILABLE;entry.value='—';entry.subtitle=!connected?'Offline':group&&group.error==='PERMISSION_DENIED'?'Allow access':'No data'; }
       entry._sourceSignature=props?JSON.stringify([instance.instanceId,entry.value,pin.action&&pin.action.toggleProperty?boolean(props[pin.action.toggleProperty]):null]):'';
       if (props) entry.image=image(props[reading.property]);
       if (reading.category === 'weather') entry.kind=K.weather;

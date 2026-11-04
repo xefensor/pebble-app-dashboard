@@ -1,6 +1,6 @@
 # Dashboard maintainer notes
 
-This repository contains the local native Dashboard candidate (0.2.1),
+This repository contains the local native Dashboard candidate (0.3.0),
 its phone runtime/settings, and earlier browser design studies. Read README.md
 and docs/IMPLEMENTATION.md. Preserve UUID f76f9fc1-2944-4248-bcc5-3eea2af0183b,
 DSH1 message keys and existing published sibling apps.
@@ -47,7 +47,14 @@ previous selection.
 An overview hold opens its collection once; continuing that same hold must not
 start scrolling. A release must never add another navigation step or action.
 App hints name the destination, and activity reordering preserves selection and
-control focus. Real command integration must report pending/result state
+control focus. First use shows a static readable button guide, dismissed without
+triggering an item action; persist only its dismissal flag. Holding Select can
+preview the exact app destination in the header. Header/sidebar feedback must
+leave the two pin rows visible. Explain selected unavailable readings without
+disabling independent commands. Generic control navigation skips absent slots
+while preserving provider action indices. Confirmations identify the target and
+use the action icon in the right sidebar. Keep an empty activity area neutral.
+Real command integration must report pending/result state
 and only update values from confirmed source state.
 All navigation destinations are simulated intents in this browser prototype.
 Six activities and twelve mixed pins are fictional overflow examples, not a

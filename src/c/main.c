@@ -12,6 +12,8 @@
 #define VIEW_TIMEOUT_MS 6000
 #define ACTION_TIMEOUT_MS 12000
 #define OUTBOX_CAPACITY 4
+#define GUIDE_SEEN_KEY 1
+#define HOLD_PREVIEW_MS 250
 
 typedef struct {uint8_t op,mode,action,confirm;uint16_t offset,index;uint32_t request,token,version;} Outbound;
 typedef struct {uint32_t request,token,version;uint8_t action,result;char text[65];bool active,confirmation,ended;} Command;
@@ -23,7 +25,8 @@ static Outbound s_queue[OUTBOX_CAPACITY];
 static uint8_t s_queue_count;
 static bool s_sending,s_focused=true,s_has_connection=true;
 static Command s_command;
-static AppTimer *s_view_timeout,*s_action_timeout,*s_expiry_timer,*s_repeat;
+static AppTimer *s_view_timeout,*s_action_timeout,*s_expiry_timer,*s_repeat,*s_hold_timer;
+static bool s_guide,s_select_down,s_hold_preview,s_hold_intent;
 static int s_repeat_delta;
 static bool s_repeat_held;
 static uint32_t s_press_token,s_press_version;
@@ -45,6 +48,17 @@ static void configure_clicks(void *context);
 static void send_queued(void);
 static void stop_repeat(void);
 static void request_view(uint8_t mode,uint16_t offset,uint16_t index,uint32_t token,bool hello);
+static const DbItem *pressed_item(void);
+static bool control_available(const DbItem *item,unsigned index);
+static void cancel_hold_preview(void){
+  if(s_hold_timer){app_timer_cancel(s_hold_timer);s_hold_timer=NULL;}
+  if(s_hold_preview){s_hold_preview=false;repaint();}
+}
+static const DbItem *preview_item(void){
+  const DbItem *item=pressed_item();
+  return s_hold_preview&&s_select_down&&!s_guide&&!s_command.confirmation&&s_has_connection&&
+    db_item_capability_current(item,utc_now())&&(item->flags&DB_APP)?item:NULL;
+}
 static GColor background(void){return s_state.snapshot.dark?GColorBlack:GColorWhite;}
 static GColor foreground(void){return s_state.snapshot.dark?GColorWhite:GColorBlack;}
 static GColor muted(void){return s_state.snapshot.dark?GColorLightGray:GColorDarkGray;}
@@ -155,13 +169,30 @@ static const char *status_text(void){
   if(!s_has_connection)return "Connect your phone";
   switch(s_state.snapshot.status){case DB_PERMISSION:return "Allow access on phone";case DB_ERROR:return "Data unavailable";case DB_OFFLINE:return "Connect your phone";case DB_LOADING:return "Loading sources…";default:return "Nothing here yet";}
 }
+static const char *command_error(void){
+  if(!s_command.active||s_command.confirmation)return NULL;
+  switch(s_command.result){
+    case DB_DENIED:return "Allow access";
+    case DB_STALE:return "Item changed";
+    case DB_FAILED:return s_command.text[0]?s_command.text:"Action failed";
+    case DB_CANCELLED:return "Cancelled";
+    default:return NULL;
+  }
+}
 static void header(GContext *ctx){
+  const DbItem *preview=preview_item(),*item=db_selected(&s_state);const char *status=NULL;
+  if(preview)status=preview->app_label;
+  else if(!s_has_connection||s_state.snapshot.status==DB_OFFLINE)status="Offline";
+  else if(command_error())status=command_error();
+  else if(item&&item->role==DB_ROLE_PIN&&!db_item_current(item,utc_now()))status=(item->flags&DB_UNAVAILABLE)&&item->subtitle[0]?item->subtitle:"No data";
+  else if(item&&s_state.desired_mode==DB_MEDIA&&db_control_present(item,s_state.focus)&&!control_available(item,s_state.focus))status="Unavailable";
+  if(status){text(ctx,status,20,6,22,CONTENT_W-12,foreground());segment(ctx,5,25,CONTENT_W-5,25,stroke());return;}
   const char *title=s_state.desired_mode==DB_ACTIVITIES?"Activities":s_state.desired_mode==DB_PINNED?"Pinned":s_state.desired_mode==DB_MEDIA?"Controls":"Dashboard";
-  text(ctx,title,20,6,22,108,foreground());
+  text(ctx,title,20,6,22,100,foreground());
   char right[24];
-  if(s_state.desired_mode==DB_ACTIVITIES||s_state.desired_mode==DB_PINNED)snprintf(right,sizeof(right),"%u/%u",s_state.snapshot.total?s_state.selected_index+1:0,s_state.loading?0:s_state.snapshot.total);
+  if(s_state.desired_mode==DB_ACTIVITIES||s_state.desired_mode==DB_PINNED){if(s_state.loading)snprintf(right,sizeof(right),"…");else snprintf(right,sizeof(right),"%u/%u",s_state.snapshot.total?s_state.selected_index+1:0,s_state.snapshot.total);}
   else{time_t now=time(NULL);struct tm *local=localtime(&now);strftime(right,sizeof(right),clock_is_24h_style()?"%H:%M":"%I:%M",local);if(!clock_is_24h_style()&&right[0]=='0')memmove(right,right+1,strlen(right));}
-  draw_text(ctx,right,3,111,22,CONTENT_W-117,muted(),GTextAlignmentRight);segment(ctx,5,25,CONTENT_W-5,25,stroke());
+  draw_text(ctx,right,4,108,22,CONTENT_W-114,muted(),GTextAlignmentRight);segment(ctx,5,25,CONTENT_W-5,25,stroke());
 }
 static bool control_available(const DbItem *item,unsigned index){const uint16_t bits[]={DB_MEDIA_PREVIOUS,DB_MEDIA_TOGGLE,DB_MEDIA_NEXT};return item&&index<3&&(item->flags&bits[index])&&db_item_actionable(item,utc_now());}
 static void item_value(const DbItem *item,char *value,size_t size){
@@ -204,11 +235,11 @@ static void notice(GContext *ctx,const DbItem *item){
   if(item->name[0]&&strcmp(item->name,item->title))snprintf(heading,sizeof(heading),"%s · %s",item->title,item->name);else snprintf(heading,sizeof(heading),"%s",item->title[0]?item->title:item->name);
   text(ctx,heading,20,37,128,CONTENT_W-47,ink);text(ctx,item->subtitle[0]?item->subtitle:"New notification",20,8,150,CONTENT_W-16,ink);
 }
-static void empty_message(GContext *ctx,const char *title,const char *detail,int y){symbol(ctx,DB_TIMER,(CONTENT_W-28)/2,y,28,muted());centered(ctx,title,20,y+57,foreground());if(detail&&detail[0])centered(ctx,detail,20,y+84,muted());}
+static void empty_message(GContext *ctx,const char *title,const char *detail,int y){symbol(ctx,DB_GENERIC,(CONTENT_W-28)/2,y,28,muted());centered(ctx,title,20,y+57,foreground());if(detail&&detail[0])centered(ctx,detail,20,y+84,muted());}
 static void snapshot(GContext *ctx){
   const DbItem *activity=NULL,*notification=NULL;unsigned pins=0;
   for(unsigned i=0;i<s_state.snapshot.count;i++){const DbItem *item=&s_state.snapshot.items[i];if(item->role==DB_ROLE_ACTIVITY&&!activity)activity=item;else if(item->role==DB_ROLE_NOTICE&&!notification)notification=item;}
-  if(activity)activity_main(ctx,activity);else{symbol(ctx,DB_TIMER,12,51,28,muted());text(ctx,"No live activities",20,48,75,CONTENT_W-58,muted());}
+  if(activity)activity_main(ctx,activity);else centered(ctx,"Nothing active",24,77,muted());
   segment(ctx,8,105,CONTENT_W-8,105,stroke());
   if(notification)notice(ctx,notification);else{symbol(ctx,DB_NOTICE,10,117,22,muted());text(ctx,"No notifications",20,39,138,CONTENT_W-49,muted());}
   segment(ctx,8,154,CONTENT_W-8,154,stroke());
@@ -222,7 +253,7 @@ static void list_row(GContext *ctx,const DbItem *item,int y){
   else text(ctx,item->title[0]?item->title:item->name,24,42,y+29,CONTENT_W-53,ink);
 }
 static void list_view(GContext *ctx){
-  if(!s_state.snapshot.count){empty_message(ctx,s_state.desired_mode==DB_ACTIVITIES?"No live activities":"No pinned items",s_state.desired_mode==DB_PINNED?"Choose items on phone":"",66);return;}
+  if(!s_state.snapshot.count){empty_message(ctx,s_state.desired_mode==DB_ACTIVITIES?"Nothing active":"No pinned items",s_state.desired_mode==DB_PINNED?"Choose items on phone":"",66);return;}
   for(unsigned i=0;i<s_state.snapshot.count;i++)list_row(ctx,&s_state.snapshot.items[i],27+(int)i*40);
   if(s_state.snapshot.total>5){int thumb=200*5/s_state.snapshot.total;if(thumb<8)thumb=8;int top=27+(200-thumb)*s_state.snapshot.offset/(s_state.snapshot.total-5);fill(ctx,GRect(CONTENT_W-3,27,2,200),stroke(),0);fill(ctx,GRect(CONTENT_W-3,top,2,thumb),foreground(),0);}
 }
@@ -243,7 +274,7 @@ static void media_view(GContext *ctx){
     if(width_of(title,5)>CONTENT_W-20){for(unsigned i=0;title[i];i++)if(title[i]==' '){char saved=title[i];title[i]=0;if(width_of(title,5)<=CONTENT_W-20)split=i;title[i]=saved;}}
     if(split){memcpy(first,title,split);first[split]=0;snprintf(second,sizeof(second),"%s",title+split+1);text(ctx,first,24,9,67,CONTENT_W-20,foreground());text(ctx,second,24,9,93,CONTENT_W-20,foreground());}
     else text(ctx,title,24,9,93,CONTENT_W-20,foreground());
-    picture(ctx,item,9,105,40,accent());text(ctx,item->subtitle,16,58,121,CONTENT_W-68,foreground());text(ctx,item->value[0]?item->value:item->flags&DB_PAUSED?"Paused":"",14,58,141,CONTENT_W-68,muted());
+    picture(ctx,item,9,105,40,accent());text(ctx,item->subtitle,20,58,122,CONTENT_W-68,foreground());text(ctx,item->value[0]?item->value:item->flags&DB_PAUSED?"Paused":"",20,58,146,CONTENT_W-68,muted());
     for(unsigned i=0;i<3;i++){
       bool available=control_available(item,i),selected=s_state.focus==i;GColor ink=selected?background():available?foreground():muted();int x=5+i*52;
       if(selected)fill(ctx,GRect(x,163,48,37),foreground(),5);else edge(ctx,GRect(x,163,48,37),stroke(),5);
@@ -251,48 +282,70 @@ static void media_view(GContext *ctx){
     }
   }else{
     text(ctx,item->title,24,9,57,CONTENT_W-20,foreground());char value[64];item_value(item,value,sizeof(value));text(ctx,value[0]?value:item->subtitle,24,9,86,CONTENT_W-20,muted());
-    for(unsigned i=0;i<3;i++){
-      bool available=control_available(item,i),selected=s_state.focus==i;int y=98+i*42;
-      if(selected)fill(ctx,GRect(6,y,CONTENT_W-12,38),foreground(),4);else if(available)edge(ctx,GRect(6,y,CONTENT_W-12,38),stroke(),4);
-      text(ctx,item->controls[i][0]?item->controls[i]:"Unavailable",20,14,y+29,CONTENT_W-28,selected?background():available?foreground():muted());
+    unsigned count=0;for(unsigned i=0;i<3;i++)if(db_control_present(item,i))count++;
+    int height=count==1?72:count==2?56:38,gap=count==3?5:8,top=count==1?116:102;unsigned row=0;
+    for(unsigned i=0;i<3;i++)if(db_control_present(item,i)){
+      bool available=control_available(item,i),selected=s_state.focus==i;int y=top+(int)row++*(height+gap);
+      if(selected)fill(ctx,GRect(6,y,CONTENT_W-12,height),foreground(),4);else edge(ctx,GRect(6,y,CONTENT_W-12,height),stroke(),4);
+      GColor ink=selected?(available?background():(s_state.snapshot.dark?GColorDarkGray:GColorLightGray)):(available?foreground():muted());
+      text(ctx,item->controls[i][0]?item->controls[i]:"Action",24,14,y+height/2+12,CONTENT_W-28,ink);
     }
   }
 }
+static void check_icon(GContext *ctx,int x,int y,GColor ink){segment(ctx,x-7,y,x-2,y+6,ink);segment(ctx,x-2,y+6,x+8,y-6,ink);}
+static void launch_icon(GContext *ctx,int x,int y,GColor ink){
+  segment(ctx,x-8,y-8,x,y-8,ink);segment(ctx,x-8,y-8,x-8,y+8,ink);segment(ctx,x-8,y+8,x,y+8,ink);
+  segment(ctx,x-2,y,x+9,y,ink);segment(ctx,x+4,y-5,x+9,y,ink);segment(ctx,x+9,y,x+4,y+5,ink);
+}
+static void action_icon(GContext *ctx,const DbItem *item,unsigned action,int x,int y,GColor ink){
+  if(item->flags&DB_IS_MEDIA){playback_icon(ctx,action,(item->flags&DB_PAUSED)!=0,x-9,y-10,ink);return;}
+  if(item->kind==DB_LIGHT){graphics_context_set_stroke_color(ctx,ink);graphics_context_set_stroke_width(ctx,2);graphics_draw_circle(ctx,GPoint(x,y+1),8);fill(ctx,GRect(x-3,y-12,6,10),foreground(),0);segment(ctx,x,y-11,x,y,ink);}
+  else if(item->kind==DB_FIND)symbol(ctx,DB_FIND,x-11,y-11,22,ink);
+  else check_icon(ctx,x,y,ink);
+}
 static void action_bar(GContext *ctx){
   GColor ink=background();int x=CONTENT_W+ACTION_BAR_WIDTH/2;fill(ctx,GRect(CONTENT_W,0,ACTION_BAR_WIDTH,SCREEN_H),foreground(),0);
+  if(s_guide){check_icon(ctx,x,114,ink);return;}
   if(!s_command.confirmation){segment(ctx,x-6,42,x,36,ink);segment(ctx,x,36,x+6,42,ink);segment(ctx,x-6,187,x,193,ink);segment(ctx,x,193,x+6,187,ink);}
   if(s_state.loading||!s_state.ready)return;
   const DbItem *item=db_selected(&s_state);if(!s_has_connection||!db_item_capability_current(item,utc_now()))return;
+  if(preview_item()){launch_icon(ctx,x,114,ink);return;}
   if(s_command.active&&s_command.result==DB_PENDING){for(int i=0;i<3;i++){graphics_context_set_fill_color(ctx,ink);graphics_fill_circle(ctx,GPoint(x-8+i*8,114),2);}return;}
-  if(s_command.confirmation){segment(ctx,x-7,114,x-2,120,ink);segment(ctx,x-2,120,x+8,108,ink);return;}
-  if(s_state.desired_mode==DB_MEDIA){if(control_available(item,s_state.focus)){if(item->flags&DB_IS_MEDIA)playback_icon(ctx,s_state.focus,(item->flags&DB_PAUSED)!=0,x-9,104,ink);else{segment(ctx,x-7,114,x-2,120,ink);segment(ctx,x-2,120,x+8,108,ink);}}}
+  if(s_command.confirmation){action_icon(ctx,item,s_command.action,x,114,ink);return;}
+  if(s_command.active&&s_command.result==DB_SUCCESS){check_icon(ctx,x,114,ink);return;}
+  if(s_state.desired_mode==DB_MEDIA){if(control_available(item,s_state.focus))action_icon(ctx,item,s_state.focus,x,114,ink);}
   else if(item->flags&DB_NOTIFICATION){if(item->flags&DB_APP)symbol(ctx,DB_NOTICE,x-11,103,22,ink);}
-  else if(item->role==DB_ROLE_ACTIVITY&&(item->flags&DB_IS_MEDIA)){if(db_item_direct_action(item,utc_now())==1)playback_icon(ctx,1,(item->flags&DB_PAUSED)!=0,x-9,104,ink);}
+  else if(item->role==DB_ROLE_ACTIVITY&&(item->flags&DB_IS_MEDIA)){if(db_item_direct_action(item,utc_now())==1)action_icon(ctx,item,1,x,114,ink);}
   else if(db_item_actionable(item,utc_now())){
     if(item->role==DB_ROLE_ACTIVITY){for(int i=0;i<3;i++){graphics_context_set_fill_color(ctx,ink);graphics_fill_circle(ctx,GPoint(x-8+i*8,114),2);}}
-    else if(item->kind==DB_LIGHT){graphics_context_set_stroke_color(ctx,ink);graphics_context_set_stroke_width(ctx,2);graphics_draw_circle(ctx,GPoint(x,115),8);fill(ctx,GRect(x-3,102,6,10),foreground(),0);segment(ctx,x,103,x,114,ink);}
-    else if(item->kind==DB_FIND)symbol(ctx,DB_FIND,x-11,103,22,ink);
+    else if(item->kind==DB_LIGHT||item->kind==DB_FIND)action_icon(ctx,item,0,x,114,ink);
     else{segment(ctx,x+3,103,x-5,115,ink);segment(ctx,x-5,115,x+4,115,ink);segment(ctx,x+4,115,x-3,125,ink);}
   }
 }
-static void feedback(GContext *ctx){
-  const char *label=NULL;
-  if(!s_has_connection)label="Phone disconnected";
-  else if(s_command.active&&!s_command.confirmation)label=s_command.result==DB_PENDING?"Working…":s_command.result==DB_DENIED?"Allow on phone":s_command.result==DB_STALE?"Item changed":s_command.result==DB_SUCCESS?"Done":s_command.result==DB_FAILED?(s_command.text[0]?s_command.text:"Action failed"):NULL;
-  if(label){fill(ctx,GRect(4,191,CONTENT_W-8,34),foreground(),4);text(ctx,label,20,10,218,CONTENT_W-20,background());}
-}
 static void confirm_overlay(GContext *ctx){
-  fill(ctx,GRect(4,57,CONTENT_W-8,139),background(),6);edge(ctx,GRect(4,57,CONTENT_W-8,139),foreground(),6);centered(ctx,"Confirm action?",20,87,foreground());
-  text(ctx,s_command.text[0]?s_command.text:"Run this action",20,12,116,CONTENT_W-24,muted());centered(ctx,"Select: confirm",20,153,foreground());centered(ctx,"Back: cancel",20,181,muted());
+  const DbItem *item=db_selected(&s_state);
+  fill(ctx,GRect(4,39,CONTENT_W-8,161),background(),6);edge(ctx,GRect(4,39,CONTENT_W-8,161),foreground(),6);
+  centered(ctx,"Confirm?",28,74,foreground());
+  text(ctx,item?(item->title[0]?item->title:item->name):"Selected item",24,12,109,CONTENT_W-24,foreground());
+  centered(ctx,"Select confirms",20,153,foreground());centered(ctx,"Back cancels",20,185,muted());
+}
+static void guide_view(GContext *ctx){
+  text(ctx,"Buttons",24,6,28,CONTENT_W-12,foreground());segment(ctx,5,34,CONTENT_W-5,34,stroke());
+  const char *lines[]={"Up / Down: move","Hold Up: Activities","Hold Down: Pinned","Select: action","Hold Select: app","Back: return"};
+  for(unsigned i=0;i<6;i++)text(ctx,lines[i],20,6,57+(int)i*26,CONTENT_W-12,foreground());
+  fill(ctx,GRect(4,201,CONTENT_W-8,25),foreground(),4);text(ctx,"Select to start",20,10,222,CONTENT_W-20,background());
 }
 static void update(Layer *layer,GContext *ctx){
-  (void)layer;fill(ctx,GRect(0,0,SCREEN_W,SCREEN_H),background(),0);header(ctx);
+  (void)layer;fill(ctx,GRect(0,0,SCREEN_W,SCREEN_H),background(),0);
+  if(s_guide){guide_view(ctx);action_bar(ctx);return;}
+  header(ctx);
   if(s_state.loading||!s_state.ready)empty_message(ctx,s_has_connection?"Loading…":"Phone disconnected",s_has_connection?"Waiting for data":"Reconnect your phone",66);
   else if(s_state.snapshot.status>=DB_OFFLINE&&!s_state.snapshot.count)empty_message(ctx,status_text(),s_state.snapshot.status==DB_PERMISSION?"Open phone settings":"Back is available",66);
   else if(s_state.desired_mode==DB_OVERVIEW)snapshot(ctx);
   else if(s_state.desired_mode==DB_MEDIA)media_view(ctx);
   else list_view(ctx);
-  feedback(ctx);if(s_command.confirmation)confirm_overlay(ctx);action_bar(ctx);
+  if(s_command.confirmation)confirm_overlay(ctx);
+  action_bar(ctx);
 }
 static bool read_uint(DictionaryIterator *dict,uint32_t key,uint32_t *value){
   Tuple *t=dict_find(dict,key);if(!t||(t->type!=TUPLE_UINT&&t->type!=TUPLE_INT))return false;
@@ -304,7 +357,13 @@ static bool read_uint(DictionaryIterator *dict,uint32_t key,uint32_t *value){
 }
 static void view_failed(void *context){(void)context;s_view_timeout=NULL;if(!s_state.loading)return;stop_repeat();bool dark=s_state.snapshot.dark;s_state.loading=false;s_state.ready=true;memset(&s_state.snapshot,0,sizeof(s_state.snapshot));s_state.snapshot.dark=dark;s_state.snapshot.mode=s_state.desired_mode;s_state.snapshot.status=s_has_connection?DB_ERROR:DB_OFFLINE;s_state.selected_token=0;update_ticks();repaint();}
 static void clear_feedback(void *context){(void)context;s_action_timeout=NULL;memset(&s_command,0,sizeof(s_command));repaint();}
-static void finish_feedback(void){if(s_action_timeout)app_timer_cancel(s_action_timeout);s_action_timeout=app_timer_register(2000,clear_feedback,NULL);}
+static void finish_feedback(void){
+  if(s_action_timeout){app_timer_cancel(s_action_timeout);s_action_timeout=NULL;}
+  if(s_command.result==DB_SUCCESS)s_action_timeout=app_timer_register(1000,clear_feedback,NULL);
+}
+static void acknowledge_feedback(void){
+  if(s_command.active&&s_command.ended){if(s_action_timeout){app_timer_cancel(s_action_timeout);s_action_timeout=NULL;}memset(&s_command,0,sizeof(s_command));repaint();}
+}
 static void action_failed(void *context){(void)context;s_action_timeout=NULL;if(s_command.active){s_command.result=DB_FAILED;s_command.confirmation=false;s_command.ended=true;snprintf(s_command.text,sizeof(s_command.text),"No response");finish_feedback();repaint();}}
 static void send_queued(void){
   if(s_sending||!s_queue_count)return;
@@ -353,7 +412,7 @@ static void inbox(DictionaryIterator *dict,void *context){
     // starts at one. A new native epoch prevents old replies or capabilities
     // from being mistaken for this replacement runtime's state.
     uint32_t session=s_state.session>=INT32_MAX?1:s_state.session+1;bool dark=s_state.snapshot.dark;
-    stop_repeat();
+    stop_repeat();cancel_hold_preview();s_select_down=false;s_hold_intent=false;
     if(s_view_timeout){app_timer_cancel(s_view_timeout);s_view_timeout=NULL;}
     if(s_action_timeout){app_timer_cancel(s_action_timeout);s_action_timeout=NULL;}
     if(s_expiry_timer){app_timer_cancel(s_expiry_timer);s_expiry_timer=NULL;}
@@ -375,6 +434,7 @@ static void inbox(DictionaryIterator *dict,void *context){
       if(db_state_apply(&s_state,incoming)){
         if(s_view_timeout){app_timer_cancel(s_view_timeout);s_view_timeout=NULL;}
         if(s_state.snapshot.mode==DB_MEDIA&&s_state.focus>2)s_state.focus=1;
+        if(s_select_down&&!pressed_item())cancel_hold_preview();
         bool redacted=db_state_redact(&s_state,utc_now(),!s_has_connection);update_ticks();if(redraw||redacted||selected!=s_state.selected_token)repaint();
         if(was_loading||selected!=s_state.selected_token||selected_index!=s_state.selected_index)publish_focus();
       }
@@ -406,7 +466,7 @@ static void outbox_failed(DictionaryIterator *dict,AppMessageResult reason,void 
 static void inbox_dropped(AppMessageResult reason,void *context){(void)reason;(void)context;if(s_state.loading)view_failed(NULL);}
 static void tick(struct tm *now,TimeUnits units){
   bool dirty=db_state_redact(&s_state,utc_now(),!s_has_connection);unsigned minute=(unsigned)now->tm_hour*60+(unsigned)now->tm_min;
-  if(minute!=s_last_minute){s_last_minute=minute;dirty=true;}
+  if(minute!=s_last_minute){s_last_minute=minute;if(!s_guide)dirty=true;}
   if((units&SECOND_UNIT)&&db_state_running_clock(&s_state,utc_now()))dirty=true;
   if(dirty)repaint();
   update_ticks();
@@ -417,7 +477,8 @@ static void expire_sources(void *context){
   update_ticks();
 }
 static void update_ticks(void){
-  uint8_t seconds=s_focused&&db_state_running_clock(&s_state,utc_now())?1:0;
+  if(s_hold_preview&&!preview_item())cancel_hold_preview();
+  uint8_t seconds=s_focused&&!s_guide&&db_state_running_clock(&s_state,utc_now())?1:0;
   if(s_tick_seconds!=seconds+1){s_tick_seconds=seconds+1;tick_timer_service_unsubscribe();tick_timer_service_subscribe(seconds?SECOND_UNIT:MINUTE_UNIT,tick);}
   if(s_expiry_timer){app_timer_cancel(s_expiry_timer);s_expiry_timer=NULL;}
   uint32_t now=utc_now(),next=0;
@@ -452,15 +513,25 @@ static void repeated(void *context){
   if(!s_state.loading&&before==s_state.selected_index&&focus==s_state.focus){s_repeat_held=false;return;}
   if(s_repeat_held)s_repeat=app_timer_register(140,repeated,NULL);
 }
-static void direction_click(ClickRecognizerRef recognizer,void *context){(void)context;move_selection(click_recognizer_get_button_id(recognizer)==BUTTON_ID_UP?-1:1);}
+static void direction_click(ClickRecognizerRef recognizer,void *context){(void)context;if(s_guide)return;acknowledge_feedback();cancel_hold_preview();move_selection(click_recognizer_get_button_id(recognizer)==BUTTON_ID_UP?-1:1);}
 static void direction_hold(ClickRecognizerRef recognizer,void *context){
-  (void)context;if(s_command.confirmation)return;int delta=click_recognizer_get_button_id(recognizer)==BUTTON_ID_UP?-1:1;
+  (void)context;if(s_guide||s_command.confirmation)return;acknowledge_feedback();cancel_hold_preview();int delta=click_recognizer_get_button_id(recognizer)==BUTTON_ID_UP?-1:1;
   if(s_state.desired_mode==DB_OVERVIEW){if(s_state.loading)return;db_state_remember(&s_state);request_view(delta<0?DB_ACTIVITIES:DB_PINNED,0,0,0,false);return;}
   stop_repeat();s_repeat_held=true;s_repeat_delta=delta;move_selection(delta);s_repeat=app_timer_register(140,repeated,NULL);
 }
 static void direction_release(ClickRecognizerRef recognizer,void *context){(void)recognizer;(void)context;stop_repeat();}
-static void select_raw(ClickRecognizerRef recognizer,void *context){(void)recognizer;(void)context;const DbItem *item=db_selected(&s_state);s_press_token=item?item->token:0;s_press_version=item?item->version:0;s_press_mode=s_state.desired_mode;}
 static const DbItem *pressed_item(void){const DbItem *item=db_selected(&s_state);return item&&item->token==s_press_token&&item->version==s_press_version&&s_state.desired_mode==s_press_mode?item:NULL;}
+static void show_hold_preview(void *context){
+  (void)context;s_hold_timer=NULL;const DbItem *item=pressed_item();
+  if(s_select_down&&!s_guide&&!s_command.confirmation&&s_has_connection&&db_item_capability_current(item,utc_now())&&(item->flags&DB_APP)&&!(s_command.active&&s_command.result==DB_PENDING)){s_hold_preview=true;s_hold_intent=true;repaint();}
+}
+static void select_raw(ClickRecognizerRef recognizer,void *context){
+  (void)recognizer;(void)context;cancel_hold_preview();s_hold_intent=false;s_select_down=true;
+  if(s_guide){s_press_token=s_press_version=0;return;}
+  acknowledge_feedback();const DbItem *item=db_selected(&s_state);s_press_token=item?item->token:0;s_press_version=item?item->version:0;s_press_mode=s_state.desired_mode;
+  if(item&&(item->flags&DB_APP)&&!s_command.confirmation)s_hold_timer=app_timer_register(HOLD_PREVIEW_MS,show_hold_preview,NULL);
+}
+static void select_released(ClickRecognizerRef recognizer,void *context){(void)recognizer;(void)context;s_select_down=false;cancel_hold_preview();}
 static void run_command(const DbItem *item,uint8_t operation,uint8_t action,bool confirmation){
   if(!s_has_connection||!db_item_capability_current(item,utc_now())||(operation==DB_OP_OPEN?!(item->flags&DB_APP):!db_item_actionable(item,utc_now())))return;
   if(s_command.active&&s_command.result==DB_PENDING)return;
@@ -471,7 +542,9 @@ static void run_command(const DbItem *item,uint8_t operation,uint8_t action,bool
   queue_message((Outbound){.op=operation,.mode=s_state.desired_mode,.request=request,.token=item->token,.version=item->version,.action=action,.confirm=confirmation?1:0});repaint();
 }
 static void select_click(ClickRecognizerRef recognizer,void *context){
-  (void)recognizer;(void)context;
+  (void)recognizer;(void)context;cancel_hold_preview();
+  if(s_guide){s_guide=false;persist_write_bool(GUIDE_SEEN_KEY,true);s_press_token=s_press_version=0;s_hold_intent=false;update_ticks();repaint();return;}
+  if(s_hold_intent){s_hold_intent=false;return;}
   if(s_command.confirmation){const DbItem *item=db_selected(&s_state);if(item&&item->token==s_command.token&&item->version==s_command.version)run_command(item,DB_OP_ACTION,s_command.action,true);else{s_command.confirmation=false;s_command.result=DB_STALE;repaint();}return;}
   const DbItem *item=pressed_item();if(!s_has_connection||!db_item_capability_current(item,utc_now()))return;
   if(s_state.desired_mode==DB_MEDIA){if(control_available(item,s_state.focus))run_command(item,DB_OP_ACTION,s_state.focus,false);}
@@ -482,9 +555,9 @@ static void select_click(ClickRecognizerRef recognizer,void *context){
     request_view(DB_MEDIA,0,0,item->token,false);
   }else if(item->role==DB_ROLE_PIN&&db_item_actionable(item,utc_now()))run_command(item,DB_OP_ACTION,0,false);
 }
-static void select_hold(ClickRecognizerRef recognizer,void *context){(void)recognizer;(void)context;if(s_command.confirmation)return;const DbItem *item=pressed_item();if(item&&(item->flags&DB_APP))run_command(item,DB_OP_OPEN,0,false);}
+static void select_hold(ClickRecognizerRef recognizer,void *context){(void)recognizer;(void)context;cancel_hold_preview();if(s_guide||s_command.confirmation)return;const DbItem *item=pressed_item();if(item&&(item->flags&DB_APP))run_command(item,DB_OP_OPEN,0,false);}
 static void back_click(ClickRecognizerRef recognizer,void *context){
-  (void)recognizer;(void)context;stop_repeat();
+  (void)recognizer;(void)context;stop_repeat();cancel_hold_preview();acknowledge_feedback();
   if(s_command.confirmation){memset(&s_command,0,sizeof(s_command));repaint();return;}
   DbReturn previous;if(db_state_back(&s_state,&previous)){s_state.focus=previous.focus;request_view(previous.mode,previous.offset,previous.index,previous.token,false);}
   else{queue_message((Outbound){.op=DB_OP_CANCEL,.request=next_request()});window_stack_pop_all(false);}
@@ -493,20 +566,24 @@ static void configure_clicks(void *context){
   (void)context;
   window_single_click_subscribe(BUTTON_ID_UP,direction_click);window_long_click_subscribe(BUTTON_ID_UP,600,direction_hold,direction_release);
   window_single_click_subscribe(BUTTON_ID_DOWN,direction_click);window_long_click_subscribe(BUTTON_ID_DOWN,600,direction_hold,direction_release);
-  window_single_click_subscribe(BUTTON_ID_SELECT,select_click);window_long_click_subscribe(BUTTON_ID_SELECT,600,select_hold,NULL);window_raw_click_subscribe(BUTTON_ID_SELECT,select_raw,NULL,NULL);
+  window_single_click_subscribe(BUTTON_ID_SELECT,select_click);window_long_click_subscribe(BUTTON_ID_SELECT,600,select_hold,NULL);window_raw_click_subscribe(BUTTON_ID_SELECT,select_raw,select_released,NULL);
   window_single_click_subscribe(BUTTON_ID_BACK,back_click);
 }
 static void connection_changed(bool connected){
-  s_has_connection=connected;s_state.connected=connected;stop_repeat();
+  s_has_connection=connected;s_state.connected=connected;stop_repeat();cancel_hold_preview();s_select_down=false;s_hold_intent=false;s_press_token=0;
   if(!connected){db_state_redact(&s_state,utc_now(),true);if(s_state.loading)view_failed(NULL);if(s_command.active&&s_command.result==DB_PENDING)action_failed(NULL);}
   else request_view(s_state.desired_mode,s_state.snapshot.offset,s_state.selected_index,s_state.selected_token,true);
   update_ticks();repaint();
 }
-static void focus_changed(bool focused){s_focused=focused;if(!focused){stop_repeat();s_press_token=0;}else{db_state_redact(&s_state,utc_now(),!s_has_connection);repaint();}update_ticks();}
+static void focus_changed(bool focused){s_focused=focused;if(!focused){stop_repeat();cancel_hold_preview();s_select_down=false;s_hold_intent=false;s_press_token=0;}else{db_state_redact(&s_state,utc_now(),!s_has_connection);repaint();}update_ticks();}
 static void battery_changed(BatteryChargeState value){(void)value;for(unsigned i=0;i<s_state.snapshot.count;i++)if(s_state.snapshot.items[i].flags&DB_LOCAL_WATCH){repaint();break;}}
 static void init(void){
   time_t seconds;uint16_t milliseconds;time_ms(&seconds,&milliseconds);uint32_t session=((uint32_t)seconds^((uint32_t)milliseconds<<16)^0x44534831u)&INT32_MAX;if(!session)session=1;
-  db_state_init(&s_state,session);s_has_connection=connection_service_peek_pebble_app_connection();s_state.connected=s_has_connection;
+  db_state_init(&s_state,session);
+#ifndef DASHBOARD_FIXTURE
+  s_guide=!persist_read_bool(GUIDE_SEEN_KEY);
+#endif
+  s_has_connection=connection_service_peek_pebble_app_connection();s_state.connected=s_has_connection;
   s_window=window_create();if(!s_window)return;s_canvas=layer_create(GRect(0,0,SCREEN_W,SCREEN_H));if(!s_canvas)return;
   layer_set_update_proc(s_canvas,update);layer_add_child(window_get_root_layer(s_window),s_canvas);window_set_click_config_provider(s_window,configure_clicks);
   app_message_register_inbox_received(inbox);app_message_register_inbox_dropped(inbox_dropped);app_message_register_outbox_sent(outbox_sent);app_message_register_outbox_failed(outbox_failed);
@@ -531,7 +608,7 @@ static void init(void){
 #endif
 }
 static void deinit(void){
-  stop_repeat();if(s_view_timeout)app_timer_cancel(s_view_timeout);if(s_action_timeout)app_timer_cancel(s_action_timeout);if(s_expiry_timer)app_timer_cancel(s_expiry_timer);tick_timer_service_unsubscribe();battery_state_service_unsubscribe();connection_service_unsubscribe();app_focus_service_unsubscribe();app_message_deregister_callbacks();
+  stop_repeat();cancel_hold_preview();if(s_view_timeout)app_timer_cancel(s_view_timeout);if(s_action_timeout)app_timer_cancel(s_action_timeout);if(s_expiry_timer)app_timer_cancel(s_expiry_timer);tick_timer_service_unsubscribe();battery_state_service_unsubscribe();connection_service_unsubscribe();app_focus_service_unsubscribe();app_message_deregister_callbacks();
   if(s_canvas)layer_destroy(s_canvas);
   if(s_window)window_destroy(s_window);
   for(unsigned i=0;i<FONT_COUNT;i++)if(s_fonts[i])fonts_unload_custom_font(s_fonts[i]);

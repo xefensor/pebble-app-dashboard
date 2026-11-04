@@ -1,0 +1,111 @@
+{
+  "result": "PASS",
+  "version": "0.3.0",
+  "recordedAtUtc": "2026-11-04T14:48:24.408667+00:00",
+  "scope": "Stock-SDK Emery candidate. Isolated packaged SDK sources/actions and real native QEMU; no live phone command or physical-watch session.",
+  "uuid": "f76f9fc1-2944-4248-bcc5-3eea2af0183b",
+  "sdk": "4.33.1",
+  "platform": "emery",
+  "pixels": [
+    200,
+    228
+  ],
+  "changes": [
+    "One-time static button guide; dismissal consumes input and persists only a boolean",
+    "App destination preview with cancelled-hold protection and exact token/version",
+    "Header/sidebar feedback leaves both pins visible",
+    "Selected missing readings show a reason while independent actions remain available",
+    "Present generic controls use larger rows and retain original action indices",
+    "Confirmation target in content with contextual action icon in the right sidebar",
+    "Neutral Nothing active layout"
+  ],
+  "artifacts": {
+    "dist/Dashboard-0.3.0.pbw": "2d6cdb3c318acb6eb50a926def402a2d2048ed0bfdba21e7cf6c58dd3bad4ca1",
+    "dist/Dashboard-0.3.0-debug.zip": "5ac606021835ed9017481e019afc45a8c16e0284a33c818a203c290f036cb420"
+  },
+  "checks": {
+    "nodeTests": {
+      "result": "PASS",
+      "total": 60,
+      "phone": 36,
+      "protocol": 9,
+      "settings": 15
+    },
+    "nativeModel": {
+      "result": "PASS",
+      "canonicalFixtures": 16,
+      "actualPackagedRuntimeFrames": 30,
+      "addressSanitizer": "PASS",
+      "undefinedBehaviorSanitizer": "PASS",
+      "leakSanitizer": "Disabled for sandbox ptrace compatibility"
+    },
+    "packagedArtifact": "PASS",
+    "generatedConfiguration": "PASS",
+    "sourceAndResourceHashesMatchDebugBundle": true,
+    "nativePayloadsMatchBothEmulatorRuns": true,
+    "nativeScreenshotHashes": "PASS",
+    "nativeEmulator": {
+      "result": "PASS",
+      "fullSuiteChecks": 31,
+      "fullSuiteCaptures": 48,
+      "notificationRegressionChecks": 8,
+      "notificationRegressionCaptures": 10,
+      "totalChecks": 39,
+      "totalCaptures": 58
+    }
+  },
+  "buildSizesBytes": {
+    "nativeFootprint": 32218,
+    "nativeBudget": 131072,
+    "heapSpaceBeforeRuntimeAllocations": 98854,
+    "resources": 64208,
+    "resourceBudget": 262144
+  },
+  "evidenceSha256": {
+    "docs/qa/0.3.0/packaged-runtime.json": "e00690f7f7f7e09daeff4f67dcca56b4421e9e32cbe0f1123fae139f93d75b98",
+    "docs/qa/0.3.0/native/emulator.json": "0a819005ade9e2407c0f7dc1d28244804b1d455f107c1e844b56ffc57646a730",
+    "docs/qa/0.3.0/native-notifications/emulator.json": "fd107db23768ae316e86553e3e2e14d61c4eb5709f4e092abe0960b5100bbad3"
+  },
+  "builtSourceAndResourceSha256": {
+    "src/c/dashboard.c": "983f13c5ae5be461c8eb5f3b9b626f5c8259fbb2241b9cfb8fad608fc1ce856a",
+    "src/c/dashboard.h": "e0f481066e64d49b0607800be57000770acc7956deffff69380d8dc6346bf3c2",
+    "src/c/main.c": "1c2286e1265274ae6aeb450cd95b46ab808f7e76a54cc7f33abda2864e9b73bf",
+    "src/pkjs/commands.js": "6e367a6b1158e0fc35eb9d18585caafa6760de85b89494a0d4bbef8ed4977076",
+    "src/pkjs/index.js": "14dafd602c8e29f4e5685e049a012ac82645dac5b3e583adefaea2968fccc4d8",
+    "src/pkjs/protocol.js": "b3c6f4459e318e9cb0fa49bd42f7c049e11d66eb3a6c115066beb946acb2377e",
+    "src/pkjs/queue.js": "fad9a9b92949ec72a7bdfdbe99973f38a6ce38bf791cbcf19840f43b222ad53e",
+    "src/pkjs/runtime.js": "109216ce0c06f0c27d81aa6034843be8e0e8b8ade74d0d0d91f3484774f3203f",
+    "src/pkjs/settings-page.js": "fd18b8a0ad6c85bcfc7c3ee914932656e114c36c8e7351b69f4977899b6592d4",
+    "src/pkjs/settings.js": "0ee90d5380b2c8be2560510064a579f7c505a817ef020b563cb7eb96a6337d07",
+    "src/pkjs/sources.js": "7b233b1d6e4609a6184877623622aee29f083beede8b3005999907e73a121079",
+    "src/plugin/index.js": "32cdb365a25f9f3fc05dd4f4903e5f96f8fe58a447a29852b9a1f0f681dff327",
+    "resources/fonts/Fredoka-Bold-Clock.ttf": "526d2361818275d1f9d1df6ce1835095058b84ec989e50e22f271237cc304000",
+    "resources/fonts/OFL-Fredoka.txt": "5c9e7eee5c6b25f4b05b8d53b2e470ea4962f9ced742d044a98f7d95d1375bab",
+    "resources/fonts/OFL-RobotoCondensed.txt": "0e4cc6ece88573545be2ed25835363662a6182ba4a4c1b5c8feda52add30e8a6",
+    "resources/fonts/RobotoCondensed-Bold.ttf": "6e949e8aa3f6e0b4db88aacafccf0c0e55e708c4564c8f3d145792adbbf80ef6",
+    "resources/images/menu-icon.png": "a9973a33f05a20d63b92d0c1ce3d62c29eb25cba00913c97e3557deefe6e9164"
+  },
+  "buildInputsSha256": {
+    "package.json": "344fd20fce1a5e85311ef46f81eeaed8b46a3d593aa29751ee9c5b1933eb0518",
+    "package-lock.json": "4fb07ded2f443ddec4ec4abeba66734e286b3d45033303fc9740ec2899884a59",
+    "wscript": "528d722ae2e0df186ecbd5008b0f8ceceafca4239188275abe78c9433ee308aa",
+    "config.html": "8d6ceaa303bb45d2e06341a77f75add13d15c4176d471372ce1baf9ad0b08142",
+    "scripts/build.py": "983be84667125a40ca8be9c94e2b5664bcf514bbad2c3ef2151619e95d1f8942",
+    "scripts/bundle-plugin.py": "e0f47b6bdaba2776d69b0f1ce76c94ea419d6b7fd61b1b70f26c3b9b9b2e2038",
+    "vendor/ACTIVITIES.json": "58ebd0ec2f43b8f09732b3a0475c0c8ff7793a45490ed7b123d38f2b1fc97718",
+    "vendor/pebble-activities-0.4.2.tgz": "a182681ad59f258bb9a7f865839d59ed8cf76a8a54cdd03264b52a7577ad1ec3"
+  },
+  "previousArtifactsPreserved": [
+    "0.1.0",
+    "0.2.0",
+    "0.2.1"
+  ],
+  "remainingDeviceValidation": [
+    "Phone permissions/provider integration and associated app launch",
+    "Physical-watch readability, button comfort and battery"
+  ],
+  "deferred": [
+    "Dashboard Timer Pause/Resume",
+    "Custom Back shortcut"
+  ]
+}

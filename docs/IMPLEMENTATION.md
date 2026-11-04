@@ -163,6 +163,21 @@ meaningful identity. Music tap dispatches play/pause slot1 directly only when
 declared; hold opens the verified associated Music app. Generic activities can
 still open useful labelled controls. Optional artwork/icon and source clocks are
 local watch rendering.
+Only received control labels/availability bits establish a present control; do
+not infer disabled actions or invent declarations. The public summary API does
+not currently carry a separate per-action disabled state. Native focus retains
+the original 0/1/2 action index and skips absent slots, including after updates.
+
+The first-use guide is static and consumes its dismissal click. Only its boolean
+dismissal preference is persisted. Visible source clocks do not tick behind the
+guide. A delayed raw-Select preview names the exact associated app without
+dispatching it. Once that preview appears, early release consumes the gesture
+without a tap action; ordinary quick taps remain unchanged. Stale/expired/replaced items cannot
+keep a launch preview. Command progress/success use the sidebar; command failures,
+offline status and selected missing-reading reasons use the header. No feedback
+overlay may cover a pinned value. Confirmation content identifies the target,
+with the action glyph aligned to Select in the sidebar; preserve exact binding
+checks and Back cancellation. Idle activity content uses a neutral placeholder.
 No automatic text scrolling or repeating idle redraw; tick only visible running
 clocks/minute header. One native AppMessage dispatcher and bounded pending view.
 Retain selection by token, never auto-run new items when a source disappears.

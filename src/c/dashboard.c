@@ -101,6 +101,18 @@ void db_state_init(DbState *state,uint32_t session){memset(state,0,sizeof(*state
 void db_state_expect(DbState *state,uint32_t request,uint8_t mode,uint16_t index,uint32_t token){
   state->view_request=request;state->desired_mode=mode;state->desired_index=index;state->selected_token=token;state->loading=true;
 }
+bool db_control_present(const DbItem *item,unsigned index){
+  static const uint16_t bits[]={DB_MEDIA_PREVIOUS,DB_MEDIA_TOGGLE,DB_MEDIA_NEXT};
+  return item&&index<3&&(item->controls[index][0]||(item->flags&bits[index]));
+}
+static void normalize_control_focus(DbState *state){
+  if(state->snapshot.mode!=DB_MEDIA)return;
+  const DbItem *item=db_selected(state);
+  if(db_control_present(item,state->focus))return;
+  for(unsigned i=state->focus;i<3;i++)if(db_control_present(item,i)){state->focus=(uint8_t)i;return;}
+  for(int i=state->focus>2?2:(int)state->focus-1;i>=0;i--)if(db_control_present(item,(unsigned)i)){state->focus=(uint8_t)i;return;}
+  state->focus=0;
+}
 bool db_state_apply(DbState *state,const DbSnapshot *snapshot){
   if(snapshot->session!=state->session||snapshot->request!=state->view_request||snapshot->mode!=state->desired_mode||
     (state->last_sequence&&(int32_t)(snapshot->sequence-state->last_sequence)<=0))return false;
@@ -108,7 +120,7 @@ bool db_state_apply(DbState *state,const DbSnapshot *snapshot){
   state->snapshot=*snapshot;state->last_sequence=snapshot->sequence;state->loading=false;state->ready=true;
   int selected=-1;for(unsigned i=0;i<snapshot->count;i++)if(snapshot->items[i].token==token){selected=(int)i;break;}
   if(selected<0&&snapshot->count){
-    if(token&&!loading){state->selected_token=0;state->selection_lost=true;return true;}
+    if(token&&!loading){state->selected_token=0;state->selection_lost=true;normalize_control_focus(state);return true;}
     uint16_t desired=loading?state->desired_index:state->selected_index;
     if(desired<snapshot->offset)desired=snapshot->offset;
     if(desired>=snapshot->offset+snapshot->count)desired=snapshot->offset+snapshot->count-1;
@@ -117,6 +129,7 @@ bool db_state_apply(DbState *state,const DbSnapshot *snapshot){
   state->selection_lost=false;
   if(selected>=0){state->selected_token=snapshot->items[selected].token;state->selected_index=snapshot->offset+(uint16_t)selected;}
   else{state->selected_token=0;state->selected_index=0;}
+  normalize_control_focus(state);
   return true;
 }
 const DbItem *db_selected(const DbState *state){
@@ -149,7 +162,18 @@ void db_item_value(const DbItem *item,uint32_t now,char *buffer,size_t size){
 }
 bool db_state_move(DbState *state,int delta,uint16_t *index){
   if(state->loading||!state->ready)return false;
-  if(state->snapshot.mode==DB_MEDIA){int next=(int)state->focus+delta;if(next<0)next=0;if(next>2)next=2;bool changed=next!=state->focus;state->focus=(uint8_t)next;return changed;}
+  if(state->snapshot.mode==DB_MEDIA){
+    const DbItem *item=db_selected(state);if(!delta||!item)return false;
+    int direction=delta<0?-1:1,next=state->focus;unsigned moves=delta<0?(unsigned)(-(int64_t)delta):(unsigned)delta;
+    if(moves>3)moves=3;
+    while(moves--){
+      int candidate=next+direction;
+      while(candidate>=0&&candidate<3&&!db_control_present(item,(unsigned)candidate))candidate+=direction;
+      if(candidate<0||candidate>=3)break;
+      next=candidate;
+    }
+    bool changed=next!=state->focus;state->focus=(uint8_t)next;return changed;
+  }
   if(!state->snapshot.total)return false;
   int next=state->selection_lost?(delta<0?(int)state->snapshot.offset+(int)state->snapshot.count-1:(int)state->snapshot.offset):(int)state->selected_index+delta;
   if(next<0)next=0;
@@ -172,7 +196,7 @@ bool db_state_redact(DbState *state,uint32_t now,bool disconnected){
       bool dirty=!(item->flags&DB_UNAVAILABLE)||(item->flags&(DB_ACTION|DB_APP))||item->clock_mode||item->anchor||item->base_seconds||item->subtitle[0]||item->value[0]||item->width||item->height||item->palette_length||item->pixel_length;
       if(item->flags&DB_PRIVATE)dirty=dirty||item->title[0]||item->name[0]||item->app_label[0]||item->action_label[0]||item->controls[0][0]||item->controls[1][0]||item->controls[2][0];
       if(!dirty)continue;
-      item->flags|=DB_UNAVAILABLE;item->flags&=~(DB_ACTION|DB_APP);item->clock_mode=0;item->anchor=item->base_seconds=0;
+      item->flags|=DB_UNAVAILABLE;item->flags&=~(DB_ACTION|DB_APP|DB_MEDIA_PREVIOUS|DB_MEDIA_TOGGLE|DB_MEDIA_NEXT);item->clock_mode=0;item->anchor=item->base_seconds=0;
       memset(item->subtitle,0,sizeof(item->subtitle));memset(item->value,0,sizeof(item->value));
       memset(item->pixels,0,sizeof(item->pixels));memset(item->palette,0,sizeof(item->palette));item->width=item->height=item->palette_length=0;item->pixel_length=0;
       if(item->flags&DB_PRIVATE){
@@ -182,6 +206,7 @@ bool db_state_redact(DbState *state,uint32_t now,bool disconnected){
       changed=true;
     }
   }
+  if(changed)normalize_control_focus(state);
   return changed;
 }
 bool db_state_running_clock(const DbState *state,uint32_t now){

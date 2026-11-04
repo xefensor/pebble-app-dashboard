@@ -66,6 +66,44 @@ static void direct_media_action(void){
   item.flags=DB_ACTION;item.kind=DB_LIGHT;item.role=DB_ROLE_PIN;assert(db_item_direct_action(&item,1000)==0);
   item.flags=DB_APP;assert(db_item_direct_action(&item,1000)==-1);
 }
+static void control_slots(void){
+  DbState state;db_state_init(&state,5);db_state_expect(&state,7,DB_MEDIA,0,12);
+  DbSnapshot frame={.session=5,.request=7,.sequence=1,.now=1000,.mode=DB_MEDIA,.status=DB_READY,.total=1,.count=1};
+  frame.items[0]=(DbItem){.token=12,.version=1,.valid_until=2000,.role=DB_ROLE_ACTIVITY,.flags=DB_ACTION|DB_MEDIA_PREVIOUS|DB_MEDIA_NEXT};
+  snprintf(frame.items[0].controls[0],33,"Track parcel");snprintf(frame.items[0].controls[2],33,"Contact");
+  assert(!db_control_present(NULL,0)&&!db_control_present(&frame.items[0],3));
+  assert(db_control_present(&frame.items[0],0)&&!db_control_present(&frame.items[0],1)&&db_control_present(&frame.items[0],2));
+  assert(db_state_apply(&state,&frame)&&state.focus==0);
+  uint16_t index=77;
+  assert(db_state_move(&state,1,&index)&&state.focus==2&&index==77); // Original dispatch slot2, not compact row1.
+  assert(!db_state_move(&state,1,NULL)&&state.focus==2);
+  assert(db_state_move(&state,-1,NULL)&&state.focus==0&&!db_state_move(&state,-1,NULL));
+  assert(!db_state_move(&state,0,NULL));
+  // A named but disabled slot still exposes its reason; an absent slot does not.
+  frame.sequence++;snprintf(frame.items[0].controls[1],33,"Contact unavailable");assert(db_state_apply(&state,&frame));
+  assert(db_state_move(&state,1,NULL)&&state.focus==1);
+  assert(!(db_selected(&state)->flags&DB_MEDIA_TOGGLE)&&db_control_present(db_selected(&state),1));
+  // Live removal keeps the same item and selects a surviving original slot.
+  frame.sequence++;frame.items[0].controls[1][0]=0;assert(db_state_apply(&state,&frame)&&state.focus==2&&state.selected_token==12);
+  frame.sequence++;frame.items[0].controls[2][0]=0;frame.items[0].flags&=~DB_MEDIA_NEXT;
+  assert(db_state_apply(&state,&frame)&&state.focus==0);
+  // A provider with only middle slot1 never starts on an invented slot0.
+  frame.sequence++;frame.items[0].controls[0][0]=0;frame.items[0].flags=DB_ACTION|DB_MEDIA_TOGGLE;
+  snprintf(frame.items[0].controls[1],33,"Acknowledge");assert(db_state_apply(&state,&frame)&&state.focus==1);
+  assert(!db_state_move(&state,1,NULL)&&!db_state_move(&state,-1,NULL));
+  // Ordinary Music keeps all three physical slots and bounded navigation.
+  frame.sequence++;frame.items[0].flags=DB_ACTION|DB_IS_MEDIA|DB_MEDIA_PREVIOUS|DB_MEDIA_TOGGLE|DB_MEDIA_NEXT;
+  assert(db_state_apply(&state,&frame)&&state.focus==1);
+  assert(db_state_move(&state,1,NULL)&&state.focus==2&&!db_state_move(&state,1,NULL));
+  assert(db_state_move(&state,-1,NULL)&&state.focus==1&&db_state_move(&state,-1,NULL)&&state.focus==0);
+  assert(db_state_move(&state,2,NULL)&&state.focus==2&&db_state_move(&state,-2,NULL)&&state.focus==0);
+  // Withdrawal leaves no ghost controls even when the last frame had bits set.
+  state.snapshot.items[0].flags|=DB_PRIVATE;assert(db_state_redact(&state,1000,true));
+  for(unsigned i=0;i<3;i++)assert(!db_control_present(db_selected(&state),i));
+  assert(state.focus==0&&!db_state_move(&state,1,NULL));
+  frame.sequence++;frame.items[0].flags=DB_ACTION;memset(frame.items[0].controls,0,sizeof(frame.items[0].controls));
+  assert(db_state_apply(&state,&frame)&&state.focus==0&&!db_state_move(&state,1,NULL));
+}
 static void identity_and_privacy(void){
   DbState state;db_state_init(&state,5);db_state_expect(&state,7,DB_PINNED,0,0);
   DbSnapshot frame={.session=5,.request=7,.sequence=1,.now=1000,.mode=DB_PINNED,.status=DB_READY,.total=12,.count=5};
@@ -82,7 +120,6 @@ static void identity_and_privacy(void){
   assert(!state.snapshot.items[0].controls[0][0]&&!state.snapshot.items[0].action_label[0]&&!state.snapshot.items[0].app_label[0]);
   assert(!db_item_actionable(&state.snapshot.items[0],1000));
   assert(state.snapshot.items[1].title[0]);assert(db_state_redact(&state,2000,false));assert(state.snapshot.items[1].flags&DB_UNAVAILABLE);
-  state.snapshot.mode=DB_MEDIA;state.snapshot.total=1;state.focus=1;assert(db_state_move(&state,1,NULL)&&state.focus==2);assert(!db_state_move(&state,1,NULL)&&state.focus==2);assert(db_state_move(&state,-1,NULL)&&state.focus==1);
   // A replacement phone runtime restarts at sequence1. Rotating the native
   // epoch clears old private content/selection/history and accepts that frame.
   DbSnapshot old=state.snapshot;old.session=5;old.request=7;old.sequence=500;
@@ -143,5 +180,5 @@ int main(int argc,char **argv){
     free(frame);printf("C parser: %d actual runtime frames accepted\n",argc-2);return 0;
   }
   for(int i=1;i<argc;i++)fixture(argv[i]);
-  clocks();direct_media_action();identity_and_privacy();static_placeholder();notification_shortcut();printf("native model: %u binary fixtures; malformed, stale, selection, privacy and clock checks passed\n",checked);return 0;
+  clocks();direct_media_action();control_slots();identity_and_privacy();static_placeholder();notification_shortcut();printf("native model: %u binary fixtures; malformed, stale, selection, privacy, sparse controls and clock checks passed\n",checked);return 0;
 }

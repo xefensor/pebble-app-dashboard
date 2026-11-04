@@ -28,11 +28,11 @@ sys.path.insert(0,str(ROOT.parent/'recovery-validation'))
 def digest(data):return hashlib.sha256(data).hexdigest()
 
 
-def run(pbw,output,expected_sha256=None,notifications_only=False):
+def run(pbw,output,expected_sha256=None,notifications_only=False,ux_only=False):
     from pipe_emulator import connect
     from libpebble2.services.appmessage import AppMessageService,Uint32,ByteArray,CString
     from libpebble2.services.screenshot import Screenshot
-    from libpebble2.protocol.apps import AppRunState,AppRunStateStart
+    from libpebble2.protocol.apps import AppRunState,AppRunStateStart,AppRunStateStop
     from libpebble2.protocol.system import TimeMessage,SetUTC
     from libpebble2.communication.transports.qemu.protocol import QemuButton,QemuBluetoothConnection,QemuBattery
     from pebble_tool.commands.emucontrol import send_data_to_qemu
@@ -91,6 +91,7 @@ def run(pbw,output,expected_sha256=None,notifications_only=False):
         def __init__(self):
             self.lock=threading.RLock();self.session=0;self.sequence=0;self.view=None;self.respond=True;self.dark=False;self.empty=False
             self.actions=[];self.opens=[];self.frames=[];self.suppressed=[]
+            self.action_behavior='success';self.pending_actions=[]
             overview=json.loads((ROOT/'tests/fixtures/overview.json').read_text())
             self.fixture_now=overview['now'];self.activities=copy.deepcopy(json.loads((ROOT/'tests/fixtures/activity-list.json').read_text())['items'])
             self.activities+=copy.deepcopy(json.loads((ROOT/'tests/fixtures/generic-controls.json').read_text())['items'])
@@ -137,6 +138,14 @@ def run(pbw,output,expected_sha256=None,notifications_only=False):
                 with self.lock:self.frames.append({'request':frame['request'],'sequence':frame['sequence'],'mode':frame['mode'],'offset':frame['offset'],'tokens':[x['token'] for x in frame['items']]})
         def result(self,request,result,text=''):
             send({key('DB_SESSION'):Uint32(self.session),key('DB_REQUEST'):Uint32(request[key('DB_REQUEST')]),key('DB_RESULT'):Uint32(result),key('DB_TEXT'):CString(text)})
+        def complete(self,request,result=2,text='Done'):
+            with self.lock:
+                acts,pins=self.items();found=next((x for x in acts+pins if x['token']==request.get(key('DB_TOKEN'))),None)
+                if result==2 and found:
+                    if found['kind']==6:found['value']='Off' if found['value']!='Off' else '65%';found['version']+=1
+                    elif found['kind']==2 and request.get(key('DB_ACTION'))==1:
+                        found['flags']^=32;found['controls'][1]='Play' if found['flags']&32 else 'Pause';found['value']='Paused' if found['flags']&32 else 'Playing';found['version']+=1
+            self.publish();self.result(request,result,text)
         def process(self,request):
             operation=request.get(key('DB_OPERATION'))
             if operation in (1,2):
@@ -151,11 +160,13 @@ def run(pbw,output,expected_sha256=None,notifications_only=False):
                     acts,pins=self.items();found=next((x for x in acts+pins+([self.notice] if self.notice else []) if x['token']==request.get(key('DB_TOKEN'))),None)
                     if not found or found['version']!=request.get(key('DB_VERSION')):self.result(request,4,'Item changed');return
                     if operation==4:self.opens.append(request);self.result(request,2,'Opening app');return
-                    self.actions.append(request);self.result(request,1,'Working')
-                    if found['kind']==6:found['value']='Off' if found['value']!='Off' else '65%';found['version']+=1
-                    elif found['kind']==2 and request.get(key('DB_ACTION'))==1:
-                        found['flags']^=32;found['controls'][1]='Play' if found['flags']&32 else 'Pause';found['value']='Paused' if found['flags']&32 else 'Playing';found['version']+=1
-                self.publish();self.result(request,2,'Done')
+                    self.actions.append(request)
+                    if self.action_behavior=='confirm' and not request.get(key('DB_CONFIRM')):
+                        self.result(request,7,'Ring Find phone?');return
+                    self.result(request,1,'Working')
+                    if self.action_behavior=='defer':self.pending_actions.append(request);return
+                    outcome=3 if self.action_behavior=='failure' else 5 if self.action_behavior=='denied' else 2
+                self.complete(request,outcome,'Light did not respond' if outcome==3 else 'Allow on phone' if outcome==5 else 'Done')
             elif operation==7:
                 with self.lock:
                     if self.view and request.get(key('DB_REQUEST'))==self.view.get(key('DB_REQUEST')):
@@ -181,10 +192,10 @@ def run(pbw,output,expected_sha256=None,notifications_only=False):
     def button(name,hold=.08):
         send_data_to_qemu(p.transport,QemuButton(state=int(getattr(QemuButton.Button,name))));time.sleep(hold)
         send_data_to_qemu(p.transport,QemuButton(state=0));time.sleep(.22)
-    def capture(name):
-        # Let the bounded command-result overlay finish before visual evidence;
-        # that overlay is tested by requests/results, not mistaken for lost rows.
-        time.sleep(2.2);rows=Screenshot(p).grab_image();assert len(rows)==228 and all(len(x)==600 for x in rows)
+    def capture(name,settle=2.2):
+        # Ordinary scenes settle transient success feedback; explicit UX scenes
+        # use a short delay to retain their pending/error/preview state.
+        time.sleep(settle);rows=Screenshot(p).grab_image();assert len(rows)==228 and all(len(x)==600 for x in rows)
         rgb=b''.join(rows);path=output/(name+'.png');Image.frombytes('RGB',(200,228),rgb).save(path)
         captures.append({'name':name,'file':path.name,'sha256':digest(path.read_bytes()),'rgbSha256':digest(rgb),'pixels':[200,228],'nativePixelsModified':False})
         print('Native capture:',name,flush=True);return rgb
@@ -194,10 +205,115 @@ def run(pbw,output,expected_sha256=None,notifications_only=False):
         # Back out at most two context levels; root Back would quit, so inspect
         # the last actual VIEW from native before deciding on another press.
         while active_mode()!=0:button('Back');await_condition(lambda:bool(peer.frames) and peer.frames[-1]['mode']==active_mode(),'Back view not delivered')
+    def select_snapshot(token):
+        snapshot_home()
+        for _ in range(4):button('Up')
+        tokens=peer.frames[-1]['tokens'];assert token in tokens
+        for _ in range(tokens.index(token)):button('Down')
+        await_condition(lambda:peer.view.get(key('DB_TOKEN'))==token,'Snapshot selection did not reach '+str(token))
+    def restart_without_guide():
+        before=counts();frames=len(peer.frames);old_session=peer.session
+        p.send_packet(AppRunState(data=AppRunStateStop(uuid=target)));time.sleep(.25)
+        p.send_packet(AppRunState(data=AppRunStateStart(uuid=target)))
+        await_condition(lambda:len(peer.frames)>frames and peer.session!=old_session,'Dashboard restart did not handshake',12)
+        button('Down');await_condition(lambda:peer.view.get(key('DB_TOKEN'))==3,'First-use guide reappeared after dismissal/restart')
+        assert counts()==before
+        capture('guide-dismissed-after-restart',.1);button('Up')
+        proofs.append({'check':'First-use guide dismissal persists across a native app restart; ordinary navigation works immediately and dispatches no action','passed':True})
+    def ux_checks():
+        snapshot_home()
+        with peer.lock:
+            saved_activities=copy.deepcopy(peer.activities);saved_pins=copy.deepcopy(peer.pins);saved_notice=copy.deepcopy(peer.notice)
+            peer.empty=False;peer.dark=False
+            timer=next(x for x in peer.activities if x['token']==1)
+            peer.activities=[timer]+[x for x in peer.activities if x['token']!=1]
+            weather=next(x for x in peer.pins if x['token']==4);light=next(x for x in peer.pins if x['token']==5)
+            peer.pins=[weather,light]+[x for x in peer.pins if x['token'] not in (4,5)]
+        peer.publish();select_snapshot(5)
+        ready=capture('second-pin-ready',.1)
+        peer.action_behavior='defer';before=len(peer.actions);button('Select')
+        await_condition(lambda:len(peer.pending_actions)==1 and len(peer.actions)==before+1,'Deferred action did not reach pending')
+        pending_pixels=capture('second-pin-pending',.1);pending_request=peer.pending_actions.pop()
+        peer.complete(pending_request);success=capture('second-pin-success',.1)
+        # Header/sidebar feedback must not erase the second pin icon.
+        pin_icon_roi=(5,194,35,224)
+        baseline=Image.frombytes('RGB',(200,228),ready).crop(pin_icon_roi).tobytes()
+        assert all(Image.frombytes('RGB',(200,228),pixels).crop(pin_icon_roi).tobytes()==baseline for pixels in (pending_pixels,success))
+        time.sleep(2.1);peer.action_behavior='failure';before=len(peer.actions);button('Select')
+        await_condition(lambda:len(peer.actions)==before+1,'Failure action missing');failed=capture('second-pin-failure',.1)
+        assert Image.frombytes('RGB',(200,228),failed).crop(pin_icon_roi).tobytes()==baseline
+        proofs.append({'check':'Pending, success and failure feedback leaves the selected second Snapshot pin visible; values change only on successful synthetic source refresh','passed':True})
+        button('Up');button('Down') # Acknowledge the persistent error before reviewing the reading's own reason.
+        with peer.lock:light['flags']|=16;light['subtitle']='Allow on phone';light['value']='';light['version']+=1
+        peer.publish();capture('reading-permission-action-available',.1)
+        peer.action_behavior='success';before=len(peer.actions);button('Select')
+        await_condition(lambda:len(peer.actions)==before+1,'Reading permission incorrectly blocked independent action')
+        assert peer.actions[-1][key('DB_TOKEN')]==5
+        proofs.append({'check':'Selected permission/unavailable reading is explained while its independently declared pin action remains usable','passed':True})
+        time.sleep(1.1)
+        with peer.lock:
+            music=next(x for x in peer.activities if x['token']==2)
+            peer.activities=[music]+[x for x in peer.activities if x['token']!=2]
+        peer.publish();select_snapshot(2);before=counts();button('Select')
+        await_condition(lambda:len(peer.actions)==before[0]+1,'Ordinary Music tap missing in hold-cancellation check')
+        assert peer.actions[-1][key('DB_ACTION')]==1 and len(peer.opens)==before[1]
+        time.sleep(1.1);before=counts();button('Select',.4);assert counts()==before
+        button('Select',.75);await_condition(lambda:len(peer.opens)==before[1]+1,'Completed Music hold did not open its app')
+        assert len(peer.actions)==before[0] and peer.opens[-1][key('DB_TOKEN')]==2
+        proofs.append({'check':'Ordinary Music tap runs slot1; releasing Select at400ms after destination preview cancels without a tap or launch, while a completed hold opens Music exactly once','passed':True})
+        time.sleep(1.1)
+        with peer.lock:peer.activities=[timer]+[x for x in peer.activities if x['token']!=1]
+        peer.publish();select_snapshot(1);before=counts()
+        send_data_to_qemu(p.transport,QemuButton(state=int(QemuButton.Button.Select)));time.sleep(.28)
+        capture('held-select-app-preview',0)
+        send_data_to_qemu(p.transport,QemuButton(state=0));time.sleep(.2)
+        assert counts()==before
+        button('Select',.75);await_condition(lambda:len(peer.opens)==before[1]+1,'Held Select app destination did not open')
+        assert len(peer.actions)==before[0] and peer.opens[-1][key('DB_TOKEN')]==1
+        select_snapshot(5);before=counts();button('Select',.75);assert counts()==before
+        proofs.append({'check':'Select hold previews the actual Timer destination, launches it exactly once, and adds no tap action; a pin without an app does nothing on hold','passed':True})
+        with peer.lock:
+            find=next(x for x in peer.pins if x['token']==7);find['flags']|=2048
+            peer.pins=[weather,find]+[x for x in peer.pins if x['token'] not in (4,7)]
+        peer.publish();select_snapshot(7);peer.action_behavior='confirm';before=len(peer.actions);button('Select')
+        await_condition(lambda:len(peer.actions)==before+1,'Confirmation request missing');capture('confirmation-target-sidebar',.1)
+        assert not peer.actions[-1].get(key('DB_CONFIRM'))
+        button('Back');assert len(peer.actions)==before+1
+        button('Select');await_condition(lambda:len(peer.actions)==before+2,'Confirmation retry missing')
+        request_id=peer.actions[-1][key('DB_REQUEST')];button('Select')
+        await_condition(lambda:len(peer.actions)==before+3,'Confirmation acceptance missing')
+        assert peer.actions[-1][key('DB_CONFIRM')]==1 and peer.actions[-1][key('DB_REQUEST')]==request_id and peer.actions[-1][key('DB_TOKEN')]==7
+        proofs.append({'check':'Confirmation identifies Find phone and its action; Back cancels and Select confirms only the original bound request','passed':True})
+        peer.action_behavior='success';time.sleep(2.1)
+        for fixture_name,expected in [('generic-controls',1),('generic-sparse-controls',2),('generic-single-control',1)]:
+            snapshot_home()
+            activity=copy.deepcopy(json.loads((ROOT/'tests/fixtures'/(fixture_name+'.json')).read_text())['items'][0])
+            with peer.lock:peer.activities=[activity]
+            peer.publish();select_snapshot(activity['token']);before=len(peer.actions);button('Select')
+            await_condition(lambda:active_mode()==3 and peer.frames[-1]['tokens']==[activity['token']],'Generic controls view missing')
+            assert len(peer.actions)==before
+            capture(fixture_name+'-visible-slots',.1)
+            button('Down');button('Down');button('Select')
+            await_condition(lambda:len(peer.actions)==before+1,'Generic control dispatch missing')
+            assert peer.actions[-1][key('DB_ACTION')]==expected and peer.actions[-1][key('DB_TOKEN')]==activity['token']
+            if fixture_name=='generic-sparse-controls':
+                # Remove focused slot2 on a live update; surviving slot0 owns the next press.
+                activity['controls'][2]='';activity['flags']&=~32768;activity['version']+=1;peer.publish();before=len(peer.actions);button('Select')
+                await_condition(lambda:len(peer.actions)==before+1,'Removed focus did not normalize')
+                assert peer.actions[-1][key('DB_ACTION')]==0
+                capture('sparse-control-focus-removed',.1)
+            button('Back');await_condition(lambda:active_mode()==0,'Controls Back did not restore Snapshot')
+        proofs.append({'check':'Two controls show no invented third row; sparse 0/2 and sole slot1 retain original dispatch indices, stay bounded, and normalize focus after live removal','passed':True})
+        with peer.lock:peer.activities=[];peer.notice=None
+        peer.publish();select_snapshot(7);capture('snapshot-idle-neutral',.1)
+        before=counts();button('Select',.75);assert counts()==before
+        proofs.append({'check':'Snapshot with no activity or notification uses a neutral idle state and safely retains configured pins','passed':True})
+        with peer.lock:peer.activities=saved_activities;peer.pins=saved_pins;peer.notice=saved_notice;peer.action_behavior='success'
+        peer.publish();select_snapshot(1)
     def write_report():
         report={'result':'PASS','version':json.loads((ROOT/'package.json').read_text())['version'],
             'scope':'Real native Emery QEMU UI and AppMessage requests with an explicit fictional protocol peer; no phone JavaScript, live plugins, real app launches or physical watch.',
-            'focusedNotificationsOnly':notifications_only,'candidatePbwSha256':digest(pbw.read_bytes()),'nativeOnlyPbwSha256':digest(native.read_bytes()),
+            'focusedNotificationsOnly':notifications_only,'focusedUxOnly':ux_only,'candidatePbwSha256':digest(pbw.read_bytes()),'nativeOnlyPbwSha256':digest(native.read_bytes()),
             'nativePayloadSha256':{name:digest(data) for name,data in payload.items()},'phoneJavascriptExecuted':False,
             'stateDirectory':str(state_dir),'session':peer.session,'checks':proofs,'captures':captures,
             'requests':[{str(k):v for k,v in request.items()} for request in requests],
@@ -214,6 +330,15 @@ def run(pbw,output,expected_sha256=None,notifications_only=False):
         ToolAppInstaller(p,str(native),quiet=True).install();p.send_packet(AppRunState(data=AppRunStateStart(uuid=target)))
         await_condition(lambda:peer.view is not None and bool(peer.frames),'Native HELLO/frame exchange missing',12)
         primary_roi=(4,29,162,102);notice_roi=(4,108,162,151)
+        guide_pixels=capture('first-use-button-guide',.1);before=counts()
+        button('Down');button('Select',.75);assert counts()==before
+        button('Select');assert counts()==before
+        dismissed=capture('first-use-guide-dismissed',.1)
+        assert guide_pixels!=dismissed
+        proofs.append({'check':'First-use native button guide explains controls; dismissal consumes Select without dispatching an action or app launch','passed':True})
+        restart_without_guide()
+        if ux_only:
+            ux_checks();assert not errors;return write_report()
         if notifications_only:
             # Explicitly fictional launcher binding. Real host destination and
             # SDK execution are independently verified by packaged-runtime QA.
@@ -429,6 +554,7 @@ def run(pbw,output,expected_sha256=None,notifications_only=False):
         before=len(peer.opens);button('Select',.72);await_condition(lambda:len(peer.opens)==before+1,'Fresh runtime controls unavailable after restart')
         assert peer.opens[-1][key('DB_TOKEN')]==1 and peer.opens[-1][key('DB_SESSION')]==peer.session
         proofs.append({'check':'Phone-runtime restart accepts sequence1 in a fresh epoch; stale prior-session frame cannot replace it','passed':True})
+        ux_checks()
         assert not errors
         return write_report()
     finally:
@@ -443,4 +569,7 @@ if __name__=='__main__':
     parser.add_argument('--output',type=Path,default=ROOT/('docs/qa/'+VERSION+'/native'))
     parser.add_argument('--expected-sha256',help='Require these exact candidate bytes before installing')
     parser.add_argument('--notifications-only',action='store_true',help='Focused empty Notifications navigation, expiry and app-open checks')
-    args=parser.parse_args();run(args.pbw,args.output,args.expected_sha256,args.notifications_only)
+    parser.add_argument('--ux-only',action='store_true',help='Focused guide, feedback, hold preview, confirmation, sparse controls and idle UX checks')
+    args=parser.parse_args()
+    if args.notifications_only and args.ux_only:parser.error('Choose at most one focused suite')
+    run(args.pbw,args.output,args.expected_sha256,args.notifications_only,args.ux_only)

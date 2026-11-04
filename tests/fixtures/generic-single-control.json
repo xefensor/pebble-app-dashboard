@@ -1,0 +1,34 @@
+{
+  "session": 1,
+  "request": 1,
+  "sequence": 1,
+  "now": 2000000000,
+  "status": 1,
+  "dark": false,
+  "activitiesTotal": 6,
+  "pinsTotal": 12,
+  "mode": 3,
+  "total": 1,
+  "offset": 0,
+  "items": [
+    {
+      "token": 14,
+      "version": 1,
+      "validUntil": 2000003600,
+      "flags": 16385,
+      "kind": 0,
+      "role": 0,
+      "title": "Doorbell",
+      "subtitle": "",
+      "value": "Visitor",
+      "appLabel": "",
+      "actionLabel": "Actions",
+      "name": "",
+      "controls": [
+        "",
+        "Acknowledge",
+        ""
+      ]
+    }
+  ]
+}

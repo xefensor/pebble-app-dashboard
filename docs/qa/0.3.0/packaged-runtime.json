@@ -1,0 +1,57 @@
+{
+  "result": "PASS",
+  "scope": "Actual PBW phone and settings-plugin JavaScript executed with isolated fictional SDK sources/actions; not a live phone or physical watch test.",
+  "version": "0.3.0",
+  "pbwSha256": "2d6cdb3c318acb6eb50a926def402a2d2048ed0bfdba21e7cf6c58dd3bad4ca1",
+  "phoneSha256": "45e317c4d4510eadf2a163c173db5dce9795286c600dd1c9a394e8ea34a9b916",
+  "proofs": {
+    "realActivitiesProviderAndConsumer": true,
+    "overviewFourItems": true,
+    "overviewOneActivityOneNotificationTwoPins": true,
+    "fullCatalogueRetained": true,
+    "sourceCountdownAnchors": true,
+    "artworkBridge": true,
+    "privateBodyOptOut": true,
+    "musicCommandOnceAndConfirmedReading": true,
+    "musicTapDirectFromSnapshot": true,
+    "musicHoldVerifiedApp": true,
+    "findPhoneExplicitOnly": true,
+    "associatedAppDestination": true,
+    "notificationPrivateWithdrawalRetainsPublicLauncher": true,
+    "emptyNotificationLauncherOpensExactNativeApp": true,
+    "notificationPreviewOptOutKeepsLauncherWithoutSubscription": true,
+    "liveSettingsReload": true,
+    "pagedPins": true,
+    "privateContentNeverPersisted": true,
+    "bundledSettingsPlugin": true,
+    "legacyRepairExplicitOnly": true,
+    "noCommandsAfterCancel": true
+  },
+  "actualEncodedFrameCount": 30,
+  "mockInvocations": [
+    {
+      "plugin": "00000000-0000-0000-0001-000000000003",
+      "action": "set_playing"
+    },
+    {
+      "plugin": "00000000-0000-0000-0001-000000000007",
+      "action": "launch_app"
+    },
+    {
+      "plugin": "00000000-0000-0000-0001-000000000008",
+      "action": "ring"
+    },
+    {
+      "plugin": "00000000-0000-0000-0001-000000000007",
+      "action": "launch_app"
+    },
+    {
+      "plugin": "00000000-0000-0000-0001-000000000007",
+      "action": "launch_app"
+    },
+    {
+      "plugin": "00000000-0000-0000-0001-000000000007",
+      "action": "launch_app"
+    }
+  ]
+}

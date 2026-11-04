@@ -15,13 +15,19 @@ const phone=item(6,{kind:k.phone,role:2,title:'Phone',value:'76%'});
 const find=item(7,{kind:k.find,role:2,validUntil:0,flags:f.ACTION,title:'Find phone',actionLabel:'Ring'});
 const watch=item(8,{kind:k.battery,role:2,title:'Watch',value:'85%'});
 const extras=[item(9,{kind:k.navigation,flags:f.APP,title:'Oak Street',value:'200 m',appLabel:'Directions'}),item(10,{kind:k.workout,flags:f.APP,title:'Walk',value:'1.4 km',appLabel:'Workout'}),item(11,{title:'Podcast',value:'42%'}),item(12,{flags:f.ACTION|f.MEDIA_PREVIOUS|f.MEDIA_TOGGLE,title:'Delivery',value:'18 min',actionLabel:'Actions',controls:['Track parcel','Contact','']})];
+const sparse=item(13,{flags:f.ACTION|f.MEDIA_PREVIOUS|f.MEDIA_NEXT,title:'Delivery',value:'18 min',actionLabel:'Actions',controls:['Track parcel','','Contact']});
+const single=item(14,{flags:f.ACTION|f.MEDIA_TOGGLE,title:'Doorbell',value:'Visitor',actionLabel:'Actions',controls:['','Acknowledge','']});
 const scenes={overview:{mode:0,total:4,offset:0,items:[timer,notice,weather,phone]},
 'overview-empty-notifications':{mode:0,total:4,offset:0,items:[timer,emptyNotice,weather,phone]},
 'overview-idle-notifications':{mode:0,total:3,offset:0,items:[emptyNotice,weather,phone]},
 'overview-notifications-shortcut':{mode:0,total:4,offset:0,items:[timer,{...emptyNotice,subtitle:'Open notifications'},weather,phone]},
 'overview-media':{mode:0,total:4,offset:0,items:[music,notice,weather,phone]},
 'overview-custom':{mode:0,total:4,offset:0,items:[timer,notice,light,find]},
-'overview-long':{mode:0,total:4,offset:0,items:[{...timer,title:'Slow cook',anchor:now+45296},{...notice,title:'Long sender name',subtitle:'Meet at the north entrance after lunch.'}, {...weather,title:'Balcony',value:'−13.5°C'}, {...light,title:'Kitchen light',value:'100%'}]},'activity-list':{mode:1,total:6,offset:0,items:[timer,music,...extras.slice(0,3)]},'pinned-list':{mode:2,total:12,offset:0,items:[weather,light,phone,find,watch]},media:{mode:3,total:1,offset:0,items:[music]},'generic-controls':{mode:3,total:1,offset:0,items:[extras[3]]},empty:{mode:1,total:0,offset:0,items:[]}};
+'overview-long':{mode:0,total:4,offset:0,items:[{...timer,title:'Slow cook',anchor:now+45296},{...notice,title:'Long sender name',subtitle:'Meet at the north entrance after lunch.'}, {...weather,title:'Balcony',value:'−13.5°C'}, {...light,title:'Kitchen light',value:'100%'}]},
+'overview-reading-denied':{mode:0,total:4,offset:0,items:[timer,notice,weather,{...light,flags:f.ACTION|f.UNAVAILABLE,subtitle:'Allow on phone',value:''}]},
+'activity-list':{mode:1,total:6,offset:0,items:[timer,music,...extras.slice(0,3)]},'pinned-list':{mode:2,total:12,offset:0,items:[weather,light,phone,find,watch]},media:{mode:3,total:1,offset:0,items:[music]},'generic-controls':{mode:3,total:1,offset:0,items:[extras[3]]},
+'generic-sparse-controls':{mode:3,total:1,offset:0,items:[sparse]},'generic-single-control':{mode:3,total:1,offset:0,items:[single]},
+'overview-idle':{mode:0,total:2,offset:0,items:[weather,phone]},empty:{mode:1,total:0,offset:0,items:[]}};
 fs.mkdirSync(path.join(root,'tests/fixtures'),{recursive:true});
 for(const [name,scene]of Object.entries(scenes)){
  const snapshot={session:1,request:1,sequence:1,now,status:1,dark:false,activitiesTotal:6,pinsTotal:12,...scene};
