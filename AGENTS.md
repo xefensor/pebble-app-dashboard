@@ -1,6 +1,6 @@
 # Dashboard maintainer notes
 
-This repository contains the native Dashboard development prerelease (0.3.0),
+This repository contains the native Dashboard development prerelease (0.3.1),
 its phone runtime/settings, and earlier browser design studies. Read README.md
 and docs/IMPLEMENTATION.md. Preserve UUID f76f9fc1-2944-4248-bcc5-3eea2af0183b,
 DSH1 message keys and existing published sibling apps.
@@ -11,6 +11,12 @@ DSH1 message keys and existing published sibling apps.
   Combine readings and commands in one Pinned collection: a pin can expose a
   value, a press action, or both. Do not require an activity for a reading/action.
 - Keep Dashboard settings and priority independent of Dynamic and the helper.
+- Plugin discovery belongs to PKJS. The settings plugin has no enumeratePlugins
+  API, and opening config does not start a noncurrent Dashboard PKJS session.
+  Use live PKJS metadata when available and the bounded public declaration cache
+  when closed. Never cache live instances/cards/readings/arguments or use metadata
+  cache entries to authorize execution. Tests must keep the two SDK API surfaces
+  distinct, including readiness and disappearing-target cases.
 - Activities metadata support does not imply an implemented command executor,
   Dashboard catalogue transport or native Timer controls. Check actual APIs.
 - Keep source identity, original validity, privacy and native alarm ownership.

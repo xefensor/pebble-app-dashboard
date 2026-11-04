@@ -5,6 +5,7 @@ var settingsModel = require('./settings');
 var createSources = require('./sources');
 var createCommands = require('./commands');
 var createQueue = require('./queue');
+var metadata = require('./catalogue');
 var F = protocol.flag, M = protocol.mode, S = protocol.status, O = protocol.op;
 function positive(value) { return typeof value === 'number' && isFinite(value) && Math.floor(value) === value && value > 0 && value <= 2147483647; }
 function bounded(value, limit) { return typeof value === 'number' && isFinite(value) && Math.floor(value) === value && value >= 0 && value <= limit; }
@@ -18,7 +19,7 @@ module.exports = function createRuntime(options) {
   var session=0,sequence=0,nextToken=1,view=null,stopped=false,started=false,heartbeat=null,publishTimer=null;
   var identities=Object.create(null),bindings=Object.create(null),feedback=Object.create(null),lastFrameSignature='';
   var queue=createQueue(function(message,success,failure){pebble.sendAppMessage(message,success,failure);});
-  var sources=(options.createSources || createSources)({pebble:pebble,now:now,later:later,cancelLater:cancel,
+  var sources=(options.createSources || createSources)({pebble:pebble,storage:options.storage,now:now,later:later,cancelLater:cancel,
     activitiesHost:options.activitiesHost,onChanged:function(){schedulePublish();}});
   function result(request,value,text) {
     if(!session)return;
@@ -190,7 +191,7 @@ module.exports = function createRuntime(options) {
   return {
     ready:function(){
       if(stopped)return;
-      if(!started)startSources();queue.send(message(O.READY));
+      queue.send(message(O.READY));
     },message:receive,
     configure:function(value){
       var normalized=settingsModel.normalize(value);prefs=settingsModel.save(options.storage,normalized);settingsError=false;
@@ -198,9 +199,9 @@ module.exports = function createRuntime(options) {
     },
     configuration:function(){
       syncSettings();schedulePublish();
-      if(!started&&!stopped)startSources();
-      return sources.configuration().then(function(catalogue){return {settings:copy(prefs),catalogue:catalogue,needsRepair:settingsError};});
+      return metadata.discover(pebble,options.storage).then(function(catalogue){return {settings:copy(prefs),catalogue:catalogue,needsRepair:settingsError};});
     },
+    catalogue:function(){return metadata.discover(pebble,options.storage);},
     reloadSettings:function(){syncSettings();schedulePublish();return copy(prefs);},
     connectionChanged:function(value){sources.connectionChanged(value);schedulePublish();},
     stop:function(){

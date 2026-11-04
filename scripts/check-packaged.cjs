@@ -63,7 +63,11 @@ function frame(){
   assert.equal(at,b.length);return out;
 }
 async function main(){
-  events.ready();send(protocol.op.HELLO,1,{[P.DB_MODE]:0});await settle();
+  events.ready();await settle();assert.equal(subscriptions.length,0,'PKJS startup alone must not subscribe to private source content');
+  let discovered;events.configmessage({data:{type:'catalogue'},respond:value=>discovered=value});await settle();
+  assert.equal(discovered.ok,true);assert.equal(discovered.cached,false);assert.ok(discovered.catalogue.activities.some(provider=>provider.key===TIMER&&provider.name==='Timer'));
+  assert.deepEqual(Array.from(discovered.catalogue.instances),[]);assert.equal(subscriptions.length,0,'Metadata RPC cannot start live source subscriptions');assert.equal(calls.length,0);
+  send(protocol.op.HELLO,1,{[P.DB_MODE]:0});await settle();
   let view=frame();assert.equal(view.mode,0);assert.equal(view.items.length,4);assert.deepEqual(view.items.map(item=>item.role),[0,1,2,2]);assert.equal(view.activitiesTotal,2);assert.equal(view.pinsTotal,4);assert.equal(calls.length,0);
   const tea=view.items.find(item=>item.title==='Tea');assert.ok(tea);assert.equal(tea.clockMode,1);assert.equal(tea.anchor,Math.floor(ms/1000)+151);assert.equal(tea.flags&F.ACTION,0);
   const notice=view.items.find(item=>item.role===1);assert.ok(notice);assert.equal(notice.subtitle,'','Default private body opt-out must hold in packaged script');
@@ -101,6 +105,7 @@ async function main(){
   for(const value of storage.values.values()){assert.ok(!value.includes('Fictional track'));assert.ok(!value.includes('Fictional sender'));assert.ok(!value.includes('Private test text'));}
   let config;const configEvents={};vm.runInNewContext(fs.readFileSync(path.join(packed,'plugin.js'),'utf8'),{Pebble:{registerConfigHandler:fn=>config=fn},localStorage:storage,Promise,console},{filename:'packaged-dashboard-plugin.js',timeout:5000});
   config({type:'load_settings'},value=>configEvents.loaded=value);assert.equal(configEvents.loaded.ok,true);assert.equal(configEvents.loaded.settings.dark,true);
+  config({type:'catalogue'},value=>configEvents.catalogue=value);assert.equal(configEvents.catalogue.ok,true);assert.equal(configEvents.catalogue.cached,true);assert.ok(configEvents.catalogue.catalogue.activities.some(provider=>provider.key===TIMER));assert.equal(configEvents.catalogue.catalogue.instances.length,0);
   storage.setItem('dashboard.settings.v1','unreadable');events.showConfiguration();await settle();
   assert.ok(decodeURIComponent(urls.at(-1)).includes('"needsRepair":true'),'Legacy configuration must visibly permit an explicit repair');
   assert.equal(storage.getItem('dashboard.settings.v1'),'unreadable','Opening a repair page must not save defaults');
@@ -111,7 +116,7 @@ async function main(){
   frames.forEach((message,index)=>fs.writeFileSync(path.join(framesDir,String(index).padStart(4,'0')+'.bin'),Buffer.from(message[P.DB_DATA])));
   const report={result:'PASS',scope:'Actual PBW phone and settings-plugin JavaScript executed with isolated fictional SDK sources/actions; not a live phone or physical watch test.',version:pkg.version,
     pbwSha256:crypto.createHash('sha256').update(fs.readFileSync(pbw)).digest('hex'),phoneSha256:crypto.createHash('sha256').update(fs.readFileSync(path.join(packed,'pebble-js-app.js'))).digest('hex'),
-    proofs:{realActivitiesProviderAndConsumer:true,overviewFourItems:true,overviewOneActivityOneNotificationTwoPins:true,fullCatalogueRetained:true,sourceCountdownAnchors:true,artworkBridge:true,privateBodyOptOut:true,musicCommandOnceAndConfirmedReading:true,musicTapDirectFromSnapshot:true,musicHoldVerifiedApp:true,findPhoneExplicitOnly:true,associatedAppDestination:true,notificationPrivateWithdrawalRetainsPublicLauncher:true,emptyNotificationLauncherOpensExactNativeApp:true,notificationPreviewOptOutKeepsLauncherWithoutSubscription:true,liveSettingsReload:true,pagedPins:true,privateContentNeverPersisted:true,bundledSettingsPlugin:true,legacyRepairExplicitOnly:true,noCommandsAfterCancel:true},
+    proofs:{realActivitiesProviderAndConsumer:true,metadataOnlyPKJSConfiguration:true,inactiveInstalledProviderDiscovery:true,closedWatchSettingsPublicCatalogueCache:true,overviewFourItems:true,overviewOneActivityOneNotificationTwoPins:true,fullCatalogueRetained:true,sourceCountdownAnchors:true,artworkBridge:true,privateBodyOptOut:true,musicCommandOnceAndConfirmedReading:true,musicTapDirectFromSnapshot:true,musicHoldVerifiedApp:true,findPhoneExplicitOnly:true,associatedAppDestination:true,notificationPrivateWithdrawalRetainsPublicLauncher:true,emptyNotificationLauncherOpensExactNativeApp:true,notificationPreviewOptOutKeepsLauncherWithoutSubscription:true,liveSettingsReload:true,pagedPins:true,privateContentNeverPersisted:true,bundledSettingsPlugin:true,legacyRepairExplicitOnly:true,noCommandsAfterCancel:true},
     actualEncodedFrameCount:frames.length,mockInvocations:calls.map(call=>({plugin:call.plugin,action:call.action}))};
   fs.mkdirSync(qaOutput,{recursive:true});fs.writeFileSync(path.join(qaOutput,'packaged-runtime.json'),JSON.stringify(report,null,2)+'\n');
   console.log('Packaged Dashboard runtime: PASS');

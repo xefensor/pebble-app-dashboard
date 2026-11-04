@@ -88,10 +88,20 @@ test('config handler works while native app is closed and never silently repairs
   const saved = await receive({type:'save_settings', settings:value()}); assert.equal(saved.ok, true); assert.deepEqual(saved.settings, model.normalize(value()));
   const bad = await receive({type:'save_settings', settings:{version:99,pins:[]}}); assert.equal(bad.ok, false); assert.deepEqual(model.load(store), saved.settings);
 });
-test('catalogue discovery reads metadata without subscribing or executing actions', async () => {
-  let reads = 0, actions = 0; const receive = handler({enumeratePlugins:() => [{uuid:PLUGIN, name:'Lights', sources:[{category:'home',items:['light'],properties:{brightness:['numericValue']}}],actions:[{name:'set_on',parameters:{type:'object'}}]}], readSource:() => { reads++; }, invokeAction:() => { actions++; }});
-  const result = await receive({type:'catalogue'}); assert.equal(result.ok, true); assert.equal(result.catalogue.plugins[0].actions[0].name, 'set_on'); assert.equal(reads, 0); assert.equal(actions, 0);
-  assert.deepEqual(result.catalogue.activities.filter(item=>item.key==='builtin:music'),[{key:'builtin:music',name:'Music'}]);
+test('closed plugin settings use public metadata cache without an unsupported enumeration API', async () => {
+  const metadata = require('../src/pkjs/catalogue'), store = storage();
+  let enumerations = 0, reads = 0, actions = 0;
+  const receive = handler({enumeratePlugins:() => { enumerations++; throw Error('Plugin runtime does not expose this API'); }, readSource:() => { reads++; }, invokeAction:() => { actions++; }}, store);
+  const missing = await receive({type:'catalogue'});
+  assert.equal(missing.ok, true); assert.equal(missing.cached, true); assert.match(missing.message, /Open Dashboard/);
+  assert.deepEqual(missing.catalogue.activities,[{key:'builtin:music',name:'Music'}]);
+  assert.equal(metadata.save(store, metadata.fromPlugins([{uuid:PLUGIN, name:'Timer provider', sources:[{category:'activity',items:['summary'],properties:require('pebble-activities/summary').SOURCE_PROPERTIES}],actions:[{name:'stop',parameters:{type:'object',properties:{run:{type:'string'}},required:['run']}}]}])),true);
+  const cached = await receive({type:'catalogue'});
+  assert.equal(cached.ok, true); assert.equal(cached.cached, true); assert.match(cached.message, /refresh/);
+  assert.equal(cached.catalogue.plugins[0].actions[0].name, 'stop');
+  assert.deepEqual(cached.catalogue.instances, []);
+  assert.deepEqual(cached.catalogue.activities,[{key:PLUGIN,name:'Timer provider'},{key:'builtin:music',name:'Music'}]);
+  assert.deepEqual([enumerations,reads,actions],[0,0,0]);
 });
 test('Find phone can never be probed while inspecting settings', async () => {
   let reads = 0; const receive = handler({readSource:() => { reads++; throw Error('must not ring'); }});
@@ -106,7 +116,13 @@ test('source inspection returns selector metadata only and verifies exact provid
   const wrong = handler({readSource:() => ({pluginUuid:'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee', instances:[]})});
   assert.equal((await wrong({type:'inspect_source', source:{plugin:PLUGIN, category:'home', item:'light'}})).ok, false);
 });
-test('metadata catalogue failures produce an explicit response', async () => {
-  assert.equal((await handler({enumeratePlugins:() => null})({type:'catalogue'})).ok, false);
-  assert.equal((await handler({enumeratePlugins:() => Promise.reject(Error('denied'))})({type:'catalogue'})).ok, false);
+test('missing and corrupt public catalogue caches explain the supported discovery path', async () => {
+  const metadata = require('../src/pkjs/catalogue'), store = storage();
+  for (const value of ['broken', JSON.stringify({version:99,plugins:[]})]) {
+    store.setItem(metadata.key, value);
+    const response = await handler({},store)({type:'catalogue'});
+    assert.equal(response.ok, true); assert.equal(response.cached, true); assert.match(response.message, /Open Dashboard/);
+    assert.deepEqual(response.catalogue.plugins, []); assert.deepEqual(response.catalogue.activities,[{key:'builtin:music',name:'Music'}]);
+    assert.equal(store.getItem(metadata.key), value, 'reading a bad metadata cache cannot overwrite it');
+  }
 });

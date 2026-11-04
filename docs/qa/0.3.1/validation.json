@@ -1,0 +1,135 @@
+{
+  "result": "PASS",
+  "version": "0.3.1",
+  "recordedAtUtc": "2026-11-04T17:01:54.966258+00:00",
+  "scope": "Settings discovery fix. Actual Dashboard config handlers run in Chromium/VM with separate supported SDK API surfaces and fictional public metadata. No live phone or physical-watch claim.",
+  "uuid": "f76f9fc1-2944-4248-bcc5-3eea2af0183b",
+  "sdk": "4.33.1",
+  "platform": "emery",
+  "rootCause": "0.3.0 asked its settings plugin for enumeratePlugins, which belongs to PKJS; an over-capable test mock hid the unsupported call. Config pages do not start a noncurrent PKJS runtime.",
+  "changes": [
+    "Live metadata discovery through PKJS configmessage",
+    "Validated bounded public declaration cache for closed-watch settings",
+    "Inactive installed activity providers listed",
+    "Visible discovery instructions, errors and retry",
+    "Current-target checks and bounded fallback preserve drafts after app closure",
+    "Settings metadata requests start no private subscriptions"
+  ],
+  "artifacts": {
+    "dist/Dashboard-0.3.1.pbw": "d513be9def575990ca1f0120d3a0f5bb41c5dd617a843db4129ed63495a6fa2d",
+    "dist/Dashboard-0.3.1-debug.zip": "f3a615af2525b3d80811aec3ce856691bf36aca4a11d60e1b52809efd4a51ab6"
+  },
+  "checks": {
+    "nodeTests": {
+      "result": "PASS",
+      "total": 66,
+      "phone": 42,
+      "protocol": 9,
+      "settings": 15
+    },
+    "nativeModel": {
+      "result": "PASS",
+      "canonicalFixtures": 16,
+      "actualPackagedRuntimeFrames": 30
+    },
+    "settingsBrowser": {
+      "result": "PASS",
+      "checks": 24,
+      "captures": 7,
+      "SDKContexts": "Actual app config handlers with plugin enumeration absent and PKJS enumeration present",
+      "contextCalls": {
+        "enumerations": 5,
+        "reads": 0,
+        "subscriptions": 0,
+        "actions": 0,
+        "appMessages": 0
+      }
+    },
+    "packagedRuntime": "PASS",
+    "packagedArtifact": "PASS",
+    "generatedConfiguration": "PASS",
+    "builtSourceIdentity": "PASS",
+    "nativeCAndResourcesUnchangedFrom": "0.3.0"
+  },
+  "buildSizesBytes": {
+    "nativeFootprint": 32218,
+    "nativeBudget": 131072,
+    "heapSpaceBeforeRuntimeAllocations": 98854,
+    "resources": 64208,
+    "resourceBudget": 262144
+  },
+  "nativeEvidence": {
+    "freshNativeScreenshots": false,
+    "priorVersion": "0.3.0",
+    "unchangedNativeAndResourceSha256": {
+      "src/c/dashboard.c": "983f13c5ae5be461c8eb5f3b9b626f5c8259fbb2241b9cfb8fad608fc1ce856a",
+      "src/c/dashboard.h": "e0f481066e64d49b0607800be57000770acc7956deffff69380d8dc6346bf3c2",
+      "src/c/main.c": "1c2286e1265274ae6aeb450cd95b46ab808f7e76a54cc7f33abda2864e9b73bf",
+      "resources/fonts/Fredoka-Bold-Clock.ttf": "526d2361818275d1f9d1df6ce1835095058b84ec989e50e22f271237cc304000",
+      "resources/fonts/OFL-Fredoka.txt": "5c9e7eee5c6b25f4b05b8d53b2e470ea4962f9ced742d044a98f7d95d1375bab",
+      "resources/fonts/OFL-RobotoCondensed.txt": "0e4cc6ece88573545be2ed25835363662a6182ba4a4c1b5c8feda52add30e8a6",
+      "resources/fonts/RobotoCondensed-Bold.ttf": "6e949e8aa3f6e0b4db88aacafccf0c0e55e708c4564c8f3d145792adbbf80ef6",
+      "resources/images/menu-icon.png": "a9973a33f05a20d63b92d0c1ce3d62c29eb25cba00913c97e3557deefe6e9164"
+    },
+    "note": "Historical 0.3.0 native captures remain labelled as such; no renderer changes in 0.3.1."
+  },
+  "evidenceSha256": {
+    "docs/qa/0.3.1/packaged-runtime.json": "954635f4a23eb2a8e75c753065b457f1c55b5ae0d903bc2320142df441813060",
+    "docs/qa/0.3.1/settings/validation.json": "4cddd539d674844cfefc61b8e233ed104ae4888fa99420d9b0e129302373143f"
+  },
+  "settingsScreenshotsSha256": {
+    "overview-light.png": "a064531f1f946b347dea54c9995fda409849e7f1fe0c3068841c827977d4b783",
+    "pin-editor.png": "b8fc09498d89240380bfd8c8a37e526e30114508ffe83f927f3a63aae7e61c18",
+    "overview-dark-small.png": "f8650471b48236a098d54f8e6bc080442d340dfe14c747797da6a4f0886b7fed",
+    "activities-watch-closed-first-install.png": "d649e407000c6e492c1d559184e014bc6bc6dc17eca657c9383abd45b04ddc60",
+    "activities-live-discovery.png": "ae3caca1df1237c9774a003eed7bd0beb5ce1e034a58a2bbfac2ddf17e8f9516",
+    "activities-watch-closed-cache.png": "938db266bf5c7ce7563f316769b4da2a6fb29a1d3787d5077e112338518fcb1a",
+    "activities-discovery-error.png": "e7abe81d7430f1c0063c2b9684b517da8d3609279637608c8dbdd3382a39dc73"
+  },
+  "builtSourceAndResourceSha256": {
+    "src/c/dashboard.c": "983f13c5ae5be461c8eb5f3b9b626f5c8259fbb2241b9cfb8fad608fc1ce856a",
+    "src/c/dashboard.h": "e0f481066e64d49b0607800be57000770acc7956deffff69380d8dc6346bf3c2",
+    "src/c/main.c": "1c2286e1265274ae6aeb450cd95b46ab808f7e76a54cc7f33abda2864e9b73bf",
+    "src/pkjs/catalogue.js": "ac0607cf23f14384cbc0182305999f5b8a639ec17dd6690391c84c351717101a",
+    "src/pkjs/commands.js": "6e367a6b1158e0fc35eb9d18585caafa6760de85b89494a0d4bbef8ed4977076",
+    "src/pkjs/index.js": "1c41aa315657233b86839d75d01fbfbd65ae8b40df9f5495b646d4cb43b16eb4",
+    "src/pkjs/protocol.js": "b3c6f4459e318e9cb0fa49bd42f7c049e11d66eb3a6c115066beb946acb2377e",
+    "src/pkjs/queue.js": "fad9a9b92949ec72a7bdfdbe99973f38a6ce38bf791cbcf19840f43b222ad53e",
+    "src/pkjs/runtime.js": "ac7f414bd5b2220586e2b7232096ab5ed0f45010a87f3071618c50e2e777278b",
+    "src/pkjs/settings-page.js": "5aac6f58d65149d53097ed6f3b5b4d406c6d9f740c01dc14d2442942251746af",
+    "src/pkjs/settings.js": "0ee90d5380b2c8be2560510064a579f7c505a817ef020b563cb7eb96a6337d07",
+    "src/pkjs/sources.js": "cae392a2537ced274d2a7ac11e5272d3511432d7ce4655774b81d6de3539b4fe",
+    "src/plugin/index.js": "a7baf3dd1984c0a1f3b0197035234600809c2d1052aeb68560ef182e5a59431e",
+    "resources/fonts/Fredoka-Bold-Clock.ttf": "526d2361818275d1f9d1df6ce1835095058b84ec989e50e22f271237cc304000",
+    "resources/fonts/OFL-Fredoka.txt": "5c9e7eee5c6b25f4b05b8d53b2e470ea4962f9ced742d044a98f7d95d1375bab",
+    "resources/fonts/OFL-RobotoCondensed.txt": "0e4cc6ece88573545be2ed25835363662a6182ba4a4c1b5c8feda52add30e8a6",
+    "resources/fonts/RobotoCondensed-Bold.ttf": "6e949e8aa3f6e0b4db88aacafccf0c0e55e708c4564c8f3d145792adbbf80ef6",
+    "resources/images/menu-icon.png": "a9973a33f05a20d63b92d0c1ce3d62c29eb25cba00913c97e3557deefe6e9164"
+  },
+  "buildInputsSha256": {
+    "package.json": "9a8f7c97503c24e0252d7d11e2fcb62cd37446aebf854c4e6b15f7d0084f9529",
+    "package-lock.json": "755edf3895fb0267c3b5d97e5f5e3b12d694063508f3d5a7980738d3df1c2435",
+    "wscript": "528d722ae2e0df186ecbd5008b0f8ceceafca4239188275abe78c9433ee308aa",
+    "config.html": "245a5e49af79f652201baee10fd027b9a5069cc5c98dd10f4b3fb223bed83741",
+    "scripts/build.py": "983be84667125a40ca8be9c94e2b5664bcf514bbad2c3ef2151619e95d1f8942",
+    "scripts/bundle-plugin.py": "e0f47b6bdaba2776d69b0f1ce76c94ea419d6b7fd61b1b70f26c3b9b9b2e2038",
+    "vendor/ACTIVITIES.json": "58ebd0ec2f43b8f09732b3a0475c0c8ff7793a45490ed7b123d38f2b1fc97718",
+    "vendor/pebble-activities-0.4.2.tgz": "a182681ad59f258bb9a7f865839d59ed8cf76a8a54cdd03264b52a7577ad1ec3"
+  },
+  "publicMetadataCache": {
+    "key": "dashboard.catalogue.v1",
+    "maxUtf8Bytes": 262144,
+    "liveInstancesOrPrivateContent": false,
+    "usedForExecutionAuthorization": false
+  },
+  "remainingDeviceValidation": [
+    "Fresh-install discovery after opening Dashboard once",
+    "Live phone settings while opening/closing the watchapp"
+  ],
+  "previousArtifactsPreserved": [
+    "0.1.0",
+    "0.2.0",
+    "0.2.1",
+    "0.3.0"
+  ]
+}

@@ -8,6 +8,8 @@ function behavior(initial, makeModel) {
   var catalogue = initial.catalogue || {plugins:[], instances:[], activities:[]}, bridgeReady = false, pkjsReady = false;
   var channels = {}, editing = null, inspectVersion = 0, sourceEntries = [], actionEntries = [], argumentFields = [];
   var legacy = initial.mode === 'legacy';
+  var cataloguePhase = legacy ? catalogue.error ? 'error' : 'ready' : 'waiting';
+  var catalogueMessage = '', bridgeTimer = null, catalogueRefresh = 0, catalogueTargetTimer = null;
   function clone(value) { return JSON.parse(JSON.stringify(value)); }
   function say(value, error) { $('status').textContent = value; $('status').className = error ? 'status error' : 'status'; }
   function meta(value, fallback) { return typeof value === 'string' && value ? value : fallback || ''; }
@@ -38,14 +40,14 @@ function behavior(initial, makeModel) {
     renderPins(); renderActivities(); controls();
     say(repairing ? 'Saved settings were unreadable. Review these defaults before explicitly saving.' : 'No changes to save.', repairing);
   }
-  function request(payload, complete, failure, channel) {
+  function request(payload, complete, failure, channel, target) {
     channel = channel || 'settings';
     var slot = channels[channel] || (channels[channel] = {id:0, timer:null}), id = ++slot.id;
     if (slot.timer !== null) clearTimeout(slot.timer);
     slot.timer = setTimeout(function() { if (slot.id === id) { slot.id++; slot.timer = null; failure(); } }, 7000);
     function done(fn, response) { if (slot.id !== id) return; slot.id++; clearTimeout(slot.timer); slot.timer = null; fn(response); }
     try {
-      var result = Pebble.sendMessage('plugin', payload);
+      var result = Pebble.sendMessage(target || 'plugin', payload);
       if (!result || typeof result.then !== 'function') { done(failure); return; }
       result.then(function(response) { done(complete, response); }, function() { done(failure); });
     } catch (error) { done(failure); }
@@ -53,7 +55,11 @@ function behavior(initial, makeModel) {
   function loadFailed() { phase = 'load-error'; loaded = false; controls(); say('Could not load saved settings. Retry before editing.', true); }
   function load() {
     phase = 'loading'; loaded = false; editing = null; controls(); say('Loading settings…');
-    if (!bridgeReady) return;
+    if (!bridgeReady) {
+      if (bridgeTimer !== null) clearTimeout(bridgeTimer);
+      bridgeTimer = setTimeout(function() { bridgeTimer = null; loadFailed(); catalogueFailed('Pebble did not connect to the settings plugin. Reopen this page from Pebble.'); }, 7000);
+      return;
+    }
     request({type:'load_settings'}, function(response) {
       try { if (!response || response.ok !== true) throw Error(); apply(response.settings, response.needsRepair); }
       catch (error) { loadFailed(); }
@@ -92,18 +98,47 @@ function behavior(initial, makeModel) {
   }
   function refreshCatalogue() {
     if (legacy || !bridgeReady) return;
+    var refresh = ++catalogueRefresh, chosen = false;
+    if (catalogueTargetTimer !== null) clearTimeout(catalogueTargetTimer);
+    catalogueTargetTimer = null;
+    cataloguePhase = 'loading'; catalogueMessage = ''; renderActivities(); controls();
     $('catalogue-status').textContent = 'Loading available plugins…';
-    request({type:'catalogue'}, function(response) {
-      if (!response || !response.ok || !response.catalogue) { catalogueFailed(); return; }
-      catalogue = response.catalogue; renderActivities(); controls();
-      $('catalogue-status').textContent = 'Choose from ' + (catalogue.plugins || []).length + ' installed plugins. Saved unavailable bindings are kept.';
-      // A delayed catalogue reply must not replace fields being edited. The
-      // next explicit editor open picks up the refreshed metadata.
-      if (editing !== null) $('inspect-status').textContent = 'Available plugins updated. Reopen this item to use the refreshed choices.';
-      else { sourceEntries = collectSources(); actionEntries = collectActions(); }
-    }, catalogueFailed, 'catalogue');
+    function fetch(target, fallback) {
+      if (refresh !== catalogueRefresh) return;
+      request({type:'catalogue'}, function(response) {
+        if (refresh !== catalogueRefresh) return;
+        if (!response || response.ok !== true || !response.catalogue || !Array.isArray(response.catalogue.plugins) || !Array.isArray(response.catalogue.activities)) {
+          if (target === 'pkjs' && (!response || response.ok !== false)) { fetch('plugin', true); return; }
+          catalogueFailed(response && response.message); return;
+        }
+        catalogue = response.catalogue; cataloguePhase = response.cached ? 'cached' : 'ready'; catalogueMessage = meta(response.message, '');
+        if (fallback) catalogueMessage = 'Live discovery is unavailable. ' + (catalogueMessage || 'Open Dashboard on your watch to refresh installed plugins.');
+        renderActivities(); controls();
+        $('catalogue-status').textContent = response.cached ? catalogueMessage || 'Saved plugin metadata. Open Dashboard on your watch to refresh installed plugins.' :
+          'Choose from ' + (catalogue.plugins || []).length + ' installed plugins. Saved unavailable bindings are kept.';
+        // A delayed catalogue reply must not replace fields being edited. The
+        // next explicit editor open picks up the refreshed metadata.
+        if (editing !== null) $('inspect-status').textContent = 'Available plugins updated. Reopen this item to use the refreshed choices.';
+        else { sourceEntries = collectSources(); actionEntries = collectActions(); }
+      }, function() { if (refresh !== catalogueRefresh) return; if (target === 'pkjs') fetch('plugin', true); else catalogueFailed(); }, 'catalogue', target);
+    }
+    function choose(target) {
+      if (chosen || refresh !== catalogueRefresh) return;
+      chosen = true; clearTimeout(catalogueTargetTimer); catalogueTargetTimer = null; fetch(target);
+    }
+    if (typeof Pebble.targets === 'function') {
+      catalogueTargetTimer = setTimeout(function() { choose(pkjsReady ? 'pkjs' : 'plugin'); }, 7000);
+      try { Promise.resolve(Pebble.targets()).then(function(targets) {
+        choose(Array.isArray(targets) ? targets.some(function(target) { return target && target.id === 'pkjs'; }) ? 'pkjs' : 'plugin' : pkjsReady ? 'pkjs' : 'plugin');
+      }, function() { choose(pkjsReady ? 'pkjs' : 'plugin'); }); }
+      catch (error) { choose(pkjsReady ? 'pkjs' : 'plugin'); }
+    } else choose(pkjsReady ? 'pkjs' : 'plugin');
   }
-  function catalogueFailed() { $('catalogue-status').textContent = 'Plugin discovery failed. Your saved items are kept. Retry discovery when permissions are available.'; }
+  function catalogueFailed(message) {
+    cataloguePhase = 'error'; catalogueMessage = meta(message, 'Plugin discovery failed. Check plugin access in Pebble, then retry.').slice(0, 180);
+    $('catalogue-status').textContent = catalogueMessage + ' Your saved items are kept.';
+    renderActivities(); controls();
+  }
   function summary(pin) {
     var parts = [];
     if (pin.reading) parts.push(pin.reading.category === 'watch-local' ? 'Watch battery' : pin.reading.category + '/' + pin.reading.item + ' · ' + pin.reading.property);
@@ -136,7 +171,7 @@ function behavior(initial, makeModel) {
     $('pins-empty').hidden = !!draft.pins.length;
   }
   function activityList() {
-    var known = {};
+    var known = {'builtin:music':{key:'builtin:music', name:'Music'}};
     (catalogue.activities || []).forEach(function(item) { if (item && typeof item.key === 'string') known[item.key] = {key:item.key, name:meta(item.name, item.key)}; });
     var keys = (draft ? draft.activityOrder : []).slice();
     if (draft) draft.disabledActivities.forEach(function(key) { if (keys.indexOf(key) < 0) keys.push(key); });
@@ -144,6 +179,15 @@ function behavior(initial, makeModel) {
     return keys.map(function(key) { return known[key] || {key:key, name:'Unavailable activity (' + key + ')'}; });
   }
   function renderActivities() {
+    var status = $('activities-status'), retry = $('retry-activities');
+    status.className = cataloguePhase === 'error' ? 'hint error' : 'hint';
+    status.textContent = cataloguePhase === 'waiting' ? 'Connecting to Pebble to discover installed activity providers…' :
+      cataloguePhase === 'loading' ? 'Loading installed activity providers…' :
+      cataloguePhase === 'error' ? catalogueMessage || catalogue.error || 'Could not discover installed activity providers. Music and your saved choices are still shown.' :
+      cataloguePhase === 'cached' ? catalogueMessage || 'Saved provider list. Open Dashboard on your watch to refresh installed plugins, then check again.' :
+      'Installed activity providers are listed even when no activity is running.';
+    retry.hidden = legacy || cataloguePhase !== 'error' && cataloguePhase !== 'cached'; retry.disabled = pending();
+    retry.textContent = cataloguePhase === 'cached' ? 'Check again' : 'Retry activity discovery';
     var target = $('activities'); target.textContent = ''; if (!draft) return;
     var activities = activityList(); $('activities-empty').hidden = !!activities.length;
     activities.forEach(function(activity, index) {
@@ -313,7 +357,7 @@ function behavior(initial, makeModel) {
       renderInstances(); $('inspect-status').textContent = response.instances.length ? 'Instances loaded. Choose the item you want.' : 'No current instances. The saved binding is kept.';
     }, function() { if (editing && inspectVersion === version) $('inspect-status').textContent = 'Instances could not be loaded. Saved choices are kept.'; }, 'inspect');
   };
-  $('refresh-catalogue').onclick = refreshCatalogue; $('retry').onclick = load;
+  $('refresh-catalogue').onclick = refreshCatalogue; $('retry-activities').onclick = refreshCatalogue; $('retry').onclick = load;
   $('discard').onclick = function() {
     if (legacy) { location.href = 'pebblejs://close#'; return; }
     if (uncertain) { load(); return; }
@@ -350,12 +394,11 @@ function behavior(initial, makeModel) {
   model.icons.forEach(function(icon) { option($('icon'), icon, icon.charAt(0).toUpperCase() + icon.slice(1)); });
   if (legacy) { sourceEntries = collectSources(); actionEntries = collectActions(); try { apply(initial.settings, initial.needsRepair); } catch (error) { loadFailed(); } $('catalogue-status').textContent = catalogue.error || 'Installed sources and saved bindings are shown below.'; }
   else {
-    draft = model.defaults(); controls();
-    var bridgeTimer = setTimeout(function() { if (!bridgeReady) loadFailed(); }, 7000);
+    draft = model.defaults(); renderActivities(); load();
     if (typeof Pebble !== 'undefined' && typeof Pebble.addEventListener === 'function') Pebble.addEventListener('ready', function(event) {
-      if (event && event.target === 'pkjs') { pkjsReady = true; return; }
+      if (event && event.target === 'pkjs') { pkjsReady = true; if (bridgeReady) refreshCatalogue(); return; }
       if (event && event.target && event.target !== 'plugin' || bridgeReady) return;
-      bridgeReady = true; clearTimeout(bridgeTimer); load();
+      bridgeReady = true; clearTimeout(bridgeTimer); bridgeTimer = null; load();
     });
   }
   measureFooter();
@@ -376,7 +419,7 @@ function render(initial) {
     '<label>Tap Select<select id="action" data-edit></select></label><div id="action-fields"><label>Action label<input id="action-label" type="text" maxlength="32" data-edit></label><p id="arguments-note" class="hint"></p><p id="automatic-args" class="hint" hidden>The selected item and its next on/off state are filled automatically from this reading when you press Select.</p><div id="arguments"></div><details id="args-json-wrap"><summary>Advanced arguments</summary><p class="hint">Optional extra arguments, as a JSON object. Declared fields above take precedence; automatic toggle fields always come from the selected reading.</p><label>Arguments<textarea id="args-json" rows="4" spellcheck="false" data-edit>{}</textarea></label></details><label>Toggle an on/off reading<select id="toggle" data-edit></select></label><p class="hint">A toggle uses the source’s actual on/off state. Brightness is never treated as an on/off state.</p><label class="inline"><input id="confirm-action" type="checkbox" data-edit><span>Confirm before running this action</span></label></div>',
     '<details><summary>Associated watch app</summary><label class="inline"><input id="has-app" type="checkbox" data-edit><span>Hold Select to open an app</span></label><div id="app-fields"><label>App name<input id="app-label" type="text" maxlength="32" data-edit></label><label>Watchapp UUID<input id="app-uuid" type="text" autocomplete="off" spellcheck="false" placeholder="00000000-0000-0000-0000-000000000000" data-edit></label><p class="hint">Use the installed watch app’s UUID. This opens the app itself; the plugin’s phone settings are a separate destination.</p></div></details>',
     '<p id="editor-error" class="error" role="alert"></p><div class="editor-actions"><button id="editor-cancel" type="button">Cancel item</button><button id="editor-save" type="submit" data-edit>Use item</button></div></form></section>',
-    '<section class="card"><h2>Activity priority</h2><p class="hint">The highest-priority available activity appears on Snapshot. Hold Up there to browse all activities. Hide a provider to keep its activities out of Dashboard. Dynamic keeps its own order.</p><ol id="activities" class="items"></ol><p id="activities-empty" class="hint">Compatible activity providers appear here after discovery.</p></section>',
+    '<section class="card"><h2>Activity priority</h2><p class="hint">The highest-priority available activity appears on Snapshot. Hold Up there to browse all activities. Hide a provider to keep its activities out of Dashboard. Dynamic keeps its own order.</p><p id="activities-status" class="hint" role="status" aria-live="polite">Connecting to Pebble…</p><button id="retry-activities" type="button" hidden>Retry activity discovery</button><ol id="activities" class="items"></ol><p id="activities-empty" class="hint">Compatible activity providers appear here after discovery.</p></section>',
     '<details class="card"><summary>Available plugins &amp; help</summary><p id="catalogue-status" class="hint">Waiting for plugin discovery…</p><button id="refresh-catalogue" type="button">Retry discovery</button><p class="hint">Allow the selected source/action permissions in Pebble. Missing providers keep their saved bindings and appear unavailable; they never switch to a different plugin.</p><p class="hint">The watch shows a button guide once on first use. Tap Select on Music to play or pause; hold Select to open the Music app. Other items use their available action on tap or associated app on hold. On Snapshot, hold Up for Activities or Down for Pinned. Within a list, hold Up/Down to scroll. Timer controls are planned separately.</p></details>',
     '</main><footer id="actions"><div class="footer-inner"><p id="status" class="status" role="status" aria-live="polite">Loading settings…</p><div class="actions"><button id="retry" type="button" hidden>Retry loading</button><button id="discard" type="button" disabled>Discard</button><button id="save" type="button" disabled>Save</button></div></div></footer><script>(', behavior.toString(), ')(',
     JSON.stringify(initial).replace(/</g, '\\u003c').replace(/\u2028/g, '\\u2028').replace(/\u2029/g, '\\u2029'), ',(', model.browserFactory.toString(), '));</script></body></html>'

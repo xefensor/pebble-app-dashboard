@@ -1,19 +1,19 @@
 # Dashboard
 
 A stock Pebble watchapp for current activities, the latest available notification
-and pinned readings/actions. **0.3.0 is an Emery development prerelease.**
+and pinned readings/actions. **0.3.1 is an Emery development prerelease.**
 
 The native app, phone runtime and bundled settings page are implemented in
 [xefensor/pebble-app-dashboard](https://github.com/xefensor/pebble-app-dashboard).
 Build and portable/emulator checks are recorded under
-[docs/qa/0.3.0](docs/qa/0.3.0). Real-phone permissions/provider integration and
+[docs/qa/0.3.1](docs/qa/0.3.1). Real-phone permissions/provider integration and
 physical-watch comfort/battery still need device testing. Synthetic SDK/emulator
 fixtures are not evidence of live phone operation.
 
 ## Try the build
 
-Download [Dashboard 0.3.0](https://github.com/xefensor/pebble-app-dashboard/releases/download/v0.3.0/Dashboard-0.3.0.pbw)
-from the [development release](https://github.com/xefensor/pebble-app-dashboard/releases/tag/v0.3.0).
+Download [Dashboard 0.3.1](https://github.com/xefensor/pebble-app-dashboard/releases/download/v0.3.1/Dashboard-0.3.1.pbw)
+from the [development release](https://github.com/xefensor/pebble-app-dashboard/releases/tag/v0.3.1).
 The release also includes source, debug files and checksums. Local builds create
 the same filenames under `dist/`. Install the PBW using the official Pebble phone app with plugins
 enabled. Allow permissions needed by your selected readings and controls. Open
@@ -80,6 +80,14 @@ device/source data supplies the value.
 ## Settings and sources
 
 The bundled phone page works independently of Dashboard's native lifetime.
+Open Dashboard on the watch once to discover installed providers. Live discovery
+runs in its phone-side app code; Pebble does not provide that API to the settings
+plugin or start Dashboard merely because its settings page opens. After discovery,
+the page can use a bounded saved list of public provider declarations while the
+watchapp is closed. It refreshes when Dashboard becomes available and explains
+missing discovery beside the Activity priority list. Inactive compatible providers
+are listed too. Only public declarations are cached, never activity instances,
+readings, message content or action arguments.
 Choose sources/properties and stable instances, add optional actions with typed
 arguments, and reorder pins. Dashboard's activity priority/visibility is separate
 from Dynamic. Saves are explicit; failed loads never silently replace saved

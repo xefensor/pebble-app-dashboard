@@ -27,6 +27,9 @@ Pebble.addEventListener('configmessage',function(event){
   var message=event.message||event.data||event.payload||event;
   try{
     if(typeof message==='string')message=JSON.parse(message);
+    if(message&&message.type==='catalogue'){
+      runtime.catalogue().then(function(value){event.respond({ok:true,catalogue:value,cached:false});},function(){event.respond({ok:false,message:'Could not read installed plugins. Retry discovery.'});});return;
+    }
     if(!message||message.type!=='reload_settings'){event.respond({ok:false});return;}
     var current=settings.load(localStorage);
     if(!current){event.respond({ok:false});return;}

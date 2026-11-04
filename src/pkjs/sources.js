@@ -11,6 +11,7 @@ var F = {ACTION:1,APP:2,MEDIA:4,PRIVATE:8,UNAVAILABLE:16,PAUSED:32,PENDING:64,FA
   NOTIFICATION:1024,CONFIRM:2048,LOCAL_WATCH:4096,MEDIA_PREVIOUS:8192,MEDIA_TOGGLE:16384,MEDIA_NEXT:32768};
 var K = {generic:0,timer:1,media:2,notification:3,weather:4,phone:5,light:6,find:7,workout:8,navigation:9,calendar:10,battery:11,scene:12};
 var protocol = require('./protocol');
+var metadata = require('./catalogue');
 function object(value) { return value && typeof value === 'object' && !Array.isArray(value); }
 function uuid(value) { return typeof value === 'string' && /^[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}$/i.test(value) && !/^0{8}-0{4}-0{4}-0{4}-0{12}$/.test(value); }
 function clean(value, limit) { return typeof value === 'string' ? protocol.text(value.replace(/[\u0000-\u001f\u007f-\u009f]/g, ' ').trim(), limit || 192) : ''; }
@@ -167,7 +168,7 @@ module.exports = function createSources(options) {
     discovery=discovery.then(function (value) {
       if (stopped || run !== generation) return [];
       if (!Array.isArray(value)) { plugins=[];error='INVALID_CATALOGUE';notify();return []; }
-      plugins=value.filter(function (plugin) { return plugin && uuid(plugin.uuid); }).slice(0,128);error='';notify();return plugins;
+      plugins=value.filter(function (plugin) { return plugin && uuid(plugin.uuid); }).slice(0,128);metadata.save(options.storage,metadata.fromPlugins(plugins));error='';notify();return plugins;
     },function (failure) { if (!stopped && run === generation) { plugins=[];error=failure && failure.code || 'PLUGINS_UNAVAILABLE';notify(); }return []; }).then(function (value) {
       if (run === generation) {
         discovery=null;if (discoveryTimer !== null) cancel(discoveryTimer);
@@ -310,8 +311,7 @@ module.exports = function createSources(options) {
   }
   return {start:start,stop:stop,snapshot:snapshot,refreshPaths:refreshPaths,
     connectionChanged:function(value){connected=!!value;if(!connected){Object.keys(groups).forEach(function(key){stopGroup(groups[key]);});if(activities)activities.connectionChanged(false);notify();}else if(settings)start(settings);},
-    configuration:function(){return enumerate().then(function(){return {plugins:clone(plugins),instances:Object.keys(groups).reduce(function(result,key){var group=groups[key];if(!live(group))return result;return result.concat(group.envelope.instances.slice(0,64).map(function(instance){return {plugin:group.envelope.pluginUuid,category:group.category,item:group.item,instanceId:instance.instanceId,name:text(instance.properties&&instance.properties.name),properties:Object.keys(instance.properties||{})};}));},[]),
-      activities:(activities?activities.providers():[]).map(function(provider){return {key:provider.uuid,name:provider.name||'Activity'};}).concat([{key:'builtin:music',name:'Music'}]),error:error};});}
+    configuration:function(){return metadata.discover(pebble);}
   };
 };
 module.exports.text=text;module.exports.boolean=boolean;module.exports.command=command;module.exports.fromActivity=fromActivity;module.exports.essentialValue=essentialValue;

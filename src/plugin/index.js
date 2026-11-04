@@ -1,19 +1,12 @@
 'use strict';
 
 var settings = require('../pkjs/settings');
+var metadata = require('../pkjs/catalogue');
 function safeText(value, max) { return typeof value === 'string' ? value.replace(/[\u0000-\u001f]/g, '').slice(0, max || 128) : ''; }
 function object(value) { return !!value && typeof value === 'object' && !Array.isArray(value); }
 function uuid(value) { return typeof value === 'string' && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(value); }
 function catalogue(plugins) {
-  if (!Array.isArray(plugins)) throw Error('Plugin catalogue is unavailable.');
-  var clean = plugins.slice(0, 128).filter(function(plugin) { return object(plugin) && uuid(plugin.uuid); }).map(function(plugin) {
-    return {uuid:plugin.uuid, name:safeText(plugin.name || plugin.displayName || plugin.uuid, 96),
-      sources:Array.isArray(plugin.sources) ? plugin.sources.slice(0, 64).filter(object) : [],
-      actions:Array.isArray(plugin.actions) ? plugin.actions.slice(0, 64).filter(object) : []};
-  });
-  return {plugins:clean, instances:[], activities:clean.filter(function(plugin) {
-    return plugin.sources.some(function(source) { return source.category === 'activity' && Array.isArray(source.items) && source.items.some(function(item) { return ['summary','live','card','session'].indexOf(item) !== -1; }); });
-  }).map(function(plugin) { return {key:plugin.uuid, name:plugin.name}; }).concat([{key:'builtin:music', name:'Music'}])};
+  return metadata.fromPlugins(plugins);
 }
 function instanceName(instance) {
   var property = instance && instance.properties && instance.properties.name;
@@ -30,13 +23,9 @@ function register(pebble, storage) {
       try { respond({ok:true, settings:settings.save(storage, message.settings)}); }
       catch (error) { respond({ok:false, message:safeText(error && error.message || 'Settings were not saved.', 160)}); }
     } else if (type === 'catalogue') {
-      if (typeof pebble.enumeratePlugins !== 'function') { respond({ok:false, message:'Enable plugins in the Pebble app to choose sources.'}); return; }
-      try {
-        Promise.resolve(pebble.enumeratePlugins()).then(function(plugins) {
-          try { respond({ok:true, catalogue:catalogue(plugins)}); }
-          catch (error) { respond({ok:false, message:'Plugin catalogue is invalid.'}); }
-        }, function() { respond({ok:false, message:'Could not read installed plugins.'}); });
-      } catch (error) { respond({ok:false, message:'Could not read installed plugins.'}); }
+      var saved=metadata.load(storage);
+      respond({ok:true,catalogue:saved||catalogue([]),cached:true,
+        message:saved?'Saved provider list. Open Dashboard on your watch to refresh available plugins.':'Open Dashboard on your watch once to discover installed activity providers.'});
     } else if (type === 'inspect_source') {
       var source = message.source;
       if (!object(source) || typeof source.category !== 'string' || typeof source.item !== 'string' ||

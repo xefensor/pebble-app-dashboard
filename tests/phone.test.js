@@ -7,6 +7,7 @@ const createCommands=require('../src/pkjs/commands');
 const createQueue=require('../src/pkjs/queue');
 const settings=require('../src/pkjs/settings');
 const protocol=require('../src/pkjs/protocol');
+const metadata=require('../src/pkjs/catalogue');
 const {flag:F,MUSIC,FIND,NOTIFICATIONS,MUSIC_APP,NOTIFICATIONS_APP}=sourcesModule.constants;
 const UUID='11111111-2222-4333-8444-555555555555';
 const OTHER='22222222-2222-4333-8444-555555555555';
@@ -61,6 +62,77 @@ function runtimeFixture(prefs=minimal(),plugins=[]){
   runtime.ready();runtime.message(native(pebble,protocol.op.HELLO,55,1));time.advance(0);
   return {time,pebble,storage,runtime,frame:()=>decode(pebble.sent.filter(m=>m[protocol.keys.DB_DATA]).at(-1)[protocol.keys.DB_DATA])};
 }
+
+test('installed activity discovery matches the real SDK declaration shape and pinned consumer without needing active cards',()=>{
+  const api=require('pebble-activities/host'),summary=require('pebble-activities/summary');
+  const providers=['summary','live','card','session'].map((item,index)=>({uuid:'11111111-2222-4333-8444-55555555555'+index,name:'Installed '+item,
+    description:'Public provider',sources:[{category:'activity',items:[item],properties:summary.SOURCE_PROPERTIES,supportsMultiple:true,callerPermissions:[],suggestedRefreshIntervalSec:300}],actions:[]}));
+  const wrong=[plugin(OTHER,'activity','summary'),plugin(UUID,'home','light')];
+  const catalogue=metadata.fromPlugins([...providers,...wrong]);
+  assert.deepEqual(catalogue.activities.filter(item=>item.key!=='builtin:music'),providers.map(plugin=>({key:plugin.uuid,name:plugin.name})));
+  for(const plugin of [...providers,...wrong])assert.equal(catalogue.activities.some(item=>item.key===plugin.uuid),api.createActivities.compatible(plugin,3));
+  assert.deepEqual(catalogue.instances,[]);assert.deepEqual(catalogue.activities.at(-1),{key:'builtin:music',name:'Music'});
+});
+
+test('configuration-only PKJS startup enumerates installed metadata without starting private or side-effecting sources',async()=>{
+  const time=clock(),pebble=sdk([{uuid:UUID,name:'Idle Timer',sources:[{category:'activity',items:['summary'],properties:require('pebble-activities/summary').SOURCE_PROPERTIES}],actions:[]}]);
+  let reads=0;pebble.readSource=()=>{reads++;throw Error('metadata must not read a source');};
+  const values=new Map([['dashboard.settings.v1',JSON.stringify(minimal())]]),storage={getItem:key=>values.get(key)??null,setItem:(key,value)=>values.set(key,value)};
+  const runtime=createRuntime({...time,pebble,storage,activitiesHost:host()});runtime.ready();
+  const catalogue=await runtime.catalogue(),configuration=await runtime.configuration();
+  assert.deepEqual(catalogue.activities[0],{key:UUID,name:'Idle Timer'});assert.deepEqual(configuration.catalogue.activities,catalogue.activities);
+  assert.equal(pebble.subscriptions.length,0);assert.equal(reads,0);assert.equal(pebble.invocations.length,0);assert.equal(time.count(),0);
+  assert.equal(pebble.sent.some(message=>message[protocol.keys.DB_DATA]),false);assert.deepEqual(settings.load(storage),settings.normalize(minimal()));
+  assert.deepEqual(metadata.load(storage).activities,catalogue.activities);runtime.stop();
+});
+
+test('ordinary watch HELLO warms only public metadata for closed-watch plugin settings',async()=>{
+  const declaration={uuid:UUID,name:'Idle Timer',sources:[{category:'activity',items:['summary'],properties:require('pebble-activities/summary').SOURCE_PROPERTIES}],actions:[{name:'stop',parameters:{type:'object',properties:{run:{type:'string'}},required:['run']}}]};
+  const f=runtimeFixture(minimal(),[declaration]);await flush();f.time.advance(0);
+  assert.equal(f.frame().items.filter(item=>item.role===0).length,0,'an installed provider need not have a current activity');
+  f.pebble.emit('notifications','notification',envelope(NOTIFICATIONS,[{instanceId:'private-id',properties:{name:prop('Private sender'),body:prop('Secret body')}}]));
+  const cached=f.storage.getItem(metadata.key);assert.ok(cached);assert.ok(!cached.includes('private-id'));assert.ok(!cached.includes('Private sender'));assert.ok(!cached.includes('Secret body'));
+  f.runtime.stop();let receive;require('../src/plugin').register({registerConfigHandler:fn=>receive=fn},f.storage);
+  let response;receive({type:'catalogue'},value=>response=value);assert.equal(response.ok,true);assert.equal(response.cached,true);assert.deepEqual(response.catalogue.activities[0],{key:UUID,name:'Idle Timer'});
+  assert.deepEqual(response.catalogue.plugins[0].actions[0].parameters.required,['run']);assert.deepEqual(response.catalogue.instances,[]);assert.match(response.message,/Open Dashboard/);
+});
+
+test('actual PKJS configmessage serves metadata and preserves the prior public cache on discovery failure',async()=>{
+  const fs=require('node:fs'),vm=require('node:vm'),requireIndex=require('node:module').createRequire(require.resolve('../src/pkjs/index'));
+  const pebble=sdk([{uuid:UUID,name:'Idle Timer',sources:[{category:'activity',items:['summary'],properties:require('pebble-activities/summary').SOURCE_PROPERTIES}],actions:[]}]),events={};
+  pebble.addEventListener=(name,handler)=>events[name]=handler;
+  const values=new Map(),storage={getItem:key=>values.get(key)??null,setItem:(key,value)=>values.set(key,value)};
+  vm.runInNewContext(fs.readFileSync(require.resolve('../src/pkjs/index'),'utf8'),{Pebble:pebble,localStorage:storage,require:requireIndex});
+  const receive=message=>new Promise(resolve=>events.configmessage({data:message,respond:resolve}));
+  let result=await receive({type:'catalogue'});assert.equal(result.ok,true);assert.equal(result.cached,false);assert.deepEqual(result.catalogue.activities[0],{key:UUID,name:'Idle Timer'});
+  const before=storage.getItem(metadata.key);pebble.enumeratePlugins=()=>Promise.reject(Error('service unavailable'));
+  result=await receive({type:'catalogue'});assert.equal(result.ok,false);assert.match(result.message,/Retry discovery/);assert.equal(storage.getItem(metadata.key),before);
+  assert.equal(pebble.subscriptions.length,0);assert.equal(pebble.invocations.length,0);assert.equal(storage.getItem('dashboard.settings.v1'),null,'discovery cannot write replacement preferences');
+});
+
+test('public catalogue cache strips live fields and invocation arguments, bounds schemas and rejects unreadable oversized caches',()=>{
+  const values=new Map(),storage={getItem:key=>values.get(key)??null,setItem:(key,value)=>values.set(key,value)};
+  const plugin={uuid:UUID,name:'Public provider',instances:[{instanceId:'private-instance'}],privateData:'Secret private content',
+    sources:[{category:'activity',items:['summary'],properties:{schema_version:['numericValue']},envelope:{body:'Secret private content'}}],
+    actions:[{name:'stop',args:{run:'private-run'},parameters:{type:'object',properties:{run:{type:'string',default:'private-default'}},required:['run']}}]};
+  metadata.save(storage,{plugins:[plugin],instances:[{name:'Secret private content'}]});const stored=storage.getItem(metadata.key);
+  for(const value of ['private-instance','Secret private content','private-run','private-default','instances','envelope'])assert.ok(!stored.includes(value));
+  assert.deepEqual(metadata.load(storage).plugins[0].actions[0].parameters.required,['run']);
+  const huge=Array.from({length:128},(_,index)=>({...plugin,uuid:'11111111-2222-4333-8444-'+String(index).padStart(12,'0'),name:'界'.repeat(96),actions:Array.from({length:64},(_,n)=>({name:'action'+n,description:'界'.repeat(384)}))}));
+  assert.equal(metadata.save(storage,{plugins:huge}),true);assert.ok(Buffer.byteLength(storage.getItem(metadata.key),'utf8')<=metadata.limit);assert.equal(metadata.load(storage).activities.length,129,'bounded fallback still preserves every provider identity');
+  storage.setItem(metadata.key,'x'.repeat(metadata.limit+1));assert.equal(metadata.load(storage),null);storage.setItem(metadata.key,'broken');assert.equal(metadata.load(storage),null);
+});
+
+test('oversized or deeply branching action schemas are omitted whole within a bounded traversal',()=>{
+  let visited=0;const leaf={type:'string',description:'Public text'};
+  // Reuse a public schema subtree, so traversing it without an aggregate budget
+  // would expand a modest metadata graph into a much larger intermediate copy.
+  const shared={type:'object',properties:Object.fromEntries(Array.from({length:128},(_,index)=>['field'+index,leaf]))};
+  const broad={type:'object',properties:Object.fromEntries(Array.from({length:128},(_,index)=>['branch'+index,{get type(){visited++;return 'object';},properties:{nested:shared}}]))};
+  const tooMany={type:'object',required:Array.from({length:129},(_,index)=>'required'+index),properties:{}};
+  const catalogue=metadata.fromPlugins([{uuid:UUID,name:'Provider',sources:[],actions:[{name:'broad',parameters:broad},{name:'requirements',parameters:tooMany},{name:'safe',parameters:{type:'object',required:['id'],properties:{id:{type:'string'}}}}]}]);
+  assert.deepEqual(catalogue.plugins[0].actions.map(action=>action.name),['safe']);assert.ok(visited<128,'budget stops before scanning every branch');
+});
 
 test('latest notification is current shade data on first launch, clears withdrawal and permission loss',async()=>{
   const {pebble,source}=sourceFixture(minimal());await flush();

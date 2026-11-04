@@ -1,4 +1,4 @@
-# Dashboard 0.2 implementation contract
+# Dashboard implementation contract
 
 Local stock-SDK Emery app, UUID `f76f9fc1-2944-4248-bcc5-3eea2af0183b`.
 The approved Snapshot and contextual input rules in README.md take precedence
@@ -25,13 +25,17 @@ title,subtitle,value,appLabel,actionLabel,name,controls?,image?}`. All commands/
 and provider identities stay on phone, bound to the displayed token/version.
 
 `runtime.js` exports `createRuntime({pebble,storage,now?,later?,cancelLater?})`
-returning `{ready,message,configure,stop,configuration,reloadSettings,connectionChanged}`.
+returning `{ready,message,configure,stop,configuration,catalogue,reloadSettings,connectionChanged}`.
 `configuration()` returns a Promise of `{settings,catalogue,needsRepair}` for the
 legacy settings page. When `needsRepair` is true, pass no valid initial settings
 to that page so it requires explicit repair instead of presenting saved defaults.
 `configure(settings)` validates and saves preferences then rebinds sources.
 `reloadSettings()` adopts already-saved settings without writing them again;
 `connectionChanged(connected)` updates live connection state.
+`ready()` announces the runtime; source subscriptions start only after native
+HELLO. Both `configuration()` and `catalogue()` discover public metadata without
+starting source subscriptions. Installed compatible providers appear even when
+they have no active cards.
 `src/pkjs/index.js` is root-owned thin event wiring.
 
 `settings.js` exports `defaults()`, `normalize(value)`, `load(storage)`,
@@ -59,13 +63,26 @@ No invented home-light source in production defaults.
 `settings-page.js` exports a function `(settings,catalogue)=>htmlString`.
 Catalogue supplied by runtime: `{plugins:[SDK enumeratePlugins entries],
 instances:[{plugin,category,item,instanceId,name,properties:[names]}],
-activities:[{key,name}],error?}`. The settings page requests `catalogue` and
-`inspect_source` through its plugin bridge; the plugin calls
-`Pebble.enumeratePlugins`/`readSource` and excludes side-effecting Find phone
-reads. The plugin handler also supports `load_settings` -> settings and
+activities:[{key,name}],error?}`. `catalogue.js` sanitizes only public plugin,
+source and action declarations. The page requests live `catalogue` through PKJS;
+the official plugin runtime has no `enumeratePlugins` API. With Dashboard closed,
+the plugin returns a validated cached declaration list and refresh instructions.
+The page handles late readiness and target disappearance without replacing drafts.
+`inspect_source` still uses the plugin's supported `readSource` API and excludes
+side-effecting Find phone reads. The plugin handler also supports `load_settings` -> settings and
 `save_settings` -> settings. Bundled settings bridge
 must use the established official plugin-settings SDK mechanism (see helper),
 with legacy `showConfiguration`/`webviewclosed` as fallback. Do not silently save.
+
+The independent `dashboard.catalogue.v1` cache is at most 256 KiB of UTF-8 JSON,
+with bounded public schemas and no live instances, observations, activity records,
+readings, artwork or invocation arguments. Revalidate it on load. Normal successful
+runtime enumeration warms it; identical writes are skipped. A missing/corrupt cache
+keeps Music available and explains that Dashboard must be opened to discover peers.
+The cache is settings metadata only; all watch display and action bindings continue
+to use fresh source/runtime data. The official `ConfigPageSession` resolves PKJS
+only from the currently matching watchapp session, so settings must not assume a
+background PKJS start or silently claim fresh discovery while reading the cache.
 
 ## AppMessage keys
 
