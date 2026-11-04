@@ -31,13 +31,22 @@ native Notifications, or performs a pin's optional action. Pins without actions
 and summary-only activities do nothing on tap; do not add bare enlarged views.
 Timer has no Dashboard controls yet. Hold Select opens the selected item's
 optional associated app; without a destination it does nothing. Hold Up opens
-all Activities; hold Down opens all Pinned items, independent of selection.
-Back restores the previous selection and useful control focus. Repeating a
-group hold must not nest the same group. Switching groups replaces the list.
-A hold must never also execute a short press or move selection on release.
+all Activities and hold Down opens all Pinned items only from the overview.
+Inside full lists these buttons repeat navigation while held; inside Music they
+keep focus within its bounded controls. Back restores the previous selection.
+An overview hold opens its collection once; continuing that same hold must not
+start scrolling. A release must never add another navigation step or action.
+App hints name the destination, and activity reordering preserves selection and
+Music control focus. Real command integration must report pending/result state
+and only update values from confirmed source state.
 All navigation destinations are simulated intents in this browser prototype.
 Six activities and twelve mixed pins are fictional overflow examples, not a
 capacity decision. Latest notification is distinct from Dynamic's short alert.
+
+Stock PebbleOS reserves held Back for system exit to the launcher. Third-party
+apps cannot install a long/raw/repeating Back handler or shorten that timeout.
+Preserve this behavior; do not simulate a custom watchface-exit hold or globally
+set a successful-action exit reason, which can override app handoff targets.
 
 There is no package manifest, SDK build or installable release artifact yet.
 Do not describe previews as native captures or physically tested behavior.

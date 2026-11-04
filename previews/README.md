@@ -24,10 +24,10 @@ app destination is independent of the tap action.
 
 | Button | Tap | Hold for 600 ms |
 | --- | --- | --- |
-| Up | Previous item/control | All Activities |
+| Up | Previous item/control | Overview: Activities; list: scroll up; Music: move within controls |
 | Select | Useful activity controls; native Notifications; pin action if any | Associated app when available |
-| Down | Next item/control | All Pinned items |
-| Back | Previous screen, retaining selection | Same ordinary Back button |
+| Down | Next item/control | Overview: Pinned; list: scroll down; Music: move within controls |
+| Back | Previous screen, retaining selection | OS reserved; not simulated |
 
 Music opens previous/play/next controls on tap. Summary-only activities and pins
 without actions stay unchanged on tap; no screen opens just to enlarge the same
@@ -36,18 +36,29 @@ and its Select hold records the intent to open Timer. Notifications go directly
 to their native app on tap, without a Dashboard detail. Every command and app
 navigation remains simulated; the browser sends nothing to a phone or watch.
 
-The footer shows the selected tap action (`—` if none), an associated-app hold
-hint when available, and the global Up/Down group shortcuts. Collections contain
+The footer shows the selected tap action (`—` if none), a named associated-app
+hint when available, and contextual Up/Down guidance. Collections contain
 six fictional activities and twelve mixed pins, with at most five rows visible
 and a scrollbar. These are examples, not capacity decisions. In the quiet
 example, hold Up opens an empty Activities list; hold Down still opens Pinned.
 
-Group shortcuts work from any item and from Music controls. Back restores the
-previous selected row, viewport and playback-control focus. Switching between
-Activities and Pinned replaces the current list, preserving its original return
-frame; holding the same group's button again creates no redundant screen.
-Actions in Pinned execute once and stay in the list. No hold also runs its tap
-or moves selection on release.
+Group shortcuts work from any overview item. They open the group once; holding
+the same button through that transition does not also scroll. Release and hold
+again inside the list to scroll, repeating every 140 ms after the initial
+600 ms hold. Scrolling stops at the boundary and immediately on release. Back
+restores the previous selected row, viewport and playback-control focus. Use
+Back to return to Snapshot before opening another collection. Music holds stay
+within its bounded controls. Actions in Pinned execute once and stay in the
+list. No hold also runs its tap or adds another move on release.
+
+The activity-order button preserves the selected occurrence and Music control
+focus across reordering. Real command integration will need pending/result
+feedback and confirmed device values; the prototype's toggle is synchronous.
+
+Held Back remains an OS gesture. Stock PebbleOS exits to the app launcher and
+does not expose a custom long/raw/repeating Back handler to ordinary apps. This
+browser preview only simulates normal Back navigation; it does not claim a
+custom hold-to-watchface capability. See the repository README for the audit.
 
 Keyboard: tap or hold arrows and Enter/Space, Escape returns. W / S / H simulate
 holding Up / Down / Select. Pointer cancellation, focus loss and resets cancel
@@ -83,8 +94,9 @@ Run from the repository root with Chromium installed. The capture script owns
 an isolated temporary browser/profile and closes it afterward. It writes PNGs,
 contact sheets and `validation.json`, including exact preview/font input hashes.
 Checks cover palette and drawing bounds, static idle pixels, button/keyboard
-navigation, pointer/arrow/Enter/Space hold-release suppression, optional app
-destinations, no-op taps, empty collections, section scrolling, Music/Back
-behavior, selection visibility and simulated controls. Exports include
+navigation, pointer/arrow/Enter/Space hold-release suppression, contextual
+hold-to-scroll and release cancellation, optional app destinations, no-op taps,
+empty collections, stable selection under reordering, Music/Back behavior and
+simulated controls. Exports include
 `expansion-overview.png`, `expansion-dark.png` and `expansion-navigation.png`.
 These results describe the browser prototype only.

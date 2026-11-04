@@ -5,16 +5,16 @@
     200,
     228
   ],
-  "captureScriptSha256": "026555d7e42b0bc45b6153e44649a6a50e32b0ecd4a42fb6c08dcf0b89e07e75",
+  "captureScriptSha256": "070af7768499f54bd962201c35440459227c8ef5c5aacf9a245c429a3e8dbc2e",
   "sourceHashes": {
     "assets/fonts/Fredoka-Bold-Clock.ttf": "526d2361818275d1f9d1df6ce1835095058b84ec989e50e22f271237cc304000",
     "assets/fonts/OFL-Fredoka.txt": "5c9e7eee5c6b25f4b05b8d53b2e470ea4962f9ced742d044a98f7d95d1375bab",
     "assets/fonts/OFL-RobotoCondensed.txt": "0e4cc6ece88573545be2ed25835363662a6182ba4a4c1b5c8feda52add30e8a6",
     "assets/fonts/RobotoCondensed-Bold.ttf": "6e949e8aa3f6e0b4db88aacafccf0c0e55e708c4564c8f3d145792adbbf80ef6",
-    "dashboard.js": "23045017ae0c1b00cbc82c3ed5434545950fc920ac41f02a3af35f01751e0033",
-    "index.html": "1c54633ca017980df2f1c13b151381996c88e8e6b2ddc811ae20a65dc270b304",
+    "dashboard.js": "e5bfcf75675194af59664dbbe23a31fa0c84dd02da4ae0f4cb0cf9581163c755",
+    "index.html": "8af1a203a5c2718e15c55eecdbc9e7e360c287130fba461a86e1ec5df178feda",
     "preview.css": "f1beba96902d742eddf445caec919a7daec82bd2ea2c3a1d559f273fde5c4949",
-    "snapshot.html": "5d9f5b35db24eeaa6d65ec3058e1b651fa3b7039ca37a43f25b1b8762accc173"
+    "snapshot.html": "7dfa38e9d7e7be1bedeb7b191e2565c0459cab5ca05065f1bc19ebe7be86ba6e"
   },
   "scenarios": [
     "timer-media",
@@ -280,6 +280,29 @@
       "backRestoresOrigin": true
     }
   ],
+  "stableFocus": [
+    {
+      "layout": "snapshot",
+      "activityReorderUpdatesOrder": true,
+      "selectedOccurrenceRetained": true,
+      "musicControlFocusRetained": true,
+      "backRetainsSource": true
+    },
+    {
+      "layout": "focus",
+      "activityReorderUpdatesOrder": true,
+      "selectedOccurrenceRetained": true,
+      "musicControlFocusRetained": true,
+      "backRetainsSource": true
+    },
+    {
+      "layout": "list",
+      "activityReorderUpdatesOrder": true,
+      "selectedOccurrenceRetained": true,
+      "musicControlFocusRetained": true,
+      "backRetainsSource": true
+    }
+  ],
   "privacy": [
     {
       "layout": "snapshot",
@@ -321,7 +344,7 @@
       "total": 6,
       "viewportLimit": 5,
       "lastEntryReachable": true,
-      "repeatedGroupHoldDoesNotNest": true,
+      "contextualHoldsScrollWithoutSwitchingGroup": true,
       "musicBackRestoresList": true,
       "overviewBackRetainsCellAndViewport": true
     },
@@ -331,15 +354,16 @@
       "total": 12,
       "viewportLimit": 5,
       "lastEntryReachable": true,
-      "repeatedGroupHoldDoesNotNest": true,
+      "contextualHoldsScrollWithoutSwitchingGroup": true,
       "musicBackRestoresList": false,
       "overviewBackRetainsCellAndViewport": true
     },
     {
       "layout": "snapshot",
       "fromMusic": true,
-      "groupSwitchPreservesReturnDepth": true,
-      "backRestoresPlaybackFocus": true
+      "contextualHoldsRetainMusic": true,
+      "oppositeHoldsRestorePlaybackFocus": true,
+      "backRestoresOrigin": true
     },
     {
       "layout": "focus",
@@ -347,7 +371,7 @@
       "total": 6,
       "viewportLimit": 5,
       "lastEntryReachable": true,
-      "repeatedGroupHoldDoesNotNest": true,
+      "contextualHoldsScrollWithoutSwitchingGroup": true,
       "musicBackRestoresList": true,
       "overviewBackRetainsCellAndViewport": true
     },
@@ -357,15 +381,16 @@
       "total": 12,
       "viewportLimit": 5,
       "lastEntryReachable": true,
-      "repeatedGroupHoldDoesNotNest": true,
+      "contextualHoldsScrollWithoutSwitchingGroup": true,
       "musicBackRestoresList": false,
       "overviewBackRetainsCellAndViewport": true
     },
     {
       "layout": "focus",
       "fromMusic": true,
-      "groupSwitchPreservesReturnDepth": true,
-      "backRestoresPlaybackFocus": true
+      "contextualHoldsRetainMusic": true,
+      "oppositeHoldsRestorePlaybackFocus": true,
+      "backRestoresOrigin": true
     },
     {
       "layout": "list",
@@ -373,7 +398,7 @@
       "total": 6,
       "viewportLimit": 5,
       "lastEntryReachable": true,
-      "repeatedGroupHoldDoesNotNest": true,
+      "contextualHoldsScrollWithoutSwitchingGroup": true,
       "musicBackRestoresList": true,
       "overviewBackRetainsCellAndViewport": true
     },
@@ -383,15 +408,16 @@
       "total": 12,
       "viewportLimit": 5,
       "lastEntryReachable": true,
-      "repeatedGroupHoldDoesNotNest": true,
+      "contextualHoldsScrollWithoutSwitchingGroup": true,
       "musicBackRestoresList": false,
       "overviewBackRetainsCellAndViewport": true
     },
     {
       "layout": "list",
       "fromMusic": true,
-      "groupSwitchPreservesReturnDepth": true,
-      "backRestoresPlaybackFocus": true
+      "contextualHoldsRetainMusic": true,
+      "oppositeHoldsRestorePlaybackFocus": true,
+      "backRestoresOrigin": true
     }
   ],
   "notificationNavigation": [
@@ -418,19 +444,22 @@
     {
       "layout": "snapshot",
       "emptyActivitiesSafe": true,
-      "canSwitchToPinned": true,
+      "contextualHoldsStayInEmptyGroup": true,
+      "canReturnAndOpenPinned": true,
       "backRestoresQuietOverview": true
     },
     {
       "layout": "focus",
       "emptyActivitiesSafe": true,
-      "canSwitchToPinned": true,
+      "contextualHoldsStayInEmptyGroup": true,
+      "canReturnAndOpenPinned": true,
       "backRestoresQuietOverview": true
     },
     {
       "layout": "list",
       "emptyActivitiesSafe": true,
-      "canSwitchToPinned": true,
+      "contextualHoldsStayInEmptyGroup": true,
+      "canReturnAndOpenPinned": true,
       "backRestoresQuietOverview": true
     }
   ],
@@ -464,6 +493,38 @@
       "pointerUpAndDownHoldsOpenGroups": true,
       "arrowKeyHoldsOpenGroups": true,
       "releaseNeverMovesSelection": true
+    }
+  ],
+  "repeatNavigation": [
+    {
+      "layout": "snapshot",
+      "sustainedPointerDownReachesLastPin": true,
+      "sustainedArrowUpReachesFirstPin": true,
+      "staysInPinned": true,
+      "releaseStopsRepeat": true,
+      "neverExecutesItemAction": true,
+      "musicHoldsRetainControlContext": true,
+      "backRetainsOrigin": true
+    },
+    {
+      "layout": "focus",
+      "sustainedPointerDownReachesLastPin": true,
+      "sustainedArrowUpReachesFirstPin": true,
+      "staysInPinned": true,
+      "releaseStopsRepeat": true,
+      "neverExecutesItemAction": true,
+      "musicHoldsRetainControlContext": true,
+      "backRetainsOrigin": true
+    },
+    {
+      "layout": "list",
+      "sustainedPointerDownReachesLastPin": true,
+      "sustainedArrowUpReachesFirstPin": true,
+      "staysInPinned": true,
+      "releaseStopsRepeat": true,
+      "neverExecutesItemAction": true,
+      "musicHoldsRetainControlContext": true,
+      "backRetainsOrigin": true
     }
   ],
   "focusedEntrySmoke": {
@@ -696,14 +757,14 @@
           }
         },
         {
-          "source": "Hold: App",
-          "shown": "Hold: App",
+          "source": "Hold: Timer",
+          "shown": "Hold: Timer",
           "size": 12,
           "bounds": {
-            "x": 144.603515625,
+            "x": 135.50390625,
             "y": 204,
-            "width": 47.396484375,
-            "height": 13
+            "width": 56.49609375,
+            "height": 10
           }
         },
         {
@@ -778,8 +839,8 @@
       ],
       "width": 200,
       "height": 228,
-      "bytes": 10076,
-      "sha256": "2bd8ec70e38d35799bc614a79817a87a5f78b45c836eb8dc83ffd5676cdc111f",
+      "bytes": 10095,
+      "sha256": "1c7f6631b19b424200f4411fe43c8c601f37d36beb0531e61d312b77bd51ba43",
       "palette": {
         "opaque": true,
         "quantized": true,
@@ -969,14 +1030,14 @@
           }
         },
         {
-          "source": "Hold: App",
-          "shown": "Hold: App",
+          "source": "Hold: Timer",
+          "shown": "Hold: Timer",
           "size": 12,
           "bounds": {
-            "x": 144.603515625,
+            "x": 135.50390625,
             "y": 204,
-            "width": 47.396484375,
-            "height": 13
+            "width": 56.49609375,
+            "height": 10
           }
         },
         {
@@ -1051,8 +1112,8 @@
       ],
       "width": 200,
       "height": 228,
-      "bytes": 9787,
-      "sha256": "871be660372e8470462f7d4154a90156627714be3b119f6a71d356a7c9dae2e1",
+      "bytes": 9810,
+      "sha256": "9efdf00532e66070647ab2fac7c3b60523f9e0ae3a8522542e52d94a243cc281",
       "palette": {
         "opaque": true,
         "quantized": true,
@@ -1229,14 +1290,14 @@
           }
         },
         {
-          "source": "Hold: App",
-          "shown": "Hold: App",
+          "source": "Hold: Timer",
+          "shown": "Hold: Timer",
           "size": 12,
           "bounds": {
-            "x": 144.603515625,
+            "x": 135.50390625,
             "y": 204,
-            "width": 47.396484375,
-            "height": 13
+            "width": 56.49609375,
+            "height": 10
           }
         },
         {
@@ -1295,8 +1356,8 @@
       ],
       "width": 200,
       "height": 228,
-      "bytes": 9435,
-      "sha256": "3ece03738fc016733741cf648b89f742ec9d9b61103e2a5aeb787aa4c14fce76",
+      "bytes": 9451,
+      "sha256": "2ad659ac874ce9ab1f73bdcc69de59369cd03e029265b6bbefbe1785f5ad02a4",
       "palette": {
         "opaque": true,
         "quantized": true,
@@ -1519,14 +1580,14 @@
           }
         },
         {
-          "source": "Hold: App",
-          "shown": "Hold: App",
+          "source": "Hold: Timer",
+          "shown": "Hold: Timer",
           "size": 12,
           "bounds": {
-            "x": 144.603515625,
+            "x": 135.50390625,
             "y": 204,
-            "width": 47.396484375,
-            "height": 13
+            "width": 56.49609375,
+            "height": 10
           }
         },
         {
@@ -1601,8 +1662,8 @@
       ],
       "width": 200,
       "height": 228,
-      "bytes": 10339,
-      "sha256": "169e7cb438168f004e1956d84e19ffd91688e983409b90e4ec081734b9c5a214",
+      "bytes": 10367,
+      "sha256": "e0aba3e985d68d9c7562767c99c78b06d46e00ea7b51047a23e29e614e24af5c",
       "palette": {
         "opaque": true,
         "quantized": true,
@@ -1792,14 +1853,14 @@
           }
         },
         {
-          "source": "Hold: App",
-          "shown": "Hold: App",
+          "source": "Hold: Timer",
+          "shown": "Hold: Timer",
           "size": 12,
           "bounds": {
-            "x": 144.603515625,
+            "x": 135.50390625,
             "y": 204,
-            "width": 47.396484375,
-            "height": 13
+            "width": 56.49609375,
+            "height": 10
           }
         },
         {
@@ -1874,8 +1935,8 @@
       ],
       "width": 200,
       "height": 228,
-      "bytes": 10246,
-      "sha256": "25369ee0e183000f0cae51ecdecceb7654cfe07cef807f8b2a12ea29082a3238",
+      "bytes": 10274,
+      "sha256": "93c62847f40ac1d1f6564b49d5fe2f98d2d67fb7b83fad3d076e10438b62222f",
       "palette": {
         "opaque": true,
         "quantized": true,
@@ -2052,14 +2113,14 @@
           }
         },
         {
-          "source": "Hold: App",
-          "shown": "Hold: App",
+          "source": "Hold: Timer",
+          "shown": "Hold: Timer",
           "size": 12,
           "bounds": {
-            "x": 144.603515625,
+            "x": 135.50390625,
             "y": 204,
-            "width": 47.396484375,
-            "height": 13
+            "width": 56.49609375,
+            "height": 10
           }
         },
         {
@@ -2118,8 +2179,8 @@
       ],
       "width": 200,
       "height": 228,
-      "bytes": 9681,
-      "sha256": "78f5fc192b13f2eee382ad613718a0dd21309363c76bb7cd9bd8942e8de927ea",
+      "bytes": 9709,
+      "sha256": "e1ab705bb6c477eb9b5b59cd2a928d99a2ccea6003b18446f0ed9a90e77fd53c",
       "palette": {
         "opaque": true,
         "quantized": true,
@@ -2342,14 +2403,14 @@
           }
         },
         {
-          "source": "Hold: App",
-          "shown": "Hold: App",
+          "source": "Hold: Workout",
+          "shown": "Hold: Workout",
           "size": 12,
           "bounds": {
-            "x": 144.603515625,
+            "x": 123.427734375,
             "y": 204,
-            "width": 47.396484375,
-            "height": 13
+            "width": 68.572265625,
+            "height": 10
           }
         },
         {
@@ -2424,8 +2485,8 @@
       ],
       "width": 200,
       "height": 228,
-      "bytes": 10197,
-      "sha256": "42099e361095e1c3e7dd3cbec2127ce98ae9bfdc61522992da6487432143b862",
+      "bytes": 10304,
+      "sha256": "080230e7f7a4347b0643c40ede447c3f135e638e2a134dc0d26b94d47161843f",
       "palette": {
         "opaque": true,
         "quantized": true,
@@ -2615,14 +2676,14 @@
           }
         },
         {
-          "source": "Hold: App",
-          "shown": "Hold: App",
+          "source": "Hold: Workout",
+          "shown": "Hold: Workout",
           "size": 12,
           "bounds": {
-            "x": 144.603515625,
+            "x": 123.427734375,
             "y": 204,
-            "width": 47.396484375,
-            "height": 13
+            "width": 68.572265625,
+            "height": 10
           }
         },
         {
@@ -2697,8 +2758,8 @@
       ],
       "width": 200,
       "height": 228,
-      "bytes": 9879,
-      "sha256": "49ff809f1198c0b851ef61fa751dc03a3479eb7e300055b303161cec45336899",
+      "bytes": 9989,
+      "sha256": "1d088a47e0bd83ca427507d3eeaefead6f4b0ddbeb720f7aca279ef887c79800",
       "palette": {
         "opaque": true,
         "quantized": true,
@@ -2875,14 +2936,14 @@
           }
         },
         {
-          "source": "Hold: App",
-          "shown": "Hold: App",
+          "source": "Hold: Workout",
+          "shown": "Hold: Workout",
           "size": 12,
           "bounds": {
-            "x": 144.603515625,
+            "x": 123.427734375,
             "y": 204,
-            "width": 47.396484375,
-            "height": 13
+            "width": 68.572265625,
+            "height": 10
           }
         },
         {
@@ -2941,8 +3002,8 @@
       ],
       "width": 200,
       "height": 228,
-      "bytes": 9623,
-      "sha256": "5ea5fdbe03326c25c39a225c6141a42702a352b97eed153e154df5015a650f11",
+      "bytes": 9731,
+      "sha256": "1e9eba8832494cf92d37f67712844b776e51cd6f89bcf07d64818fff73404ec7",
       "palette": {
         "opaque": true,
         "quantized": true,
@@ -3165,14 +3226,14 @@
           }
         },
         {
-          "source": "Hold: App",
-          "shown": "Hold: App",
+          "source": "Hold: Music",
+          "shown": "Hold: Music",
           "size": 12,
           "bounds": {
-            "x": 144.603515625,
+            "x": 134.66015625,
             "y": 204,
-            "width": 47.396484375,
-            "height": 13
+            "width": 57.33984375,
+            "height": 10
           }
         },
         {
@@ -3247,8 +3308,8 @@
       ],
       "width": 200,
       "height": 228,
-      "bytes": 10193,
-      "sha256": "24e74af38521204e94ce7283acfa3bff2126ea0479534fe6881858c7d26d920c",
+      "bytes": 10247,
+      "sha256": "5f7d897e6f827a086591e3fd1b74fc047b76b93d94f56d247043322b90c633d3",
       "palette": {
         "opaque": true,
         "quantized": true,
@@ -3438,14 +3499,14 @@
           }
         },
         {
-          "source": "Hold: App",
-          "shown": "Hold: App",
+          "source": "Hold: Music",
+          "shown": "Hold: Music",
           "size": 12,
           "bounds": {
-            "x": 144.603515625,
+            "x": 134.66015625,
             "y": 204,
-            "width": 47.396484375,
-            "height": 13
+            "width": 57.33984375,
+            "height": 10
           }
         },
         {
@@ -3520,8 +3581,8 @@
       ],
       "width": 200,
       "height": 228,
-      "bytes": 9736,
-      "sha256": "77bd5b60c0087b98d7811568777919745a888c48760203bfaecb8528d677e76e",
+      "bytes": 9790,
+      "sha256": "11e3b68c4ab49cb9ac4bdca5848040352bce3fb758887106e0dce3dc3ed639c9",
       "palette": {
         "opaque": true,
         "quantized": true,
@@ -3698,14 +3759,14 @@
           }
         },
         {
-          "source": "Hold: App",
-          "shown": "Hold: App",
+          "source": "Hold: Music",
+          "shown": "Hold: Music",
           "size": 12,
           "bounds": {
-            "x": 144.603515625,
+            "x": 134.66015625,
             "y": 204,
-            "width": 47.396484375,
-            "height": 13
+            "width": 57.33984375,
+            "height": 10
           }
         },
         {
@@ -3764,8 +3825,8 @@
       ],
       "width": 200,
       "height": 228,
-      "bytes": 9579,
-      "sha256": "609e31fc4c4bf150faea6c9b40138575ef8879eefff3dcca6324706634f12f8e",
+      "bytes": 9630,
+      "sha256": "0efe2c4c87804a527067b0b716ca6564c519036beac211abc38d2996b1b02d82",
       "palette": {
         "opaque": true,
         "quantized": true,
@@ -3988,14 +4049,14 @@
           }
         },
         {
-          "source": "Hold: App",
-          "shown": "Hold: App",
+          "source": "Hold: Timer",
+          "shown": "Hold: Timer",
           "size": 12,
           "bounds": {
-            "x": 144.603515625,
+            "x": 135.50390625,
             "y": 204,
-            "width": 47.396484375,
-            "height": 13
+            "width": 56.49609375,
+            "height": 10
           }
         },
         {
@@ -4070,8 +4131,8 @@
       ],
       "width": 200,
       "height": 228,
-      "bytes": 11388,
-      "sha256": "b73273dce395e18ff3f2bb203aabe2f72cd551610165e0a20d9f9207f4759e9a",
+      "bytes": 11407,
+      "sha256": "43683a47e1b26b4b6aae85c0f7649053faa2bea6e335b66ed38d7e96917a7ed8",
       "palette": {
         "opaque": true,
         "quantized": true,
@@ -4261,14 +4322,14 @@
           }
         },
         {
-          "source": "Hold: App",
-          "shown": "Hold: App",
+          "source": "Hold: Timer",
+          "shown": "Hold: Timer",
           "size": 12,
           "bounds": {
-            "x": 144.603515625,
+            "x": 135.50390625,
             "y": 204,
-            "width": 47.396484375,
-            "height": 13
+            "width": 56.49609375,
+            "height": 10
           }
         },
         {
@@ -4343,8 +4404,8 @@
       ],
       "width": 200,
       "height": 228,
-      "bytes": 11566,
-      "sha256": "358db07b7d5e962043c5a987f58d1c1cd10807c93950cdd99ec05921db653651",
+      "bytes": 11587,
+      "sha256": "75ba5a15d63588c305ad94ee93058b4baf05862c6e90007dbefd79d6ede1574e",
       "palette": {
         "opaque": true,
         "quantized": true,
@@ -4521,14 +4582,14 @@
           }
         },
         {
-          "source": "Hold: App",
-          "shown": "Hold: App",
+          "source": "Hold: Timer",
+          "shown": "Hold: Timer",
           "size": 12,
           "bounds": {
-            "x": 144.603515625,
+            "x": 135.50390625,
             "y": 204,
-            "width": 47.396484375,
-            "height": 13
+            "width": 56.49609375,
+            "height": 10
           }
         },
         {
@@ -4587,8 +4648,8 @@
       ],
       "width": 200,
       "height": 228,
-      "bytes": 10563,
-      "sha256": "4b34bb32b141f951ec8b9958acd7c39ecaca0fa1292b6dee442f98e63282ea2f",
+      "bytes": 10580,
+      "sha256": "ca4dcdc527424a632a617d28642c4ed3bafb9012f7116180c1801f853a345583",
       "palette": {
         "opaque": true,
         "quantized": true,
@@ -4753,14 +4814,14 @@
           }
         },
         {
-          "source": "Hold: App",
-          "shown": "Hold: App",
+          "source": "Hold: Weather",
+          "shown": "Hold: Weather",
           "size": 12,
           "bounds": {
-            "x": 144.603515625,
+            "x": 123.9609375,
             "y": 204,
-            "width": 47.396484375,
-            "height": 13
+            "width": 68.0390625,
+            "height": 10
           }
         },
         {
@@ -4811,8 +4872,8 @@
       ],
       "width": 200,
       "height": 228,
-      "bytes": 8752,
-      "sha256": "d830a49363463eb671199c50674793dcecd5248626dda8c30750dab8939412fe",
+      "bytes": 8847,
+      "sha256": "22fe04de6f89354c85a8346e083edf1e58e7ab41581c5d348271ca82cd1aa076",
       "palette": {
         "opaque": true,
         "quantized": true,
@@ -4999,14 +5060,14 @@
           }
         },
         {
-          "source": "Hold: App",
-          "shown": "Hold: App",
+          "source": "Hold: Weather",
+          "shown": "Hold: Weather",
           "size": 12,
           "bounds": {
-            "x": 144.603515625,
+            "x": 123.9609375,
             "y": 204,
-            "width": 47.396484375,
-            "height": 13
+            "width": 68.0390625,
+            "height": 10
           }
         },
         {
@@ -5057,8 +5118,8 @@
       ],
       "width": 200,
       "height": 228,
-      "bytes": 8752,
-      "sha256": "232e70be0c04ed7a36a1c7109e63df173a44ea448d95a6a9e4a0678328ea74e2",
+      "bytes": 8848,
+      "sha256": "3d593dd676dbe7003e1305b7896291b66717be8fd9061972974cd4ec61da16e3",
       "palette": {
         "opaque": true,
         "quantized": true,
@@ -5201,14 +5262,14 @@
           }
         },
         {
-          "source": "Hold: App",
-          "shown": "Hold: App",
+          "source": "Hold: Weather",
+          "shown": "Hold: Weather",
           "size": 12,
           "bounds": {
-            "x": 144.603515625,
+            "x": 123.9609375,
             "y": 204,
-            "width": 47.396484375,
-            "height": 13
+            "width": 68.0390625,
+            "height": 10
           }
         },
         {
@@ -5259,8 +5320,8 @@
       ],
       "width": 200,
       "height": 228,
-      "bytes": 7748,
-      "sha256": "75bbfa98b606d355a2c79bb78603e21948b259f710c9aced7e370d14e88a595d",
+      "bytes": 7846,
+      "sha256": "988957e720a505525df5b6f20250a5a213728391a974e9b75805ff3a5b0da892",
       "palette": {
         "opaque": true,
         "quantized": true,
@@ -5283,7 +5344,7 @@
       "returnDepth": 0,
       "lastNavigation": null,
       "actionCount": 0,
-      "selectedId": "activity-1",
+      "selectedId": "activity-0",
       "visibleIds": [
         "activity-1",
         "activity-0",
@@ -5450,25 +5511,25 @@
           }
         },
         {
-          "source": "Select: Controls",
-          "shown": "Select: Controls",
+          "source": "Select: —",
+          "shown": "Select: —",
           "size": 12,
           "bounds": {
             "x": 8,
             "y": 204,
-            "width": 77.033203125,
+            "width": 44.150390625,
             "height": 10
           }
         },
         {
-          "source": "Hold: App",
-          "shown": "Hold: App",
+          "source": "Hold: Timer",
+          "shown": "Hold: Timer",
           "size": 12,
           "bounds": {
-            "x": 144.603515625,
+            "x": 135.50390625,
             "y": 204,
-            "width": 47.396484375,
-            "height": 13
+            "width": 56.49609375,
+            "height": 10
           }
         },
         {
@@ -5490,7 +5551,7 @@
           "y": 23,
           "width": 192,
           "height": 57,
-          "selected": true
+          "selected": false
         },
         {
           "id": "activity-0",
@@ -5498,7 +5559,7 @@
           "y": 84,
           "width": 192,
           "height": 32,
-          "selected": false
+          "selected": true
         },
         {
           "id": "notification",
@@ -5543,8 +5604,8 @@
       ],
       "width": 200,
       "height": 228,
-      "bytes": 11831,
-      "sha256": "ca7ef389a02c10b7ac1064ba898edd0f845ffc028937120e05bc53b845dd7004",
+      "bytes": 11680,
+      "sha256": "587fb415b115526968b25d5c8130f21e8dad22eec034eb72fe10d7580795ddcb",
       "palette": {
         "opaque": true,
         "quantized": true,
@@ -5767,14 +5828,14 @@
           }
         },
         {
-          "source": "Hold: App",
-          "shown": "Hold: App",
+          "source": "Hold: Timer",
+          "shown": "Hold: Timer",
           "size": 12,
           "bounds": {
-            "x": 144.603515625,
+            "x": 135.50390625,
             "y": 204,
-            "width": 47.396484375,
-            "height": 13
+            "width": 56.49609375,
+            "height": 10
           }
         },
         {
@@ -5849,8 +5910,8 @@
       ],
       "width": 200,
       "height": 228,
-      "bytes": 10056,
-      "sha256": "d730f1f045211ccd98a5c74232d7b6c798e6f05c098b60a812556194ef6e922b",
+      "bytes": 10076,
+      "sha256": "609033b873efa02f10e6e2eae9473519be1cbffc1eab255d7573c1f49b47e575",
       "palette": {
         "opaque": true,
         "quantized": true,
@@ -6040,14 +6101,14 @@
           }
         },
         {
-          "source": "Hold: App",
-          "shown": "Hold: App",
+          "source": "Hold: Timer",
+          "shown": "Hold: Timer",
           "size": 12,
           "bounds": {
-            "x": 144.603515625,
+            "x": 135.50390625,
             "y": 204,
-            "width": 47.396484375,
-            "height": 13
+            "width": 56.49609375,
+            "height": 10
           }
         },
         {
@@ -6122,8 +6183,8 @@
       ],
       "width": 200,
       "height": 228,
-      "bytes": 9879,
-      "sha256": "3c11ec3c2548e74309cd704b7a341dd7ef7fff89293822416a71caabe0286a40",
+      "bytes": 9901,
+      "sha256": "96260333a5056cacdf0919bc9d9ed497641ca8393816ded0c56ae11db2b8b599",
       "palette": {
         "opaque": true,
         "quantized": true,
@@ -6300,14 +6361,14 @@
           }
         },
         {
-          "source": "Hold: App",
-          "shown": "Hold: App",
+          "source": "Hold: Timer",
+          "shown": "Hold: Timer",
           "size": 12,
           "bounds": {
-            "x": 144.603515625,
+            "x": 135.50390625,
             "y": 204,
-            "width": 47.396484375,
-            "height": 13
+            "width": 56.49609375,
+            "height": 10
           }
         },
         {
@@ -6366,8 +6427,8 @@
       ],
       "width": 200,
       "height": 228,
-      "bytes": 9424,
-      "sha256": "2c792a947714517315990a1afc5c5766436ea9e8fd8429d63a8683da71f003d2",
+      "bytes": 9444,
+      "sha256": "205bb68d61d4a8c780b457e7ceb4cdb70591a7d71223989843588093e6c6cb33",
       "palette": {
         "opaque": true,
         "quantized": true,
@@ -6590,14 +6651,14 @@
           }
         },
         {
-          "source": "Hold: App",
-          "shown": "Hold: App",
+          "source": "Hold: Notifications",
+          "shown": "Hold: Notifica…",
           "size": 12,
           "bounds": {
-            "x": 144.603515625,
+            "x": 117.984375,
             "y": 204,
-            "width": 47.396484375,
-            "height": 13
+            "width": 74.015625,
+            "height": 10
           }
         },
         {
@@ -6672,8 +6733,8 @@
       ],
       "width": 200,
       "height": 228,
-      "bytes": 10269,
-      "sha256": "3c5fef62edac4239dbc516034d5d40fe67828299072ec1f170d0ef63da120744",
+      "bytes": 10376,
+      "sha256": "b2b810af6495c149da602f92d4b68c98db3e51ec7759dda9b681428eee5efdcc",
       "palette": {
         "opaque": true,
         "quantized": true,
@@ -7158,14 +7219,14 @@
           }
         },
         {
-          "source": "Hold: App",
-          "shown": "Hold: App",
+          "source": "Hold: Notifications",
+          "shown": "Hold: Notifica…",
           "size": 12,
           "bounds": {
-            "x": 144.603515625,
+            "x": 117.984375,
             "y": 204,
-            "width": 47.396484375,
-            "height": 13
+            "width": 74.015625,
+            "height": 10
           }
         },
         {
@@ -7240,8 +7301,8 @@
       ],
       "width": 200,
       "height": 228,
-      "bytes": 10095,
-      "sha256": "a7973484e94de489e3da79bd3bd094b5167dbaa3809d87f184bc11bb76c3d00a",
+      "bytes": 10205,
+      "sha256": "394a695365cbe943711631aa55b585c7fd45eff11de243795bf4929019ecf006",
       "palette": {
         "opaque": true,
         "quantized": true,
@@ -7680,14 +7741,14 @@
           }
         },
         {
-          "source": "Hold: App",
-          "shown": "Hold: App",
+          "source": "Hold: Notifications",
+          "shown": "Hold: Notifica…",
           "size": 12,
           "bounds": {
-            "x": 144.603515625,
+            "x": 117.984375,
             "y": 204,
-            "width": 47.396484375,
-            "height": 13
+            "width": 74.015625,
+            "height": 10
           }
         },
         {
@@ -7746,8 +7807,8 @@
       ],
       "width": 200,
       "height": 228,
-      "bytes": 9727,
-      "sha256": "1b4317f2e96ca837b1b287cc0f90aaad6cb8c10d6c52b9d93e008e9786d13b6e",
+      "bytes": 9837,
+      "sha256": "3c121869db7bf3fcb4581243665964fa4e3f680f7281fa38602f8d922aaa3956",
       "palette": {
         "opaque": true,
         "quantized": true,
@@ -8159,14 +8220,14 @@
           }
         },
         {
-          "source": "Hold: App",
-          "shown": "Hold: App",
+          "source": "Hold: Timer",
+          "shown": "Hold: Timer",
           "size": 12,
           "bounds": {
-            "x": 144.603515625,
+            "x": 135.50390625,
             "y": 204,
-            "width": 47.396484375,
-            "height": 13
+            "width": 56.49609375,
+            "height": 10
           }
         },
         {
@@ -8241,8 +8302,8 @@
       ],
       "width": 200,
       "height": 228,
-      "bytes": 9787,
-      "sha256": "871be660372e8470462f7d4154a90156627714be3b119f6a71d356a7c9dae2e1",
+      "bytes": 9810,
+      "sha256": "9efdf00532e66070647ab2fac7c3b60523f9e0ae3a8522542e52d94a243cc281",
       "palette": {
         "opaque": true,
         "quantized": true,
@@ -8338,24 +8399,24 @@
           }
         },
         {
-          "source": "Hold: App",
-          "shown": "Hold: App",
+          "source": "Hold: Music",
+          "shown": "Hold: Music",
           "size": 12,
           "bounds": {
-            "x": 144.603515625,
+            "x": 134.66015625,
             "y": 204,
-            "width": 47.396484375,
-            "height": 13
+            "width": 57.33984375,
+            "height": 10
           }
         },
         {
-          "source": "Hold Up: Activities · Down: Pinned",
-          "shown": "Hold Up: Activities · Down: Pinned",
+          "source": "Up / Down: choose control",
+          "shown": "Up / Down: choose control",
           "size": 11,
           "bounds": {
-            "x": 24.7509765625,
+            "x": 42.263427734375,
             "y": 218,
-            "width": 150.498046875,
+            "width": 115.47314453125,
             "height": 10
           }
         }
@@ -8363,8 +8424,8 @@
       "regions": [],
       "width": 200,
       "height": 228,
-      "bytes": 6063,
-      "sha256": "8f02e3caa56adbf44abccade8eb7c3b10d1db7af7580b8f574916be02391b8de",
+      "bytes": 5969,
+      "sha256": "d394525fcab75374487a883caae4ba089bda4e88b8ac721b8f1e15a68314c8b9",
       "palette": {
         "opaque": true,
         "quantized": true,
@@ -8554,14 +8615,14 @@
           }
         },
         {
-          "source": "Hold: App",
-          "shown": "Hold: App",
+          "source": "Hold: Notifications",
+          "shown": "Hold: Notifica…",
           "size": 12,
           "bounds": {
-            "x": 144.603515625,
+            "x": 117.984375,
             "y": 204,
-            "width": 47.396484375,
-            "height": 13
+            "width": 74.015625,
+            "height": 10
           }
         },
         {
@@ -8636,8 +8697,8 @@
       ],
       "width": 200,
       "height": 228,
-      "bytes": 10095,
-      "sha256": "a7973484e94de489e3da79bd3bd094b5167dbaa3809d87f184bc11bb76c3d00a",
+      "bytes": 10205,
+      "sha256": "394a695365cbe943711631aa55b585c7fd45eff11de243795bf4929019ecf006",
       "palette": {
         "opaque": true,
         "quantized": true,
@@ -9122,14 +9183,14 @@
           }
         },
         {
-          "source": "Hold: App",
-          "shown": "Hold: App",
+          "source": "Hold: Weather",
+          "shown": "Hold: Weather",
           "size": 12,
           "bounds": {
-            "x": 144.603515625,
+            "x": 123.9609375,
             "y": 204,
-            "width": 47.396484375,
-            "height": 13
+            "width": 68.0390625,
+            "height": 10
           }
         },
         {
@@ -9204,8 +9265,8 @@
       ],
       "width": 200,
       "height": 228,
-      "bytes": 10042,
-      "sha256": "c50fff857d955c6f757b65db14fcf6e30c38ff011150edbf6647c59cc4f6e7d5",
+      "bytes": 10135,
+      "sha256": "9047bae25f4269f87bbf30ec2790703608189367f67c657093ba01293514349d",
       "palette": {
         "opaque": true,
         "quantized": true,
@@ -9301,24 +9362,24 @@
           }
         },
         {
-          "source": "Hold: App",
-          "shown": "Hold: App",
+          "source": "Hold: Music",
+          "shown": "Hold: Music",
           "size": 12,
           "bounds": {
-            "x": 144.603515625,
+            "x": 134.66015625,
             "y": 204,
-            "width": 47.396484375,
-            "height": 13
+            "width": 57.33984375,
+            "height": 10
           }
         },
         {
-          "source": "Hold Up: Activities · Down: Pinned",
-          "shown": "Hold Up: Activities · Down: Pinned",
+          "source": "Up / Down: choose control",
+          "shown": "Up / Down: choose control",
           "size": 11,
           "bounds": {
-            "x": 24.7509765625,
+            "x": 42.263427734375,
             "y": 218,
-            "width": 150.498046875,
+            "width": 115.47314453125,
             "height": 10
           }
         }
@@ -9326,8 +9387,8 @@
       "regions": [],
       "width": 200,
       "height": 228,
-      "bytes": 6063,
-      "sha256": "8f02e3caa56adbf44abccade8eb7c3b10d1db7af7580b8f574916be02391b8de",
+      "bytes": 5969,
+      "sha256": "d394525fcab75374487a883caae4ba089bda4e88b8ac721b8f1e15a68314c8b9",
       "palette": {
         "opaque": true,
         "quantized": true,
@@ -9504,24 +9565,24 @@
           }
         },
         {
-          "source": "Hold: App",
-          "shown": "Hold: App",
+          "source": "Hold: Timer",
+          "shown": "Hold: Timer",
           "size": 12,
           "bounds": {
-            "x": 144.603515625,
+            "x": 135.50390625,
             "y": 204,
-            "width": 47.396484375,
-            "height": 13
+            "width": 56.49609375,
+            "height": 10
           }
         },
         {
-          "source": "Hold Up: Activities · Down: Pinned",
-          "shown": "Hold Up: Activities · Down: Pinned",
+          "source": "Hold Up / Down to scroll",
+          "shown": "Hold Up / Down to scroll",
           "size": 11,
           "bounds": {
-            "x": 24.7509765625,
+            "x": 46.936279296875,
             "y": 218,
-            "width": 150.498046875,
+            "width": 106.12744140625,
             "height": 10
           }
         }
@@ -9570,8 +9631,8 @@
       ],
       "width": 200,
       "height": 228,
-      "bytes": 8664,
-      "sha256": "a53e0d5a2a0a2dc8bcc3d07a92641082be509a64765712cda16ff2b0ba2774dd",
+      "bytes": 8507,
+      "sha256": "3bcc95fe2b56d4567cde0934bcc3a37630cbaee7daff71c12cb78bdf4275a662",
       "palette": {
         "opaque": true,
         "quantized": true,
@@ -9737,13 +9798,13 @@
           }
         },
         {
-          "source": "Hold Up: Activities · Down: Pinned",
-          "shown": "Hold Up: Activities · Down: Pinned",
+          "source": "Hold Up / Down to scroll",
+          "shown": "Hold Up / Down to scroll",
           "size": 11,
           "bounds": {
-            "x": 24.7509765625,
+            "x": 46.936279296875,
             "y": 218,
-            "width": 150.498046875,
+            "width": 106.12744140625,
             "height": 10
           }
         }
@@ -9792,8 +9853,8 @@
       ],
       "width": 200,
       "height": 228,
-      "bytes": 8402,
-      "sha256": "4c1ffb96cb2e24fed48c6243b6d327a38e07d8a916e1448a026dd673a0544348",
+      "bytes": 8213,
+      "sha256": "bda128c97368e8ee22d4ce9055a44f8301a2a848e339c574633192ea08e7d987",
       "palette": {
         "opaque": true,
         "quantized": true,
@@ -9959,24 +10020,24 @@
           }
         },
         {
-          "source": "Hold: App",
-          "shown": "Hold: App",
+          "source": "Hold: Weather",
+          "shown": "Hold: Weather",
           "size": 12,
           "bounds": {
-            "x": 144.603515625,
+            "x": 123.9609375,
             "y": 204,
-            "width": 47.396484375,
-            "height": 13
+            "width": 68.0390625,
+            "height": 10
           }
         },
         {
-          "source": "Hold Up: Activities · Down: Pinned",
-          "shown": "Hold Up: Activities · Down: Pinned",
+          "source": "Hold Up / Down to scroll",
+          "shown": "Hold Up / Down to scroll",
           "size": 11,
           "bounds": {
-            "x": 24.7509765625,
+            "x": 46.936279296875,
             "y": 218,
-            "width": 150.498046875,
+            "width": 106.12744140625,
             "height": 10
           }
         }
@@ -10025,8 +10086,8 @@
       ],
       "width": 200,
       "height": 228,
-      "bytes": 8410,
-      "sha256": "d472a7541e127466b26cd444eb07729ce56ba6f98e24a9009d36ae0460406109",
+      "bytes": 8328,
+      "sha256": "578eca6e0aefce897e08adde84ad1398bf2c98d70e125c8ae2b2d9e9f3cf4121",
       "palette": {
         "opaque": true,
         "quantized": true,
@@ -10249,14 +10310,14 @@
           }
         },
         {
-          "source": "Hold: App",
-          "shown": "Hold: App",
+          "source": "Hold: Weather",
+          "shown": "Hold: Weather",
           "size": 12,
           "bounds": {
-            "x": 144.603515625,
+            "x": 123.9609375,
             "y": 204,
-            "width": 47.396484375,
-            "height": 13
+            "width": 68.0390625,
+            "height": 10
           }
         },
         {
@@ -10331,8 +10392,8 @@
       ],
       "width": 200,
       "height": 228,
-      "bytes": 10261,
-      "sha256": "775c3588183854f34fa5df87fc595b3bb96307b534a2fd6bec74f7fbadcfd71f",
+      "bytes": 10370,
+      "sha256": "6f3d98fed5938d282dd6b9b3335a136a86625bd65ff294d87c68d73f160607a1",
       "palette": {
         "opaque": true,
         "quantized": true,
@@ -10428,24 +10489,24 @@
           }
         },
         {
-          "source": "Hold: App",
-          "shown": "Hold: App",
+          "source": "Hold: Music",
+          "shown": "Hold: Music",
           "size": 12,
           "bounds": {
-            "x": 144.603515625,
+            "x": 134.66015625,
             "y": 204,
-            "width": 47.396484375,
-            "height": 13
+            "width": 57.33984375,
+            "height": 10
           }
         },
         {
-          "source": "Hold Up: Activities · Down: Pinned",
-          "shown": "Hold Up: Activities · Down: Pinned",
+          "source": "Up / Down: choose control",
+          "shown": "Up / Down: choose control",
           "size": 11,
           "bounds": {
-            "x": 24.7509765625,
+            "x": 42.263427734375,
             "y": 218,
-            "width": 150.498046875,
+            "width": 115.47314453125,
             "height": 10
           }
         }
@@ -10453,8 +10514,8 @@
       "regions": [],
       "width": 200,
       "height": 228,
-      "bytes": 6098,
-      "sha256": "e42c0edcd7b77ef9aa46ead426bd513e1962262eacf10d0db85aa5e5c7661265",
+      "bytes": 6006,
+      "sha256": "97b9104d8ed99046414342ad104f2e3228e94ddfdf305e85eff5d050d48d190b",
       "palette": {
         "opaque": true,
         "quantized": true,
@@ -10631,24 +10692,24 @@
           }
         },
         {
-          "source": "Hold: App",
-          "shown": "Hold: App",
+          "source": "Hold: Timer",
+          "shown": "Hold: Timer",
           "size": 12,
           "bounds": {
-            "x": 144.603515625,
+            "x": 135.50390625,
             "y": 204,
-            "width": 47.396484375,
-            "height": 13
+            "width": 56.49609375,
+            "height": 10
           }
         },
         {
-          "source": "Hold Up: Activities · Down: Pinned",
-          "shown": "Hold Up: Activities · Down: Pinned",
+          "source": "Hold Up / Down to scroll",
+          "shown": "Hold Up / Down to scroll",
           "size": 11,
           "bounds": {
-            "x": 24.7509765625,
+            "x": 46.936279296875,
             "y": 218,
-            "width": 150.498046875,
+            "width": 106.12744140625,
             "height": 10
           }
         }
@@ -10697,8 +10758,8 @@
       ],
       "width": 200,
       "height": 228,
-      "bytes": 8796,
-      "sha256": "3161bee2aa6be765dd5dcb763ef8334685c5a83dda2ab238ae4bd354a535ff9e",
+      "bytes": 8638,
+      "sha256": "992c9651337a5b7010589497024ac781ecb4c667e02605e8b93d86b558f49839",
       "palette": {
         "opaque": true,
         "quantized": true,
@@ -10864,13 +10925,13 @@
           }
         },
         {
-          "source": "Hold Up: Activities · Down: Pinned",
-          "shown": "Hold Up: Activities · Down: Pinned",
+          "source": "Hold Up / Down to scroll",
+          "shown": "Hold Up / Down to scroll",
           "size": 11,
           "bounds": {
-            "x": 24.7509765625,
+            "x": 46.936279296875,
             "y": 218,
-            "width": 150.498046875,
+            "width": 106.12744140625,
             "height": 10
           }
         }
@@ -10919,8 +10980,8 @@
       ],
       "width": 200,
       "height": 228,
-      "bytes": 8656,
-      "sha256": "67eada6f6d82a155b164b7145c8b572e34a0f8a78938b9501ca6e3aca8e4d65f",
+      "bytes": 8473,
+      "sha256": "90fb96fe8575c60a40620d6a082eee5a33d7b8a6950883eb380f12e49c107892",
       "palette": {
         "opaque": true,
         "quantized": true,
@@ -11086,24 +11147,24 @@
           }
         },
         {
-          "source": "Hold: App",
-          "shown": "Hold: App",
+          "source": "Hold: Weather",
+          "shown": "Hold: Weather",
           "size": 12,
           "bounds": {
-            "x": 144.603515625,
+            "x": 123.9609375,
             "y": 204,
-            "width": 47.396484375,
-            "height": 13
+            "width": 68.0390625,
+            "height": 10
           }
         },
         {
-          "source": "Hold Up: Activities · Down: Pinned",
-          "shown": "Hold Up: Activities · Down: Pinned",
+          "source": "Hold Up / Down to scroll",
+          "shown": "Hold Up / Down to scroll",
           "size": 11,
           "bounds": {
-            "x": 24.7509765625,
+            "x": 46.936279296875,
             "y": 218,
-            "width": 150.498046875,
+            "width": 106.12744140625,
             "height": 10
           }
         }
@@ -11152,8 +11213,8 @@
       ],
       "width": 200,
       "height": 228,
-      "bytes": 8630,
-      "sha256": "a6c8e2843af203971351e8fe8863dbeecfd5651eb236e747f97f7bf8c6c5121f",
+      "bytes": 8553,
+      "sha256": "c2455372b74dbf9d0be2e168df70ac90e6c3328b02db0246a3fca1883a5dcf22",
       "palette": {
         "opaque": true,
         "quantized": true,
@@ -11330,24 +11391,24 @@
           }
         },
         {
-          "source": "Hold: App",
-          "shown": "Hold: App",
+          "source": "Hold: Music",
+          "shown": "Hold: Music",
           "size": 12,
           "bounds": {
-            "x": 144.603515625,
+            "x": 134.66015625,
             "y": 204,
-            "width": 47.396484375,
-            "height": 13
+            "width": 57.33984375,
+            "height": 10
           }
         },
         {
-          "source": "Hold Up: Activities · Down: Pinned",
-          "shown": "Hold Up: Activities · Down: Pinned",
+          "source": "Hold Up / Down to scroll",
+          "shown": "Hold Up / Down to scroll",
           "size": 11,
           "bounds": {
-            "x": 24.7509765625,
+            "x": 46.936279296875,
             "y": 218,
-            "width": 150.498046875,
+            "width": 106.12744140625,
             "height": 10
           }
         }
@@ -11396,8 +11457,8 @@
       ],
       "width": 200,
       "height": 228,
-      "bytes": 8865,
-      "sha256": "5c53572ffaa36945af7b577804389ffff8b73df2c1522ec967c1fe723a6d5a33",
+      "bytes": 8736,
+      "sha256": "1487ee8b062842d9abe51abe34a2eb813c08570c1ea015894be8c2ab590c0aeb",
       "palette": {
         "opaque": true,
         "quantized": true,
@@ -11493,24 +11554,24 @@
           }
         },
         {
-          "source": "Hold: App",
-          "shown": "Hold: App",
+          "source": "Hold: Music",
+          "shown": "Hold: Music",
           "size": 12,
           "bounds": {
-            "x": 144.603515625,
+            "x": 134.66015625,
             "y": 204,
-            "width": 47.396484375,
-            "height": 13
+            "width": 57.33984375,
+            "height": 10
           }
         },
         {
-          "source": "Hold Up: Activities · Down: Pinned",
-          "shown": "Hold Up: Activities · Down: Pinned",
+          "source": "Up / Down: choose control",
+          "shown": "Up / Down: choose control",
           "size": 11,
           "bounds": {
-            "x": 24.7509765625,
+            "x": 42.263427734375,
             "y": 218,
-            "width": 150.498046875,
+            "width": 115.47314453125,
             "height": 10
           }
         }
@@ -11518,8 +11579,8 @@
       "regions": [],
       "width": 200,
       "height": 228,
-      "bytes": 6063,
-      "sha256": "8f02e3caa56adbf44abccade8eb7c3b10d1db7af7580b8f574916be02391b8de",
+      "bytes": 5969,
+      "sha256": "d394525fcab75374487a883caae4ba089bda4e88b8ac721b8f1e15a68314c8b9",
       "palette": {
         "opaque": true,
         "quantized": true,
@@ -11696,24 +11757,24 @@
           }
         },
         {
-          "source": "Hold: App",
-          "shown": "Hold: App",
+          "source": "Hold: Music",
+          "shown": "Hold: Music",
           "size": 12,
           "bounds": {
-            "x": 144.603515625,
+            "x": 134.66015625,
             "y": 204,
-            "width": 47.396484375,
-            "height": 13
+            "width": 57.33984375,
+            "height": 10
           }
         },
         {
-          "source": "Hold Up: Activities · Down: Pinned",
-          "shown": "Hold Up: Activities · Down: Pinned",
+          "source": "Hold Up / Down to scroll",
+          "shown": "Hold Up / Down to scroll",
           "size": 11,
           "bounds": {
-            "x": 24.7509765625,
+            "x": 46.936279296875,
             "y": 218,
-            "width": 150.498046875,
+            "width": 106.12744140625,
             "height": 10
           }
         }
@@ -11762,8 +11823,8 @@
       ],
       "width": 200,
       "height": 228,
-      "bytes": 8865,
-      "sha256": "5c53572ffaa36945af7b577804389ffff8b73df2c1522ec967c1fe723a6d5a33",
+      "bytes": 8736,
+      "sha256": "1487ee8b062842d9abe51abe34a2eb813c08570c1ea015894be8c2ab590c0aeb",
       "palette": {
         "opaque": true,
         "quantized": true,
@@ -11986,14 +12047,14 @@
           }
         },
         {
-          "source": "Hold: App",
-          "shown": "Hold: App",
+          "source": "Hold: Notifications",
+          "shown": "Hold: Notifica…",
           "size": 12,
           "bounds": {
-            "x": 144.603515625,
+            "x": 117.984375,
             "y": 204,
-            "width": 47.396484375,
-            "height": 13
+            "width": 74.015625,
+            "height": 10
           }
         },
         {
@@ -12068,8 +12129,8 @@
       ],
       "width": 200,
       "height": 228,
-      "bytes": 10269,
-      "sha256": "3c5fef62edac4239dbc516034d5d40fe67828299072ec1f170d0ef63da120744",
+      "bytes": 10376,
+      "sha256": "b2b810af6495c149da602f92d4b68c98db3e51ec7759dda9b681428eee5efdcc",
       "palette": {
         "opaque": true,
         "quantized": true,
@@ -12083,56 +12144,56 @@
       "title": "overview-light",
       "width": 1312,
       "height": 666,
-      "sha256": "b5e329f28eec2def4cd6b1d0a2d9558464596e3be7a3e6c8b68b14f889156bf0"
+      "sha256": "a8eca104c01c12008dc2d2933129abd317a6b414e1c73818ae5d923c5786dc6a"
     },
     {
       "file": "overview-dark.png",
       "title": "overview-dark",
       "width": 1312,
       "height": 666,
-      "sha256": "c31b6aeead2ef6704bdd078fce3a81052421db2bbbd5b34b42f51a99c6108b58"
+      "sha256": "9ec7cc040e8c5bc9aa6093fed83f25b63ff5770d329b36f2f40faee39c50a47c"
     },
     {
       "file": "alternate-activities.png",
       "title": "alternate-activities",
       "width": 1312,
       "height": 666,
-      "sha256": "a8a503e3af194407b7eef0d921f4b7bc6120d167c3c6c3c1319fcd107d935001"
+      "sha256": "6ee94615867ad4ca19bc4961bd476dcc6b6ae06e765c09e83735409cf9bf1a34"
     },
     {
       "file": "media-first.png",
       "title": "media-first",
       "width": 1312,
       "height": 666,
-      "sha256": "25868184fd1d9c52f1dd6e77482e4bcd2897512d2825c3e8a41336217c538f45"
+      "sha256": "864183c2d0b00b4248e1af7e775a41b12f0bcfae69266d7deeea4a3578c98ee2"
     },
     {
       "file": "detail-overview.png",
       "title": "detail-overview",
       "width": 884,
       "height": 1218,
-      "sha256": "89fda891e8e77e67d6dac002ea5af25d11d33d45135a4f2813138f64f945b686"
+      "sha256": "46998dd1a66c086dbb355fd7e6ea4bfec58c7c99e8eb7a996a3d2147a4bc1123"
     },
     {
       "file": "expansion-overview.png",
       "title": "Snapshot and expanded groups",
       "width": 884,
       "height": 1218,
-      "sha256": "7aa3fae3f19640510dd3695de4b95d8bf6aa1933b1bb3323c5280ad557fa6396"
+      "sha256": "9e83bd497f98d00b06c031ed6230b34b95b58b7207297c8774c384683fe2e57d"
     },
     {
       "file": "expansion-dark.png",
       "title": "Expanded groups in dark",
       "width": 884,
       "height": 1218,
-      "sha256": "ee783761267b68657b4c1af35c6e63effd85b9f679106b15fa96874c93ee668e"
+      "sha256": "1a03bd028402ec67d0f517592e0941e6226213c2c783421c08b602e7292a842f"
     },
     {
       "file": "expansion-navigation.png",
       "title": "Use controls, open apps and return",
       "width": 884,
       "height": 1218,
-      "sha256": "a15e596e3c6777c3e47393559366e83e9908c0bb9f50079b86d5e225d63b0be2"
+      "sha256": "80a0777ea44ac4b9bcadb587ca44b49d10e39597f95b8f152dac1f76f9938272"
     }
   ]
 }

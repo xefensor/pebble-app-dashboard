@@ -61,11 +61,14 @@ The button model is:
   a summary-only activity does nothing; there are no bare enlarged readouts.
 - Hold Select to open the selected item's associated app when a destination is
   available. An action and an app destination are independent optional features.
-- Hold Up to browse all Activities; hold Down to browse all Pinned items.
-  These shortcuts work independently of the selected item, including in Music.
+- On Snapshot, hold Up to browse all Activities; hold Down to browse all Pinned
+  items. Either shortcut works independently of the selected overview item.
+- Inside a full list, hold Up/Down to scroll. Inside Music, Up/Down stays within
+  its playback controls. Release adds no extra step. Back returns to Snapshot
+  before switching collections.
 - Back restores the previous selection, viewport and Music control focus.
-  Switching collection lists replaces the current list; holding its own button
-  again does not add a redundant return frame.
+  Swapping activity order also preserves the selected occurrence and control
+  focus. The footer names the available associated app.
 
 A hold must not also execute its short press or move selection on release.
 The browser records app navigation intents without launching real apps. Six
@@ -76,6 +79,24 @@ real plugin command is implemented by this preview.
 The user also wants Timer Pause/Resume inside Dashboard, deferred until later.
 Until then, tapping its summary does nothing; hold Select opens Timer. This is
 recorded scope, not an implemented Timer command capability.
+
+Real command integration still needs pending/result feedback and confirmed
+source updates; the browser's light toggle is a synchronous simulation.
+
+### Held Back
+
+Stock PebbleOS reserves held Back for system exit to the app launcher, rather
+than directly to the watchface. The public SDK rejects long/raw/repeating Back
+subscriptions. Timer and Open Activity already leave the OS gesture intact;
+Dashboard will do the same. The preview does not invent a custom Back hold.
+See the [official Back-button contract](https://developer.repebble.com/docs/c/User_Interface/Clicks/#about-the-back-button).
+
+The public [App Exit Reason API](https://developer.repebble.com/guides/user-interfaces/app-exit-reason/)
+can return a completed action to the watchface, but it does not identify a held
+Back exit. Setting it globally would also redirect ordinary exits and can
+override a pending app-launch destination. An explicit gesture such as double
+Back could use it locally, with a recognition delay for ordinary Back; this is
+an alternative for discussion, not an implemented shortcut.
 
 Latest notification is a separate product idea from Dynamic's temporary new-
 notification activity. Its availability and privacy lifetime need implementation;

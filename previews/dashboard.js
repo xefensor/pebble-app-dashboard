@@ -156,8 +156,9 @@
     if(detail)action=view.detailFocus===1?(state.playing?'Pause':'Play'):view.detailFocus===0?'Previous':'Next';
     if(entry&&entry.kind==='notification')action='Notifications';
     text('Select: '+action,8,214,12,c.muted,118);
-    if(associatedApp(entry))text('Hold: App',192,214,12,c.muted,64,'right');
-    text('Hold Up: Activities · Down: Pinned',100,226,11,c.muted,188,'center');
+    const app=associatedApp(entry);
+    if(app)text('Hold: '+app.name,192,214,12,c.muted,76,'right');
+    text(view.mode==='overview'?'Hold Up: Activities · Down: Pinned':view.mode==='section'?'Hold Up / Down to scroll':'Up / Down: choose control',100,226,11,c.muted,188,'center');
   }
   function activityRow(a,y,h=36){
     const p=panel(a.id,4,y+2,192,h-4),baseline=y+25;
@@ -270,6 +271,11 @@
     if(view.mode==='detail')detail(layout);else if(view.mode==='section')list(layout);else ({snapshot,focus,list})[layout](layout);
     quantize();view.log=drawLog;
     const entry=selected(layout);view.canvas.setAttribute('aria-label',layout+' '+view.mode+': '+(entry?(entry.name||entry.title||entry.sender):'No live activities'));
+    const watch=view.canvas.closest('.watch');
+    for(const key of ['up','down']){
+      const hold=view.mode==='overview'?'open all '+(key==='up'?'Activities':'Pinned items'):view.mode==='section'?'scroll '+key:'move within Music controls';
+      watch.querySelector('[data-key="'+key+'"]').setAttribute('aria-label',layout+': tap '+key+' to move; hold to '+hold);
+    }
   }
   function renderAll(){layouts.forEach(render);}
   function cancelGesture(){if(gesture)clearTimeout(gesture.timer);gesture=null;}
@@ -307,11 +313,14 @@
     const view=views[layout];state.active=layout;
     if(key==='back'){goBack(layout);return;}
     if(key==='hold'){openAssociatedApp(layout);return;}
-    if(key==='hold-up'||key==='hold-down'){openSection(layout,key==='hold-up'?'activities':'pinned');return;}
+    if(key==='hold-up'||key==='hold-down'){
+      if(view.mode==='overview'){openSection(layout,key==='hold-up'?'activities':'pinned');return;}
+      key=key==='hold-up'?'up':'down';
+    }
     if(key==='up'||key==='down'){
       const delta=key==='down'?1:-1;
       if(view.mode==='detail'){
-        if(hasControls(selected(layout)))view.detailFocus=(view.detailFocus+delta+3)%3;
+        if(hasControls(selected(layout)))view.detailFocus=Math.max(0,Math.min(2,view.detailFocus+delta));
       }else{
         const data=entries(layout),index=data.findIndex(item=>item.id===view.selectedId);
         if(data.length)view.selectedId=data[Math.min(data.length-1,Math.max(0,index+delta))].id;
@@ -345,11 +354,20 @@
     if(gesture)return;
     const pending={layout,source,key,target:JSON.stringify(frame(views[layout])),fired:false};
     gesture=pending;
-    pending.timer=setTimeout(()=>{
+    const held=()=>{
       if(gesture!==pending)return;
       pending.fired=true;
-      if(sameTarget(pending))press(layout,pending.key==='select'?'hold':'hold-'+pending.key);
-    },600);
+      if(!sameTarget(pending))return;
+      const wasOverview=views[layout].mode==='overview',before=pending.target;
+      press(layout,pending.key==='select'?'hold':'hold-'+pending.key);
+      // Collections use conventional hold-to-scroll. Keep the target in sync
+      // only after this gesture's own navigation, and stop at either boundary.
+      const after=JSON.stringify(frame(views[layout]));
+      if(gesture===pending&&pending.key!=='select'&&!wasOverview&&after!==before){
+        pending.target=after;pending.timer=setTimeout(held,140);
+      }
+    };
+    pending.timer=setTimeout(held,600);
   }
   function releaseGesture(source){
     const pending=gesture;if(!pending||pending.source!==source)return;
@@ -392,7 +410,7 @@
   window.addEventListener('blur',cancelGesture);
   const api={layouts,
     setScenario(key){if(!scenes[key])throw Error('Unknown scenario');state.scenario=key;state.track=0;state.playing=true;state.swapped=false;document.getElementById('scenario').value=key;document.getElementById('swap').disabled=scenes[key].activities.length<2;reset();},
-    swapActivities(){state.swapped=!state.swapped;reset();},
+    swapActivities(){state.swapped=!state.swapped;renderAll();},
     setTheme(theme){state.theme=theme==='dark'?'dark':'light';const button=document.getElementById('theme');button.setAttribute('aria-pressed',String(state.theme==='dark'));button.textContent=state.theme==='dark'?'Light screens':'Dark screens';renderAll();},
     setMessagePreview(enabled){state.messagePreview=!!enabled;document.getElementById('message-preview').checked=state.messagePreview;renderAll();},
     reset,press,

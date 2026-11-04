@@ -37,8 +37,9 @@ if (plan) {
       'expansion-overview.png','expansion-dark.png','expansion-navigation.png'],
     checks:['64-colour opaque pixels','bounded drawing','button and keyboard navigation','static idle frames','selected/control captures',
       'six activities and twelve mixed pinned entries','value and optional action on the same pinned item','summary-only taps do nothing',
-      'Select hold opens optional associated app','Up hold opens Activities','Down hold opens Pinned','Back restores source view and selection',
-      'real pointer/keyboard holds suppress taps and movement','native notification handoff intent','focused Snapshot page real holds and Back']},null,2));
+      'Select hold opens optional associated app','overview Up/Down holds open Activities/Pinned','list holds repeat navigation without changing collection',
+      'Music holds retain control context','Back restores source view and selection','real holds suppress extra taps and stop navigation on release',
+      'native notification handoff intent','focused Snapshot page real holds and Back']},null,2));
   process.exit(0);
 }
 
@@ -113,12 +114,12 @@ async function pointerPress(layout,button,hold=false) {
   await send('Input.dispatchMouseEvent',{type:'mouseMoved',...point});
   await send('Input.dispatchMouseEvent',{type:'mousePressed',...point,button:'left',buttons:1,clickCount:1});
   let held;
-  if(hold){await sleep(850);held=(await api('inspect')).layouts[layout];}
+  if(hold){await sleep(typeof hold==='number'?hold:850);held=(await api('inspect')).layouts[layout];}
   await send('Input.dispatchMouseEvent',{type:'mouseReleased',...point,button:'left',buttons:0,clickCount:1});
   return held;
 }
-async function holdKey(layout,keyName,code=keyName) {
-  await key('keyDown',keyName,code);await sleep(850);
+async function holdKey(layout,keyName,code=keyName,duration=850) {
+  await key('keyDown',keyName,code);await sleep(duration);
   const held=(await api('inspect')).layouts[layout];
   await key('keyDown',keyName,code,{autoRepeat:true});await key('keyUp',keyName,code);
   return held;
@@ -241,9 +242,9 @@ async function run() {
   await configure('workout-navigation','light');const alternate=[];
   for(const id of layouts)alternate.push(await capture(id,id+'-workout-navigation'));
   await sheet('alternate-activities',alternate,'The two activities can be any types; these examples use workout and navigation.');
-  await configure();await api('swapActivities');const mediaFirst=[];
+  await configure();for(const id of layouts)await api('select',id,'activity-1');await api('swapActivities');const mediaFirst=[];
   for(const id of layouts) {
-    assert.equal((await inspect()).layouts[id].selectedId,'activity-1','Swapping keeps the promoted media occurrence selected');
+    assert.equal((await inspect()).layouts[id].selectedId,'activity-1','Swapping keeps the same media occurrence selected');
     mediaFirst.push(await capture(id,id+'-media-first'));
   }
   await sheet('media-first',mediaFirst,'Swap activities: media is first and Timer is second; either activity can lead.');
@@ -289,8 +290,20 @@ async function run() {
   }
   await sheet('detail-overview',details,'Select performs a useful action or opens controls. Summary-only items stay in place.',2);
 
-  const readOnlyTaps=[],appHolds=[],mixedPins=[];
+  const readOnlyTaps=[],appHolds=[],mixedPins=[],stableFocus=[];
   for(const layout of layouts) {
+    await configure();await api('select',layout,'activity-1');const selectedMedia=await view(layout);
+    await api('swapActivities');let reordered=await view(layout);
+    assert.equal(reordered.selectedId,selectedMedia.selectedId,'Activity reordering must retain the selected source');
+    assert.notDeepEqual(reordered.visibleIds,selectedMedia.visibleIds,'Activity reordering should still update visual order');
+    await api('swapActivities');assert.deepEqual((await view(layout)).visibleIds,selectedMedia.visibleIds);
+    await api('press',layout,'select');await api('press',layout,'down');const controls=await view(layout),controlPixels=await api('snapshot',layout);
+    await api('swapActivities');reordered=await view(layout);
+    assert.equal(reordered.mode,'detail');assert.equal(reordered.selectedId,'activity-1');assert.equal(reordered.returnDepth,controls.returnDepth);
+    assert.equal(await api('snapshot',layout),controlPixels,'Reordering must not move the focused Music control');
+    await api('swapActivities');assert.equal(await api('snapshot',layout),controlPixels);
+    await api('press',layout,'back');assert.equal((await view(layout)).selectedId,'activity-1');
+    stableFocus.push({layout,activityReorderUpdatesOrder:true,selectedOccurrenceRetained:true,musicControlFocusRetained:true,backRetainsSource:true});
     for(const id of ['activity-0','pin-weather','pin-phone']) {
       await configure();await api('select',layout,id);const before=await view(layout),pixels=await api('snapshot',layout);
       await api('press',layout,'select');const after=await view(layout);
@@ -333,7 +346,7 @@ async function run() {
   }
 
   const groups=[['activities','hold-up'],['pinned','hold-down']];
-  const sectionNavigation=[],notificationNavigation=[],holdGestures=[],emptyGroups=[];
+  const sectionNavigation=[],notificationNavigation=[],holdGestures=[],repeatNavigation=[],emptyGroups=[];
   const expansionFrames={light:[],dark:[]},navigationFrames=[];
   for(const theme of ['light','dark']) {
     await configure('timer-media',theme);await api('select','snapshot','pin-weather');
@@ -341,31 +354,39 @@ async function run() {
     frame.label='Snapshot: value-only pin';frame.note='Select does nothing · hold Select opens its app';expansionFrames[theme].push(frame);
     await api('select','snapshot','activity-1');await api('press','snapshot','select');
     frame=await capture('snapshot','snapshot-music-controls-'+theme);
-    frame.label='Select Music: playback';frame.note='Previous / play / next · hold Select opens Music';expansionFrames[theme].push(frame);
+    frame.label='Select Music: playback';frame.note='Up / Down stay in controls · hold Select opens Music';expansionFrames[theme].push(frame);
     await api('press','snapshot','back');await api('select','snapshot','activity-0');await api('press','snapshot','hold-up');
     assertSection(await view('snapshot'),'activities','snapshot');
     frame=await capture('snapshot','snapshot-all-activities-'+theme);
-    frame.label='Hold Up: Activities';frame.note='Browse all activities · Back restores Snapshot';expansionFrames[theme].push(frame);
+    frame.label='Hold Up on Snapshot';frame.note='Activities · hold Up / Down to scroll';expansionFrames[theme].push(frame);
     await api('press','snapshot','back');await api('select','snapshot','control-light');await api('press','snapshot','hold-down');
     await sectionRow('snapshot','control-light');assertSection(await view('snapshot'),'pinned','snapshot');
     frame=await capture('snapshot','snapshot-all-pinned-action-'+theme);
-    frame.label='Hold Down: Pinned';frame.note='Values and actions together · Select toggles light';expansionFrames[theme].push(frame);
+    frame.label='Hold Down on Snapshot';frame.note='Pinned · hold to scroll · Select toggles light';expansionFrames[theme].push(frame);
     await sectionRow('snapshot','pin-weather');await capture('snapshot','snapshot-all-pinned-reading-'+theme);
   }
-  await sheet('expansion-overview',expansionFrames.light,'Tap Select for actions. Hold Select for an app. Hold Up / Down for Activities / Pinned.',2);
-  await sheet('expansion-dark',expansionFrames.dark,'The same button model in dark. Fictional data and simulated navigation.',2);
+  await sheet('expansion-overview',expansionFrames.light,'Snapshot holds open collections; inside a list, hold Up / Down to scroll. Select uses the item.',2);
+  await sheet('expansion-dark',expansionFrames.dark,'Contextual Up / Down holds in dark. Fictional data and simulated navigation.',2);
 
   for(const layout of layouts) {
     for(const [section,hold] of groups) {
       await configure();await api('select',layout,'control-light');const overview=await view(layout);
       await api('press',layout,hold);const first=await view(layout);assertSection(first,section,layout);
-      await api('press',layout,hold);assert.equal((await view(layout)).returnDepth,first.returnDepth,'Holding current group must not add a Back frame');
+      await api('press',layout,'hold-down');let scrolled=await view(layout);assertSection(scrolled,section,layout);
+      assert.notEqual(scrolled.selectedId,first.selectedId,'List Down hold must move to its next item');
+      assert.equal(scrolled.returnDepth,first.returnDepth,'List hold must not add a Back frame');
+      await api('press',layout,'hold-up');scrolled=await view(layout);assertSection(scrolled,section,layout);
+      assert.equal(scrolled.selectedId,first.selectedId,'List Up hold must move back instead of switching groups');
       for(let index=0;index<first.sectionCounts[section];index++)await api('press',layout,'down');
       const last=await view(layout);assertSection(last,section,layout);
       assert.ok(!first.visibleIds.includes(last.selectedId));assert.notDeepEqual(last.visibleIds,first.visibleIds);
       if(section==='activities') {
         await sectionRow(layout,'activity-1');const before=await view(layout),pixels=await api('snapshot',layout);
         await api('press',layout,'select');assert.equal((await view(layout)).mode,'detail');
+        const controls=await api('snapshot',layout),depth=(await view(layout)).returnDepth;
+        await api('press',layout,'hold-down');assert.equal((await view(layout)).mode,'detail');
+        await api('press',layout,'hold-up');assert.equal(await api('snapshot',layout),controls);
+        assert.equal((await view(layout)).returnDepth,depth,'Music holds do not add a collection return frame');
         await api('press',layout,'back');const returned=await view(layout);assertSection(returned,section,layout);
         assert.equal(returned.selectedId,before.selectedId);assert.deepEqual(returned.visibleIds,before.visibleIds);
         assert.equal(await api('snapshot',layout),pixels,'Music Back must restore the exact list selection and viewport');
@@ -380,30 +401,33 @@ async function run() {
       assert.equal(returned.mode,'overview');assert.equal(returned.selectedId,overview.selectedId);
       assert.deepEqual(returned.visibleIds,overview.visibleIds);assert.equal(returned.returnDepth,0);
       sectionNavigation.push({layout,section,total:first.sectionCounts[section],viewportLimit:5,lastEntryReachable:true,
-        repeatedGroupHoldDoesNotNest:true,musicBackRestoresList:section==='activities',overviewBackRetainsCellAndViewport:true});
+        contextualHoldsScrollWithoutSwitchingGroup:true,musicBackRestoresList:section==='activities',overviewBackRetainsCellAndViewport:true});
     }
     await configure();await api('select',layout,'activity-1');await api('press',layout,'select');await api('press',layout,'down');
     const music=await view(layout),musicPixels=await api('snapshot',layout);
     await api('press',layout,'hold');assert.equal((await view(layout)).lastNavigation,'music');
     assert.equal((await view(layout)).actionCount,music.actionCount);assert.equal(await api('snapshot',layout),musicPixels);
-    await api('press',layout,'hold-down');let current=await view(layout);assertSection(current,'pinned',layout);
-    const depth=current.returnDepth;await api('press',layout,'hold-up');current=await view(layout);assertSection(current,'activities',layout);
-    assert.equal(current.returnDepth,depth,'Switching group replaces the current group rather than nesting');
-    await api('press',layout,'back');assert.equal((await view(layout)).mode,'detail');
-    assert.equal(await api('snapshot',layout),musicPixels,'Back must restore the exact playback button focus');
-    sectionNavigation.push({layout,fromMusic:true,groupSwitchPreservesReturnDepth:true,backRestoresPlaybackFocus:true});
+    await api('press',layout,'hold-up');let current=await view(layout);assert.equal(current.mode,'detail');
+    assert.equal(current.section,music.section);assert.equal(current.returnDepth,music.returnDepth);
+    assert.notEqual(await api('snapshot',layout),musicPixels,'Music Up hold should move control focus');
+    await api('press',layout,'hold-down');current=await view(layout);assert.equal(current.mode,'detail');
+    assert.equal(current.returnDepth,music.returnDepth);assert.equal(await api('snapshot',layout),musicPixels);
+    await api('press',layout,'back');assert.equal((await view(layout)).mode,'overview');
+    assert.equal((await view(layout)).selectedId,'activity-1');
+    sectionNavigation.push({layout,fromMusic:true,contextualHoldsRetainMusic:true,oppositeHoldsRestorePlaybackFocus:true,backRestoresOrigin:true});
     await configure();await api('select',layout,'notification');await api('press',layout,'select');const notification=await view(layout);
     assert.equal(notification.mode,'overview');assert.equal(notification.lastNavigation,'notifications');assert.equal(notification.selectedId,'notification');
     notificationNavigation.push({layout,destination:'notifications',mockIntentOnly:true,createsDashboardDetail:false});
     await configure('quiet');const quiet=await view(layout);await api('press',layout,'hold-up');const empty=await view(layout);
     assert.equal(empty.mode,'section');assert.equal(empty.section,'activities');assert.equal(empty.sectionCounts.activities,0);
     assert.deepEqual(empty.visibleIds,[]);assert.equal(empty.selectedId,null);
-    for(const input of ['select','hold','up','down'])await api('press',layout,input);
+    for(const input of ['select','hold','up','down','hold-up','hold-down'])await api('press',layout,input);
     assert.equal((await view(layout)).section,'activities');
-    await api('press',layout,'hold-down');assertSection(await view(layout),'pinned',layout);
     await api('press',layout,'back');assert.equal((await view(layout)).mode,'overview');
     assert.equal((await view(layout)).selectedId,quiet.selectedId);
-    emptyGroups.push({layout,emptyActivitiesSafe:true,canSwitchToPinned:true,backRestoresQuietOverview:true});
+    await api('press',layout,'hold-down');assertSection(await view(layout),'pinned',layout);
+    await api('press',layout,'back');assert.equal((await view(layout)).selectedId,quiet.selectedId);
+    emptyGroups.push({layout,emptyActivitiesSafe:true,contextualHoldsStayInEmptyGroup:true,canReturnAndOpenPinned:true,backRestoresQuietOverview:true});
   }
 
   await configure();await api('press','snapshot','hold-up');await sectionRow('snapshot','activity-1');
@@ -445,6 +469,36 @@ async function run() {
     }
     holdGestures.push({layout,pointerSelectHoldSuppressesTap:true,enterAndSpaceHoldSuppressTap:true,freshSelectTapRunsOnce:true,
       optionalAppHoldRecorded:true,pointerUpAndDownHoldsOpenGroups:true,arrowKeyHoldsOpenGroups:true,releaseNeverMovesSelection:true});
+
+    // Holds inside a collection repeat ordinary navigation. Starting from an
+    // overview is a separate gesture and must not start this repeat sequence.
+    await configure();await api('select',layout,'pin-weather');await api('press',layout,'hold-down');
+    const firstPinned=await view(layout);assert.equal(firstPinned.selectedId,'pin-weather');
+    const pointerHeld=await pointerPress(layout,'down',2400),pointerReleased=await view(layout);
+    assertSection(pointerReleased,'pinned',layout);assert.equal(pointerHeld.selectedId,'control-reading');
+    assert.equal(pointerReleased.selectedId,'control-reading','Sustained Down hold must reach the last pin');
+    assert.equal(pointerReleased.returnDepth,firstPinned.returnDepth);assert.equal(pointerReleased.actionCount,firstPinned.actionCount);
+    const pointerPixels=await api('snapshot',layout);await sleep(350);
+    assert.equal(await api('snapshot',layout),pointerPixels,'List pointer repeat must stop after release');
+    await focusCanvas(layout);const keyboardHeld=await holdKey(layout,'ArrowUp','ArrowUp',2400),keyboardReleased=await view(layout);
+    assertSection(keyboardReleased,'pinned',layout);assert.equal(keyboardHeld.selectedId,'pin-weather');
+    assert.equal(keyboardReleased.selectedId,'pin-weather','Sustained Up key hold must reach the first pin');
+    assert.equal(keyboardReleased.returnDepth,firstPinned.returnDepth);assert.equal(keyboardReleased.actionCount,firstPinned.actionCount);
+    const keyboardPixels=await api('snapshot',layout);await sleep(350);
+    assert.equal(await api('snapshot',layout),keyboardPixels,'List keyboard repeat must stop after release');
+    await api('press',layout,'back');assert.equal((await view(layout)).selectedId,'pin-weather');
+
+    await configure();await api('select',layout,'activity-1');await api('press',layout,'select');
+    const musicBefore=await view(layout),musicFrame=await api('snapshot',layout);
+    await pointerPress(layout,'down',true);const musicPointer=await view(layout);
+    assert.equal(musicPointer.mode,'detail');assert.equal(musicPointer.section,musicBefore.section);
+    assert.equal(musicPointer.returnDepth,musicBefore.returnDepth);assert.equal(musicPointer.actionCount,musicBefore.actionCount);
+    const heldMusicPixels=await api('snapshot',layout);await sleep(350);
+    assert.equal(await api('snapshot',layout),heldMusicPixels,'Music navigation repeat must stop on release');
+    assert.notEqual(heldMusicPixels,musicFrame,'Music hold should navigate its controls');
+    await api('press',layout,'back');assert.equal((await view(layout)).selectedId,'activity-1');
+    repeatNavigation.push({layout,sustainedPointerDownReachesLastPin:true,sustainedArrowUpReachesFirstPin:true,
+      staysInPinned:true,releaseStopsRepeat:true,neverExecutesItemAction:true,musicHoldsRetainControlContext:true,backRetainsOrigin:true});
   }
 
   await configure();const keyboard=[];
@@ -478,7 +532,7 @@ async function run() {
   const report={result:'PASS',scope:'Code-native Chromium design previews with synthetic data; not a Pebble SDK build, native screenshot, live plugin or physical-watch test.',
     dimensions:[200,228],captureScriptSha256:sha(fs.readFileSync(__filename)),sourceHashes:inputs(path.join(root,'previews')),scenarios,layouts,
     idle:{staticPixels:true,repeatingIntervals:idleAfter.intervals,framesBefore:idleBefore,framesAfter:idleAfter},
-    selectedChecks,readOnlyTaps,appHolds,mixedPins,privacy,keyboard,sectionNavigation,notificationNavigation,emptyGroups,holdGestures,focusedEntrySmoke,
+    selectedChecks,readOnlyTaps,appHolds,mixedPins,stableFocus,privacy,keyboard,sectionNavigation,notificationNavigation,emptyGroups,holdGestures,repeatNavigation,focusedEntrySmoke,
     browserExceptions:exceptions,captures,contactSheets:sheets};
   fs.writeFileSync(path.join(output,'validation.json'),JSON.stringify(report,null,2)+'\n');
   for(const group of ['readouts','controls'])for(const theme of ['light','dark']) {
