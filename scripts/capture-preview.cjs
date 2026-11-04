@@ -35,9 +35,10 @@ if (plan) {
   console.log(JSON.stringify({entry:'previews/index.html', dimensions:[200,228], layouts, scenarios,
     output, contactSheets:['overview-light.png','overview-dark.png','alternate-activities.png','media-first.png','detail-overview.png',
       'expansion-overview.png','expansion-dark.png','expansion-navigation.png'],
-    checks:['64-colour opaque pixels','bounded drawing','button and keyboard navigation','static idle frames','selected/detail captures',
-      'six activities and twelve mixed pinned entries','value and optional action on the same pinned item','detail and section Back restoration','real pointer/keyboard hold suppresses tap','native notification handoff intent',
-      'focused Snapshot page real hold and Back']},null,2));
+    checks:['64-colour opaque pixels','bounded drawing','button and keyboard navigation','static idle frames','selected/control captures',
+      'six activities and twelve mixed pinned entries','value and optional action on the same pinned item','summary-only taps do nothing',
+      'Select hold opens optional associated app','Up hold opens Activities','Down hold opens Pinned','Back restores source view and selection',
+      'real pointer/keyboard holds suppress taps and movement','native notification handoff intent','focused Snapshot page real holds and Back']},null,2));
   process.exit(0);
 }
 
@@ -91,7 +92,7 @@ async function inspect() {
     assert.ok(Array.isArray(state.layouts[id].visibleIds),id+' must expose visibleIds');
     const violations=state.layouts[id].boundsViolations;
     assert.notEqual(violations,undefined,id+' must expose boundsViolations');
-    assert.equal(Array.isArray(violations)?violations.length:violations,0,id+' drawing exceeds screen bounds');
+    assert.equal(Array.isArray(violations)?violations.length:violations,0,id+' drawing exceeds screen bounds: '+JSON.stringify(violations));
   }
   return state;
 }
@@ -106,13 +107,30 @@ async function focusCanvas(layout) {
 }
 async function key(type,key,code=key,extra={}) {await send('Input.dispatchKeyEvent',{type,key,code,...extra});}
 async function tapKey(keyName,code=keyName) {await key('keyDown',keyName,code);await key('keyUp',keyName,code);}
-async function pointerSelect(layout,hold=false) {
-  const point=await evaluate(`(()=>{const b=document.querySelector('.watch[data-layout="${layout}"] .hardware[data-key="select"]');if(!b)return null;b.scrollIntoView({block:'center'});const r=b.getBoundingClientRect();return {x:r.x+r.width/2,y:r.y+r.height/2};})()`);
-  assert.ok(point,layout+' Select button is missing');
+async function pointerPress(layout,button,hold=false) {
+  const point=await evaluate(`(()=>{const b=document.querySelector('.watch[data-layout="${layout}"] .hardware[data-key="${button}"]');if(!b)return null;b.scrollIntoView({block:'center'});const r=b.getBoundingClientRect();return {x:r.x+r.width/2,y:r.y+r.height/2};})()`);
+  assert.ok(point,layout+' '+button+' button is missing');
   await send('Input.dispatchMouseEvent',{type:'mouseMoved',...point});
   await send('Input.dispatchMouseEvent',{type:'mousePressed',...point,button:'left',buttons:1,clickCount:1});
-  if(hold)await sleep(850);
+  let held;
+  if(hold){await sleep(850);held=(await api('inspect')).layouts[layout];}
   await send('Input.dispatchMouseEvent',{type:'mouseReleased',...point,button:'left',buttons:0,clickCount:1});
+  return held;
+}
+async function holdKey(layout,keyName,code=keyName) {
+  await key('keyDown',keyName,code);await sleep(850);
+  const held=(await api('inspect')).layouts[layout];
+  await key('keyDown',keyName,code,{autoRepeat:true});await key('keyUp',keyName,code);
+  return held;
+}
+async function sectionRow(layout,id) {
+  const current=await view(layout),total=current.sectionCounts[current.section];
+  for(let step=0;step<total;step++)await api('press',layout,'up');
+  for(let step=0;step<total;step++){
+    if((await view(layout)).selectedId===id)return;
+    await api('press',layout,'down');
+  }
+  throw Error(layout+' section row is missing: '+id);
 }
 function assertSection(current,section,layout) {
   assert.equal(current.mode,'section',layout+' hold must open a section');
@@ -146,7 +164,7 @@ async function capture(layout,name) {
 
 async function sheet(name,frames,subtitle,columns=3) {
   const title=({'expansion-overview':'Snapshot and expanded groups','expansion-dark':'Expanded groups in dark',
-    'expansion-navigation':'Open details and return'})[name]||name;
+    'expansion-navigation':'Use controls, open apps and return'})[name]||name;
   const url=await evaluate(`(async()=>{
     const frames=${JSON.stringify(frames.map(frame=>({url:frame.url,label:frame.label||labels[frame.record.layout],note:frame.note||''})))},columns=${columns};
     const scale=2,w=200*scale,h=228*scale,gap=28,header=86,caption=68,rows=Math.ceil(frames.length/columns);
@@ -256,199 +274,218 @@ async function run() {
     selectedChecks.push({layout:id,selectionCanReachLatestNotificationAndControl:true,selectedControlVisible:true});
   }
   const details=[];
-  for(const [id,label] of [['activity-0','Timer detail'],['activity-1','Music detail'],['notification','Native notification handoff'],['control-light','Light controls']]) {
-    await configure();await api('select','focus',id);const before=(await inspect()).layouts.focus;
-    const previousPixels=await api('snapshot','focus');
-    await api('press','focus','select');const after=(await inspect()).layouts.focus;
+  for(const [id,label,file] of [['activity-0','Timer: no extra controls','tap-timer-no-action'],['activity-1','Music controls','detail-activity-1'],['notification','Native Notifications','detail-notification'],['control-light','Light: toggle + value','detail-control-light']]) {
+    await configure();await api('select','focus',id);const before=await view('focus'),pixels=await api('snapshot','focus');
+    await api('press','focus','select');const after=await view('focus');
     if(id==='control-light') {
-      assert.equal(after.mode,before.mode,'An explicit light toggle stays in the overview');
-      assert.notEqual(await api('snapshot','focus'),previousPixels,'Light toggle must update its displayed state');
-    } else if(id==='notification') {
-      assert.equal(after.mode,'overview','Notifications must hand off without inventing a Dashboard detail');
-      assert.equal(after.lastNavigation,'notifications','Notification Select records the native-app destination');
-    } else assert.notEqual(after.mode,before.mode,id+' Select must open its detail or controls');
-    const frame=await capture('focus','detail-'+id);frame.label=label;details.push(frame);
-    await api('press','focus','back');assert.equal((await inspect()).layouts.focus.mode,before.mode);
+      assert.equal(after.mode,before.mode);assert.equal(after.actionCount,before.actionCount+1);
+      assert.notEqual(await api('snapshot','focus'),pixels,'Light action must update its displayed value');
+    }else if(id==='notification') {
+      assert.equal(after.mode,'overview');assert.equal(after.lastNavigation,'notifications');
+    }else if(id==='activity-0') {
+      assert.equal(after.mode,'overview');assert.equal(await api('snapshot','focus'),pixels,'Timer tap must not just enlarge the countdown');
+    }else assert.equal(after.mode,'detail','Music tap must expose its playback controls');
+    const frame=await capture('focus',file);frame.label=label;details.push(frame);
   }
-  await sheet('detail-overview',details,'Select opens details or its destination; light toggles. Timer controls are future work.',2);
+  await sheet('detail-overview',details,'Select performs a useful action or opens controls. Summary-only items stay in place.',2);
 
-  const readingDetails=[];
-  for(const id of layouts) {
-    await configure();await api('select',id,'pin-weather');await api('press',id,'select');
-    assert.equal((await inspect()).layouts[id].mode,'detail','Reading Select opens its detail');
-    await api('press',id,'select');const after=(await inspect()).layouts[id];
-    assert.equal(after.mode,'overview','Reading detail Select follows its Back hint');
-    assert.equal(after.selectedId,'pin-weather','Returning retains the selected reading');
-    readingDetails.push({layout:id,detailSelectReturns:true,selectedReadingRetained:true});
-  }
-
-  const mixedPins=[];
+  const readOnlyTaps=[],appHolds=[],mixedPins=[];
   for(const layout of layouts) {
+    for(const id of ['activity-0','pin-weather','pin-phone']) {
+      await configure();await api('select',layout,id);const before=await view(layout),pixels=await api('snapshot',layout);
+      await api('press',layout,'select');const after=await view(layout);
+      assert.equal(after.mode,before.mode,layout+' '+id+' must not create a bare enlarged view');
+      assert.equal(after.selectedId,id);assert.equal(after.actionCount,before.actionCount);
+      assert.equal(after.lastNavigation,before.lastNavigation);assert.equal(after.returnDepth,before.returnDepth);
+      assert.equal(await api('snapshot',layout),pixels,layout+' '+id+' actionless tap must keep screen pixels unchanged');
+      readOnlyTaps.push({layout,id,noExtraScreen:true,noAction:true,unchangedPixels:true});
+    }
+    for(const [id,destination] of [['activity-0','timer'],['activity-1','music'],['pin-weather','weather'],['notification','notifications'],['control-light',null],['control-find',null]]) {
+      await configure();await api('select',layout,id);const before=await view(layout),pixels=await api('snapshot',layout);
+      await api('press',layout,'hold');const after=await view(layout);
+      assert.equal(after.lastNavigation,destination,layout+' '+id+' hold must use only its optional associated app');
+      assert.equal(after.mode,before.mode);assert.equal(after.selectedId,id);assert.equal(after.returnDepth,before.returnDepth);
+      assert.equal(after.actionCount,before.actionCount,layout+' Select hold must not execute its tap action');
+      assert.equal(await api('snapshot',layout),pixels,layout+' Select hold records navigation without a Dashboard transition');
+      appHolds.push({layout,id,destination,optionalDestinationOnly:true,suppressesTap:true});
+    }
     await configure();await api('select',layout,'control-light');
-    // Previous simulations can leave the light off. Start this check on the
-    // reported 65% state, then prove that the same pin is also actionable.
     if(!(await view(layout)).text.some(item=>item.source==='65%'))await api('press',layout,'select');
     const before=await view(layout);
-    assert.ok(before.text.some(item=>item.source==='65%'),layout+' light pin must show its brightness reading');
-    assert.ok(before.text.some(item=>item.source==='Select: Toggle'),layout+' light brightness pin must advertise its optional action');
+    assert.ok(before.text.some(item=>item.source==='65%'));assert.ok(before.text.some(item=>item.source==='Select: Toggle'));
     await api('press',layout,'select');const off=await view(layout);
-    assert.equal(off.mode,'overview');assert.equal(off.selectedId,'control-light');
-    assert.equal(off.actionCount,before.actionCount+1,layout+' brightness pin must toggle once');
-    assert.ok(off.text.some(item=>item.source==='Off'),layout+' toggled brightness pin must show Off');
-    await api('press',layout,'select');
-    assert.ok((await view(layout)).text.some(item=>item.source==='65%'),layout+' light toggle must restore its reported brightness');
-    await api('press',layout,'hold');let pinned=await view(layout);assertSection(pinned,'pinned',layout);
-    assert.ok(pinned.text.some(item=>item.source==='65%'),layout+' the mixed Pinned list must also show brightness');
-    assert.ok(pinned.visibleIds.includes('pin-weather')&&pinned.visibleIds.includes('control-light')&&pinned.visibleIds.includes('control-find'),
-      layout+' Pinned must mix a value-only reading, value/action light and action-only Find phone');
-    const heldCount=pinned.actionCount;
-    await api('press',layout,'down');await api('press',layout,'down');pinned=await view(layout);
-    assert.equal(pinned.selectedId,'control-find',layout+' unified list ordering must reach Find phone after Light and Phone');
-    assert.ok(pinned.text.some(item=>item.source==='Select: Ring'),layout+' action-only pin must keep its own action hint');
-    await api('press',layout,'select');const rang=await view(layout);assertSection(rang,'pinned',layout);
-    assert.equal(rang.actionCount,heldCount+1);assert.equal(rang.selectedId,'control-find');
+    assert.equal(off.mode,'overview');assert.equal(off.selectedId,'control-light');assert.equal(off.actionCount,before.actionCount+1);
+    assert.ok(off.text.some(item=>item.source==='Off'));
+    await api('press',layout,'select');assert.ok((await view(layout)).text.some(item=>item.source==='65%'));
+    await api('press',layout,'hold-down');let pinned=await view(layout);assertSection(pinned,'pinned',layout);
+    assert.ok(pinned.text.some(item=>item.source==='65%'));
+    assert.ok(pinned.visibleIds.includes('pin-weather')&&pinned.visibleIds.includes('control-light')&&pinned.visibleIds.includes('control-find'));
+    await sectionRow(layout,'control-find');const count=(await view(layout)).actionCount;
+    assert.ok((await view(layout)).text.some(item=>item.source==='Select: Ring'));
+    await api('press',layout,'select');pinned=await view(layout);assertSection(pinned,'pinned',layout);
+    assert.equal(pinned.actionCount,count+1);assert.equal(pinned.selectedId,'control-find');
+    await sectionRow(layout,'pin-weather');const readingPixels=await api('snapshot',layout);
+    await api('press',layout,'select');assert.equal((await view(layout)).mode,'section');
+    assert.equal(await api('snapshot',layout),readingPixels,'A value-only pin in Pinned must also ignore Select');
     await api('press',layout,'back');assert.equal((await view(layout)).selectedId,'control-light');
-    mixedPins.push({layout,valueAndActionSamePin:true,brightnessToggleUpdatesReading:true,
+    mixedPins.push({layout,valueAndActionSamePin:true,brightnessToggleUpdatesReading:true,valueOnlyTapDoesNothing:true,
       valueOnlyAndActionOnlyInSameGroup:true,actionStaysInPinned:true,backRestoresOrigin:true});
   }
 
-  const groups=[['activities','activity-0','All activities','activities'],['pinned','pin-weather','Pinned: value only','pinned-reading'],['pinned','control-light','Pinned: value + action','pinned-action']];
-  const sectionNavigation=[],notificationNavigation=[],holdGestures=[];
+  const groups=[['activities','hold-up'],['pinned','hold-down']];
+  const sectionNavigation=[],notificationNavigation=[],holdGestures=[],emptyGroups=[];
   const expansionFrames={light:[],dark:[]},navigationFrames=[];
   for(const theme of ['light','dark']) {
-    await configure('timer-media',theme);
-    const overview=await capture('snapshot','snapshot-expand-overview-'+theme);
-    overview.label='Snapshot';overview.note='Select opens / runs · hold Select shows more';expansionFrames[theme].push(overview);
-    for(const [section,trigger,label,fileLabel] of groups) {
-      await api('select','snapshot',trigger);await api('press','snapshot','hold');
-      const current=await view('snapshot');assertSection(current,section,'snapshot');
-      const frame=await capture('snapshot','snapshot-all-'+fileLabel+'-'+theme);
-      frame.label=label;frame.note=section==='activities'?'6 examples · Up / Down · Back restores Snapshot':
-        trigger==='control-light'?'Same list · brightness + Select to toggle':'12 mixed pins · values and optional actions';expansionFrames[theme].push(frame);
-      await api('press','snapshot','back');assert.equal((await view('snapshot')).selectedId,trigger);
-    }
+    await configure('timer-media',theme);await api('select','snapshot','pin-weather');
+    let frame=await capture('snapshot','snapshot-expand-overview-'+theme);
+    frame.label='Snapshot: value-only pin';frame.note='Select does nothing · hold Select opens its app';expansionFrames[theme].push(frame);
+    await api('select','snapshot','activity-1');await api('press','snapshot','select');
+    frame=await capture('snapshot','snapshot-music-controls-'+theme);
+    frame.label='Select Music: playback';frame.note='Previous / play / next · hold Select opens Music';expansionFrames[theme].push(frame);
+    await api('press','snapshot','back');await api('select','snapshot','activity-0');await api('press','snapshot','hold-up');
+    assertSection(await view('snapshot'),'activities','snapshot');
+    frame=await capture('snapshot','snapshot-all-activities-'+theme);
+    frame.label='Hold Up: Activities';frame.note='Browse all activities · Back restores Snapshot';expansionFrames[theme].push(frame);
+    await api('press','snapshot','back');await api('select','snapshot','control-light');await api('press','snapshot','hold-down');
+    await sectionRow('snapshot','control-light');assertSection(await view('snapshot'),'pinned','snapshot');
+    frame=await capture('snapshot','snapshot-all-pinned-action-'+theme);
+    frame.label='Hold Down: Pinned';frame.note='Values and actions together · Select toggles light';expansionFrames[theme].push(frame);
+    await sectionRow('snapshot','pin-weather');await capture('snapshot','snapshot-all-pinned-reading-'+theme);
   }
-  await sheet('expansion-overview',expansionFrames.light,'Hold Select for Activities or Pinned. A pinned item can show a value and have an action.',2);
-  await sheet('expansion-dark',expansionFrames.dark,'The same four screens in the dark theme. Synthetic data; browser design preview.',2);
+  await sheet('expansion-overview',expansionFrames.light,'Tap Select for actions. Hold Select for an app. Hold Up / Down for Activities / Pinned.',2);
+  await sheet('expansion-dark',expansionFrames.dark,'The same button model in dark. Fictional data and simulated navigation.',2);
 
   for(const layout of layouts) {
-    for(const [section,trigger] of groups) {
-      await configure();await api('select',layout,trigger);const overview=await view(layout);
-      await api('press',layout,'hold');const first=await view(layout);assertSection(first,section,layout);
-      for(let index=1;index<first.sectionCounts[section];index++)await api('press',layout,'down');
+    for(const [section,hold] of groups) {
+      await configure();await api('select',layout,'control-light');const overview=await view(layout);
+      await api('press',layout,hold);const first=await view(layout);assertSection(first,section,layout);
+      await api('press',layout,hold);assert.equal((await view(layout)).returnDepth,first.returnDepth,'Holding current group must not add a Back frame');
+      for(let index=0;index<first.sectionCounts[section];index++)await api('press',layout,'down');
       const last=await view(layout);assertSection(last,section,layout);
-      assert.ok(!first.visibleIds.includes(last.selectedId),layout+' '+section+' must scroll beyond the initial five rows');
-      assert.notDeepEqual(last.visibleIds,first.visibleIds,layout+' '+section+' viewport must follow selection');
-      // The last Pinned row may execute an action. Use the Sunrise reading to
-      // verify a value-only detail inside the same mixed group.
-      if(section==='pinned') {
-        for(let step=0;step<last.sectionCounts.pinned&&((await view(layout)).selectedId!=='pin-sunrise');step++)await api('press',layout,'up');
-        assert.equal((await view(layout)).selectedId,'pin-sunrise',layout+' must expose the Sunrise reading in Pinned');
+      assert.ok(!first.visibleIds.includes(last.selectedId));assert.notDeepEqual(last.visibleIds,first.visibleIds);
+      if(section==='activities') {
+        await sectionRow(layout,'activity-1');const before=await view(layout),pixels=await api('snapshot',layout);
+        await api('press',layout,'select');assert.equal((await view(layout)).mode,'detail');
+        await api('press',layout,'back');const returned=await view(layout);assertSection(returned,section,layout);
+        assert.equal(returned.selectedId,before.selectedId);assert.deepEqual(returned.visibleIds,before.visibleIds);
+        assert.equal(await api('snapshot',layout),pixels,'Music Back must restore the exact list selection and viewport');
+      }else {
+        const pixels=await api('snapshot',layout),before=await view(layout);
+        await sectionRow(layout,'pin-sunrise');const sunrise=await view(layout),sunrisePixels=await api('snapshot',layout);
+        await api('press',layout,'select');assert.equal(await api('snapshot',layout),sunrisePixels);
+        assert.equal((await view(layout)).returnDepth,sunrise.returnDepth,'Read-only pin does not add a Back frame');
+        assert.ok(pixels&&before.visibleIds.length>0);
       }
-      const beforeDetail=await view(layout);
-      await api('press',layout,'select');assert.equal((await view(layout)).mode,'detail',layout+' expanded value-only row Select opens detail');
-      await api('press',layout,'back');const detailReturned=await view(layout);
-      assertSection(detailReturned,section,layout);assert.equal(detailReturned.selectedId,beforeDetail.selectedId,layout+' detail Back must retain the selected occurrence');
-      assert.deepEqual(detailReturned.visibleIds,beforeDetail.visibleIds,layout+' detail Back must retain section position');
       await api('press',layout,'back');const returned=await view(layout);
-      assert.equal(returned.mode,'overview',layout+' section Back returns to overview');
-      assert.equal(returned.selectedId,overview.selectedId,layout+' section Back retains the original card');
-      assert.deepEqual(returned.visibleIds,overview.visibleIds,layout+' section Back retains the original viewport');
-      assert.equal(returned.returnDepth,0,layout+' Back should consume the section return frame');
-      sectionNavigation.push({layout,section,origin:trigger,total:first.sectionCounts[section],viewportLimit:5,lastEntryReachable:true,
-        detailBackRetainsRowAndViewport:true,overviewBackRetainsCellAndViewport:true});
+      assert.equal(returned.mode,'overview');assert.equal(returned.selectedId,overview.selectedId);
+      assert.deepEqual(returned.visibleIds,overview.visibleIds);assert.equal(returned.returnDepth,0);
+      sectionNavigation.push({layout,section,total:first.sectionCounts[section],viewportLimit:5,lastEntryReachable:true,
+        repeatedGroupHoldDoesNotNest:true,musicBackRestoresList:section==='activities',overviewBackRetainsCellAndViewport:true});
     }
+    await configure();await api('select',layout,'activity-1');await api('press',layout,'select');await api('press',layout,'down');
+    const music=await view(layout),musicPixels=await api('snapshot',layout);
+    await api('press',layout,'hold');assert.equal((await view(layout)).lastNavigation,'music');
+    assert.equal((await view(layout)).actionCount,music.actionCount);assert.equal(await api('snapshot',layout),musicPixels);
+    await api('press',layout,'hold-down');let current=await view(layout);assertSection(current,'pinned',layout);
+    const depth=current.returnDepth;await api('press',layout,'hold-up');current=await view(layout);assertSection(current,'activities',layout);
+    assert.equal(current.returnDepth,depth,'Switching group replaces the current group rather than nesting');
+    await api('press',layout,'back');assert.equal((await view(layout)).mode,'detail');
+    assert.equal(await api('snapshot',layout),musicPixels,'Back must restore the exact playback button focus');
+    sectionNavigation.push({layout,fromMusic:true,groupSwitchPreservesReturnDepth:true,backRestoresPlaybackFocus:true});
     await configure();await api('select',layout,'notification');await api('press',layout,'select');const notification=await view(layout);
-    assert.equal(notification.mode,'overview',layout+' notification opens the native app, not a Dashboard detail');
-    assert.equal(notification.lastNavigation,'notifications',layout+' notification handoff destination is missing');
-    assert.equal(notification.selectedId,'notification',layout+' notification handoff keeps its originating card');
+    assert.equal(notification.mode,'overview');assert.equal(notification.lastNavigation,'notifications');assert.equal(notification.selectedId,'notification');
     notificationNavigation.push({layout,destination:'notifications',mockIntentOnly:true,createsDashboardDetail:false});
+    await configure('quiet');const quiet=await view(layout);await api('press',layout,'hold-up');const empty=await view(layout);
+    assert.equal(empty.mode,'section');assert.equal(empty.section,'activities');assert.equal(empty.sectionCounts.activities,0);
+    assert.deepEqual(empty.visibleIds,[]);assert.equal(empty.selectedId,null);
+    for(const input of ['select','hold','up','down'])await api('press',layout,input);
+    assert.equal((await view(layout)).section,'activities');
+    await api('press',layout,'hold-down');assertSection(await view(layout),'pinned',layout);
+    await api('press',layout,'back');assert.equal((await view(layout)).mode,'overview');
+    assert.equal((await view(layout)).selectedId,quiet.selectedId);
+    emptyGroups.push({layout,emptyActivitiesSafe:true,canSwitchToPinned:true,backRestoresQuietOverview:true});
   }
 
-  // Capture the activity drill-down and its return at the exact same selected occurrence.
-  await configure();await api('press','snapshot','hold');await api('press','snapshot','down');
+  await configure();await api('press','snapshot','hold-up');await sectionRow('snapshot','activity-1');
   const sectionBefore=await view('snapshot');
-  let frame=await capture('snapshot','snapshot-section-before-detail');frame.label='All activities';frame.note='Select Music from the expanded group';navigationFrames.push(frame);
+  let frame=await capture('snapshot','snapshot-section-before-detail');frame.label='All activities';frame.note='Select Music to enter playback controls';navigationFrames.push(frame);
   await api('press','snapshot','select');assert.equal((await view('snapshot')).mode,'detail');
-  frame=await capture('snapshot','snapshot-section-activity-detail');frame.label='Activity detail';frame.note='Back returns to the same activity in the group';navigationFrames.push(frame);
+  frame=await capture('snapshot','snapshot-section-activity-detail');frame.label='Music controls';frame.note='Hold Select opens its associated app';navigationFrames.push(frame);
   await api('press','snapshot','back');const sectionAfter=await view('snapshot');
   assert.equal(sectionAfter.selectedId,sectionBefore.selectedId);assert.deepEqual(sectionAfter.visibleIds,sectionBefore.visibleIds);
-  frame=await capture('snapshot','snapshot-section-after-detail');frame.label='Back: same Music row';frame.note='The selected occurrence and scroll position survive';navigationFrames.push(frame);
+  frame=await capture('snapshot','snapshot-section-after-detail');frame.label='Back: same Music row';frame.note='Selection and viewport survive';navigationFrames.push(frame);
   await api('press','snapshot','back');await api('select','snapshot','notification');await api('press','snapshot','select');
-  frame=await capture('snapshot','snapshot-notification-handoff');frame.label='Notifications';frame.note='Select requests the native app · preview intent only';navigationFrames.push(frame);
-  await sheet('expansion-navigation',navigationFrames,'Activity detail returns to its list; notifications go directly to the native app.',2);
+  frame=await capture('snapshot','snapshot-notification-handoff');frame.label='Select: Notifications';frame.note='Native-app navigation intent · no intermediate screen';navigationFrames.push(frame);
+  await sheet('expansion-navigation',navigationFrames,'Music has useful controls; summaries do not open an enlarged copy of themselves.',2);
 
-  // Real DOM gestures verify that releasing a hold cannot also run the selected control.
+  // Check real DOM holds, including their release events and OS key-repeat events.
   for(const layout of layouts) {
     await configure();await api('select',layout,'control-light');const before=await view(layout);
-    assert.equal(typeof before.actionCount,'number',layout+' must expose actionCount');
-    await pointerSelect(layout,true);let after=await view(layout);assertSection(after,'pinned',layout);
-    assert.equal(after.actionCount,before.actionCount,layout+' pointer hold release must not toggle a control');
-    await api('press',layout,'back');await pointerSelect(layout);after=await view(layout);
-    assert.equal(after.mode,'overview',layout+' fresh pointer tap after hold stays overview');
-    assert.equal(after.actionCount,before.actionCount+1,layout+' fresh pointer tap must execute exactly one control action');
+    await pointerPress(layout,'select',true);let after=await view(layout);
+    assert.equal(after.mode,'overview');assert.equal(after.actionCount,before.actionCount);assert.equal(after.lastNavigation,null);
+    await pointerPress(layout,'select');after=await view(layout);assert.equal(after.actionCount,before.actionCount+1);
     for(const [keyName,code] of [['Enter','Enter'],[' ','Space']]) {
       await configure();await api('select',layout,'control-light');await focusCanvas(layout);const count=(await view(layout)).actionCount;
-      await key('keyDown',keyName,code);await sleep(850);
-      await key('keyDown',keyName,code,{autoRepeat:true});await key('keyUp',keyName,code);
-      after=await view(layout);assertSection(after,'pinned',layout);
-      assert.equal(after.actionCount,count,layout+' '+code+' hold release must not run its control');
-      await tapKey('Escape');assert.equal((await view(layout)).mode,'overview');
-      await tapKey(keyName,code);after=await view(layout);
-      assert.equal(after.actionCount,count+1,layout+' fresh '+code+' tap after hold must run exactly once');
+      await holdKey(layout,keyName,code);after=await view(layout);assert.equal(after.mode,'overview');assert.equal(after.actionCount,count);
+      await tapKey(keyName,code);assert.equal((await view(layout)).actionCount,count+1);
     }
-    await configure();await api('select',layout,'control-light');const sectionCount=(await view(layout)).actionCount;
-    await api('press',layout,'hold');await api('press',layout,'select');after=await view(layout);
-    assertSection(after,'pinned',layout);assert.equal(after.actionCount,sectionCount+1,layout+' an expanded actionable pin must run exactly once and retain Pinned');
-    await configure();await api('select',layout,'activity-0');await pointerSelect(layout,true);
-    assertSection(await view(layout),'activities',layout);
-    holdGestures.push({layout,pointerHoldControlSuppressesTap:true,pointerFreshTapRunsOnce:true,
-      enterHoldSuppressesTap:true,spaceHoldSuppressesTap:true,keyboardFreshTapRunsOnce:true,expandedControlRunsOnce:true,pointerHoldActivityOpensGroup:true});
+    await configure();await api('select',layout,'activity-0');await pointerPress(layout,'select',true);
+    after=await view(layout);assert.equal(after.mode,'overview');assert.equal(after.lastNavigation,'timer');assert.equal(after.actionCount,0);
+    await configure();await api('select',layout,'activity-1');await focusCanvas(layout);await holdKey(layout,'Enter');
+    after=await view(layout);assert.equal(after.mode,'overview');assert.equal(after.lastNavigation,'music');
+    for(const [button,keyName,section] of [['up','ArrowUp','activities'],['down','ArrowDown','pinned']]) {
+      await configure();await api('select',layout,'activity-1');const held=await pointerPress(layout,button,true),released=await view(layout);
+      assertSection(released,section,layout);assert.equal(released.selectedId,held.selectedId);assert.equal(released.actionCount,held.actionCount);
+      assert.deepEqual(released.visibleIds,held.visibleIds,'Releasing a group hold must not also move selection');
+      await api('press',layout,'back');assert.equal((await view(layout)).selectedId,'activity-1');
+      await configure();await api('select',layout,'activity-1');await focusCanvas(layout);
+      const keyboardHeld=await holdKey(layout,keyName),keyboardReleased=await view(layout);assertSection(keyboardReleased,section,layout);
+      assert.equal(keyboardReleased.selectedId,keyboardHeld.selectedId);assert.deepEqual(keyboardReleased.visibleIds,keyboardHeld.visibleIds);
+      assert.equal(keyboardReleased.returnDepth,keyboardHeld.returnDepth,'Auto-repeat must not re-open the group');
+    }
+    holdGestures.push({layout,pointerSelectHoldSuppressesTap:true,enterAndSpaceHoldSuppressTap:true,freshSelectTapRunsOnce:true,
+      optionalAppHoldRecorded:true,pointerUpAndDownHoldsOpenGroups:true,arrowKeyHoldsOpenGroups:true,releaseNeverMovesSelection:true});
   }
 
-  await configure();
-  const keyboard=[];
-  for(const id of layouts) {
-    await focusCanvas(id);
-    const before=(await inspect()).layouts[id];
-    for(const [type,key,code] of [['keyDown','ArrowDown','ArrowDown'],['keyUp','ArrowDown','ArrowDown']]) await send('Input.dispatchKeyEvent',{type,key,code});
-    const after=(await inspect()).layouts[id];assert.notEqual(after.selectedId,before.selectedId,id+' ArrowDown does not move focus');
-    await send('Input.dispatchKeyEvent',{type:'keyDown',key:'Enter',code:'Enter'});await send('Input.dispatchKeyEvent',{type:'keyUp',key:'Enter',code:'Enter'});
-    assert.notEqual((await inspect()).layouts[id].mode,after.mode,id+' Enter does not open detail');
-    await send('Input.dispatchKeyEvent',{type:'keyDown',key:'Escape',code:'Escape'});await send('Input.dispatchKeyEvent',{type:'keyUp',key:'Escape',code:'Escape'});
-    assert.equal((await inspect()).layouts[id].mode,after.mode,id+' Escape does not return');
-    keyboard.push({layout:id,arrowDown:true,enter:true,escape:true});
+  await configure();const keyboard=[];
+  for(const layout of layouts) {
+    await api('select',layout,'activity-0');await focusCanvas(layout);
+    await tapKey('ArrowDown');assert.equal((await view(layout)).selectedId,'activity-1');
+    await tapKey('Enter');assert.equal((await view(layout)).mode,'detail');
+    await tapKey('Escape');assert.equal((await view(layout)).mode,'overview');assert.equal((await view(layout)).selectedId,'activity-1');
+    await tapKey('ArrowUp');assert.equal((await view(layout)).selectedId,'activity-0');
+    keyboard.push({layout,shortArrowsMoveOnce:true,enterOpensUsefulMusicControls:true,escapeReturns:true});
   }
 
-  const focusedEntry=path.join(root,'previews/snapshot.html');assert.ok(fs.existsSync(focusedEntry),'Focused Snapshot preview is missing');
+  const focusedEntry=path.join(root,'previews/snapshot.html');assert.ok(fs.existsSync(focusedEntry));
   await send('Page.navigate',{url:pathToFileURL(focusedEntry).href});
   await until(()=>evaluate('!!window.dashboardPreview && JSON.stringify(window.dashboardPreview.layouts)===JSON.stringify(["snapshot"])'),'focused Snapshot API');
   await evaluate('Promise.resolve(window.dashboardPreview.ready).then(()=>document.fonts.ready).then(()=>true)');
-  assert.equal(await evaluate('document.querySelectorAll("canvas[data-layout]").length'),1,'Focused preview must contain only Snapshot');
-  await api('setTheme','light');await api('setScenario','timer-media');
-  const focusedBefore=(await api('inspect')).layouts.snapshot;
-  await focusCanvas('snapshot');await key('keyDown','Enter');await sleep(850);await key('keyUp','Enter');
-  assertSection((await api('inspect')).layouts.snapshot,'activities','focused snapshot');
-  await tapKey('Escape');const focusedAfter=(await api('inspect')).layouts.snapshot;
-  assert.equal(focusedAfter.mode,'overview');assert.equal(focusedAfter.selectedId,focusedBefore.selectedId);
-  assert.deepEqual(focusedAfter.visibleIds,focusedBefore.visibleIds);
+  assert.equal(await evaluate('document.querySelectorAll("canvas[data-layout]").length'),1);
+  await api('setTheme','light');await api('setScenario','timer-media');const focusedBefore=(await api('inspect')).layouts.snapshot;
+  await focusCanvas('snapshot');await holdKey('snapshot','ArrowUp');assertSection((await api('inspect')).layouts.snapshot,'activities','focused Snapshot');
+  await tapKey('Escape');let focusedAfter=(await api('inspect')).layouts.snapshot;
+  assert.equal(focusedAfter.selectedId,focusedBefore.selectedId);assert.deepEqual(focusedAfter.visibleIds,focusedBefore.visibleIds);
   await api('select','snapshot','control-light');const focusedCount=(await api('inspect')).layouts.snapshot.actionCount;
-  await pointerSelect('snapshot',true);const focusedControl=(await api('inspect')).layouts.snapshot;
-  assertSection(focusedControl,'pinned','focused snapshot');assert.equal(focusedControl.actionCount,focusedCount);
+  await pointerPress('snapshot','select',true);assert.equal((await api('inspect')).layouts.snapshot.actionCount,focusedCount);
+  await pointerPress('snapshot','down',true);assertSection((await api('inspect')).layouts.snapshot,'pinned','focused Snapshot');
   await api('press','snapshot','back');assert.equal((await api('inspect')).layouts.snapshot.selectedId,'control-light');
-  const focusedEntrySmoke={entry:'previews/snapshot.html',layouts:['snapshot'],canvases:1,
-    realKeyboardHoldOpensActivities:true,backRetainsOriginalItemAndViewport:true,realPointerHoldDoesNotRunControl:true};
+  await api('select','snapshot','activity-0');await pointerPress('snapshot','select',true);
+  assert.equal((await api('inspect')).layouts.snapshot.lastNavigation,'timer');
+  const focusedEntrySmoke={entry:'previews/snapshot.html',layouts:['snapshot'],canvases:1,realUpHoldOpensActivities:true,
+    realDownHoldOpensPinned:true,realSelectHoldOpensAssociatedApp:true,backRetainsOriginalItemAndViewport:true,holdsNeverExecuteTap:true};
   assert.deepEqual(exceptions,[],'Browser exceptions occurred');
   const report={result:'PASS',scope:'Code-native Chromium design previews with synthetic data; not a Pebble SDK build, native screenshot, live plugin or physical-watch test.',
     dimensions:[200,228],captureScriptSha256:sha(fs.readFileSync(__filename)),sourceHashes:inputs(path.join(root,'previews')),scenarios,layouts,
     idle:{staticPixels:true,repeatingIntervals:idleAfter.intervals,framesBefore:idleBefore,framesAfter:idleAfter},
-    selectedChecks,readingDetails,mixedPins,privacy,keyboard,sectionNavigation,notificationNavigation,holdGestures,focusedEntrySmoke,
+    selectedChecks,readOnlyTaps,appHolds,mixedPins,privacy,keyboard,sectionNavigation,notificationNavigation,emptyGroups,holdGestures,focusedEntrySmoke,
     browserExceptions:exceptions,captures,contactSheets:sheets};
   fs.writeFileSync(path.join(output,'validation.json'),JSON.stringify(report,null,2)+'\n');
   for(const group of ['readouts','controls'])for(const theme of ['light','dark']) {
     const obsolete=path.join(output,'screens','snapshot-all-'+group+'-'+theme+'.png');
     if(fs.existsSync(obsolete))fs.unlinkSync(obsolete);
   }
+  const oldTimer=path.join(output,'screens','detail-activity-0.png');if(fs.existsSync(oldTimer))fs.unlinkSync(oldTimer);
   console.log(JSON.stringify({result:report.result,captures:captures.length,contactSheets:sheets.length,dimensions:report.dimensions,output},null,2));
 }
 

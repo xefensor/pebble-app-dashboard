@@ -6,16 +6,16 @@
   const W=200,H=228,layouts=Array.from(document.querySelectorAll('.watch'),watch=>watch.dataset.layout);
   const scenes={
     'timer-media':{activities:[
-      {id:'activity-0',kind:'timer',name:'Tea',value:'02:31',caption:'Timer'},
-      {id:'activity-1',kind:'media',title:'Night Drive',artist:'The Midnight',caption:'Music'}],
+      {id:'activity-0',kind:'timer',name:'Tea',value:'02:31',caption:'Timer',openApp:{id:'timer',name:'Timer'}},
+      {id:'activity-1',kind:'media',title:'Night Drive',artist:'The Midnight',caption:'Music',openApp:{id:'music',name:'Music'}}],
       notification:{id:'notification',kind:'notification',sender:'Sam',app:'Signal',age:'2m',body:'At the entrance.'}},
     'workout-navigation':{activities:[
-      {id:'activity-0',kind:'workout',name:'Evening run',value:'6.2 km',caption:'Workout'},
-      {id:'activity-1',kind:'navigation',name:'Oak Street',value:'200 m',caption:'Directions'}],
+      {id:'activity-0',kind:'workout',name:'Evening run',value:'6.2 km',caption:'Workout',openApp:{id:'workout',name:'Workout'}},
+      {id:'activity-1',kind:'navigation',name:'Oak Street',value:'200 m',caption:'Directions',openApp:{id:'directions',name:'Directions'}}],
       notification:{id:'notification',kind:'notification',sender:'Sam',app:'Signal',age:'2m',body:'Meet at the bridge.'}},
     long:{activities:[
-      {id:'activity-0',kind:'timer',name:'Overnight timer',value:'12:34:56',caption:'Timer'},
-      {id:'activity-1',kind:'media',title:'Better Than the Cyberpunk We Got',artist:'The Midnight',caption:'Music'}],
+      {id:'activity-0',kind:'timer',name:'Overnight timer',value:'12:34:56',caption:'Timer',openApp:{id:'timer',name:'Timer'}},
+      {id:'activity-1',kind:'media',title:'Better Than the Cyberpunk We Got',artist:'The Midnight',caption:'Music',openApp:{id:'music',name:'Music'}}],
       notification:{id:'notification',kind:'notification',sender:'Alexandra',app:'Signal',age:'2m',body:'Can you bring the blue bag to the entrance?'}},
     quiet:{activities:[],notification:null}
   };
@@ -120,13 +120,13 @@
     return s;
   }
   function items(){
-    const s=scene(),weather={id:'pin-weather',kind:'weather',name:'Weather',value:'13°C'},phone={id:'pin-phone',kind:'phone',name:'Phone',value:'76%'};
+    const s=scene(),weather={id:'pin-weather',kind:'weather',name:'Weather',value:'13°C',openApp:{id:'weather',name:'Weather'}},phone={id:'pin-phone',kind:'phone',name:'Phone',value:'76%'};
     const light={id:'control-light',kind:'light',name:'Kitchen light',value:state.lightOn?'65%':'Off',action:{kind:'toggle',label:'Toggle'}},
       find={id:'control-find',kind:'find',name:'Find phone',action:{kind:'ring',label:'Ring'}};
     const activities=s.activities.length?[...s.activities,
-      {id:'activity-2',kind:'navigation',name:'Oak Street',value:'200 m',caption:'Directions'},
-      {id:'activity-3',kind:'workout',name:'Walk',value:'1.4 km',caption:'Workout'},
-      {id:'activity-4',kind:'download',name:'Podcast',value:'42%',caption:'Download'},
+      {id:'activity-2',kind:'navigation',name:'Oak Street',value:'200 m',caption:'Directions',openApp:{id:'directions',name:'Directions'}},
+      {id:'activity-3',kind:'workout',name:'Walk',value:'1.4 km',caption:'Workout',openApp:{id:'workout',name:'Workout'}},
+      {id:'activity-4',kind:'download',name:'Podcast',value:'42%',caption:'Download',openApp:{id:'podcasts',name:'Podcasts'}},
       {id:'activity-5',kind:'delivery',name:'Delivery',value:'18 min',caption:'Delivery'}]:[];
     // A pin may expose a value, a press action, or both. Its icon describes the
     // source; it does not decide whether the item is actionable.
@@ -145,21 +145,19 @@
   }
   function entries(layout){const data=items(),section=views[layout]&&views[layout].section;return section?data.groups[section]:layout==='list'?data.listed:data.ordered;}
   function selected(layout){return entries(layout).find(item=>item.id===views[layout].selectedId);}
-  function groupFor(entry){return entry.id.startsWith('activity-')?'activities':entry.id.startsWith('pin-')||entry.id.startsWith('control-')?'pinned':null;}
+  function groupFor(entry){return !entry?null:entry.id.startsWith('activity-')?'activities':entry.id.startsWith('pin-')||entry.id.startsWith('control-')?'pinned':null;}
+  function associatedApp(entry){return !entry?null:entry.kind==='notification'?{id:'notifications',name:'Notifications'}:entry.openApp||null;}
+  function hasControls(entry){return entry&&entry.kind==='media';}
   function header(label='Dashboard',trailing='13:42'){const c=colors();text(label,8,15,16,c.ink,132);text(trailing,192,15,14,c.muted,47,'right');line(6,19.5,194,19.5,c.line);}
   function footer(layout,detail=false){
-    const c=colors(),view=views[layout],data=entries(layout),index=data.findIndex(v=>v.id===view.selectedId),entry=selected(layout);
-    line(6,212.5,194,212.5,c.line);
-    const group=entry&&groupFor(entry);
-    let action=entry&&entry.action?entry.action.label:'Open';
-    if(detail)action=entry&&entry.kind==='media'?(view.detailFocus===1?(state.playing?'Pause':'Play'):view.detailFocus===0?'Previous':'Next'):
-      group==='activities'?'Open app':'Back';
+    const c=colors(),view=views[layout],entry=selected(layout);
+    line(6,203.5,194,203.5,c.line);
+    let action=entry&&entry.action?entry.action.label:hasControls(entry)?'Controls':'—';
+    if(detail)action=view.detailFocus===1?(state.playing?'Pause':'Play'):view.detailFocus===0?'Previous':'Next';
     if(entry&&entry.kind==='notification')action='Notifications';
-    const hold=view.mode==='overview'&&group;
-    text('Select: '+action,8,225,12,c.muted,hold?88:145);
-    if(hold)text('Hold: All '+items().groups[group].length,192,225,12,c.muted,96,'right');
-    else if(detail||view.mode==='section')text('Back',192,225,12,c.muted,42,'right');
-    else if(entry&&entry.kind!=='notification')text((index+1)+'/'+data.length,192,225,12,c.muted,42,'right');
+    text('Select: '+action,8,214,12,c.muted,118);
+    if(associatedApp(entry))text('Hold: App',192,214,12,c.muted,64,'right');
+    text('Hold Up: Activities · Down: Pinned',100,226,11,c.muted,188,'center');
   }
   function activityRow(a,y,h=36){
     const p=panel(a.id,4,y+2,192,h-4),baseline=y+25;
@@ -198,11 +196,11 @@
     const data=items();header();
     if(!data.activities.length){
       emptyActivities(35);text('Your favourites are ready',100,99,14,colors().muted,184,'center');
-      data.pinned.forEach((item,i)=>pinTile(item,4+(i%2)*98,112+Math.floor(i/2)*49,94,44));
+      data.pinned.forEach((item,i)=>pinTile(item,4+(i%2)*98,108+Math.floor(i/2)*48,94,44));
     }else{
       data.activities.slice(0,2).forEach((a,i)=>activityRow(a,20+i*36));
-      if(data.notification)notification(data.notification,95,41);
-      data.pinned.forEach((item,i)=>pinTile(item,4+(i%2)*98,141+Math.floor(i/2)*35,94,32));
+      if(data.notification)notification(data.notification,92,38);
+      data.pinned.forEach((item,i)=>pinTile(item,4+(i%2)*98,134+Math.floor(i/2)*35,94,32));
     }
     footer(layout);
   }
@@ -220,7 +218,7 @@
     }
     if(data.activities[1])activityRow(data.activities[1],82,36);
     if(data.notification)notification(data.notification,121,38);
-    data.pinned.forEach((item,i)=>pinCompact(item,4+(i%2)*98,164+Math.floor(i/2)*25,94,23));
+    data.pinned.forEach((item,i)=>pinCompact(item,4+(i%2)*98,161+Math.floor(i/2)*21,94,20));
     footer(layout);
   }
   function listRow(item,y){
@@ -237,7 +235,8 @@
   function list(layout){
     const view=views[layout],data=entries(layout);
     const selectedIndex=Math.max(0,data.findIndex(item=>item.id===view.selectedId));
-    header(view.section?groupNames[view.section]:'Dashboard',view.section?(selectedIndex+1)+'/'+data.length:'13:42');
+    header(view.section?groupNames[view.section]:'Dashboard',view.section?(data.length?selectedIndex+1:0)+'/'+data.length:'13:42');
+    if(!data.length){emptyActivities(71);view.visibleIds=[];footer(layout);return;}
     const first=Math.min(Math.max(0,selectedIndex-3),Math.max(0,data.length-5));
     view.visibleIds=data.slice(first,first+5).map(item=>item.id);
     data.slice(first,first+5).forEach((item,i)=>listRow(item,23+i*36));
@@ -246,7 +245,7 @@
   }
   function detail(layout){
     const view=views[layout],entry=selected(layout),c=colors();if(!entry){view.mode='overview';return;}
-    if(entry.kind==='media'){
+    if(hasControls(entry)){
       header('Music');
       const lines=wrapLines(entry.title,24,182,2);
       lines.forEach((value,i)=>text(value,9,91-(lines.length-1-i)*26,24,c.ink,182));
@@ -255,13 +254,6 @@
         const active=view.detailFocus===i,x=5+i*65;rect(x,163,60,37,active?c.ink:c.bg,5);if(!active)ring(x,163,60,37,c.line,5);
         icon(kind,x+20,171,20,active?c.bg:c.ink);
       });
-    }else if(entry.kind==='timer'){
-      header('Timer');number(entry.value,100,92,48,c.ink,182);icon('timer',65,108,18,c.accent);text(entry.name,91,124,18,c.ink,100);
-      panel(entry.id,7,171,186,31);text('Open Timer',100,193,18,views[layout].selectedId===entry.id?c.bg:c.ink,174,'center');
-    }else{
-      header(entry.caption||entry.name);icon(entry.kind,87,37,26,c.accent);number(entry.value||'',100,117,46,c.ink,180);
-      text(entry.name,100,148,18,c.muted,182,'center');
-      if(entry.id.startsWith('activity-')){panel(entry.id,7,171,186,31);text('Open app',100,193,18,c.bg,174,'center');}
     }
     footer(layout,true);
   }
@@ -272,12 +264,12 @@
   }
   function render(layout){
     const view=views[layout],data=entries(layout);
-    if(!data.some(item=>item.id===view.selectedId))view.selectedId=data[0].id;
+    if(!data.some(item=>item.id===view.selectedId))view.selectedId=data.length?data[0].id:null;
     context=view.canvas.getContext('2d',{willReadFrequently:true});context.fontKerning='none';drawLog={layout,text:[],regions:[],boundsViolations:[]};
     rect(0,0,W,H,colors().bg);view.visibleIds=view.mode==='detail'?[view.selectedId]:data.map(item=>item.id);
     if(view.mode==='detail')detail(layout);else if(view.mode==='section')list(layout);else ({snapshot,focus,list})[layout](layout);
     quantize();view.log=drawLog;
-    const entry=selected(layout);view.canvas.setAttribute('aria-label',layout+' '+view.mode+': '+(entry.name||entry.title||entry.sender));
+    const entry=selected(layout);view.canvas.setAttribute('aria-label',layout+' '+view.mode+': '+(entry?(entry.name||entry.title||entry.sender):'No live activities'));
   }
   function renderAll(){layouts.forEach(render);}
   function cancelGesture(){if(gesture)clearTimeout(gesture.timer);gesture=null;}
@@ -294,37 +286,47 @@
       views[layout].selectedId=entries(layout)[0].id;
     });renderAll();
   }
+  function openSection(layout,section){
+    const view=views[layout],data=items().groups[section];
+    if(view.mode==='section'&&view.section===section)return;
+    const selectedId=data.some(item=>item.id===view.selectedId)?view.selectedId:data.length?data[0].id:null;
+    // Switching collections replaces the current list. Opening a collection
+    // from an overview or useful controls view retains that exact return frame.
+    if(view.mode!=='section')remember(view);
+    Object.assign(view,{mode:'section',section,selectedId,detailFocus:1});render(layout);
+    announce(groupNames[section]+': '+data.length+' entries. Up / Down to browse; Back returns to the previous screen.');
+  }
+  function openAssociatedApp(layout){
+    const view=views[layout],app=associatedApp(selected(layout));
+    if(!app)return;
+    view.lastNavigation=app.id;
+    announce('Preview: open '+app.name+'. Associated-app navigation intent only; no real app is launched.');
+  }
   function press(layout,key){
-    if(key!=='hold')cancelGesture();
+    if(!key.startsWith('hold'))cancelGesture();
     const view=views[layout];state.active=layout;
     if(key==='back'){goBack(layout);return;}
-    if(key==='hold'){
-      const entry=selected(layout),group=entry&&groupFor(entry);
-      if(view.mode==='overview'&&group){
-        remember(view);view.mode='section';view.section=group;render(layout);
-        announce('All '+group+': '+entries(layout).length+' entries. Up / Down to browse; Back returns to the same Snapshot item.');
-      }
-      return;
-    }
+    if(key==='hold'){openAssociatedApp(layout);return;}
+    if(key==='hold-up'||key==='hold-down'){openSection(layout,key==='hold-up'?'activities':'pinned');return;}
     if(key==='up'||key==='down'){
       const delta=key==='down'?1:-1;
       if(view.mode==='detail'){
-        if(selected(layout).kind==='media')view.detailFocus=(view.detailFocus+delta+3)%3;
+        if(hasControls(selected(layout)))view.detailFocus=(view.detailFocus+delta+3)%3;
       }else{
-        const data=entries(layout),index=data.findIndex(item=>item.id===view.selectedId);view.selectedId=data[Math.min(data.length-1,Math.max(0,index+delta))].id;
+        const data=entries(layout),index=data.findIndex(item=>item.id===view.selectedId);
+        if(data.length)view.selectedId=data[Math.min(data.length-1,Math.max(0,index+delta))].id;
       }
-      render(layout);const entry=selected(layout);announce('Selected '+(entry.name||entry.title||entry.sender)+'.');return;
+      render(layout);const entry=selected(layout);if(entry)announce('Selected '+(entry.name||entry.title||entry.sender)+'.');return;
     }
     if(key!=='select')return;
-    const entry=selected(layout);
+    const entry=selected(layout);if(!entry)return;
     if(view.mode==='detail'){
-      if(entry.kind==='media'){
+      if(hasControls(entry)){
         view.actionCount++;
         if(view.detailFocus===1)state.playing=!state.playing;
         else state.track=(state.track+(view.detailFocus===0?-1:1)+tracks.length)%tracks.length;
         renderAll();announce('Simulated music control. No phone command sent.');
-      }else if(groupFor(entry)==='pinned')goBack(layout);
-      else{view.lastNavigation=entry.kind;announce('Preview: Open '+(entry.caption||entry.name)+' app. Navigation intent only.');}
+      }
     }else if(entry.action){
       view.actionCount++;
       if(entry.id==='control-light')state.lightOn=!state.lightOn;
@@ -334,53 +336,56 @@
     }else if(entry.kind==='notification'){
       view.lastNavigation='notifications';
       announce('Preview: the native Notifications app would open. The preview records the destination and stays on this screen.');
-    }else{remember(view);view.mode='detail';view.detailFocus=1;render(layout);announce('Opened '+(entry.name||entry.title||entry.sender)+' details.');}
+    }else if(hasControls(entry)){
+      remember(view);view.mode='detail';view.detailFocus=1;render(layout);announce('Opened music controls.');
+    }
   }
   function sameTarget(pending){return JSON.stringify(frame(views[pending.layout]))===pending.target;}
-  function startGesture(layout,source){
+  function startGesture(layout,source,key){
     if(gesture)return;
-    const pending={layout,source,target:JSON.stringify(frame(views[layout])),fired:false};
+    const pending={layout,source,key,target:JSON.stringify(frame(views[layout])),fired:false};
     gesture=pending;
     pending.timer=setTimeout(()=>{
       if(gesture!==pending)return;
       pending.fired=true;
-      if(sameTarget(pending))press(layout,'hold');
+      if(sameTarget(pending))press(layout,pending.key==='select'?'hold':'hold-'+pending.key);
     },600);
   }
   function releaseGesture(source){
     const pending=gesture;if(!pending||pending.source!==source)return;
     const tap=!pending.fired&&sameTarget(pending);cancelGesture();
-    if(tap)press(pending.layout,'select');
+    if(tap)press(pending.layout,pending.key);
   }
   document.querySelectorAll('.watch').forEach(watch=>{
     const layout=watch.dataset.layout,canvas=watch.querySelector('canvas');canvas.dataset.layout=layout;
     views[layout]={canvas,selectedId:'activity-0',mode:'overview',section:null,stack:[],detailFocus:1,visibleIds:[],lastNavigation:null,actionCount:0};
     watch.addEventListener('focusin',()=>state.active=layout);
     watch.querySelectorAll('button').forEach(button=>{
-      if(button.dataset.key!=='select'){button.addEventListener('click',()=>press(layout,button.dataset.key));return;}
+      if(button.dataset.key==='back'){button.addEventListener('click',()=>press(layout,'back'));return;}
       button.addEventListener('pointerdown',event=>{
         if(event.button!==0)return;
-        button.setPointerCapture(event.pointerId);startGesture(layout,'pointer-'+event.pointerId);
+        button.setPointerCapture(event.pointerId);startGesture(layout,'pointer-'+event.pointerId,button.dataset.key);
       });
       button.addEventListener('pointerup',event=>releaseGesture('pointer-'+event.pointerId));
       button.addEventListener('pointercancel',cancelGesture);
       button.addEventListener('lostpointercapture',cancelGesture);
       // Real pointer clicks were handled on release. Keep assistive synthetic
       // activation available without allowing a hold to also execute a tap.
-      button.addEventListener('click',event=>{if(event.detail===0)press(layout,'select');});
+      button.addEventListener('click',event=>{if(event.detail===0)press(layout,button.dataset.key);});
     });
     canvas.addEventListener('click',()=>{state.active=layout;canvas.focus();});
   });
   document.addEventListener('keydown',event=>{
     const watch=event.target.closest&&event.target.closest('.watch');if(!watch)return;
-    if(event.key==='Enter'||event.code==='Space'){
-      event.preventDefault();if(!event.repeat)startGesture(watch.dataset.layout,'key-'+event.code);return;
+    const gestureKey=event.key==='Enter'||event.code==='Space'?'select':event.key==='ArrowUp'?'up':event.key==='ArrowDown'?'down':null;
+    if(gestureKey){
+      event.preventDefault();if(!event.repeat)startGesture(watch.dataset.layout,'key-'+event.code,gestureKey);return;
     }
-    const key={ArrowUp:'up',ArrowDown:'down',Escape:'back',Backspace:'back',h:'hold',H:'hold'}[event.key];
-    if(key){event.preventDefault();press(watch.dataset.layout,key);}
+    const key={Escape:'back',Backspace:'back',h:'hold',H:'hold',w:'hold-up',W:'hold-up',s:'hold-down',S:'hold-down'}[event.key];
+    if(key){event.preventDefault();cancelGesture();press(watch.dataset.layout,key);}
   });
   document.addEventListener('keyup',event=>{
-    if(event.key==='Enter'||event.code==='Space'){
+    if(event.key==='Enter'||event.code==='Space'||event.key==='ArrowUp'||event.key==='ArrowDown'){
       if(gesture&&gesture.source==='key-'+event.code){event.preventDefault();releaseGesture('key-'+event.code);}
     }
   });
@@ -400,7 +405,7 @@
     inspect(){return {theme:state.theme,scenario:state.scenario,swapped:state.swapped,messagePreview:state.messagePreview,layouts:Object.fromEntries(layouts.map(layout=>[layout,{mode:views[layout].mode,section:views[layout].section,sectionCounts:Object.fromEntries(Object.entries(items().groups).map(([key,values])=>[key,values.length])),returnDepth:views[layout].stack.length,lastNavigation:views[layout].lastNavigation,actionCount:views[layout].actionCount,selectedId:views[layout].selectedId,visibleIds:views[layout].visibleIds,boundsViolations:views[layout].log.boundsViolations,text:views[layout].log.text,regions:views[layout].log.regions}]))};}
   };
   api.ready=Promise.all([document.fonts.load('700 16px "Roboto Watch"'),document.fonts.load('700 32px "Fredoka Watch"')]).then(()=>{
-    reset();announce('Ready. Select opens or uses an item. Hold Select for all entries in its group. Back returns to the same item.');return true;
+    reset();announce('Ready. Select uses available controls. Hold Select opens the associated app. Hold Up for Activities; hold Down for Pinned.');return true;
   });
   window.dashboardPreview=api;
   document.getElementById('scenario').addEventListener('change',event=>api.setScenario(event.target.value));

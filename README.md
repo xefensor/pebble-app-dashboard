@@ -10,7 +10,7 @@ installable build exists yet. The repository is local and has no remote.
 
 Open [the interactive Snapshot preview](previews/snapshot.html), or view the
 [expanded groups](previews/expansion-overview.png) and
-[detail / return navigation](previews/expansion-navigation.png).
+[controls / return navigation](previews/expansion-navigation.png).
 The [earlier layout comparison](previews/index.html) and its exports remain:
 [light overview](previews/overview-light.png),
 [dark overview](previews/overview-dark.png),
@@ -53,19 +53,29 @@ shows brightness and toggles on Select. Reading and command capabilities remain
 independent underneath; they can belong to the same displayed item.
 
 These visible slots do not set each collection's total capacity.
-Hold Select on an activity or pin to browse Activities or Pinned; the footer
-shows the available count. Short Select performs the pin's action when present,
-otherwise opens its details. Activities open their contextual detail view.
-Back restores the previous item and list position, then
-the original Snapshot item. A hold must not also execute the short-press action.
-Selecting the notification goes directly to native Notifications; the browser
-records that navigation intent without launching a real app. Six activities and
-twelve mixed pins demonstrate overflow; these counts are not capacity limits.
+The button model is:
+
+- Tap Up/Down to move selection.
+- Tap Select to open useful activity controls (Music playback), open native
+  Notifications directly, or perform a pin's action. A pin without an action or
+  a summary-only activity does nothing; there are no bare enlarged readouts.
+- Hold Select to open the selected item's associated app when a destination is
+  available. An action and an app destination are independent optional features.
+- Hold Up to browse all Activities; hold Down to browse all Pinned items.
+  These shortcuts work independently of the selected item, including in Music.
+- Back restores the previous selection, viewport and Music control focus.
+  Switching collection lists replaces the current list; holding its own button
+  again does not add a redundant return frame.
+
+A hold must not also execute its short press or move selection on release.
+The browser records app navigation intents without launching real apps. Six
+activities and twelve mixed pins demonstrate overflow, not capacity limits.
 The light's 65% value and toggle are simulated; no brightness-adjustment UI or
 real plugin command is implemented by this preview.
 
 The user also wants Timer Pause/Resume inside Dashboard, deferred until later.
-This is recorded scope, not an implemented Timer command capability.
+Until then, tapping its summary does nothing; hold Select opens Timer. This is
+recorded scope, not an implemented Timer command capability.
 
 Latest notification is a separate product idea from Dynamic's temporary new-
 notification activity. Its availability and privacy lifetime need implementation;

@@ -12,7 +12,7 @@
   <header class="page-header">
     <div class="eyebrow"><span class="brand-mark" aria-hidden="true">D</span> PEBBLE DASHBOARD <span class="study-label">SNAPSHOT · EXPANSION</span></div>
     <h1>A quick look. More when you need it.</h1>
-    <p class="intro">Pinned items can show a value, perform an action, or do both.<br>Select uses the item. Hold Select to see all Pinned items.</p>
+    <p class="intro">Tap Select for controls or an action. Hold Select for the associated app.<br>Hold Up for all Activities. Hold Down for all Pinned items.</p>
   </header>
   <section class="toolbar" aria-label="Preview settings">
     <label>Example <select id="scenario"><option value="timer-media">Timer + music</option><option value="workout-navigation">Workout + directions</option><option value="long">Long text + long timer</option><option value="quiet">Nothing running</option></select></label>
@@ -32,19 +32,19 @@
         <div class="watch" data-layout="snapshot">
           <canvas width="200" height="228" tabindex="0" role="img" aria-label="Snapshot Dashboard preview"></canvas>
           <button class="hardware back" data-key="back" aria-label="Snapshot: Back">‹</button>
-          <button class="hardware up" data-key="up" aria-label="Snapshot: Up">⌃</button>
-          <button class="hardware select" data-key="select" aria-label="Snapshot: tap Select or hold for all entries">●</button>
-          <button class="hardware down" data-key="down" aria-label="Snapshot: Down">⌄</button>
+          <button class="hardware up" data-key="up" aria-label="Snapshot: tap Up to move; hold for all Activities">⌃</button>
+          <button class="hardware select" data-key="select" aria-label="Snapshot: tap Select for controls or action; hold to open the associated app">●</button>
+          <button class="hardware down" data-key="down" aria-label="Snapshot: tap Down to move; hold for all Pinned items">⌄</button>
         </div>
       </div>
-      <p class="tradeoff">Hold the middle button for 0.6 seconds to see all Activities or Pinned items. Holding the light opens Pinned without toggling it.</p>
+      <p class="tradeoff">Tap Music to open playback controls. Tap Kitchen light to toggle it. Hold the middle button on Timer to open Timer. Holds take 0.6 seconds.</p>
     </article>
   </section>
-  <div class="interaction-help"><strong>Try it:</strong> move to Kitchen light and tap Select to toggle it. Hold Select on Light or Weather to browse the same Pinned list. Back restores your selection. Keyboard: ↑ ↓, tap or hold Enter / Space, Esc; H also previews a hold.</div>
+  <div class="interaction-help"><strong>Try it:</strong> hold Up for Activities or Down for Pinned. Tap Select runs an available action; pins without actions stay as they are. Hold Select opens the associated app when available. Back returns. Keyboard: tap/hold ↑ ↓ and Enter / Space; Esc returns. W / S / H simulate holding Up / Down / Select.</div>
   <p id="status" class="status" role="status" aria-live="polite">Loading local fonts…</p>
   <section class="notes">
-    <div><h3>One Pinned collection</h3><p>Weather shows a value, Find phone has an action, and Kitchen light has both. Six activities and twelve pins demonstrate overflow; these are example counts, not proposed limits.</p></div>
-    <div><h3>Notifications open their app</h3><p>Selecting the notification records a native Notifications navigation intent. The browser stays on Snapshot and reports it below the watch. Timer Pause/Resume is deferred.</p></div>
+    <div><h3>Useful actions on tap</h3><p>Music opens playback controls. Kitchen light toggles; Find phone rings. Weather and the current Timer summary have no tap action. Nothing opens just to enlarge the same content. Timer Pause/Resume is deferred.</p></div>
+    <div><h3>Associated app on hold</h3><p>Hold Select opens an available destination, such as Timer, Music or Weather. Items without a destination do nothing on hold. Notifications open directly on tap. Navigation is simulated below the watch.</p></div>
     <div><h3>Local concept preview</h3><p>Fictional data and simulated controls. No phone commands or native apps are launched. These 200 × 228 drawings are browser concepts, not watch captures. <a href="index.html">Earlier layout comparison</a>.</p></div>
   </section>
 </main>

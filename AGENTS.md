@@ -26,10 +26,16 @@ capture script verifies canvas bounds, palette and simulated navigation; it is
 not a native test suite. Keep preview controls disconnected from real phone APIs.
 The user wants Timer Pause/Resume later. The opening-screen goal is two current
 activities, latest notification and four pinned items. Snapshot is the chosen
-overview. Hold Select expands Activities or Pinned; Back
-restores the previous selection. A hold must never also execute a short press.
-Short Select performs a pin's optional action, otherwise opens its details.
-Notifications go directly to their native app (only a simulated intent here).
+overview. Tap Select opens useful activity controls (currently Music), opens
+native Notifications, or performs a pin's optional action. Pins without actions
+and summary-only activities do nothing on tap; do not add bare enlarged views.
+Timer has no Dashboard controls yet. Hold Select opens the selected item's
+optional associated app; without a destination it does nothing. Hold Up opens
+all Activities; hold Down opens all Pinned items, independent of selection.
+Back restores the previous selection and useful control focus. Repeating a
+group hold must not nest the same group. Switching groups replaces the list.
+A hold must never also execute a short press or move selection on release.
+All navigation destinations are simulated intents in this browser prototype.
 Six activities and twelve mixed pins are fictional overflow examples, not a
 capacity decision. Latest notification is distinct from Dynamic's short alert.
 

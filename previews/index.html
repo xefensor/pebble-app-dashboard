@@ -12,7 +12,7 @@
   <header class="page-header">
     <div class="eyebrow"><span class="brand-mark" aria-hidden="true">D</span> PEBBLE DASHBOARD <span class="study-label">LAYOUT STUDY 01</span></div>
     <h1>Snapshot, with room for more.</h1>
-    <p class="intro">Snapshot is the chosen direction. Pinned items combine values and optional press actions.<br><a href="snapshot.html">Try the focused Snapshot preview</a>, or compare the earlier layouts below.</p>
+    <p class="intro">Snapshot is the chosen direction. Tap Select for actions; hold Select for the associated app.<br><a href="snapshot.html">Try the focused Snapshot preview</a>, or compare the earlier layouts below.</p>
   </header>
   <section class="toolbar" aria-label="Preview settings">
     <label>Example <select id="scenario"><option value="timer-media">Timer + music</option><option value="workout-navigation">Workout + directions</option><option value="long">Long text + long timer</option><option value="quiet">Nothing running</option></select></label>
@@ -37,7 +37,7 @@
           <button class="hardware down" data-key="down" aria-label="Snapshot: Down">⌄</button>
         </div>
       </div>
-      <p class="tradeoff">Chosen direction. Short Select opens or uses an item; hold Select browses all entries of its group.</p>
+      <p class="tradeoff">Chosen direction. Tap Select for controls or an action. Hold Up for Activities; hold Down for Pinned.</p>
     </article>
     <article class="study" data-layout="focus">
       <div class="study-title"><span>02</span><h2>Activity focus</h2></div>
@@ -51,7 +51,7 @@
           <button class="hardware down" data-key="down" aria-label="Activity focus: Down">⌄</button>
         </div>
       </div>
-      <p class="tradeoff">More room for a countdown or headline. Pinned readings become compact.</p>
+      <p class="tradeoff">More room for a countdown or headline. Hold Select opens the selected item's associated app when available.</p>
     </article>
     <article class="study" data-layout="list">
       <div class="study-title"><span>03</span><h2>One list</h2></div>
@@ -68,11 +68,11 @@
       <p class="tradeoff">More room for each row and more items below. Pins can show a value, have an action, or both.</p>
     </article>
   </section>
-  <div class="interaction-help"><strong>Try the watch buttons.</strong> Up / Down moves focus. Select performs the item's action when available, otherwise opens details. Hold the middle button for all Activities or Pinned items. Back restores your previous selection. Notifications open the native app (simulated). Keyboard: ↑ ↓, tap or hold Enter / Space, Esc; H also previews a hold.</div>
+  <div class="interaction-help"><strong>Try the watch buttons.</strong> Tap Up / Down to move focus. Tap Select for Music controls, a pin's action, or native Notifications. Pins without actions do nothing. Hold Select for the associated app; hold Up for all Activities or Down for all Pinned items. Keyboard: tap/hold ↑ ↓ and Enter / Space; Esc returns. W / S / H simulate holding Up / Down / Select.</div>
   <p id="status" class="status" role="status" aria-live="polite">Loading local fonts…</p>
   <section class="notes">
     <div><h3>Values and actions together</h3><p>Weather, phone battery, a light and Find phone are all Pinned items. Kitchen light shows brightness and toggles on Select. Either activity position can show any supported activity.</p></div>
-    <div><h3>Timer controls come later</h3><p>The timer detail offers Open Timer. Pause/Resume inside Dashboard is planned for a later step. Music shows a proposed playback view.</p></div>
+    <div><h3>Timer controls come later</h3><p>Timer stays as a summary on tap; hold Select to open Timer. Pause/Resume inside Dashboard is planned for a later step. Music opens its proposed playback controls on tap.</p></div>
     <div><h3>A preview for discussion</h3><p>Fictional data; clocks are frozen for comparison. Buttons simulate navigation and controls. These are code-rendered concepts, not watch/emulator captures or an installed app. Latest-notification availability and privacy still need implementation.</p></div>
   </section>
 </main>

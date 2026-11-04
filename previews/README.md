@@ -17,35 +17,42 @@ the exported images and checks.
 
 ## Snapshot navigation
 
-Up/Down selects a row or tile. Pinned is one collection, containing items with
-a value, an action, or both. Kitchen light shows 65% brightness and toggles on
-Select; Find phone has an action without a value; Weather shows a temperature
-and opens details. The footer advertises the selected action, such as Toggle,
-Ring or Open. Items with actions execute them and remain selected in their
-current screen. All actions are simulations and send no phone command.
+Pinned is one collection containing items with a value, an action, or both.
+Kitchen light shows 65% brightness and toggles on Select; Find phone has an
+action without a value; Weather only shows a temperature on tap. An associated
+app destination is independent of the tap action.
 
-Activities open their details. Music's detail previews previous/play/next;
-other activity details have appropriate app navigation. Selecting a notification
-records the intent to open native Notifications, without a Dashboard detail.
+| Button | Tap | Hold for 600 ms |
+| --- | --- | --- |
+| Up | Previous item/control | All Activities |
+| Select | Useful activity controls; native Notifications; pin action if any | Associated app when available |
+| Down | Next item/control | All Pinned items |
+| Back | Previous screen, retaining selection | Same ordinary Back button |
 
-Hold the middle/Select button for 600 ms to browse Activities or Pinned. Every
-pin opens the same Pinned list, whether it has a value, an action, or both. The
-footer advertises `Hold: All 6` for Activities and `Hold: All 12` for Pinned.
-These are fictional counts, not capacity decisions. Up/Down browses the group,
-with at most five visible rows and a scrollbar. There are no additional hidden
-activities in the quiet example. Holding an actionable pin never also runs it.
+Music opens previous/play/next controls on tap. Summary-only activities and pins
+without actions stay unchanged on tap; no screen opens just to enlarge the same
+information. Timer has no Dashboard Pause/Resume yet, so its tap does nothing
+and its Select hold records the intent to open Timer. Notifications go directly
+to their native app on tap, without a Dashboard detail. Every command and app
+navigation remains simulated; the browser sends nothing to a phone or watch.
 
-Back from detail restores the exact selected group row and viewport; Back from
-the group restores the original Snapshot selection. Short Select on an expanded
-pin with an action executes it and stays in Pinned. Notifications go straight to
-the native app, represented only by a status message below the browser preview.
+The footer shows the selected tap action (`—` if none), an associated-app hold
+hint when available, and the global Up/Down group shortcuts. Collections contain
+six fictional activities and twelve mixed pins, with at most five rows visible
+and a scrollbar. These are examples, not capacity decisions. In the quiet
+example, hold Up opens an empty Activities list; hold Down still opens Pinned.
 
-Keyboard: arrows navigate, tap Enter/Space to Select, hold Enter/Space to expand,
-Escape returns. H is an alternative hold-preview shortcut. Pointer cancellation,
-focus loss and resets cancel pending gestures without executing a short press.
+Group shortcuts work from any item and from Music controls. Back restores the
+previous selected row, viewport and playback-control focus. Switching between
+Activities and Pinned replaces the current list, preserving its original return
+frame; holding the same group's button again creates no redundant screen.
+Actions in Pinned execute once and stay in the list. No hold also runs its tap
+or moves selection on release.
 
-Timer's detail only offers Open Timer: in-Dashboard Pause/Resume is wanted later.
-No progress is invented from a countdown that lacks an authoritative duration.
+Keyboard: tap or hold arrows and Enter/Space, Escape returns. W / S / H simulate
+holding Up / Down / Select. Pointer cancellation, focus loss and resets cancel
+pending gestures without executing a short press. No progress is invented from
+a countdown that lacks an authoritative duration.
 
 Use the Example selector for Timer/Music, Workout/Directions, long text/countdown
 and an empty activity state. Try dark screens, original pixel size, swapping
@@ -76,7 +83,8 @@ Run from the repository root with Chromium installed. The capture script owns
 an isolated temporary browser/profile and closes it afterward. It writes PNGs,
 contact sheets and `validation.json`, including exact preview/font input hashes.
 Checks cover palette and drawing bounds, static idle pixels, button/keyboard
-navigation, pointer/Enter/Space hold-release suppression, section scrolling,
-detail/Back behavior, selection visibility and simulated controls. Exports include
+navigation, pointer/arrow/Enter/Space hold-release suppression, optional app
+destinations, no-op taps, empty collections, section scrolling, Music/Back
+behavior, selection visibility and simulated controls. Exports include
 `expansion-overview.png`, `expansion-dark.png` and `expansion-navigation.png`.
 These results describe the browser prototype only.
