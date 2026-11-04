@@ -1,0 +1,306 @@
+{
+  "result": "PASS",
+  "version": "0.2.1",
+  "scope": "Real native Emery QEMU UI and AppMessage requests with an explicit fictional protocol peer; no phone JavaScript, live plugins, real app launches or physical watch.",
+  "focusedNotificationsOnly": true,
+  "candidatePbwSha256": "75f90917c512f669bc5b5ea75ed5d6d8cae9100fdd074c449df755335dac9e36",
+  "nativeOnlyPbwSha256": "5e25f2320dd3ee3b0740263e5c94c1cb8caecabc704afbab4c11dcd645b325dd",
+  "nativePayloadSha256": {
+    "emery/app_resources.pbpack": "94511ccd37e0309987f80c3b1f9b9a2ce4cb3cea9453d2f56470e1d35b93fe3c",
+    "emery/manifest.json": "269d1ed0cf6ddc998291867e5a763bd5650101ca48587f8a6a04ef58d2140840",
+    "emery/pebble-app.bin": "6237cda04bca4dc4671a460e60c5f75c01064f05ebae2a7a13092675a019985c"
+  },
+  "phoneJavascriptExecuted": false,
+  "stateDirectory": "/tmp/dashboard-0.2.1-hXapno",
+  "session": 750416917,
+  "checks": [
+    {
+      "check": "Empty Notifications is a real selectable Snapshot row; tap sends exactly one bound OPEN with current session/token/version and no ACTION",
+      "passed": true
+    },
+    {
+      "check": "Empty Notifications participates in ordinary Up/Down navigation; held Select opens once without an added tap/action",
+      "passed": true
+    },
+    {
+      "check": "Waiting/error shortcut is also selectable; source revision during a press cancels the stale OPEN before the rebound shortcut can open",
+      "passed": true
+    },
+    {
+      "check": "Private notice expiry erases its preview and keeps the row inert until an explicit current public launcher binding arrives",
+      "passed": true
+    },
+    {
+      "check": "Explicit empty launcher rebind preserves the selected row and uses its new version for exactly one OPEN",
+      "passed": true
+    },
+    {
+      "check": "Empty Notifications also remains selected and opens when no activity exists",
+      "passed": true
+    }
+  ],
+  "captures": [
+    {
+      "name": "empty-notifications-snapshot",
+      "file": "empty-notifications-snapshot.png",
+      "sha256": "38e47639b415141a9c399f0bac8d6b11643f081b034af4c08e16a0210a2f0634",
+      "rgbSha256": "e00fb325a2d3d81528e625b5eba097d9ff44b218bc42d7bdb95a39fcc5d53904",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "empty-notifications-selected",
+      "file": "empty-notifications-selected.png",
+      "sha256": "2abbd27bff9eb2a0f671be82f763e0097f6a7f9a9686d7df68c198c50f06de0a",
+      "rgbSha256": "2ed2fee664a416f50395dc406cd0b05500b7391b6e077dc73e1f0b9ed4a71974",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "notifications-shortcut-waiting",
+      "file": "notifications-shortcut-waiting.png",
+      "sha256": "0fe980b805d66eb80c71a32d62b7365f623490a322c997fef27d5c737ee3e94c",
+      "rgbSha256": "a0730c6bb726e4424c1ec80c981c8a8c060955c0201c666230940575cc623c37",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "notification-private-preview",
+      "file": "notification-private-preview.png",
+      "sha256": "5a15298eb0df7a370eb2f8a4a1af834c2de6c5791e5ccd135d4a17d29a519b45",
+      "rgbSha256": "4e0cb2e839b0be97f8ef08d94a4fc14683661aa0fa5c7d59bef1a9b120f1ab6a",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "notification-expired-inert",
+      "file": "notification-expired-inert.png",
+      "sha256": "1090a532d69a562355d7ad2d42fc03a619134463abc6ad9521a31f5323258629",
+      "rgbSha256": "8f2d682b2fafb835e3745b244048112261d13b8be8250685de641ff4ecbb1a56",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "empty-notifications-rebound",
+      "file": "empty-notifications-rebound.png",
+      "sha256": "512e6eb7e10d45e61b19ad229f7b168afce350473152a401dc8e3df5c7f87e2f",
+      "rgbSha256": "c5172616a23587f16fca8c78cb4fcf6f66bd038baab60301116e48c2f96624e5",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "empty-notifications-no-activity",
+      "file": "empty-notifications-no-activity.png",
+      "sha256": "42bdcb7352063edc88380e578bfe8f8581a4edee7f76dad4856d7bdefed240c5",
+      "rgbSha256": "23b0476b8f400b8f3e77d27579489dc740f0de6299194073e2d032aa66a7fe74",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    }
+  ],
+  "requests": [
+    {
+      "4000": 1,
+      "4001": 750416917,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0
+    },
+    {
+      "4000": 7,
+      "4001": 750416917,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 1,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 750416917,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 1,
+      "4005": 3,
+      "4006": 2
+    },
+    {
+      "4000": 4,
+      "4001": 750416917,
+      "4002": 2,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 3,
+      "4006": 2
+    },
+    {
+      "4000": 7,
+      "4001": 750416917,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 2,
+      "4005": 4,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 750416917,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 1,
+      "4005": 3,
+      "4006": 2
+    },
+    {
+      "4000": 4,
+      "4001": 750416917,
+      "4002": 3,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 3,
+      "4006": 2
+    },
+    {
+      "4000": 4,
+      "4001": 750416917,
+      "4002": 4,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 3,
+      "4006": 3
+    },
+    {
+      "4000": 4,
+      "4001": 750416917,
+      "4002": 5,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 3,
+      "4006": 5
+    },
+    {
+      "4000": 7,
+      "4001": 750416917,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 3,
+      "4006": 5
+    },
+    {
+      "4000": 4,
+      "4001": 750416917,
+      "4002": 6,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 3,
+      "4006": 5
+    }
+  ],
+  "mockActions": [],
+  "mockAppOpens": [
+    {
+      "4000": 4,
+      "4001": 750416917,
+      "4002": 2,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 3,
+      "4006": 2
+    },
+    {
+      "4000": 4,
+      "4001": 750416917,
+      "4002": 3,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 3,
+      "4006": 2
+    },
+    {
+      "4000": 4,
+      "4001": 750416917,
+      "4002": 4,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 3,
+      "4006": 3
+    },
+    {
+      "4000": 4,
+      "4001": 750416917,
+      "4002": 5,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 3,
+      "4006": 5
+    },
+    {
+      "4000": 4,
+      "4001": 750416917,
+      "4002": 6,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 3,
+      "4006": 5
+    }
+  ],
+  "visualReview": {
+    "reviewed": true,
+    "screens": [
+      "empty-notifications-snapshot",
+      "empty-notifications-selected",
+      "notifications-shortcut-waiting",
+      "notification-private-preview",
+      "notification-expired-inert",
+      "empty-notifications-rebound",
+      "empty-notifications-no-activity"
+    ],
+    "finding": "All seven actual 200x228 native screenshots reviewed. Empty and waiting launcher rows show the full Notifications heading plus No notifications or Open notifications, visible selection and the contextual app-open icon without overlap. A real private preview changes to Notifications / No preview on local expiry and loses its app-open icon; only an explicit public rebind restores it. The row remains visible, selected and usable with no activity. Existing static ellipsis on the optional no-live-activity placeholder remains; no layout redesign, scrolling, source-content persistence or fabricated message is introduced."
+  },
+  "nativeSourceSha256": {
+    "src/c/dashboard.c": "6e1813148c964c9315e6629445198f5073d286252ce426c2ecc174be5a652c31",
+    "src/c/dashboard.h": "598cad4ee71a3de167de8cdf58ec0ab1af57c79b8662af572b6161115cad6f6e",
+    "src/c/main.c": "79e67adbc028dd91115446a131a8891e268f48fc90453e4217e8111efb5d8aaa"
+  },
+  "harnessSha256": {
+    "scripts/emulator-smoke.py": "db84b95e0a8abd7bfe8ca64bcba7fdffa2b05efd0515cf2eecfdda351441826c",
+    "tests/native-peer.cjs": "706f342d802decc18dcab68ecdd2728fc1f588591e135b7d3f8afd14a85d7c09"
+  }
+}

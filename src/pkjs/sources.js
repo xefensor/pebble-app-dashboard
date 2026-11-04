@@ -246,15 +246,24 @@ module.exports = function createSources(options) {
     }
     return finalizeActions(entry);
   }
+  function notificationLauncher(empty) {
+    var entry=emptyItem('builtin:notifications','Notifications',K.notification,1);
+    entry.flags=F.NOTIFICATION|F.APP;entry.subtitle=empty?'No notifications':'Open notifications';
+    entry.appLabel='Notifications';entry._openApp={watchAppUuid:NOTIFICATIONS_APP,label:'Notifications'};
+    entry._connected=connected;delete entry._sourceValidUntil;
+    return entry;
+  }
   function notificationItem() {
-    var group=groups[NOTIFICATIONS+'|notifications/notification'];if (!live(group)) return null;
-    var instance=group.envelope.instances[0],props=instance && instance.properties;if (!props || typeof instance.instanceId !== 'string') return null;
-    var title=text(props.name), app=text(props.app);if (!title && !app) return null;
-    var entry=emptyItem('notification:'+group.envelope.pluginUuid+':'+instance.instanceId,title||app,K.notification,1);
+    if(!settings.showNotifications)return notificationLauncher(false);
+    var group=groups[NOTIFICATIONS+'|notifications/notification'];if (!live(group)) return notificationLauncher(false);
+    var instance=group.envelope.instances[0],props=instance && instance.properties;
+    if (!props || typeof instance.instanceId !== 'string') return notificationLauncher(group.envelope.instances.length===0);
+    var title=text(props.name), app=text(props.app);if (!title && !app) return notificationLauncher(false);
+    var entry=emptyItem('builtin:notifications',title||app,K.notification,1);
     entry.flags=F.PRIVATE|F.NOTIFICATION|F.APP;entry._provider=group.envelope.pluginUuid;entry._instanceId=instance.instanceId;entry._sourceValidUntil=group.expiresAt;
     entry.name=app||'Notifications';entry.subtitle=settings.notificationPreview?text(props.body):'';
     entry._sourceSignature=JSON.stringify([title,app,entry.subtitle]);entry.appLabel='Notifications';entry.image=image(props.app_icon);
-    entry._openApp={watchAppUuid:NOTIFICATIONS_APP,label:'Notifications'};return entry;
+    entry._openApp={watchAppUuid:NOTIFICATIONS_APP,label:'Notifications'};entry._connected=connected;return entry;
   }
   function snapshot() {
     if (!settings) return {activities:[],notification:null,pins:[],loading:false,error:'SOURCE_UNAVAILABLE',connected:connected,available:typeof pebble.subscribeToSource==='function'};
@@ -270,7 +279,7 @@ module.exports = function createSources(options) {
       if(ai<0)ai=settings.activityOrder.indexOf(ak);if(bi<0)bi=settings.activityOrder.indexOf(bk);
       return (ai<0?settings.activityOrder.length:ai)-(bi<0?settings.activityOrder.length:bi);
     });
-    if (notice && all.some(function (entry) { return entry._provider===notice._provider && entry._activityId===notice._instanceId; })) notice=null;
+    if (notice && notice._instanceId && all.some(function (entry) { return entry._provider===notice._provider && entry._activityId===notice._instanceId; })) notice=notificationLauncher(false);
     var activityStatus=activities?activities.status():{complete:true,available:false,error:'PLUGINS_UNAVAILABLE'};
     var errors=Object.keys(groups).map(function(key){return groups[key].error;}).filter(function(value){return value&&value!=='ACTION_ONLY';});
     var waiting=!activityStatus.complete || Object.keys(groups).some(function (key) { return !groups[key].ready; });

@@ -100,6 +100,41 @@ static void static_placeholder(void){
   put16(item+28,1);bytes[80]='7';assert(!db_decode(bytes,81,&frame));put16(item+28,0);
   put16(item+12,DB_COUNTDOWN);item[15]=1;assert(!db_decode(bytes,80,&frame));
 }
+static size_t notification_bytes(uint8_t *bytes,const char *subtitle){
+  memset(bytes,0,256);memcpy(bytes,"DSH1",4);put32(bytes+4,1);put32(bytes+8,1);put32(bytes+12,1);put32(bytes+16,1000);
+  bytes[20]=DB_OVERVIEW;bytes[21]=DB_READY;bytes[22]=1;put16(bytes+24,1);
+  uint8_t *item=bytes+32;put32(item,3);put32(item+4,1);put16(item+12,DB_NOTIFICATION|DB_APP);item[14]=DB_NOTICE;item[39]=DB_ROLE_NOTICE;
+  const char *strings[]={"Notifications",subtitle,"","Notifications","","Notifications"};size_t length=76;
+  for(unsigned i=0;i<6;i++){size_t n=strlen(strings[i]);put16(item+24+i*2,(uint16_t)n);memcpy(bytes+length,strings[i],n);length+=n;}
+  return length;
+}
+static void notification_shortcut(void){
+  uint8_t bytes[256];size_t length=notification_bytes(bytes,"No notifications");DbSnapshot frame;
+  assert(db_decode(bytes,length,&frame));assert(!frame.items[0].valid_until&&db_item_capability_current(&frame.items[0],1000));
+  const uint16_t allowed[]={DB_IS_PENDING,DB_IS_FAILED,DB_IS_PENDING|DB_IS_FAILED};
+  for(unsigned i=0;i<sizeof(allowed)/sizeof(allowed[0]);i++){put16(bytes+44,DB_NOTIFICATION|DB_APP|allowed[i]);assert(db_decode(bytes,length,&frame));}
+  const uint16_t forbidden[]={DB_PRIVATE,DB_UNAVAILABLE,DB_ACTION,DB_COUNTDOWN,DB_IS_MEDIA,DB_LOCAL_WATCH};
+  for(unsigned i=0;i<sizeof(forbidden)/sizeof(forbidden[0]);i++){put16(bytes+44,DB_NOTIFICATION|DB_APP|forbidden[i]);assert(!db_decode(bytes,length,&frame));}
+  put16(bytes+44,DB_NOTIFICATION|DB_APP);
+  put16(bytes+74,4);bytes[length]=1;bytes[length+1]='X';bytes[length+2]=bytes[length+3]=0;assert(!db_decode(bytes,length+4,&frame));put16(bytes+74,0);
+  bytes[46]=DB_GENERIC;assert(!db_decode(bytes,length,&frame));bytes[46]=DB_NOTICE;
+  bytes[76]='X';assert(!db_decode(bytes,length,&frame));bytes[76]='N';
+  // A readable value, custom action label/control, image or unrecognized state
+  // must never acquire an unlimited lease through this public shortcut shape.
+  put16(bytes+60,1);bytes[length]='7';assert(!db_decode(bytes,length+1,&frame));put16(bytes+60,0);
+  bytes[68]=1;bytes[69]=1;bytes[70]=1;put16(bytes+72,1);bytes[length]=0xc0;bytes[length+1]=0;assert(!db_decode(bytes,length+2,&frame));bytes[68]=bytes[69]=bytes[70]=0;put16(bytes+72,0);
+  length=notification_bytes(bytes,"Old private text");assert(!db_decode(bytes,length,&frame));
+  length=notification_bytes(bytes,"Open notifications");assert(db_decode(bytes,length,&frame));
+  DbSnapshot shell=frame;DbState state;db_state_init(&state,1);db_state_expect(&state,1,DB_OVERVIEW,0,3);
+  frame.items[0].flags=DB_PRIVATE|DB_NOTIFICATION|DB_APP;frame.items[0].valid_until=1001;
+  snprintf(frame.items[0].title,sizeof(frame.items[0].title),"Private sender");snprintf(frame.items[0].subtitle,sizeof(frame.items[0].subtitle),"Private message");
+  assert(db_state_apply(&state,&frame));assert(db_selected(&state)->token==3);
+  assert(db_state_redact(&state,1001,false));assert(db_selected(&state)->token==3);assert(!db_item_capability_current(db_selected(&state),1001));
+  assert(!state.snapshot.items[0].title[0]&&!state.snapshot.items[0].subtitle[0]&&!(state.snapshot.items[0].flags&DB_APP));
+  shell.sequence=2;shell.items[0].version=2;assert(db_state_apply(&state,&shell));assert(db_selected(&state)->token==3&&db_selected(&state)->version==2);
+  assert(db_item_capability_current(db_selected(&state),1001)&&(db_selected(&state)->flags&DB_APP)&&!db_item_actionable(db_selected(&state),1001));
+  assert(!db_state_redact(&state,1001,true)); // Public shortcut has no private preview to erase.
+}
 int main(int argc,char **argv){
   assert(argc>1);
   if(!strcmp(argv[1],"--decode-only")){
@@ -108,5 +143,5 @@ int main(int argc,char **argv){
     free(frame);printf("C parser: %d actual runtime frames accepted\n",argc-2);return 0;
   }
   for(int i=1;i<argc;i++)fixture(argv[i]);
-  clocks();direct_media_action();identity_and_privacy();static_placeholder();printf("native model: %u binary fixtures; malformed, stale, selection, privacy and clock checks passed\n",checked);return 0;
+  clocks();direct_media_action();identity_and_privacy();static_placeholder();notification_shortcut();printf("native model: %u binary fixtures; malformed, stale, selection, privacy and clock checks passed\n",checked);return 0;
 }

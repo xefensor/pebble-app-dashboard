@@ -1,0 +1,57 @@
+{
+  "session": 1,
+  "request": 1,
+  "sequence": 1,
+  "now": 2000000000,
+  "status": 1,
+  "dark": false,
+  "activitiesTotal": 6,
+  "pinsTotal": 12,
+  "mode": 0,
+  "total": 3,
+  "offset": 0,
+  "items": [
+    {
+      "token": 3,
+      "version": 1,
+      "validUntil": 0,
+      "flags": 1026,
+      "kind": 3,
+      "role": 1,
+      "title": "Notifications",
+      "subtitle": "No notifications",
+      "value": "",
+      "appLabel": "Notifications",
+      "actionLabel": "",
+      "name": "Notifications"
+    },
+    {
+      "token": 4,
+      "version": 1,
+      "validUntil": 2000003600,
+      "flags": 2,
+      "kind": 4,
+      "role": 2,
+      "title": "Weather",
+      "subtitle": "",
+      "value": "13°C",
+      "appLabel": "Weather",
+      "actionLabel": "",
+      "name": ""
+    },
+    {
+      "token": 6,
+      "version": 1,
+      "validUntil": 2000003600,
+      "flags": 0,
+      "kind": 5,
+      "role": 2,
+      "title": "Phone",
+      "subtitle": "",
+      "value": "76%",
+      "appLabel": "",
+      "actionLabel": "",
+      "name": ""
+    }
+  ]
+}

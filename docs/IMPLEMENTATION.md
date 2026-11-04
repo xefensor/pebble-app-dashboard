@@ -127,12 +127,25 @@ Countdown: anchor deadline, baseSeconds fixed remaining if anchor0.
 Elapsed: baseSeconds accumulated, plus max(0,now-anchor) if anchor>0.
 Expiry0 only for independent action-only or local-watch items, or a nonprivate
 static configured pin identity with no value/clock (such as unavailable Find
-phone metadata before discovery). Source display
+phone metadata before discovery), or the public Notifications launcher described
+below. Source display
 values must have a real original validity; public outage retention is bounded.
 Live SDK sources with null TTL have a separate60s native transport lease,
 heartbeated every30s only while the original subscription is active. Keep true
 source validity/observation separate; clear on withdrawal/error/disconnect and
 never extend a finite source/native Timer validity through this mechanism.
+
+The notification row uses one stable `builtin:notifications` identity whether
+displaying a real message or just opening the app. The latter is public static
+metadata: role1, kind3, flags APP|NOTIFICATION (optional PENDING/FAILED feedback
+bits), expiry0, title/name/appLabel all `Notifications`, subtitle either
+`No notifications` for a confirmed empty source or `Open notifications` when no
+preview is available. Value, action label, clocks, images and controls are empty.
+These exact fields are the only zero-expiry notification exception; live/private
+notification content always requires its real lease. Local private expiry clears
+content and makes the old binding inert until the phone supplies a new public
+launcher version. Notification preview opt-out stops source subscription while
+retaining the independent app destination; it does not fabricate a message.
 
 Optional item.controls contains exactly3 strings (each<=32UTF8bytes), encoded
 as3 length-u8/string pairs in the blob, total<=99bytes. Blank labels disable the

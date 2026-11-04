@@ -62,7 +62,7 @@ module.exports = function createRuntime(options) {
     keys.forEach(function(key,index){entry[key]=key==='value'&&protocol.utf8(entry[key]||'').length>48?'Too long':protocol.text(entry[key] || '',protocol.limits[index]);});
     entry.controls=(entry.controls || []).slice(0,3).map(function(label){return protocol.text(label || '',32);});
     while(entry.controls.length<3)entry.controls.push('');
-    bindings[entry.token]={version:entry.version,valid:true,expiresAt:finite || 0,actions:raw._commands || [],openApp:raw._openApp || null,path:raw._path || null};
+    bindings[entry.token]={version:entry.version,valid:raw._connected!==false,expiresAt:finite || 0,actions:raw._commands || [],openApp:raw._openApp || null,path:raw._path || null};
     return entry;
   }
   function materialize() {

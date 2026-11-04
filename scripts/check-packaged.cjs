@@ -56,7 +56,7 @@ function frame(){
   const b=Buffer.from(latest[P.DB_DATA]);assert.equal(b.subarray(0,4).toString(),'DSH1');let at=32;
   const out={mode:b[20],status:b[21],offset:b.readUInt16LE(26),total:b.readUInt16LE(24),activitiesTotal:b.readUInt16LE(28),pinsTotal:b.readUInt16LE(30),items:[]};
   for(let i=0;i<b[22];i++){
-    const item={token:b.readUInt32LE(at),version:b.readUInt32LE(at+4),flags:b.readUInt16LE(at+12),clockMode:b[at+15],anchor:b.readUInt32LE(at+16),role:b[at+39],imageWidth:b[at+36]},lengths=[];
+    const item={token:b.readUInt32LE(at),version:b.readUInt32LE(at+4),validUntil:b.readUInt32LE(at+8),flags:b.readUInt16LE(at+12),clockMode:b[at+15],anchor:b.readUInt32LE(at+16),role:b[at+39],imageWidth:b[at+36]},lengths=[];
     for(let n=0;n<6;n++)lengths.push(b.readUInt16LE(at+24+2*n));const tail=b[at+38]+b.readUInt16LE(at+40)+b.readUInt16LE(at+42);at+=44;
     ['title','subtitle','value','appLabel','actionLabel','name'].forEach((name,n)=>{item[name]=b.subarray(at,at+lengths[n]).toString();at+=lengths[n];});at+=tail;out.items.push(item);
   }
@@ -71,7 +71,7 @@ async function main(){
   let music=frame().items.find(item=>item.flags&F.MEDIA);assert.ok(music.flags&F.MEDIA_TOGGLE);assert.equal(music.imageWidth,40);
   // Put Music in the single activity slot. This changes only Dashboard-local
   // settings; the native tap must execute slot one without opening MODE3.
-  settings.save(storage,{...settings.load(storage),activityOrder:['builtin:music']});
+  settings.save(storage,{...settings.load(storage),activityOrder:['builtin:music'],notificationPreview:true});
   let reordered;events.configmessage({data:{type:'reload_settings'},respond:value=>reordered=value});await settle();assert.equal(reordered.ok,true);
   send(protocol.op.VIEW,3,{[P.DB_MODE]:0});await settle();assert.equal(frame().items.length,4);music=frame().items[0];assert.ok(music.flags&F.MEDIA);
   const action={ [P.DB_TOKEN]:music.token,[P.DB_VERSION]:music.version,[P.DB_ACTION]:1};
@@ -84,25 +84,34 @@ async function main(){
   send(protocol.op.VIEW,8,{[P.DB_MODE]:1,[P.DB_OFFSET]:0});await settle();
   const currentTea=frame().items.find(item=>item.title==='Tea');
   send(protocol.op.OPEN,9,{[P.DB_TOKEN]:currentTea.token,[P.DB_VERSION]:currentTea.version});await settle();assert.equal(calls.at(-1).action,'launch_app');assert.equal(calls.at(-1).args.uuid,TIMER);
-  send(protocol.op.VIEW,10,{[P.DB_MODE]:0});await settle();assert.ok(frame().items.some(item=>item.role===1));
-  noticePresent=false;emit('notifications');await settle();assert.equal(frame().items.some(item=>item.role===1),false);assert.equal(frame().items.length,3);
-  const defaults=settings.load(storage);const altered={...defaults,dark:true};settings.save(storage,altered);
+  send(protocol.op.VIEW,10,{[P.DB_MODE]:0});await settle();const privateNotice=frame().items.find(item=>item.role===1);assert.equal(privateNotice.title,'Fictional sender');assert.equal(privateNotice.subtitle,'Private test text');assert.ok(privateNotice.flags&F.PRIVATE);
+  noticePresent=false;emit('notifications');await settle();const emptyNotice=frame().items.find(item=>item.role===1);assert.equal(frame().items.length,4);
+  assert.equal(emptyNotice.token,privateNotice.token);assert.ok(emptyNotice.version>privateNotice.version);assert.equal(emptyNotice.flags,F.NOTIFICATION|F.APP);assert.equal(emptyNotice.validUntil,0);
+  assert.equal(emptyNotice.title,'Notifications');assert.equal(emptyNotice.subtitle,'No notifications');assert.equal(emptyNotice.name,'Notifications');assert.equal(emptyNotice.appLabel,'Notifications');
+  assert.equal(emptyNotice.value,'');assert.equal(emptyNotice.actionLabel,'');assert.equal(emptyNotice.clockMode,0);assert.equal(emptyNotice.imageWidth,0);
+  assert.ok(!JSON.stringify(frame()).includes('Fictional sender'));assert.ok(!JSON.stringify(frame()).includes('Private test text'));
+  const beforeEmptyOpen=calls.length;send(protocol.op.OPEN,11,{[P.DB_TOKEN]:emptyNotice.token,[P.DB_VERSION]:emptyNotice.version});await settle();
+  assert.equal(calls.length,beforeEmptyOpen+1);assert.equal(calls.at(-1).action,'launch_app');assert.equal(calls.at(-1).plugin,'00000000-0000-0000-0001-000000000007');assert.equal(calls.at(-1).args.uuid,'b2cae818-10f8-46df-ad2b-98ad2254a3c1');
+  const defaults=settings.load(storage);const altered={...defaults,dark:true,showNotifications:false};settings.save(storage,altered);
   let replied;events.configmessage({data:{type:'reload_settings'},respond:value=>replied=value});await settle();assert.equal(replied.ok,true);
-  send(protocol.op.VIEW,11,{[P.DB_MODE]:2,[P.DB_OFFSET]:0,[P.DB_INDEX]:0});await settle();assert.equal(frame().mode,2);assert.equal(frame().items.length,4);
+  const hiddenPreview=frame().items.find(item=>item.role===1);assert.equal(hiddenPreview.subtitle,'Open notifications');assert.equal(hiddenPreview.flags,F.NOTIFICATION|F.APP);assert.equal(hiddenPreview.validUntil,0);
+  assert.equal(subscriptions.some(s=>!s.closed&&s.request.category==='notifications'),false,'Disabling notification previews must unsubscribe from private source data');
+  send(protocol.op.OPEN,12,{[P.DB_TOKEN]:hiddenPreview.token,[P.DB_VERSION]:hiddenPreview.version});await settle();assert.equal(calls.at(-1).args.uuid,'b2cae818-10f8-46df-ad2b-98ad2254a3c1');
+  send(protocol.op.VIEW,13,{[P.DB_MODE]:2,[P.DB_OFFSET]:0,[P.DB_INDEX]:0});await settle();assert.equal(frame().mode,2);assert.equal(frame().items.length,4);
   for(const value of storage.values.values()){assert.ok(!value.includes('Fictional track'));assert.ok(!value.includes('Fictional sender'));assert.ok(!value.includes('Private test text'));}
   let config;const configEvents={};vm.runInNewContext(fs.readFileSync(path.join(packed,'plugin.js'),'utf8'),{Pebble:{registerConfigHandler:fn=>config=fn},localStorage:storage,Promise,console},{filename:'packaged-dashboard-plugin.js',timeout:5000});
   config({type:'load_settings'},value=>configEvents.loaded=value);assert.equal(configEvents.loaded.ok,true);assert.equal(configEvents.loaded.settings.dark,true);
   storage.setItem('dashboard.settings.v1','unreadable');events.showConfiguration();await settle();
   assert.ok(decodeURIComponent(urls.at(-1)).includes('"needsRepair":true'),'Legacy configuration must visibly permit an explicit repair');
   assert.equal(storage.getItem('dashboard.settings.v1'),'unreadable','Opening a repair page must not save defaults');
-  send(protocol.op.CANCEL,12);const count=calls.length;advance(120000);await settle();assert.equal(calls.length,count);
+  send(protocol.op.CANCEL,14);const count=calls.length;advance(120000);await settle();assert.equal(calls.length,count);
   const framesDir=path.join(root,'build/packaged-frames');fs.mkdirSync(framesDir,{recursive:true});
   for(const name of fs.readdirSync(framesDir))if(name.endsWith('.bin'))fs.unlinkSync(path.join(framesDir,name));
   const frames=sent.filter(message=>message[P.DB_DATA]);
   frames.forEach((message,index)=>fs.writeFileSync(path.join(framesDir,String(index).padStart(4,'0')+'.bin'),Buffer.from(message[P.DB_DATA])));
   const report={result:'PASS',scope:'Actual PBW phone and settings-plugin JavaScript executed with isolated fictional SDK sources/actions; not a live phone or physical watch test.',version:pkg.version,
     pbwSha256:crypto.createHash('sha256').update(fs.readFileSync(pbw)).digest('hex'),phoneSha256:crypto.createHash('sha256').update(fs.readFileSync(path.join(packed,'pebble-js-app.js'))).digest('hex'),
-    proofs:{realActivitiesProviderAndConsumer:true,overviewFourItems:true,overviewOneActivityOneNotificationTwoPins:true,fullCatalogueRetained:true,sourceCountdownAnchors:true,artworkBridge:true,privateBodyOptOut:true,musicCommandOnceAndConfirmedReading:true,musicTapDirectFromSnapshot:true,musicHoldVerifiedApp:true,findPhoneExplicitOnly:true,associatedAppDestination:true,notificationWithdrawal:true,liveSettingsReload:true,pagedPins:true,privateContentNeverPersisted:true,bundledSettingsPlugin:true,legacyRepairExplicitOnly:true,noCommandsAfterCancel:true},
+    proofs:{realActivitiesProviderAndConsumer:true,overviewFourItems:true,overviewOneActivityOneNotificationTwoPins:true,fullCatalogueRetained:true,sourceCountdownAnchors:true,artworkBridge:true,privateBodyOptOut:true,musicCommandOnceAndConfirmedReading:true,musicTapDirectFromSnapshot:true,musicHoldVerifiedApp:true,findPhoneExplicitOnly:true,associatedAppDestination:true,notificationPrivateWithdrawalRetainsPublicLauncher:true,emptyNotificationLauncherOpensExactNativeApp:true,notificationPreviewOptOutKeepsLauncherWithoutSubscription:true,liveSettingsReload:true,pagedPins:true,privateContentNeverPersisted:true,bundledSettingsPlugin:true,legacyRepairExplicitOnly:true,noCommandsAfterCancel:true},
     actualEncodedFrameCount:frames.length,mockInvocations:calls.map(call=>({plugin:call.plugin,action:call.action}))};
   fs.mkdirSync(qaOutput,{recursive:true});fs.writeFileSync(path.join(qaOutput,'packaged-runtime.json'),JSON.stringify(report,null,2)+'\n');
   console.log('Packaged Dashboard runtime: PASS');

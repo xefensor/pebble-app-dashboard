@@ -36,6 +36,14 @@ function musicPlugin(actions=['previous_track','set_playing','next_track']){retu
 function envelope(pluginUuid,instances,validUntilMs=null){return {pluginUuid,instances,validUntilMs};}
 function sourceFixture(prefs,plugins=[]){const time=clock(),pebble=sdk(plugins);let updates=0;const source=sourcesModule({...time,pebble,activitiesHost:host(),onChanged(){updates++;}});source.start(settings.normalize(prefs));return {time,pebble,source,updates:()=>updates};}
 function minimal(pins=[]){return {version:1,dark:false,notificationPreview:false,showNotifications:true,activityOrder:[],disabledActivities:[],pins};}
+function assertNotificationLauncher(item,subtitle='Open notifications'){
+  assert.equal(item._identity,'builtin:notifications');assert.equal(item.title,'Notifications');assert.equal(item.name,'Notifications');
+  assert.equal(item.subtitle,subtitle);assert.equal(item.appLabel,'Notifications');assert.equal(item.kind,protocol.kind.notification);assert.equal(item.role,1);
+  assert.equal(item.flags,F.NOTIFICATION|F.APP);assert.equal(item.validUntil,0);assert.equal(item.value,'');assert.equal(item.actionLabel,'');
+  assert.equal(item.clockMode,0);assert.equal(item.anchor,0);assert.equal(item.baseSeconds,0);assert.equal(item.image,undefined);assert.deepEqual(item._commands,[]);
+  assert.equal(item._provider,undefined);assert.equal(item._sourceValidUntil,undefined);assert.equal(item._sourceSignature,undefined);assert.equal(item._instanceId,undefined);
+  assert.deepEqual(item._openApp,{watchAppUuid:NOTIFICATIONS_APP,label:'Notifications'});
+}
 function decode(bytes){
   const b=Buffer.from(bytes),out={session:b.readUInt32LE(4),request:b.readUInt32LE(8),sequence:b.readUInt32LE(12),now:b.readUInt32LE(16),mode:b[20],status:b[21],total:b.readUInt16LE(24),offset:b.readUInt16LE(26),items:[]};let at=32;
   for(let i=0;i<b[22];i++){
@@ -60,10 +68,63 @@ test('latest notification is current shade data on first launch, clears withdraw
   assert.ok(!request.properties.includes('body'),'private body not requested when preview disabled');
   pebble.emit('notifications','notification',envelope(NOTIFICATIONS,[{instanceId:'newest',properties:{name:prop('Sam'),body:prop('Secret'),app:prop('Signal')}},{instanceId:'older',properties:{name:prop('Old')}}]));
   assert.equal(source.snapshot().notification.title,'Sam');assert.equal(source.snapshot().notification.subtitle,'');assert.equal(source.snapshot().notification._openApp.watchAppUuid,NOTIFICATIONS_APP);
-  pebble.emit('notifications','notification',envelope(NOTIFICATIONS,[]));assert.equal(source.snapshot().notification,null);
+  pebble.emit('notifications','notification',envelope(NOTIFICATIONS,[]));assertNotificationLauncher(source.snapshot().notification,'No notifications');
   pebble.emit('notifications','notification',envelope(NOTIFICATIONS,[{instanceId:'n',properties:{name:prop('Private')}}]));
-  pebble.fail('notifications','notification','PERMISSION_DENIED');assert.equal(source.snapshot().notification,null);
+  pebble.fail('notifications','notification','PERMISSION_DENIED');assertNotificationLauncher(source.snapshot().notification);
   source.stop();
+});
+
+test('notification launcher distinguishes known empty shade from unavailable or disabled previews without inventing observations',async()=>{
+  const f=sourceFixture(minimal());await flush();assertNotificationLauncher(f.source.snapshot().notification);
+  f.pebble.emit('notifications','notification',envelope(NOTIFICATIONS,[]));assertNotificationLauncher(f.source.snapshot().notification,'No notifications');
+  f.source.connectionChanged(false);assertNotificationLauncher(f.source.snapshot().notification);assert.equal(f.source.snapshot().notification._connected,false);
+  f.source.stop();
+  const disabled=sourceFixture({...minimal(),showNotifications:false,notificationPreview:true});await flush();
+  assert.equal(disabled.pebble.subscriptions.some(s=>s.request.category==='notifications'),false,'preview opt-out must not read message data');
+  assertNotificationLauncher(disabled.source.snapshot().notification);disabled.source.stop();
+});
+
+test('withdrawn or expired private notice keeps a stable public launcher token with a fresh exact command binding',async()=>{
+  const f=runtimeFixture({...minimal(),notificationPreview:true});await flush();f.time.advance(0);
+  const waiting=f.frame().items.find(item=>item.role===1);assert.equal(waiting.validUntil,0);assert.equal(waiting.subtitle,'Open notifications');
+  f.pebble.emit('notifications','notification',envelope(NOTIFICATIONS,[{instanceId:'private',properties:{name:prop('Private sender'),app:prop('Private app'),body:prop('Secret body')}}],T+10000));f.time.advance(0);
+  const privateNotice=f.frame().items.find(item=>item.role===1);assert.equal(privateNotice.token,waiting.token);assert.ok(privateNotice.flags&F.PRIVATE);assert.equal(privateNotice.subtitle,'Secret body');
+  f.pebble.emit('notifications','notification',envelope(NOTIFICATIONS,[]));f.time.advance(0);
+  const empty=f.frame().items.find(item=>item.role===1);assert.equal(empty.token,privateNotice.token);assert.ok(empty.version>privateNotice.version);assert.equal(empty.flags,F.NOTIFICATION|F.APP);
+  assert.equal(empty.title,'Notifications');assert.equal(empty.subtitle,'No notifications');assert.equal(empty.name,'Notifications');assert.equal(empty.validUntil,0);
+  assert.ok(!JSON.stringify(f.frame()).includes('Private'));assert.ok(!JSON.stringify(f.frame()).includes('Secret'));
+  f.runtime.message(native(f.pebble,protocol.op.OPEN,55,2,{DB_TOKEN:privateNotice.token,DB_VERSION:privateNotice.version}));await flush();assert.equal(f.pebble.invocations.length,0,'withdrawn private version cannot authorize a new binding');
+  f.runtime.message(native(f.pebble,protocol.op.ACTION,55,3,{DB_TOKEN:empty.token,DB_VERSION:empty.version,DB_ACTION:0}));await flush();assert.equal(f.pebble.invocations.length,0,'public launcher has no plugin action');
+  f.runtime.message(native(f.pebble,protocol.op.OPEN,55,4,{DB_TOKEN:empty.token,DB_VERSION:empty.version}));f.time.advance(0);await flush();f.time.advance(0);
+  assert.equal(f.pebble.invocations.length,1);assert.equal(f.pebble.invocations[0].plugin,'00000000-0000-0000-0001-000000000007');assert.equal(f.pebble.invocations[0].action,'launch_app');assert.deepEqual(f.pebble.invocations[0].args,{uuid:NOTIFICATIONS_APP});
+  assert.equal(f.frame().items.find(item=>item.role===1).validUntil,0,'pending/result feedback does not turn the public shell into a leased observation');
+  f.pebble.emit('notifications','notification',envelope(NOTIFICATIONS,[{instanceId:'expires',properties:{name:prop('Expiring sender'),body:prop('Expiring body')}}],f.time.now()+2000));f.time.advance(2000);
+  const expired=f.frame().items.find(item=>item.role===1);assert.equal(expired.token,empty.token);assert.equal(expired.subtitle,'Open notifications');assert.equal(expired.flags&F.PRIVATE,0);assert.equal(expired.validUntil,0);
+  assert.ok(!JSON.stringify(f.frame()).includes('Expiring'));assert.ok(!f.storage.getItem('dashboard.settings.v1').includes('Secret'));f.runtime.stop();
+});
+
+test('notification permission and preview opt-out preserve app launch; launch permission failure is explicit without retry',async()=>{
+  const f=runtimeFixture(minimal());await flush();f.pebble.emit('notifications','notification',envelope(NOTIFICATIONS,[{instanceId:'n',properties:{name:prop('Private sender')}}]));
+  f.pebble.fail('notifications','notification','PERMISSION_DENIED');f.time.advance(0);const notice=f.frame().items.find(item=>item.role===1);
+  assert.equal(notice.subtitle,'Open notifications');assert.equal(notice.flags&F.PRIVATE,0);
+  f.pebble.invokeAction=request=>{f.pebble.invocations.push(request);return Promise.resolve({ok:false,code:'PERMISSION_DENIED'});};
+  f.runtime.message(native(f.pebble,protocol.op.OPEN,55,2,{DB_TOKEN:notice.token,DB_VERSION:notice.version}));await flush();f.time.advance(0);
+  assert.equal(f.pebble.invocations.length,1,'notification read denial does not preempt the independent app-launch permission');
+  const results=f.pebble.sent.filter(message=>message[protocol.keys.DB_REQUEST]===2&&message[protocol.keys.DB_RESULT]);assert.equal(results.at(-1)[protocol.keys.DB_RESULT],protocol.result.PERMISSION);
+  f.time.advance(30000);await flush();assert.equal(f.pebble.invocations.length,1,'permission failures never retry themselves');f.runtime.stop();
+  const disabled=runtimeFixture({...minimal(),showNotifications:false});await flush();disabled.time.advance(0);
+  const launcher=disabled.frame().items.find(item=>item.role===1);disabled.runtime.message(native(disabled.pebble,protocol.op.OPEN,55,2,{DB_TOKEN:launcher.token,DB_VERSION:launcher.version}));await flush();
+  assert.equal(disabled.pebble.invocations.length,1);assert.equal(disabled.pebble.invocations[0].args.uuid,NOTIFICATIONS_APP);assert.equal(disabled.pebble.subscriptions.some(s=>s.request.category==='notifications'),false);disabled.runtime.stop();
+});
+
+test('offline notification shell cannot launch while an unrelated explicit command remains independently bound',async()=>{
+  const f=runtimeFixture(minimal([{id:'find',label:'Find phone',builtin:'find-phone'}]),[plugin(FIND,'phone','find_my_phone',[{name:'ring'}])]);await flush();f.time.advance(0);
+  f.runtime.connectionChanged(false);f.time.advance(0);const notice=f.frame().items.find(item=>item.role===1),pin=f.frame().items.find(item=>item.role===2);
+  assert.equal(notice.subtitle,'Open notifications');assert.equal(notice.flags&F.PRIVATE,0);assert.equal(f.frame().status,protocol.status.OFFLINE);
+  f.runtime.message(native(f.pebble,protocol.op.OPEN,55,2,{DB_TOKEN:notice.token,DB_VERSION:notice.version}));await flush();assert.equal(f.pebble.invocations.length,0);
+  f.runtime.message(native(f.pebble,protocol.op.ACTION,55,3,{DB_TOKEN:pin.token,DB_VERSION:pin.version,DB_ACTION:0}));await flush();assert.equal(f.pebble.invocations.length,1);assert.equal(f.pebble.invocations[0].action,'ring');
+  f.runtime.connectionChanged(true);await flush();f.time.advance(0);const connected=f.frame().items.find(item=>item.role===1);
+  f.runtime.message(native(f.pebble,protocol.op.OPEN,55,4,{DB_TOKEN:connected.token,DB_VERSION:connected.version}));await flush();assert.equal(f.pebble.invocations.at(-1).args.uuid,NOTIFICATIONS_APP);f.runtime.stop();
 });
 
 test('Find phone discovery never subscribes to its side-effecting source; explicit marker resolves declared ring',async()=>{
@@ -105,7 +166,7 @@ test('category names alone never bind a custom source to stock app destinations'
   const item=source.snapshot().activities[0];assert.equal(item.flags&F.APP,0);assert.equal(item.flags&F.ACTION,0);
   const request=pebble.subscriptions.find(s=>s.request.category==='notifications').request;assert.equal(request.plugin,NOTIFICATIONS);
   pebble.emit('notifications','notification',envelope(OTHER,[{instanceId:'other-notice',properties:{name:prop('Not native history')}}]));
-  assert.equal(source.snapshot().notification,null);source.stop();
+  assertNotificationLauncher(source.snapshot().notification);source.stop();
 });
 
 test('generic activity actions retain meaningful controls without pretending to be media',()=>{
@@ -196,7 +257,7 @@ test('queue clear suppresses old callbacks but waits for its real in-flight send
 
 test('runtime projects overview and bounded list pages, preserving tokens across reordering',async()=>{
   const pins=Array.from({length:12},(_,i)=>({id:'p'+i,label:'Pin '+i}));const f=runtimeFixture(minimal(pins));await flush();f.time.advance(0);
-  assert.equal(f.frame().items.length,2);const token=f.frame().items[0].token;
+  assert.equal(f.frame().items.length,3);const token=f.frame().items.find(item=>item.title==='Pin 0').token;
   f.runtime.message(native(f.pebble,protocol.op.VIEW,55,2,{DB_MODE:2,DB_OFFSET:7,DB_INDEX:11}));assert.equal(f.frame().offset,7);assert.equal(f.frame().items.length,5);assert.equal(f.frame().total,12);
   const saved=settings.normalize({...minimal(pins),pins:[...pins].reverse()});settings.save(f.storage,saved);
   f.runtime.message(native(f.pebble,protocol.op.VIEW,55,3,{DB_MODE:0}));assert.equal(f.frame().items.find(p=>p.title==='Pin 0')?.token,undefined);
@@ -216,13 +277,13 @@ test('native transport lease advances without changing null-TTL source version o
 });
 test('pending projection does not invalidate its own command token/version',async()=>{
   const f=runtimeFixture(minimal([{id:'find',label:'Find phone',builtin:'find-phone'}]),[plugin(FIND,'phone','find_my_phone',[{name:'ring'}])]);await flush();f.time.advance(0);
-  const pin=f.frame().items[0];f.runtime.message(native(f.pebble,protocol.op.ACTION,55,2,{DB_TOKEN:pin.token,DB_VERSION:pin.version,DB_ACTION:0}));f.time.advance(0);await flush();
-  assert.equal(f.pebble.invocations.length,1);assert.equal(f.pebble.invocations[0].action,'ring');f.time.advance(0);assert.equal(f.frame().items[0].version,pin.version);f.runtime.stop();
+  const pin=f.frame().items.find(item=>item.role===2);f.runtime.message(native(f.pebble,protocol.op.ACTION,55,2,{DB_TOKEN:pin.token,DB_VERSION:pin.version,DB_ACTION:0}));f.time.advance(0);await flush();
+  assert.equal(f.pebble.invocations.length,1);assert.equal(f.pebble.invocations[0].action,'ring');f.time.advance(0);assert.equal(f.frame().items.find(item=>item.role===2).version,pin.version);f.runtime.stop();
 });
 
 test('runtime never normalizes malformed ACTION or CONFIRM values into a default action',async()=>{
   const f=runtimeFixture(minimal([{id:'find',label:'Find phone',builtin:'find-phone'}]),[plugin(FIND,'phone','find_my_phone',[{name:'ring'}])]);await flush();f.time.advance(0);
-  const pin=f.frame().items[0];let request=2;
+  const pin=f.frame().items.find(item=>item.role===2);let request=2;
   for(const [action,confirm] of [['0',0],['',0],[-1,0],[NaN,0],[undefined,0],[0,'0'],[0,NaN],[0,-1],[0,2]]){
     f.runtime.message(native(f.pebble,protocol.op.ACTION,55,request++,{DB_TOKEN:pin.token,DB_VERSION:pin.version,DB_ACTION:action,DB_CONFIRM:confirm}));
   }
@@ -294,7 +355,7 @@ test('real Activities summary provider reaches full Dashboard catalogue, clocks 
   const pebble=sdk([descriptor]),values=new Map([['dashboard.settings.v1',JSON.stringify(minimal())]]),storage={getItem:key=>values.get(key)??null,setItem:(key,value)=>values.set(key,value)};
   const runtime=createRuntime({...time,pebble,storage,activitiesHost:api,tokenSeed:100});runtime.ready();runtime.message(native(pebble,protocol.op.HELLO,55,1));await flush();
   const first={pluginUuid:UUID,...await publisher.source({})};pebble.emit('activity','summary',first,UUID);time.advance(0);
-  let frame=decode(pebble.sent.filter(m=>m[protocol.keys.DB_DATA]).at(-1)[protocol.keys.DB_DATA]);assert.equal(frame.items.length,1,'overview keeps one activity slot');
+  let frame=decode(pebble.sent.filter(m=>m[protocol.keys.DB_DATA]).at(-1)[protocol.keys.DB_DATA]);assert.equal(frame.items.length,2,'overview keeps one activity and the public notification shortcut');
   assert.equal(frame.items[0].kind,protocol.kind.timer);assert.ok(frame.items[0].flags&F.COUNTDOWN);assert.ok(frame.items[0].flags&F.ACTION);
   assert.equal(frame.items[0].validUntil,T/1000+60,'native transport lease is shorter than source validity');
   runtime.message(native(pebble,protocol.op.VIEW,55,2,{DB_MODE:1,DB_OFFSET:0}));frame=decode(pebble.sent.filter(m=>m[protocol.keys.DB_DATA]).at(-1)[protocol.keys.DB_DATA]);

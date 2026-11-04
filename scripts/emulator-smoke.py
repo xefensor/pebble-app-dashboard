@@ -28,7 +28,7 @@ sys.path.insert(0,str(ROOT.parent/'recovery-validation'))
 def digest(data):return hashlib.sha256(data).hexdigest()
 
 
-def run(pbw,output,expected_sha256=None):
+def run(pbw,output,expected_sha256=None,notifications_only=False):
     from pipe_emulator import connect
     from libpebble2.services.appmessage import AppMessageService,Uint32,ByteArray,CString
     from libpebble2.services.screenshot import Screenshot
@@ -194,12 +194,80 @@ def run(pbw,output,expected_sha256=None):
         # Back out at most two context levels; root Back would quit, so inspect
         # the last actual VIEW from native before deciding on another press.
         while active_mode()!=0:button('Back');await_condition(lambda:bool(peer.frames) and peer.frames[-1]['mode']==active_mode(),'Back view not delivered')
+    def write_report():
+        report={'result':'PASS','version':json.loads((ROOT/'package.json').read_text())['version'],
+            'scope':'Real native Emery QEMU UI and AppMessage requests with an explicit fictional protocol peer; no phone JavaScript, live plugins, real app launches or physical watch.',
+            'focusedNotificationsOnly':notifications_only,'candidatePbwSha256':digest(pbw.read_bytes()),'nativeOnlyPbwSha256':digest(native.read_bytes()),
+            'nativePayloadSha256':{name:digest(data) for name,data in payload.items()},'phoneJavascriptExecuted':False,
+            'stateDirectory':str(state_dir),'session':peer.session,'checks':proofs,'captures':captures,
+            'requests':[{str(k):v for k,v in request.items()} for request in requests],
+            'mockActions':[{str(k):v for k,v in request.items()} for request in peer.actions],
+            'mockAppOpens':[{str(k):v for k,v in request.items()} for request in peer.opens],
+            'visualReview':{'reviewed':False}}
+        (output/'emulator.json').write_text(json.dumps(report,indent=2)+'\n')
+        print('Dashboard native emulator smoke PASS:',len(captures),'captures,',len(proofs),'behavior checks',flush=True)
+        return report
+
     try:
         p.send_packet(TimeMessage(message=SetUTC(unix_time=int(time.time()),utc_offset=0,tz_name='UTC')))
         send_data_to_qemu(p.transport,QemuBluetoothConnection(connected=True));send_data_to_qemu(p.transport,QemuBattery(percent=85,charging=False))
         ToolAppInstaller(p,str(native),quiet=True).install();p.send_packet(AppRunState(data=AppRunStateStart(uuid=target)))
         await_condition(lambda:peer.view is not None and bool(peer.frames),'Native HELLO/frame exchange missing',12)
         primary_roi=(4,29,162,102);notice_roi=(4,108,162,151)
+        if notifications_only:
+            # Explicitly fictional launcher binding. Real host destination and
+            # SDK execution are independently verified by packaged-runtime QA.
+            empty=json.loads((ROOT/'tests/fixtures/overview-empty-notifications.json').read_text())
+            with peer.lock:
+                original_notice=copy.deepcopy(peer.notice)
+                peer.notice=copy.deepcopy(next(x for x in empty['items'] if x['role']==1));peer.notice['version']=2
+            peer.publish();capture('empty-notifications-snapshot')
+            assert peer.frames[-1]['tokens'][1]==3 and len(peer.frames[-1]['tokens'])==4
+            button('Down');await_condition(lambda:peer.view.get(key('DB_TOKEN'))==3,'Empty notification row cannot be selected')
+            empty_pixels=capture('empty-notifications-selected')
+            before=counts();button('Select')
+            await_condition(lambda:len(peer.opens)==before[1]+1,'Empty notification row did not request Notifications')
+            opened=peer.opens[-1]
+            assert len(peer.actions)==before[0] and active_mode()==0 and opened[key('DB_TOKEN')]==3 and opened[key('DB_VERSION')]==2
+            assert opened[key('DB_SESSION')]==peer.session and opened[key('DB_OPERATION')]==4
+            proofs.append({'check':'Empty Notifications is a real selectable Snapshot row; tap sends exactly one bound OPEN with current session/token/version and no ACTION','passed':True})
+            button('Down');await_condition(lambda:peer.view.get(key('DB_TOKEN'))==4,'Down did not leave empty notification row')
+            button('Up');await_condition(lambda:peer.view.get(key('DB_TOKEN'))==3,'Up did not restore empty notification selection')
+            before=counts();button('Select',.75)
+            await_condition(lambda:len(peer.opens)==before[1]+1,'Held Select on empty notification row did not request its app')
+            assert len(peer.actions)==before[0] and peer.opens[-1][key('DB_TOKEN')]==3
+            proofs.append({'check':'Empty Notifications participates in ordinary Up/Down navigation; held Select opens once without an added tap/action','passed':True})
+            before=counts();send_data_to_qemu(p.transport,QemuButton(state=int(QemuButton.Button.Select)));time.sleep(.12)
+            with peer.lock:peer.notice['version']=3;peer.notice['subtitle']='Open notifications'
+            peer.publish();time.sleep(.12);send_data_to_qemu(p.transport,QemuButton(state=0));time.sleep(.25)
+            assert counts()==before
+            capture('notifications-shortcut-waiting')
+            button('Select');await_condition(lambda:len(peer.opens)==before[1]+1,'Waiting Notifications shortcut did not request its app')
+            assert len(peer.actions)==before[0] and peer.opens[-1][key('DB_VERSION')]==3
+            proofs.append({'check':'Waiting/error shortcut is also selectable; source revision during a press cancels the stale OPEN before the rebound shortcut can open','passed':True})
+            with peer.lock:peer.notice=original_notice;peer.notice['version']=4
+            peer.publish();private_pixels=capture('notification-private-preview')
+            private_frame=peer.frame()
+            next(x for x in private_frame['items'] if x['role']==1)['validUntil']=private_frame['now']+1
+            send({key('DB_DATA'):ByteArray(encode(private_frame))})
+            expired_pixels=capture('notification-expired-inert')
+            assert Image.frombytes('RGB',(200,228),private_pixels).crop(notice_roi).tobytes()!=Image.frombytes('RGB',(200,228),expired_pixels).crop(notice_roi).tobytes()
+            before=counts();button('Select');button('Select',.75);assert counts()==before
+            proofs.append({'check':'Private notice expiry erases its preview and keeps the row inert until an explicit current public launcher binding arrives','passed':True})
+            with peer.lock:peer.notice=copy.deepcopy(next(x for x in empty['items'] if x['role']==1));peer.notice['version']=5
+            peer.publish();capture('empty-notifications-rebound')
+            before=counts();button('Select');await_condition(lambda:len(peer.opens)==before[1]+1,'Rebound empty notification row did not open')
+            assert len(peer.actions)==before[0] and peer.opens[-1][key('DB_TOKEN')]==3 and peer.opens[-1][key('DB_VERSION')]==5
+            assert peer.view.get(key('DB_TOKEN'))==3
+            proofs.append({'check':'Explicit empty launcher rebind preserves the selected row and uses its new version for exactly one OPEN','passed':True})
+            peer.empty=True;peer.publish()
+            await_condition(lambda:peer.view.get(key('DB_TOKEN'))==3 and peer.view.get(key('DB_INDEX'))==0,'Notification selection did not survive removing all activities')
+            capture('empty-notifications-no-activity')
+            before=counts();button('Select');await_condition(lambda:len(peer.opens)==before[1]+1,'Empty Notifications with no activity did not open')
+            assert len(peer.actions)==before[0] and peer.opens[-1][key('DB_TOKEN')]==3 and active_mode()==0
+            proofs.append({'check':'Empty Notifications also remains selected and opens when no activity exists','passed':True})
+            assert not errors
+            return write_report()
         first_clock=capture('snapshot-light');time.sleep(1.2);next_clock=capture('snapshot-ticking')
         first_image=Image.frombytes('RGB',(200,228),first_clock);next_image=Image.frombytes('RGB',(200,228),next_clock)
         assert first_image.crop(primary_roi).tobytes()!=next_image.crop(primary_roi).tobytes()
@@ -362,18 +430,7 @@ def run(pbw,output,expected_sha256=None):
         assert peer.opens[-1][key('DB_TOKEN')]==1 and peer.opens[-1][key('DB_SESSION')]==peer.session
         proofs.append({'check':'Phone-runtime restart accepts sequence1 in a fresh epoch; stale prior-session frame cannot replace it','passed':True})
         assert not errors
-        report={'result':'PASS','version':json.loads((ROOT/'package.json').read_text())['version'],
-            'scope':'Real native Emery QEMU UI and AppMessage requests with an explicit fictional protocol peer; no phone JavaScript, live plugins, real app launches or physical watch.',
-            'candidatePbwSha256':digest(pbw.read_bytes()),'nativeOnlyPbwSha256':digest(native.read_bytes()),
-            'nativePayloadSha256':{name:digest(data) for name,data in payload.items()},'phoneJavascriptExecuted':False,
-            'stateDirectory':str(state_dir),'session':peer.session,'checks':proofs,'captures':captures,
-            'requests':[{str(k):v for k,v in request.items()} for request in requests],
-            'mockActions':[{str(k):v for k,v in request.items()} for request in peer.actions],
-            'mockAppOpens':[{str(k):v for k,v in request.items()} for request in peer.opens],
-            'visualReview':{'reviewed':False}}
-        (output/'emulator.json').write_text(json.dumps(report,indent=2)+'\n')
-        print('Dashboard native emulator smoke PASS:',len(captures),'captures,',len(proofs),'behavior checks',flush=True)
-        return report
+        return write_report()
     finally:
         stopped.set();thread.join(timeout=1)
         for handle in handles:service.unregister_handler(handle)
@@ -385,4 +442,5 @@ if __name__=='__main__':
     parser.add_argument('--pbw',type=Path,default=ROOT/('dist/Dashboard-'+VERSION+'.pbw'))
     parser.add_argument('--output',type=Path,default=ROOT/('docs/qa/'+VERSION+'/native'))
     parser.add_argument('--expected-sha256',help='Require these exact candidate bytes before installing')
-    args=parser.parse_args();run(args.pbw,args.output,args.expected_sha256)
+    parser.add_argument('--notifications-only',action='store_true',help='Focused empty Notifications navigation, expiry and app-open checks')
+    args=parser.parse_args();run(args.pbw,args.output,args.expected_sha256,args.notifications_only)

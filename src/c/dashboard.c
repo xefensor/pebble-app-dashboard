@@ -24,6 +24,14 @@ static bool take_text(const uint8_t **p,size_t *remaining,uint16_t length,char *
   if(length>=size||length>*remaining||!utf8(*p,length))return false;
   memcpy(out,*p,length);out[length]=0;*p+=length;*remaining-=length;return true;
 }
+static bool notification_launcher(const DbItem *item){
+  return item->role==DB_ROLE_NOTICE&&item->kind==DB_NOTICE&&(item->flags&~(DB_IS_PENDING|DB_IS_FAILED))==(DB_NOTIFICATION|DB_APP)&&
+    !item->valid_until&&!item->clock_mode&&!item->anchor&&!item->base_seconds&&
+    !item->value[0]&&!item->action_label[0]&&!item->width&&!item->height&&!item->palette_length&&!item->pixel_length&&
+    !item->controls[0][0]&&!item->controls[1][0]&&!item->controls[2][0]&&
+    !strcmp(item->title,"Notifications")&&!strcmp(item->name,"Notifications")&&!strcmp(item->app_label,"Notifications")&&
+    (!strcmp(item->subtitle,"No notifications")||!strcmp(item->subtitle,"Open notifications"));
+}
 bool db_decode(const uint8_t *bytes,size_t length,DbSnapshot *out){
   if(!bytes||!out||length<32||length>DB_FRAME_MAX||memcmp(bytes,"DSH1",4))return false;
   memset(out,0,sizeof(*out));
@@ -68,7 +76,7 @@ bool db_decode(const uint8_t *bytes,size_t length,DbSnapshot *out){
       if(p!=end)return false;
     }
     bool static_pin=item->role==DB_ROLE_PIN&&!(item->flags&DB_PRIVATE)&&!item->value[0]&&!item->clock_mode;
-    if(!item->valid_until&&!static_pin&&!(item->role==DB_ROLE_PIN&&(item->flags&(DB_ACTION|DB_APP|DB_LOCAL_WATCH))))return false;
+    if(!item->valid_until&&!static_pin&&!notification_launcher(item)&&!(item->role==DB_ROLE_PIN&&(item->flags&(DB_ACTION|DB_APP|DB_LOCAL_WATCH))))return false;
     if(item->flags&DB_UNAVAILABLE){/* An unavailable row can retain its static label, never execute. */}
     else if(!(item->flags&DB_LOCAL_WATCH)&&item->value[0]&&!item->valid_until)return false;
     if((item->flags&DB_APP)&&!item->app_label[0])return false;

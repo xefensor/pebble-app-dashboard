@@ -199,10 +199,10 @@ static void pin_row(GContext *ctx,const DbItem *item,int y){
 }
 static void notice(GContext *ctx,const DbItem *item){
   GColor ink=panel(ctx,item,GRect(4,108,CONTENT_W-8,43),false);
-  if(!db_item_current(item,utc_now())){symbol(ctx,DB_NOTICE,10,117,22,ink);text(ctx,"No notifications",20,39,138,CONTENT_W-49,ink);return;}
+  if(!db_item_current(item,utc_now())){symbol(ctx,DB_NOTICE,10,111,20,ink);text(ctx,"Notifications",20,37,128,CONTENT_W-47,ink);text(ctx,"No preview",20,8,150,CONTENT_W-16,ink);return;}
   picture(ctx,item,10,111,20,ink);char heading[265];
   if(item->name[0]&&strcmp(item->name,item->title))snprintf(heading,sizeof(heading),"%s · %s",item->title,item->name);else snprintf(heading,sizeof(heading),"%s",item->title[0]?item->title:item->name);
-  text(ctx,heading,20,37,128,CONTENT_W-47,ink);text(ctx,item->subtitle[0]?item->subtitle:"New notification",20,10,150,CONTENT_W-20,ink);
+  text(ctx,heading,20,37,128,CONTENT_W-47,ink);text(ctx,item->subtitle[0]?item->subtitle:"New notification",20,8,150,CONTENT_W-16,ink);
 }
 static void empty_message(GContext *ctx,const char *title,const char *detail,int y){symbol(ctx,DB_TIMER,(CONTENT_W-28)/2,y,28,muted());centered(ctx,title,20,y+57,foreground());if(detail&&detail[0])centered(ctx,detail,20,y+84,muted());}
 static void snapshot(GContext *ctx){

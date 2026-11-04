@@ -1,6 +1,6 @@
 # Dashboard maintainer notes
 
-This repository contains the local native Dashboard candidate (0.2.0),
+This repository contains the local native Dashboard candidate (0.2.1),
 its phone runtime/settings, and earlier browser design studies. Read README.md
 and docs/IMPLEMENTATION.md. Preserve UUID f76f9fc1-2944-4248-bcc5-3eea2af0183b,
 DSH1 message keys and existing published sibling apps.
@@ -37,6 +37,9 @@ and summary-only activities do nothing on tap; do not add bare enlarged views.
 Timer has no Dashboard controls yet. Hold Select opens the selected item's
 optional associated app; without a destination it does nothing. Hold Up opens
 all Activities and hold Down opens all Pinned items only from the overview.
+The notification row remains selectable as a public native-app shortcut when
+its preview is empty, unavailable or disabled. Do not retain private content to
+keep that shortcut alive; the phone supplies a current public launcher binding.
 Inside full lists these buttons repeat navigation while held; inside generic
 controls they keep focus within the bounded controls. Music hold opens the native
 Music app rather than adding a Dashboard playback screen. Back restores the

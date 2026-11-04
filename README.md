@@ -1,17 +1,17 @@
 # Dashboard
 
 A stock Pebble watchapp for current activities, the latest available notification
-and pinned readings/actions. **0.2.0 is a local Emery testing candidate.**
+and pinned readings/actions. **0.2.1 is a local Emery testing candidate.**
 
 The native app, phone runtime and bundled settings page are implemented. The
 repository has no remote. Build and portable/emulator checks are recorded under
-[docs/qa/0.2.0](docs/qa/0.2.0). Real-phone permissions/provider integration and
+[docs/qa/0.2.1](docs/qa/0.2.1). Real-phone permissions/provider integration and
 physical-watch comfort/battery still need device testing. Synthetic SDK/emulator
 fixtures are not evidence of live phone operation.
 
 ## Try the build
 
-The local build creates `dist/Dashboard-0.2.0.pbw`, a separate debug ZIP and
+The local build creates `dist/Dashboard-0.2.1.pbw`, a separate debug ZIP and
 SHA256SUMS.txt. Install that PBW using the official Pebble phone app with plugins
 enabled. Allow permissions needed by your selected readings and controls. Open
 Dashboard normally or assign it to Quick Launch in Pebble settings.
@@ -88,6 +88,11 @@ by the built-in source, including its initial snapshot. This is separate from
 Dynamic's temporary new-notification alert. It creates no history and replays no
 alert. Opening Notifications opens the app, not a particular message.
 
+The notification row stays selectable when there is no preview. Select opens
+native Notifications from this empty row too. Turning off "Show latest
+notification" stops reading message data while keeping the app shortcut.
+Unavailable previews never stand in for the phone's full notification history.
+
 Message bodies are off by default. Withdrawal, redaction and permission loss
 clear content. Music, notifications, artwork and live source values stay in RAM;
 only configuration is stored. Source observations/expiry and native Timer
@@ -149,7 +154,7 @@ named synthetic UI fixture build, not the real app.
 [browser expansion study](previews/expansion-overview.png) and
 [earlier comparison](previews/index.html) remain discussion artifacts. Actual
 native captures are in the versioned QA folder. Those browser studies predate
-the larger 0.2.0 Snapshot and its direct Music play/pause behavior.
+the larger 0.2.1 Snapshot and its direct Music play/pause behavior.
 
 Licensed under the suite's PolyForm Noncommercial terms; see LICENSE and
 THIRD-PARTY-NOTICES.md. Activities 0.4.2 is vendored with checksum provenance.

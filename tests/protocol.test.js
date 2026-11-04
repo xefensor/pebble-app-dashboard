@@ -51,3 +51,16 @@ test('static unavailable pins need no fabricated source lease; live data does',f
   assert.throws(function(){protocol.encode(frame([item({value:'',validUntil:0,flags:protocol.flag.PRIVATE})]));},/Unleased/);
   assert.throws(function(){protocol.encode(frame([item()],{mode:protocol.mode.ACTIVITIES}));},/role/);
 });
+test('an empty Notifications launcher is public static metadata, never unleased message content',function(){
+  var shell=item({role:1,kind:protocol.kind.notification,validUntil:0,flags:protocol.flag.NOTIFICATION|protocol.flag.APP,
+    title:'Notifications',name:'Notifications',subtitle:'No notifications',value:'',appLabel:'Notifications',actionLabel:'',controls:['','','']});
+  function encoded(value){return protocol.encode(frame([value],{mode:protocol.mode.OVERVIEW}));}
+  assert.ok(encoded(shell).length);
+  assert.ok(encoded(Object.assign({},shell,{subtitle:'Open notifications'})).length);
+  for(var extra of [protocol.flag.PENDING,protocol.flag.FAILED])assert.ok(encoded(Object.assign({},shell,{flags:shell.flags|extra})).length);
+  for(var change of [{flags:shell.flags|protocol.flag.PRIVATE},{flags:shell.flags|protocol.flag.UNAVAILABLE},{title:'Private sender'},
+    {subtitle:'Private message'},{value:'Secret'},{actionLabel:'Run'},{controls:['Run','','']},{appLabel:'Another app'},
+    {image:{width:1,height:1,palette:[255],pixels:[0]}},{clockMode:1,anchor:2000000040,flags:shell.flags|protocol.flag.COUNTDOWN}]){
+    assert.throws(function(){encoded(Object.assign({},shell,change));},/Unleased/);
+  }
+});

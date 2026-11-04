@@ -74,7 +74,13 @@ function encode(snapshot){
     roles[role]++;
     if((snapshot.mode===mode.PINNED&&role!==2)||((snapshot.mode===mode.ACTIVITIES||snapshot.mode===mode.MEDIA)&&role!==0))throw Error('Invalid item role');
     if(snapshot.mode===mode.MEDIA&&!(flags&flag.ACTION))throw Error('Detail without controls');
-    if(!item.validUntil&&!(flags&(flag.ACTION|flag.APP|flag.LOCAL_WATCH))&&!(role===2&&!(flags&flag.PRIVATE)&&!strings[2].length&&!clock))throw Error('Unleased source value');
+    var staticPin=role===2&&((flags&(flag.ACTION|flag.APP|flag.LOCAL_WATCH))||(!(flags&flag.PRIVATE)&&!strings[2].length&&!clock));
+    var notificationLauncher=role===1&&item.kind===kind.notification&&
+      (flags&~(flag.PENDING|flag.FAILED))===(flag.NOTIFICATION|flag.APP)&&!clock&&!item.anchor&&!item.baseSeconds&&
+      item.title==='Notifications'&&item.name==='Notifications'&&item.appLabel==='Notifications'&&
+      (item.subtitle==='No notifications'||item.subtitle==='Open notifications')&&!strings[2].length&&!strings[4].length&&!item.image&&
+      (!item.controls||(Array.isArray(item.controls)&&item.controls.length===3&&item.controls.every(function(label){return label==='';})));
+    if(!item.validUntil&&!staticPin&&!notificationLauncher)throw Error('Unleased source value');
     if(clock===1&&!(flags&flag.COUNTDOWN)||clock===2&&!(flags&flag.ELAPSED)||!clock&&(item.anchor||item.baseSeconds))throw Error('Invalid clock flags');
     var controls=[];
     if(item.controls){
