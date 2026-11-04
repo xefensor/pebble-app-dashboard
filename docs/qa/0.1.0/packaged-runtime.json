@@ -1,0 +1,39 @@
+{
+  "result": "PASS",
+  "scope": "Actual PBW phone and settings-plugin JavaScript executed with isolated fictional SDK sources/actions; not a live phone or physical watch test.",
+  "version": "0.1.0",
+  "pbwSha256": "b343905557e2c06a07dd2e55419305fdbe8c3ec91887fed4846cc5826c17890e",
+  "phoneSha256": "98ba6613555b438289c214dc73938286d1d4fc1f3c72bc6e872ac8b6b19e3aeb",
+  "proofs": {
+    "realActivitiesProviderAndConsumer": true,
+    "overviewSevenItems": true,
+    "sourceCountdownAnchors": true,
+    "artworkBridge": true,
+    "privateBodyOptOut": true,
+    "musicCommandOnceAndConfirmedReading": true,
+    "findPhoneExplicitOnly": true,
+    "associatedAppDestination": true,
+    "notificationWithdrawal": true,
+    "liveSettingsReload": true,
+    "pagedPins": true,
+    "privateContentNeverPersisted": true,
+    "bundledSettingsPlugin": true,
+    "legacyRepairExplicitOnly": true,
+    "noCommandsAfterCancel": true
+  },
+  "actualEncodedFrameCount": 18,
+  "mockInvocations": [
+    {
+      "plugin": "00000000-0000-0000-0001-000000000003",
+      "action": "set_playing"
+    },
+    {
+      "plugin": "00000000-0000-0000-0001-000000000008",
+      "action": "ring"
+    },
+    {
+      "plugin": "00000000-0000-0000-0001-000000000007",
+      "action": "launch_app"
+    }
+  ]
+}

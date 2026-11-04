@@ -1,0 +1,2 @@
+# Keep bundled upstream font license text byte-for-byte.
+resources/fonts/OFL-*.txt -whitespace

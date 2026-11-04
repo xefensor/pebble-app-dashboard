@@ -1,0 +1,24 @@
+{
+  "result": "PASS",
+  "scope": "Generated phone settings with a fake SDK config bridge; no real source/action invocation.",
+  "checks": [
+    "mixed pin typed action+reading",
+    "exact instance binding",
+    "automatic toggle target/state arguments without duplicate entry",
+    "ordinary action fields remain required",
+    "on/off toggle property",
+    "pin reorder",
+    "confirmed save notifies running PKJS",
+    "late catalogue preserves draft",
+    "uncertain save readback",
+    "load failure disables editing",
+    "retry",
+    "short dark viewport no overflow",
+    "Find phone never probed"
+  ],
+  "screens": [
+    "overview-light.png",
+    "pin-editor.png",
+    "overview-dark-small.png"
+  ]
+}

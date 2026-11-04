@@ -1,8 +1,9 @@
 # Dashboard maintainer notes
 
-This is a new local repository. The current task is repository setup and product
-discussion; UI implementation begins when requested by the user. Read README.md
-for the starting brief and distinguish proposals from settled requirements.
+This repository contains the first local native Dashboard candidate (0.1.0),
+its phone runtime/settings, and earlier browser design studies. Read README.md
+and docs/IMPLEMENTATION.md. Preserve UUID f76f9fc1-2944-4248-bcc5-3eea2af0183b,
+DSH1 message keys and existing published sibling apps.
 
 - Dashboard is a separate stock Pebble watchapp, initially targeting Emery.
   No firmware/mobile-app fork or change to other apps is implied.
@@ -26,7 +27,7 @@ capture script verifies canvas bounds, palette and simulated navigation; it is
 not a native test suite. Keep preview controls disconnected from real phone APIs.
 The user wants Timer Pause/Resume later. The opening-screen goal is two current
 activities, latest notification and four pinned items. Snapshot is the chosen
-overview. Tap Select opens useful activity controls (currently Music), opens
+overview. Tap Select opens useful activity controls (including Music), opens
 native Notifications, or performs a pin's optional action. Pins without actions
 and summary-only activities do nothing on tap; do not add bare enlarged views.
 Timer has no Dashboard controls yet. Hold Select opens the selected item's
@@ -48,5 +49,16 @@ apps cannot install a long/raw/repeating Back handler or shorten that timeout.
 Preserve this behavior; do not simulate a custom watchface-exit hold or globally
 set a successful-action exit reason, which can override app handoff targets.
 
-There is no package manifest, SDK build or installable release artifact yet.
-Do not describe previews as native captures or physically tested behavior.
+Use npm test, npm run build, npm run check:artifact, packaged runtime checks and
+focused native/settings QA appropriate to the change. Run SDK commands in the
+workspace recovery environment when needed. Build packaging is required for the
+plugin/config/permission manifest; plain pebble build alone is incomplete.
+Native list focus must be sent through FOCUS7 even for local viewport moves.
+READY means a fresh phone runtime: rotate the native session, invalidate old
+bindings/sequence/history and re-handshake without mixing in-flight outboxes.
+Keep source capabilities and command receipts transient. SDK source/action
+errors must remain visible/navigable. The public disconnect event is debounced;
+do not claim immediate physical radio-loss detection. App launches currently
+affect connected watches, so the supported launch setup has one connected watch.
+Do not describe browser previews as native captures or synthetic emulator/SDK
+fixtures as physical-watch/live-phone evidence. No publication is implied.

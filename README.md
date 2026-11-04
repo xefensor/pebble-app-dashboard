@@ -1,125 +1,150 @@
 # Dashboard
 
-A separate Pebble watchapp for plugin readings, controls and current activities.
+A stock Pebble watchapp for current activities, the latest available notification
+and pinned readings/actions. **0.1.0 is a local Emery testing candidate.**
 
-**Status: design previews, 4 November 2026.** The repository contains a starting
-brief and an interactive browser prototype. No native watch UI, SDK project or
-installable build exists yet. The repository is local and has no remote.
+The native app, phone runtime and bundled settings page are implemented. The
+repository has no remote. Build and portable/emulator checks are recorded under
+[docs/qa/0.1.0](docs/qa/0.1.0). Real-phone permissions/provider integration and
+physical-watch comfort/battery still need device testing. Synthetic SDK/emulator
+fixtures are not evidence of live phone operation.
 
-## Preview
+## Try the build
 
-Open [the interactive Snapshot preview](previews/snapshot.html), or view the
-[expanded groups](previews/expansion-overview.png) and
-[controls / return navigation](previews/expansion-navigation.png).
-The [earlier layout comparison](previews/index.html) and its exports remain:
-[light overview](previews/overview-light.png),
-[dark overview](previews/overview-dark.png),
-[other activity types](previews/alternate-activities.png) and
-[detail screens](previews/detail-overview.png).
+The local build creates `dist/Dashboard-0.1.0.pbw`, a separate debug ZIP and
+SHA256SUMS.txt. Install that PBW using the official Pebble phone app with plugins
+enabled. Allow permissions needed by your selected readings and controls. Open
+Dashboard normally or assign it to Quick Launch in Pebble settings.
 
-Snapshot is the selected opening-screen direction. Activity focus and One list
-remain as earlier comparisons.
-Each uses a 200 × 228 canvas, the suite's font sources and Pebble's 64-colour
-palette. Use the drawn watch buttons or keyboard arrows/Enter/Space/Escape. Examples,
-theme, activity order and notification body visibility are selectable. These
-are synthetic design previews, not emulator captures or functioning plugins.
-See [preview notes](previews/README.md) for scope and regeneration.
+App UUID: `f76f9fc1-2944-4248-bcc5-3eea2af0183b`. Initially targets Pebble Time 2 /
+Emery, 200 × 228. Existing Dynamic, Timer and Open Activity installations keep
+their own identities, preferences and behavior.
 
-## Existing direction
+## On the watch
 
-- Use stock PebbleOS and the official phone app; no firmware or mobile-app fork.
-- Start with Pebble Time 2 / Emery (200 × 228), like the existing suite.
-- Consume ordinary plugin readings, standalone actions and Activities summaries.
-  A plugin can provide any combination; a reading or command needs no activity.
-- Keep Dashboard's preferences, order and visibility independent of Dynamic.
-- Keep opening an associated app separate from invoking its contextual controls.
-- Preserve original source identity, revisions, observation, expiry and privacy.
-  The native Timer remains responsible for its saved state and alarms.
-- Keep text static. User-driven list navigation and local visible-clock ticking
-  are compatible with this; automatic text scrolling is not.
+Snapshot shows two current activities, one latest notification and the first
+four Pinned items. Either activity position can show any supported source.
+Pinned is one collection: an item can expose a reading, a tap action, or both,
+plus an optional associated app destination. A light's brightness and toggle can
+belong to the same pin; toggle state comes from a real Boolean source.
 
-## Current discussion
+| Button | Tap | Hold |
+| --- | --- | --- |
+| Up | Previous item/control | Snapshot: Activities; list: scroll up; controls: previous control |
+| Select | Useful activity controls, native Notifications, or pin action; otherwise no-op | Associated app when available |
+| Down | Next item/control | Snapshot: Pinned; list: scroll down; controls: next control |
+| Back | Previous screen, retaining selection; exit at Snapshot | Standard OS behavior |
 
-When opening Dashboard through Quick Launch, the user wants to see two current
-activities, the latest notification and pinned items. The previews
-show the selected Snapshot layout and how its groups expand.
-Both activity positions support different types; Music has its own playback
-detail proposal.
+Holds start after 600 ms; list navigation repeats every 140 ms while held.
+Opening a collection never also scrolls it; releasing adds no tap or extra step.
+Back restores the original item, viewport and control focus. Live reordering
+preserves selection by identity, including moves made locally within a page.
+Phone-runtime restart establishes a new native session; old replies and action
+tokens cannot acquire a different target.
 
-Snapshot shows two activities, one latest notification and four pinned items.
-Pinned is one collection: an item can have a displayed value, a press action,
-or both. Weather shows a temperature; Find phone offers an action; Kitchen light
-shows brightness and toggles on Select. Reading and command capabilities remain
-independent underneath; they can belong to the same displayed item.
+Music opens a playback view with only genuinely available previous/play/next
+controls. Other activities can expose up to three provider-declared controls.
+Summary-only activities and pins without actions do nothing on tap. Source
+clocks tick on the watch; text stays static and starts from its beginning.
+Native redraw follows visible changes rather than automatic text scrolling.
 
-These visible slots do not set each collection's total capacity.
-The button model is:
+Commands show pending/result feedback, require exact current bindings, and are
+never automatically replayed after timeout. Configured/provider confirmation is
+honored. A command acknowledgment does not fabricate a new reading: refreshed
+device/source data supplies the value.
 
-- Tap Up/Down to move selection.
-- Tap Select to open useful activity controls (Music playback), open native
-  Notifications directly, or perform a pin's action. A pin without an action or
-  a summary-only activity does nothing; there are no bare enlarged readouts.
-- Hold Select to open the selected item's associated app when a destination is
-  available. An action and an app destination are independent optional features.
-- On Snapshot, hold Up to browse all Activities; hold Down to browse all Pinned
-  items. Either shortcut works independently of the selected overview item.
-- Inside a full list, hold Up/Down to scroll. Inside Music, Up/Down stays within
-  its playback controls. Release adds no extra step. Back returns to Snapshot
-  before switching collections.
-- Back restores the previous selection, viewport and Music control focus.
-  Swapping activity order also preserves the selected occurrence and control
-  focus. The footer names the available associated app.
+## Settings and sources
 
-A hold must not also execute its short press or move selection on release.
-The browser records app navigation intents without launching real apps. Six
-activities and twelve mixed pins demonstrate overflow, not capacity limits.
-The light's 65% value and toggle are simulated; no brightness-adjustment UI or
-real plugin command is implemented by this preview.
+The bundled phone page works independently of Dashboard's native lifetime.
+Choose sources/properties and stable instances, add optional actions with typed
+arguments, and reorder pins. Dashboard's activity priority/visibility is separate
+from Dynamic. Saves are explicit; failed loads never silently replace saved
+preferences. Confirmed settings changes notify the running phone runtime.
 
-The user also wants Timer Pause/Resume inside Dashboard, deferred until later.
-Until then, tapping its summary does nothing; hold Select opens Timer. This is
-recorded scope, not an implemented Timer command capability.
+Defaults are Weather temperature, Phone battery, local Watch battery and Find
+phone. No fictional home-light provider is installed. Find phone runs only on an
+explicit tap; discovery never reads its side-effecting source. Missing providers
+retain saved bindings and show unavailable instead of selecting another entity.
 
-Real command integration still needs pending/result feedback and confirmed
-source updates; the browser's light toggle is a synchronous simulation.
+The first profile allows up to 64 configured pins and a bounded phone-side
+activity catalogue. Native receives seven overview items, five list items or one
+control view at a time. The six activities/twelve pins in design examples are not
+list limits. Dashboard owns DSH1 paging/commands; Dynamic's two-card ACT3 transport
+is unchanged. See [implementation contract](docs/IMPLEMENTATION.md).
 
-### Held Back
+Current Music/Notifications built-ins are Android capabilities. Third-party
+Activities summaries and ordinary plugin readings/actions use the existing
+plugin API. Stock app destinations require verified built-in source identity;
+other sources need an explicit real app association.
 
-Stock PebbleOS reserves held Back for system exit to the app launcher, rather
-than directly to the watchface. The public SDK rejects long/raw/repeating Back
-subscriptions. Timer and Open Activity already leave the OS gesture intact;
-Dashboard will do the same. The preview does not invent a custom Back hold.
-See the [official Back-button contract](https://developer.repebble.com/docs/c/User_Interface/Clicks/#about-the-back-button).
+## Notifications and privacy
 
-The public [App Exit Reason API](https://developer.repebble.com/guides/user-interfaces/app-exit-reason/)
-can return a completed action to the watchface, but it does not identify a held
-Back exit. Setting it globally would also redirect ordinary exits and can
-override a pending app-launch destination. An explicit gesture such as double
-Back could use it locally, with a recognition delay for ordinary Back; this is
-an alternative for discussion, not an implemented shortcut.
+Dashboard shows the newest currently available permitted notification returned
+by the built-in source, including its initial snapshot. This is separate from
+Dynamic's temporary new-notification alert. It creates no history and replays no
+alert. Opening Notifications opens the app, not a particular message.
 
-Latest notification is a separate product idea from Dynamic's temporary new-
-notification activity. Its availability and privacy lifetime need implementation;
-do not persist private bodies, retain withdrawn/redacted content, replay an alert,
-or show the same notice twice when it is already one of the activities.
+Message bodies are off by default. Withdrawal, redaction and permission loss
+clear content. Music, notifications, artwork and live source values stay in RAM;
+only configuration is stored. Source observations/expiry and native Timer
+ownership remain authoritative. Null-TTL live sources have a separate 60-second
+watch transport lease, renewed only while their subscription remains active.
+That lease never renews finite native-owner source validity.
 
-Configuration, defaults and implementation capacity limits still need design.
-The preview's five visible rows in an expanded group demonstrate navigation;
-they do not define the catalogue transport or runtime capacity.
+The public connection service debounces disconnect reporting (25 seconds in the
+stock firmware used for emulator QA). Native private content clears when the SDK
+notification arrives or its lease expires; physical radio loss is not detected
+immediately. Old session frames, expired bindings and stale commands are rejected.
 
-## Available foundations
+## Current scope
 
-- [Activities 0.4.2](../pebble-activities/README.md) supplies semantic summaries
-  and validates optional actions, entity links and app destinations. It does not
-  implement a Dashboard action executor; its ACT3 wire view holds two cards.
-- [Core 0.5.1](../pebble-watchface-core/README.md) supplies reusable reading and
-  transport helpers. Choose what Dashboard needs after agreeing on its flow.
-- [Timer](../pebble-app-timer/README.md) currently publishes summaries and an
-  app destination. In-Dashboard Pause/Resume requires additional Timer support.
-- [Open Activity](../pebble-app-open-activity/README.md) remains the separate
-  Dynamic shortcut helper. Dashboard is an app the user can open normally.
+- Timer exposes its summary and app destination. Dashboard Pause/Resume remains
+  deferred; native Timer owns saved state and alarms.
+- App opening uses the official phone Watch State action. It needs a connection
+  and permission and currently targets connected watches: use one connected
+  watch. It opens the whole app. A dispatched platform action cannot be recalled.
+- Back keeps stock behavior. PebbleOS reserves held Back to exit to the launcher;
+  custom Back shortcuts remain deferred. No global success-exit override is set.
+- This is a first local build, not an appstore publication or a claim that every
+  arbitrary plugin schema/action has been tested on a real phone.
 
-The [earlier Dashboard proposal](../pebble-activities/docs/design/dashboard-integration-draft.md)
-is background material. Some of its metadata is now implemented, while its
-Dashboard screens, command handling and capacity proposals remain unimplemented.
-Current public specifications take precedence over stale draft API wording.
+## Build and validate
+
+Use Pebble SDK 4.33.1, Node.js, Python 3 and a C99 compiler:
+
+Browser QA additionally needs Node 22+ (global WebSocket) and Chromium at
+`/usr/bin/chromium`, or a path supplied through `CHROMIUM_BINARY`.
+
+```sh
+npm ci --ignore-scripts
+npm test
+npm run build
+npm run check:artifact
+node scripts/check-packaged.cjs
+node scripts/check-settings.cjs
+```
+
+In this shared workspace, first source `../recovery-validation/env.sh` to keep
+mutable SDK state inside the workspace. Use `npm run build` to package the
+permissions, plugin/config and notices; a bare SDK build is incomplete.
+
+`scripts/emulator-smoke.py` uses isolated stock-derived Emery QEMU and an explicit
+fictional phone peer. It installs no physical device and sends no real phone
+commands. Packaged-JS checks separately execute actual PBW scripts against an
+isolated SDK model and the pinned Activities provider/consumer. Portable C tests
+cross-decode JS fixtures and cover malformed/stale/expiry/navigation cases.
+Sanitizers: `python3 scripts/test-native.py --sanitize`; disable LeakSanitizer only
+where the sandbox cannot support its ptrace mechanism.
+
+Production excludes native fixtures. `DASHBOARD_FIXTURE=1` produces a separately
+named synthetic UI fixture build, not the real app.
+
+## Design previews
+
+[Interactive Snapshot](previews/snapshot.html),
+[browser expansion study](previews/expansion-overview.png) and
+[earlier comparison](previews/index.html) remain discussion artifacts. Actual
+native captures are in the versioned QA folder.
+
+Licensed under the suite's PolyForm Noncommercial terms; see LICENSE and
+THIRD-PARTY-NOTICES.md. Activities 0.4.2 is vendored with checksum provenance.

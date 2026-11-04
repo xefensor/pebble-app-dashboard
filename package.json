@@ -1,0 +1,127 @@
+{
+  "name": "pebble-app-dashboard",
+  "version": "0.1.0",
+  "author": "Xef",
+  "private": true,
+  "license": "SEE LICENSE IN LICENSE",
+  "description": "A stock Pebble Dashboard for activities, notifications and mixed pinned readings/actions.",
+  "dependencies": {
+    "pebble-activities": "file:vendor/pebble-activities-0.4.2.tgz"
+  },
+  "scripts": {
+    "test": "node --test tests/*.test.js && python3 scripts/test-native.py",
+    "build": "python3 scripts/build.py",
+    "check:artifact": "python3 scripts/check-artifact.py"
+  },
+  "pebble": {
+    "displayName": "Dashboard",
+    "uuid": "f76f9fc1-2944-4248-bcc5-3eea2af0183b",
+    "sdkVersion": "3",
+    "projectType": "native",
+    "enableMultiJS": true,
+    "targetPlatforms": [
+      "emery"
+    ],
+    "watchapp": {
+      "watchface": false
+    },
+    "capabilities": [
+      "configurable"
+    ],
+    "configPage": "config.html",
+    "usesPermissions": [
+      "Location",
+      "ReadMusic",
+      "ControlMusic",
+      "Notifications",
+      "FindMyPhone",
+      "LaunchApps",
+      "ReadWatchSettings"
+    ],
+    "plugin": {
+      "description": "Dashboard preferences and plugin catalogue settings. No activity source or action proxy.",
+      "script": "plugin.js",
+      "sources": [],
+      "actions": []
+    },
+    "resources": {
+      "media": [
+        {
+          "type": "font",
+          "name": "FONT_BODY_11",
+          "file": "fonts/RobotoCondensed-Bold.ttf",
+          "characterRegex": "[\\u0020-\\u017F\\u2013\\u2014\\u2019\\u2026]"
+        },
+        {
+          "type": "font",
+          "name": "FONT_BODY_12",
+          "file": "fonts/RobotoCondensed-Bold.ttf",
+          "characterRegex": "[\\u0020-\\u017F\\u2013\\u2014\\u2019\\u2026]"
+        },
+        {
+          "type": "font",
+          "name": "FONT_BODY_14",
+          "file": "fonts/RobotoCondensed-Bold.ttf",
+          "characterRegex": "[\\u0020-\\u017F\\u2013\\u2014\\u2019\\u2026]"
+        },
+        {
+          "type": "font",
+          "name": "FONT_BODY_16",
+          "file": "fonts/RobotoCondensed-Bold.ttf",
+          "characterRegex": "[\\u0020-\\u017F\\u2013\\u2014\\u2019\\u2026]"
+        },
+        {
+          "type": "font",
+          "name": "FONT_BODY_20",
+          "file": "fonts/RobotoCondensed-Bold.ttf",
+          "characterRegex": "[\\u0020-\\u017F\\u2013\\u2014\\u2019\\u2026]"
+        },
+        {
+          "type": "font",
+          "name": "FONT_BODY_24",
+          "file": "fonts/RobotoCondensed-Bold.ttf",
+          "characterRegex": "[\\u0020-\\u017F\\u2013\\u2014\\u2019\\u2026]"
+        },
+        {
+          "type": "font",
+          "name": "FONT_CLOCK_20",
+          "file": "fonts/Fredoka-Bold-Clock.ttf",
+          "characterRegex": "[0-9:.,%\u00b0CF+\u2212-]"
+        },
+        {
+          "type": "font",
+          "name": "FONT_CLOCK_24",
+          "file": "fonts/Fredoka-Bold-Clock.ttf",
+          "characterRegex": "[0-9:.,%\u00b0CF+\u2212-]"
+        },
+        {
+          "type": "font",
+          "name": "FONT_CLOCK_26",
+          "file": "fonts/Fredoka-Bold-Clock.ttf",
+          "characterRegex": "[0-9:.,%\u00b0CF+\u2212-]"
+        },
+        {
+          "type": "png",
+          "name": "IMAGE_MENU_ICON",
+          "file": "images/menu-icon.png",
+          "menuIcon": true
+        }
+      ]
+    },
+    "messageKeys": {
+      "DB_OPERATION": 4000,
+      "DB_SESSION": 4001,
+      "DB_REQUEST": 4002,
+      "DB_MODE": 4003,
+      "DB_OFFSET": 4004,
+      "DB_TOKEN": 4005,
+      "DB_VERSION": 4006,
+      "DB_ACTION": 4007,
+      "DB_DATA": 4008,
+      "DB_RESULT": 4009,
+      "DB_TEXT": 4010,
+      "DB_CONFIRM": 4011,
+      "DB_INDEX": 4012
+    }
+  }
+}
