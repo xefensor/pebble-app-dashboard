@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Dashboard — Snapshot and expanded groups</title>
+  <link rel="stylesheet" href="preview.css">
+  <script src="dashboard.js" defer></script>
+</head>
+<body class="snapshot-only">
+<main>
+  <header class="page-header">
+    <div class="eyebrow"><span class="brand-mark" aria-hidden="true">D</span> PEBBLE DASHBOARD <span class="study-label">SNAPSHOT · EXPANSION</span></div>
+    <h1>A quick look. More when you need it.</h1>
+    <p class="intro">Select opens or uses the highlighted item. Hold Select to see its whole group.<br>Back returns to the exact item you came from.</p>
+  </header>
+  <section class="toolbar" aria-label="Preview settings">
+    <label>Example <select id="scenario"><option value="timer-media">Timer + music</option><option value="workout-navigation">Workout + directions</option><option value="long">Long text + long timer</option><option value="quiet">Nothing running</option></select></label>
+    <div class="toolbar-right">
+      <label class="check"><input id="message-preview" type="checkbox" checked> Message preview</label>
+      <label class="check"><input id="actual-size" type="checkbox"> Actual size</label>
+      <button id="swap" type="button">Swap activities</button>
+      <button id="theme" type="button" aria-pressed="false">Dark screens</button>
+      <button id="reset" type="button">Quick launch again</button>
+    </div>
+  </section>
+  <section class="studies" aria-label="Interactive Snapshot preview">
+    <article class="study" data-layout="snapshot">
+      <div class="study-title"><span>01</span><h2>Snapshot</h2></div>
+      <p class="description">Two activities, a notification, two readings and two controls in the overview. Six fictional entries in each expanded group.</p>
+      <div class="watch-area">
+        <div class="watch" data-layout="snapshot">
+          <canvas width="200" height="228" tabindex="0" role="img" aria-label="Snapshot Dashboard preview"></canvas>
+          <button class="hardware back" data-key="back" aria-label="Snapshot: Back">‹</button>
+          <button class="hardware up" data-key="up" aria-label="Snapshot: Up">⌃</button>
+          <button class="hardware select" data-key="select" aria-label="Snapshot: tap Select or hold for all entries">●</button>
+          <button class="hardware down" data-key="down" aria-label="Snapshot: Down">⌄</button>
+        </div>
+      </div>
+      <p class="tradeoff">Hold the middle button for 0.6 seconds. The footer shows when more entries are available. Holding a control opens its group without running it.</p>
+    </article>
+  </section>
+  <div class="interaction-help"><strong>Try it:</strong> hold Select on Tea to browse Activities. Back, then move to Weather or Light and hold again. Use Up / Down to reach the sixth entry. Keyboard: ↑ ↓, tap or hold Enter / Space, Esc; H also previews a hold.</div>
+  <p id="status" class="status" role="status" aria-live="polite">Loading local fonts…</p>
+  <section class="notes">
+    <div><h3>Snapshot is a summary</h3><p>The group lists can contain more than the opening screen. Six entries demonstrate overflow here; that is example data, not a proposed maximum.</p></div>
+    <div><h3>Notifications open their app</h3><p>Selecting the notification records a native Notifications navigation intent. The browser stays on Snapshot and reports it below the watch. Timer Pause/Resume is deferred.</p></div>
+    <div><h3>Local concept preview</h3><p>Fictional data and simulated controls. No phone commands or native apps are launched. These 200 × 228 drawings are browser concepts, not watch captures. <a href="index.html">Earlier layout comparison</a>.</p></div>
+  </section>
+</main>
+</body>
+</html>

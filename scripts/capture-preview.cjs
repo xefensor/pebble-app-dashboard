@@ -33,8 +33,11 @@ for (let i=0;i<argv.length;i++) {
 }
 if (plan) {
   console.log(JSON.stringify({entry:'previews/index.html', dimensions:[200,228], layouts, scenarios,
-    output, contactSheets:['overview-light.png','overview-dark.png','alternate-activities.png','media-first.png','detail-overview.png'],
-    checks:['64-colour opaque pixels','bounded drawing','button and keyboard navigation','static idle frames','selected/detail captures']},null,2));
+    output, contactSheets:['overview-light.png','overview-dark.png','alternate-activities.png','media-first.png','detail-overview.png',
+      'expansion-overview.png','expansion-dark.png','expansion-navigation.png'],
+    checks:['64-colour opaque pixels','bounded drawing','button and keyboard navigation','static idle frames','selected/detail captures',
+      'six entries in every expanded group','detail and section Back restoration','real pointer/keyboard hold suppresses tap','native notification handoff intent',
+      'focused Snapshot page real hold and Back']},null,2));
   process.exit(0);
 }
 
@@ -96,6 +99,28 @@ async function configure(scenario='timer-media',theme='light') {
   await api('reset');await api('setScenario',scenario);await api('setTheme',theme);await api('setMessagePreview',true);
   return inspect();
 }
+async function view(layout) {return (await inspect()).layouts[layout];}
+async function focusCanvas(layout) {
+  assert.equal(await evaluate(`(()=>{const c=document.querySelector('canvas[data-layout="${layout}"]');if(!c)return false;c.focus();return document.activeElement===c;})()`),true,
+    layout+' canvas needs a focusable data-layout attribute');
+}
+async function key(type,key,code=key,extra={}) {await send('Input.dispatchKeyEvent',{type,key,code,...extra});}
+async function tapKey(keyName,code=keyName) {await key('keyDown',keyName,code);await key('keyUp',keyName,code);}
+async function pointerSelect(layout,hold=false) {
+  const point=await evaluate(`(()=>{const b=document.querySelector('.watch[data-layout="${layout}"] .hardware[data-key="select"]');if(!b)return null;b.scrollIntoView({block:'center'});const r=b.getBoundingClientRect();return {x:r.x+r.width/2,y:r.y+r.height/2};})()`);
+  assert.ok(point,layout+' Select button is missing');
+  await send('Input.dispatchMouseEvent',{type:'mouseMoved',...point});
+  await send('Input.dispatchMouseEvent',{type:'mousePressed',...point,button:'left',buttons:1,clickCount:1});
+  if(hold)await sleep(850);
+  await send('Input.dispatchMouseEvent',{type:'mouseReleased',...point,button:'left',buttons:0,clickCount:1});
+}
+function assertSection(current,section,layout) {
+  assert.equal(current.mode,'section',layout+' hold must open a section');
+  assert.equal(current.section,section,layout+' opened the wrong section');
+  assert.equal(current.sectionCounts[section],6,layout+' '+section+' must offer six fictional entries');
+  assert.ok(current.visibleIds.length>0&&current.visibleIds.length<=5,layout+' section viewport must contain at most five rows');
+  assert.ok(current.visibleIds.includes(current.selectedId),layout+' section selection must stay visible');
+}
 
 const captures=[], sheets=[];
 async function capture(layout,name) {
@@ -119,12 +144,14 @@ async function capture(layout,name) {
 }
 
 async function sheet(name,frames,subtitle,columns=3) {
+  const title=({'expansion-overview':'Snapshot and expanded groups','expansion-dark':'Expanded groups in dark',
+    'expansion-navigation':'Open details and return'})[name]||name;
   const url=await evaluate(`(async()=>{
     const frames=${JSON.stringify(frames.map(frame=>({url:frame.url,label:frame.label||labels[frame.record.layout],note:frame.note||''})))},columns=${columns};
     const scale=2,w=200*scale,h=228*scale,gap=28,header=86,caption=68,rows=Math.ceil(frames.length/columns);
     const canvas=document.createElement('canvas');canvas.width=columns*w+(columns+1)*gap;canvas.height=header+rows*(h+caption+gap)+gap;
     const ctx=canvas.getContext('2d');ctx.fillStyle='#f3f3ef';ctx.fillRect(0,0,canvas.width,canvas.height);
-    ctx.fillStyle='#20251f';ctx.font='600 26px system-ui';ctx.fillText('Dashboard / ${name.replace(/'/g,'')} ',gap,36);
+    ctx.fillStyle='#20251f';ctx.font='600 26px system-ui';ctx.fillText(${JSON.stringify('Dashboard / '+title)},gap,36);
     ctx.font='16px system-ui';ctx.fillStyle='#5d655a';ctx.fillText(${JSON.stringify(subtitle)},gap,64);
     for(let index=0;index<frames.length;index++) {
       const frame=frames[index],image=new Image();image.src=frame.url;await image.decode();
@@ -136,7 +163,7 @@ async function sheet(name,frames,subtitle,columns=3) {
     return canvas.toDataURL('image/png');
   })()`);
   const bytes=imageBytes(url),file=name+'.png';fs.writeFileSync(path.join(output,file),bytes);
-  sheets.push({file,width:bytes.readUInt32BE(16),height:bytes.readUInt32BE(20),sha256:sha(bytes)});
+  sheets.push({file,title,width:bytes.readUInt32BE(16),height:bytes.readUInt32BE(20),sha256:sha(bytes)});
 }
 
 async function run() {
@@ -228,18 +255,21 @@ async function run() {
     selectedChecks.push({layout:id,selectionCanReachLatestNotificationAndControl:true,selectedControlVisible:true});
   }
   const details=[];
-  for(const [id,label] of [['activity-0','Timer detail'],['activity-1','Music detail'],['notification','Latest notification'],['control-light','Light controls']]) {
+  for(const [id,label] of [['activity-0','Timer detail'],['activity-1','Music detail'],['notification','Native notification handoff'],['control-light','Light controls']]) {
     await configure();await api('select','focus',id);const before=(await inspect()).layouts.focus;
     const previousPixels=await api('snapshot','focus');
     await api('press','focus','select');const after=(await inspect()).layouts.focus;
     if(id==='control-light') {
       assert.equal(after.mode,before.mode,'An explicit light toggle stays in the overview');
       assert.notEqual(await api('snapshot','focus'),previousPixels,'Light toggle must update its displayed state');
+    } else if(id==='notification') {
+      assert.equal(after.mode,'overview','Notifications must hand off without inventing a Dashboard detail');
+      assert.equal(after.lastNavigation,'notifications','Notification Select records the native-app destination');
     } else assert.notEqual(after.mode,before.mode,id+' Select must open its detail or controls');
     const frame=await capture('focus','detail-'+id);frame.label=label;details.push(frame);
     await api('press','focus','back');assert.equal((await inspect()).layouts.focus.mode,before.mode);
   }
-  await sheet('detail-overview',details,'Select opens details; a light toggles directly. Timer controls are future work.',2);
+  await sheet('detail-overview',details,'Select opens details or its destination; light toggles. Timer controls are future work.',2);
 
   const readingDetails=[];
   for(const id of layouts) {
@@ -251,11 +281,98 @@ async function run() {
     readingDetails.push({layout:id,detailSelectReturns:true,selectedReadingRetained:true});
   }
 
+  const groups=[['activities','activity-0','All activities'],['readouts','pin-weather','All readings'],['controls','control-light','All controls']];
+  const sectionNavigation=[],notificationNavigation=[],holdGestures=[];
+  const expansionFrames={light:[],dark:[]},navigationFrames=[];
+  for(const theme of ['light','dark']) {
+    await configure('timer-media',theme);
+    const overview=await capture('snapshot','snapshot-expand-overview-'+theme);
+    overview.label='Snapshot';overview.note='Select opens / runs · hold Select shows more';expansionFrames[theme].push(overview);
+    for(const [section,trigger,label] of groups) {
+      await api('select','snapshot',trigger);await api('press','snapshot','hold');
+      assertSection(await view('snapshot'),section,'snapshot');
+      const frame=await capture('snapshot','snapshot-all-'+section+'-'+theme);
+      frame.label=label;frame.note='Six entries · Up / Down · Back restores Snapshot';expansionFrames[theme].push(frame);
+      await api('press','snapshot','back');assert.equal((await view('snapshot')).selectedId,trigger);
+    }
+  }
+  await sheet('expansion-overview',expansionFrames.light,'Snapshot stays short. Hold Select on an activity, reading or control to see its group.',2);
+  await sheet('expansion-dark',expansionFrames.dark,'The same four screens in the dark theme. Synthetic data; browser design preview.',2);
+
+  for(const layout of layouts) {
+    for(const [section,trigger] of groups) {
+      await configure();await api('select',layout,trigger);const overview=await view(layout);
+      await api('press',layout,'hold');const first=await view(layout);assertSection(first,section,layout);
+      for(let index=1;index<first.sectionCounts[section];index++)await api('press',layout,'down');
+      const last=await view(layout);assertSection(last,section,layout);
+      assert.ok(!first.visibleIds.includes(last.selectedId),layout+' '+section+' must scroll beyond the initial five rows');
+      assert.notDeepEqual(last.visibleIds,first.visibleIds,layout+' '+section+' viewport must follow selection');
+      if(section!=='controls') {
+        await api('press',layout,'select');assert.equal((await view(layout)).mode,'detail',layout+' expanded row Select opens detail');
+        await api('press',layout,'back');const returned=await view(layout);
+        assertSection(returned,section,layout);assert.equal(returned.selectedId,last.selectedId,layout+' detail Back must retain the selected occurrence');
+        assert.deepEqual(returned.visibleIds,last.visibleIds,layout+' detail Back must retain section position');
+      }
+      await api('press',layout,'back');const returned=await view(layout);
+      assert.equal(returned.mode,'overview',layout+' section Back returns to overview');
+      assert.equal(returned.selectedId,overview.selectedId,layout+' section Back retains the original card');
+      assert.deepEqual(returned.visibleIds,overview.visibleIds,layout+' section Back retains the original viewport');
+      assert.equal(returned.returnDepth,0,layout+' Back should consume the section return frame');
+      sectionNavigation.push({layout,section,total:first.sectionCounts[section],viewportLimit:5,sixthEntryReachable:true,
+        detailBackRetainsRowAndViewport:section!=='controls',overviewBackRetainsCellAndViewport:true});
+    }
+    await configure();await api('select',layout,'notification');await api('press',layout,'select');const notification=await view(layout);
+    assert.equal(notification.mode,'overview',layout+' notification opens the native app, not a Dashboard detail');
+    assert.equal(notification.lastNavigation,'notifications',layout+' notification handoff destination is missing');
+    assert.equal(notification.selectedId,'notification',layout+' notification handoff keeps its originating card');
+    notificationNavigation.push({layout,destination:'notifications',mockIntentOnly:true,createsDashboardDetail:false});
+  }
+
+  // Capture the activity drill-down and its return at the exact same selected occurrence.
+  await configure();await api('press','snapshot','hold');await api('press','snapshot','down');
+  const sectionBefore=await view('snapshot');
+  let frame=await capture('snapshot','snapshot-section-before-detail');frame.label='All activities';frame.note='Select Music from the expanded group';navigationFrames.push(frame);
+  await api('press','snapshot','select');assert.equal((await view('snapshot')).mode,'detail');
+  frame=await capture('snapshot','snapshot-section-activity-detail');frame.label='Activity detail';frame.note='Back returns to the same activity in the group';navigationFrames.push(frame);
+  await api('press','snapshot','back');const sectionAfter=await view('snapshot');
+  assert.equal(sectionAfter.selectedId,sectionBefore.selectedId);assert.deepEqual(sectionAfter.visibleIds,sectionBefore.visibleIds);
+  frame=await capture('snapshot','snapshot-section-after-detail');frame.label='Back: same Music row';frame.note='The selected occurrence and scroll position survive';navigationFrames.push(frame);
+  await api('press','snapshot','back');await api('select','snapshot','notification');await api('press','snapshot','select');
+  frame=await capture('snapshot','snapshot-notification-handoff');frame.label='Notifications';frame.note='Select requests the native app · preview intent only';navigationFrames.push(frame);
+  await sheet('expansion-navigation',navigationFrames,'Activity detail returns to its list; notifications go directly to the native app.',2);
+
+  // Real DOM gestures verify that releasing a hold cannot also run the selected control.
+  for(const layout of layouts) {
+    await configure();await api('select',layout,'control-light');const before=await view(layout);
+    assert.equal(typeof before.actionCount,'number',layout+' must expose actionCount');
+    await pointerSelect(layout,true);let after=await view(layout);assertSection(after,'controls',layout);
+    assert.equal(after.actionCount,before.actionCount,layout+' pointer hold release must not toggle a control');
+    await api('press',layout,'back');await pointerSelect(layout);after=await view(layout);
+    assert.equal(after.mode,'overview',layout+' fresh pointer tap after hold stays overview');
+    assert.equal(after.actionCount,before.actionCount+1,layout+' fresh pointer tap must execute exactly one control action');
+    for(const [keyName,code] of [['Enter','Enter'],[' ','Space']]) {
+      await configure();await api('select',layout,'control-light');await focusCanvas(layout);const count=(await view(layout)).actionCount;
+      await key('keyDown',keyName,code);await sleep(850);
+      await key('keyDown',keyName,code,{autoRepeat:true});await key('keyUp',keyName,code);
+      after=await view(layout);assertSection(after,'controls',layout);
+      assert.equal(after.actionCount,count,layout+' '+code+' hold release must not run its control');
+      await tapKey('Escape');assert.equal((await view(layout)).mode,'overview');
+      await tapKey(keyName,code);after=await view(layout);
+      assert.equal(after.actionCount,count+1,layout+' fresh '+code+' tap after hold must run exactly once');
+    }
+    await configure();await api('select',layout,'control-light');const sectionCount=(await view(layout)).actionCount;
+    await api('press',layout,'hold');await api('press',layout,'select');after=await view(layout);
+    assertSection(after,'controls',layout);assert.equal(after.actionCount,sectionCount+1,layout+' an expanded control must run exactly once and retain its group');
+    await configure();await api('select',layout,'activity-0');await pointerSelect(layout,true);
+    assertSection(await view(layout),'activities',layout);
+    holdGestures.push({layout,pointerHoldControlSuppressesTap:true,pointerFreshTapRunsOnce:true,
+      enterHoldSuppressesTap:true,spaceHoldSuppressesTap:true,keyboardFreshTapRunsOnce:true,expandedControlRunsOnce:true,pointerHoldActivityOpensGroup:true});
+  }
+
   await configure();
   const keyboard=[];
   for(const id of layouts) {
-    const found=await evaluate(`(()=>{const c=document.querySelector('canvas[data-layout="${id}"]');if(!c)return false;c.focus();return document.activeElement===c;})()`);
-    assert.equal(found,true,id+' canvas needs a focusable data-layout attribute');
+    await focusCanvas(id);
     const before=(await inspect()).layouts[id];
     for(const [type,key,code] of [['keyDown','ArrowDown','ArrowDown'],['keyUp','ArrowDown','ArrowDown']]) await send('Input.dispatchKeyEvent',{type,key,code});
     const after=(await inspect()).layouts[id];assert.notEqual(after.selectedId,before.selectedId,id+' ArrowDown does not move focus');
@@ -265,11 +382,31 @@ async function run() {
     assert.equal((await inspect()).layouts[id].mode,after.mode,id+' Escape does not return');
     keyboard.push({layout:id,arrowDown:true,enter:true,escape:true});
   }
+
+  const focusedEntry=path.join(root,'previews/snapshot.html');assert.ok(fs.existsSync(focusedEntry),'Focused Snapshot preview is missing');
+  await send('Page.navigate',{url:pathToFileURL(focusedEntry).href});
+  await until(()=>evaluate('!!window.dashboardPreview && JSON.stringify(window.dashboardPreview.layouts)===JSON.stringify(["snapshot"])'),'focused Snapshot API');
+  await evaluate('Promise.resolve(window.dashboardPreview.ready).then(()=>document.fonts.ready).then(()=>true)');
+  assert.equal(await evaluate('document.querySelectorAll("canvas[data-layout]").length'),1,'Focused preview must contain only Snapshot');
+  await api('setTheme','light');await api('setScenario','timer-media');
+  const focusedBefore=(await api('inspect')).layouts.snapshot;
+  await focusCanvas('snapshot');await key('keyDown','Enter');await sleep(850);await key('keyUp','Enter');
+  assertSection((await api('inspect')).layouts.snapshot,'activities','focused snapshot');
+  await tapKey('Escape');const focusedAfter=(await api('inspect')).layouts.snapshot;
+  assert.equal(focusedAfter.mode,'overview');assert.equal(focusedAfter.selectedId,focusedBefore.selectedId);
+  assert.deepEqual(focusedAfter.visibleIds,focusedBefore.visibleIds);
+  await api('select','snapshot','control-light');const focusedCount=(await api('inspect')).layouts.snapshot.actionCount;
+  await pointerSelect('snapshot',true);const focusedControl=(await api('inspect')).layouts.snapshot;
+  assertSection(focusedControl,'controls','focused snapshot');assert.equal(focusedControl.actionCount,focusedCount);
+  await api('press','snapshot','back');assert.equal((await api('inspect')).layouts.snapshot.selectedId,'control-light');
+  const focusedEntrySmoke={entry:'previews/snapshot.html',layouts:['snapshot'],canvases:1,
+    realKeyboardHoldOpensActivities:true,backRetainsOriginalItemAndViewport:true,realPointerHoldDoesNotRunControl:true};
   assert.deepEqual(exceptions,[],'Browser exceptions occurred');
   const report={result:'PASS',scope:'Code-native Chromium design previews with synthetic data; not a Pebble SDK build, native screenshot, live plugin or physical-watch test.',
     dimensions:[200,228],captureScriptSha256:sha(fs.readFileSync(__filename)),sourceHashes:inputs(path.join(root,'previews')),scenarios,layouts,
     idle:{staticPixels:true,repeatingIntervals:idleAfter.intervals,framesBefore:idleBefore,framesAfter:idleAfter},
-    selectedChecks,readingDetails,privacy,keyboard,browserExceptions:exceptions,captures,contactSheets:sheets};
+    selectedChecks,readingDetails,privacy,keyboard,sectionNavigation,notificationNavigation,holdGestures,focusedEntrySmoke,
+    browserExceptions:exceptions,captures,contactSheets:sheets};
   fs.writeFileSync(path.join(output,'validation.json'),JSON.stringify(report,null,2)+'\n');
   console.log(JSON.stringify({result:report.result,captures:captures.length,contactSheets:sheets.length,dimensions:report.dimensions,output},null,2));
 }

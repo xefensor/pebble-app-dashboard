@@ -8,15 +8,19 @@ installable build exists yet. The repository is local and has no remote.
 
 ## Preview
 
-Open [the interactive comparison](previews/index.html), or view the exported
+Open [the interactive Snapshot preview](previews/snapshot.html), or view the
+[expanded groups](previews/expansion-overview.png) and
+[detail / return navigation](previews/expansion-navigation.png).
+The [earlier layout comparison](previews/index.html) and its exports remain:
 [light overview](previews/overview-light.png),
 [dark overview](previews/overview-dark.png),
 [other activity types](previews/alternate-activities.png) and
 [detail screens](previews/detail-overview.png).
 
-The three opening-screen proposals are Snapshot, Activity focus and One list.
+Snapshot is the selected opening-screen direction. Activity focus and One list
+remain as earlier comparisons.
 Each uses a 200 × 228 canvas, the suite's font sources and Pebble's 64-colour
-palette. Use the drawn watch buttons or keyboard arrows/Enter/Escape. Examples,
+palette. Use the drawn watch buttons or keyboard arrows/Enter/Space/Escape. Examples,
 theme, activity order and notification body visibility are selectable. These
 are synthetic design previews, not emulator captures or functioning plugins.
 See [preview notes](previews/README.md) for scope and regeneration.
@@ -38,9 +42,19 @@ See [preview notes](previews/README.md) for scope and regeneration.
 
 When opening Dashboard through Quick Launch, the user wants to see two current
 activities, the latest notification, pinned readings and controls. The previews
-compare how much can remain visible at once and what needs button navigation.
+show the selected Snapshot layout and how its groups expand.
 Both activity positions support different types; Music has its own playback
-detail proposal. No proposal is selected yet.
+detail proposal.
+
+Snapshot shows two activities, one latest notification, two pinned readings and
+two controls. These visible slots do not set each collection's total capacity.
+Hold Select on an activity, readout or control to browse its group; the footer
+shows the available count. Short Select opens activity/readout details or uses
+the selected control. Back restores the previous item and list position, then
+the original Snapshot item. A hold must not also execute the short-press action.
+Selecting the notification goes directly to native Notifications; the browser
+records that navigation intent without launching a real app. Six entries per
+group demonstrate overflow in the preview; six is not a proposed capacity limit.
 
 The user also wants Timer Pause/Resume inside Dashboard, deferred until later.
 This is recorded scope, not an implemented Timer command capability.
@@ -50,9 +64,9 @@ notification activity. Its availability and privacy lifetime need implementation
 do not persist private bodies, retain withdrawn/redacted content, replay an alert,
 or show the same notice twice when it is already one of the activities.
 
-Overview composition, list versus grid, navigation, control placement, defaults
-and capacity limits are open decisions. No row count, pixel layout or transport
-budget from an earlier draft is accepted as a requirement here.
+Configuration, defaults and implementation capacity limits still need design.
+The preview's five visible rows in an expanded group demonstrate navigation;
+they do not define the catalogue transport or runtime capacity.
 
 ## Available foundations
 

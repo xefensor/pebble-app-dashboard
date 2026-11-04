@@ -1,6 +1,7 @@
-# Dashboard overview studies
+# Dashboard Snapshot and expansion preview
 
-Open `index.html` in a browser. Everything is local; no server, download,
+Open `snapshot.html` in a browser for the selected direction. `index.html` keeps
+the earlier three-layout comparison. Everything is local; no server, download,
 account or phone connection is required. A current Chromium browser is used for
 the exported images and checks.
 
@@ -14,10 +15,30 @@ the exported images and checks.
    Find phone. Move down to reach the other reading/control. Selection stays
    visible while the list moves.
 
-Up/Down selects a row or tile. Select opens an activity, notification or reading
-detail. Explicit control tiles advertise Toggle or Ring in the footer. Music's
+## Snapshot navigation
+
+Up/Down selects a row or tile. Short Select opens activity or reading details,
+uses a control, or records the intent to open native Notifications. Notifications
+do not get a separate Dashboard detail screen. Control tiles advertise Toggle
+or Ring in the footer. Music's
 detail previews previous/play/next; other detail screens have appropriate app
-navigation. Back returns. All controls are simulations and send no phone command.
+navigation. All controls are simulations and send no phone command.
+
+Hold the middle/Select button for 600 ms on an activity, reading or control to
+open its entire group. The footer advertises `Hold: All 6` for these fictional
+examples. Up/Down moves through six entries, with at most five visible rows and
+a scrollbar. Six is demo data, not a capacity decision. There are no additional
+hidden activities in the quiet example. Holding a control never also runs it.
+
+Back from detail restores the exact selected group row and viewport; Back from
+the group restores the original Snapshot selection. Short Select on an expanded
+control executes it and stays in Controls. Notifications go straight to the
+native app, represented only by a status message below the browser preview.
+
+Keyboard: arrows navigate, tap Enter/Space to Select, hold Enter/Space to expand,
+Escape returns. H is an alternative hold-preview shortcut. Pointer cancellation,
+focus loss and resets cancel pending gestures without executing a short press.
+
 Timer's detail only offers Open Timer: in-Dashboard Pause/Resume is wanted later.
 No progress is invented from a countdown that lacks an authoritative duration.
 
@@ -50,5 +71,7 @@ Run from the repository root with Chromium installed. The capture script owns
 an isolated temporary browser/profile and closes it afterward. It writes PNGs,
 contact sheets and `validation.json`, including exact preview/font input hashes.
 Checks cover palette and drawing bounds, static idle pixels, button/keyboard
-navigation, detail/Back behavior, selection visibility and simulated controls.
+navigation, pointer/Enter/Space hold-release suppression, section scrolling,
+detail/Back behavior, selection visibility and simulated controls. Exports include
+`expansion-overview.png`, `expansion-dark.png` and `expansion-navigation.png`.
 These results describe the browser prototype only.
