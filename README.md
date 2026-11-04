@@ -1,18 +1,21 @@
 # Dashboard
 
 A stock Pebble watchapp for current activities, the latest available notification
-and pinned readings/actions. **0.3.0 is a local Emery testing candidate.**
+and pinned readings/actions. **0.3.0 is an Emery development prerelease.**
 
-The native app, phone runtime and bundled settings page are implemented. The
-repository has no remote. Build and portable/emulator checks are recorded under
+The native app, phone runtime and bundled settings page are implemented in
+[xefensor/pebble-app-dashboard](https://github.com/xefensor/pebble-app-dashboard).
+Build and portable/emulator checks are recorded under
 [docs/qa/0.3.0](docs/qa/0.3.0). Real-phone permissions/provider integration and
 physical-watch comfort/battery still need device testing. Synthetic SDK/emulator
 fixtures are not evidence of live phone operation.
 
 ## Try the build
 
-The local build creates `dist/Dashboard-0.3.0.pbw`, a separate debug ZIP and
-SHA256SUMS.txt. Install that PBW using the official Pebble phone app with plugins
+Download [Dashboard 0.3.0](https://github.com/xefensor/pebble-app-dashboard/releases/download/v0.3.0/Dashboard-0.3.0.pbw)
+from the [development release](https://github.com/xefensor/pebble-app-dashboard/releases/tag/v0.3.0).
+The release also includes source, debug files and checksums. Local builds create
+the same filenames under `dist/`. Install the PBW using the official Pebble phone app with plugins
 enabled. Allow permissions needed by your selected readings and controls. Open
 Dashboard normally or assign it to Quick Launch in Pebble settings.
 
@@ -131,7 +134,7 @@ immediately. Old session frames, expired bindings and stale commands are rejecte
   watch. It opens the whole app. A dispatched platform action cannot be recalled.
 - Back keeps stock behavior. PebbleOS reserves held Back to exit to the launcher;
   custom Back shortcuts remain deferred. No global success-exit override is set.
-- This is a local testing build, not an appstore publication or a claim that every
+- This is a development testing build, not an appstore publication or a claim that every
   arbitrary plugin schema/action has been tested on a real phone.
 
 ## Build and validate

@@ -1,6 +1,6 @@
 # Dashboard maintainer notes
 
-This repository contains the local native Dashboard candidate (0.3.0),
+This repository contains the native Dashboard development prerelease (0.3.0),
 its phone runtime/settings, and earlier browser design studies. Read README.md
 and docs/IMPLEMENTATION.md. Preserve UUID f76f9fc1-2944-4248-bcc5-3eea2af0183b,
 DSH1 message keys and existing published sibling apps.
