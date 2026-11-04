@@ -5,16 +5,16 @@
     200,
     228
   ],
-  "captureScriptSha256": "fec60721d9f872fcaff87990073d255e84621fada1c64476032a502cd189f310",
+  "captureScriptSha256": "f6903aa8e79f841bbc722ed8c9208ae7edf55678265d8ed751bd8f80dae40fd1",
   "sourceHashes": {
     "assets/fonts/Fredoka-Bold-Clock.ttf": "526d2361818275d1f9d1df6ce1835095058b84ec989e50e22f271237cc304000",
     "assets/fonts/OFL-Fredoka.txt": "5c9e7eee5c6b25f4b05b8d53b2e470ea4962f9ced742d044a98f7d95d1375bab",
     "assets/fonts/OFL-RobotoCondensed.txt": "0e4cc6ece88573545be2ed25835363662a6182ba4a4c1b5c8feda52add30e8a6",
     "assets/fonts/RobotoCondensed-Bold.ttf": "6e949e8aa3f6e0b4db88aacafccf0c0e55e708c4564c8f3d145792adbbf80ef6",
-    "dashboard.js": "2c891c4090902b8c49fa6b3a773f8552a4981844107e26236181c359b12f2e7a",
-    "index.html": "dfd20f0bc84265a83b3198f14b8d3c8f30182afc33bccc4023cd7d82898bbab3",
+    "dashboard.js": "96276735a80414c0c5b22c3fcec4aa600803c933f7b5e0f6e11d569537927802",
+    "index.html": "23f4e5cedf3c3c0079fbb0f2b4ef7f9b93554a5d15af490bec3f8e1f03f90c09",
     "preview.css": "1166449de08dc145fffe0442eba6f8a6c0c200e0e8b0a3fc19ab2aa62d02d909",
-    "snapshot.html": "df45e750f70214243578763e8d0ff1cc63b10c753213fe9306950a28ad7086d4"
+    "snapshot.html": "a9aaebc7acd17f62dd07e1a8a61715d62a2319767b36fe917646376fb08f13f8"
   },
   "scenarios": [
     "timer-media",
@@ -75,6 +75,32 @@
       "selectedReadingRetained": true
     }
   ],
+  "mixedPins": [
+    {
+      "layout": "snapshot",
+      "valueAndActionSamePin": true,
+      "brightnessToggleUpdatesReading": true,
+      "valueOnlyAndActionOnlyInSameGroup": true,
+      "actionStaysInPinned": true,
+      "backRestoresOrigin": true
+    },
+    {
+      "layout": "focus",
+      "valueAndActionSamePin": true,
+      "brightnessToggleUpdatesReading": true,
+      "valueOnlyAndActionOnlyInSameGroup": true,
+      "actionStaysInPinned": true,
+      "backRestoresOrigin": true
+    },
+    {
+      "layout": "list",
+      "valueAndActionSamePin": true,
+      "brightnessToggleUpdatesReading": true,
+      "valueOnlyAndActionOnlyInSameGroup": true,
+      "actionStaysInPinned": true,
+      "backRestoresOrigin": true
+    }
+  ],
   "privacy": [
     {
       "layout": "snapshot",
@@ -113,82 +139,91 @@
     {
       "layout": "snapshot",
       "section": "activities",
+      "origin": "activity-0",
       "total": 6,
       "viewportLimit": 5,
-      "sixthEntryReachable": true,
+      "lastEntryReachable": true,
       "detailBackRetainsRowAndViewport": true,
       "overviewBackRetainsCellAndViewport": true
     },
     {
       "layout": "snapshot",
-      "section": "readouts",
-      "total": 6,
+      "section": "pinned",
+      "origin": "pin-weather",
+      "total": 12,
       "viewportLimit": 5,
-      "sixthEntryReachable": true,
+      "lastEntryReachable": true,
       "detailBackRetainsRowAndViewport": true,
       "overviewBackRetainsCellAndViewport": true
     },
     {
       "layout": "snapshot",
-      "section": "controls",
-      "total": 6,
+      "section": "pinned",
+      "origin": "control-light",
+      "total": 12,
       "viewportLimit": 5,
-      "sixthEntryReachable": true,
-      "detailBackRetainsRowAndViewport": false,
+      "lastEntryReachable": true,
+      "detailBackRetainsRowAndViewport": true,
       "overviewBackRetainsCellAndViewport": true
     },
     {
       "layout": "focus",
       "section": "activities",
+      "origin": "activity-0",
       "total": 6,
       "viewportLimit": 5,
-      "sixthEntryReachable": true,
+      "lastEntryReachable": true,
       "detailBackRetainsRowAndViewport": true,
       "overviewBackRetainsCellAndViewport": true
     },
     {
       "layout": "focus",
-      "section": "readouts",
-      "total": 6,
+      "section": "pinned",
+      "origin": "pin-weather",
+      "total": 12,
       "viewportLimit": 5,
-      "sixthEntryReachable": true,
+      "lastEntryReachable": true,
       "detailBackRetainsRowAndViewport": true,
       "overviewBackRetainsCellAndViewport": true
     },
     {
       "layout": "focus",
-      "section": "controls",
-      "total": 6,
+      "section": "pinned",
+      "origin": "control-light",
+      "total": 12,
       "viewportLimit": 5,
-      "sixthEntryReachable": true,
-      "detailBackRetainsRowAndViewport": false,
+      "lastEntryReachable": true,
+      "detailBackRetainsRowAndViewport": true,
       "overviewBackRetainsCellAndViewport": true
     },
     {
       "layout": "list",
       "section": "activities",
+      "origin": "activity-0",
       "total": 6,
       "viewportLimit": 5,
-      "sixthEntryReachable": true,
+      "lastEntryReachable": true,
       "detailBackRetainsRowAndViewport": true,
       "overviewBackRetainsCellAndViewport": true
     },
     {
       "layout": "list",
-      "section": "readouts",
-      "total": 6,
+      "section": "pinned",
+      "origin": "pin-weather",
+      "total": 12,
       "viewportLimit": 5,
-      "sixthEntryReachable": true,
+      "lastEntryReachable": true,
       "detailBackRetainsRowAndViewport": true,
       "overviewBackRetainsCellAndViewport": true
     },
     {
       "layout": "list",
-      "section": "controls",
-      "total": 6,
+      "section": "pinned",
+      "origin": "control-light",
+      "total": 12,
       "viewportLimit": 5,
-      "sixthEntryReachable": true,
-      "detailBackRetainsRowAndViewport": false,
+      "lastEntryReachable": true,
+      "detailBackRetainsRowAndViewport": true,
       "overviewBackRetainsCellAndViewport": true
     }
   ],
@@ -267,8 +302,7 @@
       "section": null,
       "sectionCounts": {
         "activities": 6,
-        "readouts": 6,
-        "controls": 6
+        "pinned": 12
       },
       "returnDepth": 0,
       "lastNavigation": null,
@@ -279,8 +313,8 @@
         "activity-1",
         "notification",
         "pin-weather",
-        "pin-phone",
         "control-light",
+        "pin-phone",
         "control-find"
       ],
       "boundsViolations": [],
@@ -387,56 +421,67 @@
         {
           "source": "Weather",
           "shown": "Weather",
-          "size": 12,
+          "size": 11,
           "bounds": {
             "x": 29,
             "y": 145,
-            "width": 39.69140625,
-            "height": 10
+            "width": 36.3837890625,
+            "height": 8
           }
         },
         {
           "source": "13°C",
           "shown": "13°C",
-          "size": 23,
+          "size": 20,
           "bounds": {
             "x": 12,
-            "y": 156,
-            "width": 44.941986083984375,
-            "height": 17
+            "y": 155,
+            "width": 39.0799560546875,
+            "height": 14
+          }
+        },
+        {
+          "source": "Kitchen light",
+          "shown": "Kitchen light",
+          "size": 11,
+          "bounds": {
+            "x": 127,
+            "y": 145,
+            "width": 55.7841796875,
+            "height": 10
+          }
+        },
+        {
+          "source": "65%",
+          "shown": "65%",
+          "size": 20,
+          "bounds": {
+            "x": 110,
+            "y": 154,
+            "width": 35.859954833984375,
+            "height": 16
           }
         },
         {
           "source": "Phone",
           "shown": "Phone",
-          "size": 12,
+          "size": 11,
           "bounds": {
-            "x": 127,
-            "y": 145,
-            "width": 30.345703125,
-            "height": 10
+            "x": 29,
+            "y": 180,
+            "width": 27.81689453125,
+            "height": 8
           }
         },
         {
           "source": "76%",
           "shown": "76%",
-          "size": 23,
+          "size": 20,
           "bounds": {
-            "x": 110,
-            "y": 156,
-            "width": 41.906005859375,
-            "height": 18
-          }
-        },
-        {
-          "source": "Light on",
-          "shown": "Light on",
-          "size": 14,
-          "bounds": {
-            "x": 29,
-            "y": 189.5,
-            "width": 45.541015625,
-            "height": 14
+            "x": 12,
+            "y": 189,
+            "width": 36.43995666503906,
+            "height": 16
           }
         },
         {
@@ -445,7 +490,7 @@
           "size": 14,
           "bounds": {
             "x": 127,
-            "y": 189.5,
+            "y": 186,
             "width": 61.6259765625,
             "height": 14
           }
@@ -503,38 +548,38 @@
           "x": 4,
           "y": 141,
           "width": 94,
-          "height": 37,
-          "selected": false
-        },
-        {
-          "id": "pin-phone",
-          "x": 102,
-          "y": 141,
-          "width": 94,
-          "height": 37,
+          "height": 32,
           "selected": false
         },
         {
           "id": "control-light",
-          "x": 4,
-          "y": 183,
+          "x": 102,
+          "y": 141,
           "width": 94,
-          "height": 25,
+          "height": 32,
+          "selected": false
+        },
+        {
+          "id": "pin-phone",
+          "x": 4,
+          "y": 176,
+          "width": 94,
+          "height": 32,
           "selected": false
         },
         {
           "id": "control-find",
           "x": 102,
-          "y": 183,
+          "y": 176,
           "width": 94,
-          "height": 25,
+          "height": 32,
           "selected": false
         }
       ],
       "width": 200,
       "height": 228,
-      "bytes": 9323,
-      "sha256": "f7514e20b76782d0167b575947469ffc901ce7123ec1ae4a5155af1aced21fcb",
+      "bytes": 9524,
+      "sha256": "4681bacc630d8a45faa26312b23cba1484b060459d22c858706e083d748c50e8",
       "palette": {
         "opaque": true,
         "quantized": true,
@@ -552,8 +597,7 @@
       "section": null,
       "sectionCounts": {
         "activities": 6,
-        "readouts": 6,
-        "controls": 6
+        "pinned": 12
       },
       "returnDepth": 0,
       "lastNavigation": null,
@@ -564,8 +608,8 @@
         "activity-1",
         "notification",
         "pin-weather",
-        "pin-phone",
         "control-light",
+        "pin-phone",
         "control-find"
       ],
       "boundsViolations": [],
@@ -672,34 +716,34 @@
         {
           "source": "13°C",
           "shown": "13°C",
-          "size": 20,
+          "size": 19,
           "bounds": {
-            "x": 51.9200439453125,
+            "x": 53.8739013671875,
             "y": 168,
-            "width": 39.0799560546875,
+            "width": 37.1260986328125,
             "height": 14
+          }
+        },
+        {
+          "source": "65%",
+          "shown": "65%",
+          "size": 19,
+          "bounds": {
+            "x": 154.9329071044922,
+            "y": 167,
+            "width": 34.06709289550781,
+            "height": 16
           }
         },
         {
           "source": "76%",
           "shown": "76%",
-          "size": 20,
+          "size": 19,
           "bounds": {
-            "x": 152.56004333496094,
-            "y": 167,
-            "width": 36.43995666503906,
+            "x": 56.38189697265625,
+            "y": 192,
+            "width": 34.61810302734375,
             "height": 16
-          }
-        },
-        {
-          "source": "Light on",
-          "shown": "Light on",
-          "size": 14,
-          "bounds": {
-            "x": 29,
-            "y": 196,
-            "width": 45.541015625,
-            "height": 14
           }
         },
         {
@@ -707,8 +751,8 @@
           "shown": "Find phone",
           "size": 14,
           "bounds": {
-            "x": 127,
-            "y": 196,
+            "x": 128,
+            "y": 194.5,
             "width": 61.6259765625,
             "height": 14
           }
@@ -766,38 +810,38 @@
           "x": 4,
           "y": 164,
           "width": 94,
-          "height": 24,
-          "selected": false
-        },
-        {
-          "id": "pin-phone",
-          "x": 102,
-          "y": 164,
-          "width": 94,
-          "height": 24,
+          "height": 23,
           "selected": false
         },
         {
           "id": "control-light",
-          "x": 4,
-          "y": 192,
+          "x": 102,
+          "y": 164,
           "width": 94,
-          "height": 20,
+          "height": 23,
+          "selected": false
+        },
+        {
+          "id": "pin-phone",
+          "x": 4,
+          "y": 189,
+          "width": 94,
+          "height": 23,
           "selected": false
         },
         {
           "id": "control-find",
           "x": 102,
-          "y": 192,
+          "y": 189,
           "width": 94,
-          "height": 20,
+          "height": 23,
           "selected": false
         }
       ],
       "width": 200,
       "height": 228,
-      "bytes": 9258,
-      "sha256": "253f39c8cb171769203c5e2d21b75c27684879a69987e317dd9b89bc6ae3dacf",
+      "bytes": 9415,
+      "sha256": "afb52c7f780c1bfff044b3c0fe7f392673e573b4ead8336e6302ef5890bfa583",
       "palette": {
         "opaque": true,
         "quantized": true,
@@ -815,8 +859,7 @@
       "section": null,
       "sectionCounts": {
         "activities": 6,
-        "readouts": 6,
-        "controls": 6
+        "pinned": 12
       },
       "returnDepth": 0,
       "lastNavigation": null,
@@ -827,7 +870,7 @@
         "activity-1",
         "notification",
         "pin-weather",
-        "control-find"
+        "control-light"
       ],
       "boundsViolations": [],
       "text": [
@@ -942,14 +985,25 @@
           }
         },
         {
-          "source": "Find phone",
-          "shown": "Find phone",
-          "size": 18,
+          "source": "Kitchen light",
+          "shown": "Kitchen light",
+          "size": 16,
           "bounds": {
             "x": 37,
-            "y": 177,
-            "width": 79.2333984375,
-            "height": 18
+            "y": 179,
+            "width": 81.140625,
+            "height": 15
+          }
+        },
+        {
+          "source": "65%",
+          "shown": "65%",
+          "size": 24,
+          "bounds": {
+            "x": 141.96812438964844,
+            "y": 175,
+            "width": 43.03187561035156,
+            "height": 19
           }
         },
         {
@@ -1009,7 +1063,7 @@
           "selected": false
         },
         {
-          "id": "control-find",
+          "id": "control-light",
           "x": 4,
           "y": 169,
           "width": 188,
@@ -1019,8 +1073,8 @@
       ],
       "width": 200,
       "height": 228,
-      "bytes": 8372,
-      "sha256": "db23139f90ce75b0a535086c3d72e62063efd2740be643dfa553929cb0f03a46",
+      "bytes": 8929,
+      "sha256": "2782ed74f44188b446493adcd9e6c7391537910a612ed16932ab3280b90918e0",
       "palette": {
         "opaque": true,
         "quantized": true,
@@ -1038,8 +1092,7 @@
       "section": null,
       "sectionCounts": {
         "activities": 6,
-        "readouts": 6,
-        "controls": 6
+        "pinned": 12
       },
       "returnDepth": 0,
       "lastNavigation": null,
@@ -1050,8 +1103,8 @@
         "activity-1",
         "notification",
         "pin-weather",
-        "pin-phone",
         "control-light",
+        "pin-phone",
         "control-find"
       ],
       "boundsViolations": [],
@@ -1158,56 +1211,67 @@
         {
           "source": "Weather",
           "shown": "Weather",
-          "size": 12,
+          "size": 11,
           "bounds": {
             "x": 29,
             "y": 145,
-            "width": 39.69140625,
-            "height": 10
+            "width": 36.3837890625,
+            "height": 8
           }
         },
         {
           "source": "13°C",
           "shown": "13°C",
-          "size": 23,
+          "size": 20,
           "bounds": {
             "x": 12,
-            "y": 156,
-            "width": 44.941986083984375,
-            "height": 17
+            "y": 155,
+            "width": 39.0799560546875,
+            "height": 14
+          }
+        },
+        {
+          "source": "Kitchen light",
+          "shown": "Kitchen light",
+          "size": 11,
+          "bounds": {
+            "x": 127,
+            "y": 145,
+            "width": 55.7841796875,
+            "height": 10
+          }
+        },
+        {
+          "source": "65%",
+          "shown": "65%",
+          "size": 20,
+          "bounds": {
+            "x": 110,
+            "y": 154,
+            "width": 35.859954833984375,
+            "height": 16
           }
         },
         {
           "source": "Phone",
           "shown": "Phone",
-          "size": 12,
+          "size": 11,
           "bounds": {
-            "x": 127,
-            "y": 145,
-            "width": 30.345703125,
-            "height": 10
+            "x": 29,
+            "y": 180,
+            "width": 27.81689453125,
+            "height": 8
           }
         },
         {
           "source": "76%",
           "shown": "76%",
-          "size": 23,
+          "size": 20,
           "bounds": {
-            "x": 110,
-            "y": 156,
-            "width": 41.906005859375,
-            "height": 18
-          }
-        },
-        {
-          "source": "Light on",
-          "shown": "Light on",
-          "size": 14,
-          "bounds": {
-            "x": 29,
-            "y": 189.5,
-            "width": 45.541015625,
-            "height": 14
+            "x": 12,
+            "y": 189,
+            "width": 36.43995666503906,
+            "height": 16
           }
         },
         {
@@ -1216,7 +1280,7 @@
           "size": 14,
           "bounds": {
             "x": 127,
-            "y": 189.5,
+            "y": 186,
             "width": 61.6259765625,
             "height": 14
           }
@@ -1274,38 +1338,38 @@
           "x": 4,
           "y": 141,
           "width": 94,
-          "height": 37,
-          "selected": false
-        },
-        {
-          "id": "pin-phone",
-          "x": 102,
-          "y": 141,
-          "width": 94,
-          "height": 37,
+          "height": 32,
           "selected": false
         },
         {
           "id": "control-light",
-          "x": 4,
-          "y": 183,
+          "x": 102,
+          "y": 141,
           "width": 94,
-          "height": 25,
+          "height": 32,
+          "selected": false
+        },
+        {
+          "id": "pin-phone",
+          "x": 4,
+          "y": 176,
+          "width": 94,
+          "height": 32,
           "selected": false
         },
         {
           "id": "control-find",
           "x": 102,
-          "y": 183,
+          "y": 176,
           "width": 94,
-          "height": 25,
+          "height": 32,
           "selected": false
         }
       ],
       "width": 200,
       "height": 228,
-      "bytes": 9641,
-      "sha256": "50699b96fc1516837068808a908ffc7fb6a5fe7c0816780a8c56ba3499589bfe",
+      "bytes": 9836,
+      "sha256": "0b8c036dc1347826a7d8009e16400165340fd84913c7b1497780bd4b2ad2ed44",
       "palette": {
         "opaque": true,
         "quantized": true,
@@ -1323,8 +1387,7 @@
       "section": null,
       "sectionCounts": {
         "activities": 6,
-        "readouts": 6,
-        "controls": 6
+        "pinned": 12
       },
       "returnDepth": 0,
       "lastNavigation": null,
@@ -1335,8 +1398,8 @@
         "activity-1",
         "notification",
         "pin-weather",
-        "pin-phone",
         "control-light",
+        "pin-phone",
         "control-find"
       ],
       "boundsViolations": [],
@@ -1443,34 +1506,34 @@
         {
           "source": "13°C",
           "shown": "13°C",
-          "size": 20,
+          "size": 19,
           "bounds": {
-            "x": 51.9200439453125,
+            "x": 53.8739013671875,
             "y": 168,
-            "width": 39.0799560546875,
+            "width": 37.1260986328125,
             "height": 14
+          }
+        },
+        {
+          "source": "65%",
+          "shown": "65%",
+          "size": 19,
+          "bounds": {
+            "x": 154.9329071044922,
+            "y": 167,
+            "width": 34.06709289550781,
+            "height": 16
           }
         },
         {
           "source": "76%",
           "shown": "76%",
-          "size": 20,
+          "size": 19,
           "bounds": {
-            "x": 152.56004333496094,
-            "y": 167,
-            "width": 36.43995666503906,
+            "x": 56.38189697265625,
+            "y": 192,
+            "width": 34.61810302734375,
             "height": 16
-          }
-        },
-        {
-          "source": "Light on",
-          "shown": "Light on",
-          "size": 14,
-          "bounds": {
-            "x": 29,
-            "y": 196,
-            "width": 45.541015625,
-            "height": 14
           }
         },
         {
@@ -1478,8 +1541,8 @@
           "shown": "Find phone",
           "size": 14,
           "bounds": {
-            "x": 127,
-            "y": 196,
+            "x": 128,
+            "y": 194.5,
             "width": 61.6259765625,
             "height": 14
           }
@@ -1537,38 +1600,38 @@
           "x": 4,
           "y": 164,
           "width": 94,
-          "height": 24,
-          "selected": false
-        },
-        {
-          "id": "pin-phone",
-          "x": 102,
-          "y": 164,
-          "width": 94,
-          "height": 24,
+          "height": 23,
           "selected": false
         },
         {
           "id": "control-light",
-          "x": 4,
-          "y": 192,
+          "x": 102,
+          "y": 164,
           "width": 94,
-          "height": 20,
+          "height": 23,
+          "selected": false
+        },
+        {
+          "id": "pin-phone",
+          "x": 4,
+          "y": 189,
+          "width": 94,
+          "height": 23,
           "selected": false
         },
         {
           "id": "control-find",
           "x": 102,
-          "y": 192,
+          "y": 189,
           "width": 94,
-          "height": 20,
+          "height": 23,
           "selected": false
         }
       ],
       "width": 200,
       "height": 228,
-      "bytes": 9746,
-      "sha256": "8aea47c358232613681ba2ea28c308dc3c6b84395ab5a16a53dc0dd4e632c1da",
+      "bytes": 9700,
+      "sha256": "58175cae3b6b77c052118966f595259a980738d7d62df7040dc8b78cef9942a3",
       "palette": {
         "opaque": true,
         "quantized": true,
@@ -1586,8 +1649,7 @@
       "section": null,
       "sectionCounts": {
         "activities": 6,
-        "readouts": 6,
-        "controls": 6
+        "pinned": 12
       },
       "returnDepth": 0,
       "lastNavigation": null,
@@ -1598,7 +1660,7 @@
         "activity-1",
         "notification",
         "pin-weather",
-        "control-find"
+        "control-light"
       ],
       "boundsViolations": [],
       "text": [
@@ -1713,14 +1775,25 @@
           }
         },
         {
-          "source": "Find phone",
-          "shown": "Find phone",
-          "size": 18,
+          "source": "Kitchen light",
+          "shown": "Kitchen light",
+          "size": 16,
           "bounds": {
             "x": 37,
-            "y": 177,
-            "width": 79.2333984375,
-            "height": 18
+            "y": 179,
+            "width": 81.140625,
+            "height": 15
+          }
+        },
+        {
+          "source": "65%",
+          "shown": "65%",
+          "size": 24,
+          "bounds": {
+            "x": 141.96812438964844,
+            "y": 175,
+            "width": 43.03187561035156,
+            "height": 19
           }
         },
         {
@@ -1780,7 +1853,7 @@
           "selected": false
         },
         {
-          "id": "control-find",
+          "id": "control-light",
           "x": 4,
           "y": 169,
           "width": 188,
@@ -1790,8 +1863,8 @@
       ],
       "width": 200,
       "height": 228,
-      "bytes": 8607,
-      "sha256": "7b4c63894aaf63ecca5abfceeff586ef91202119dcdcfad0397ba3c16921100f",
+      "bytes": 9173,
+      "sha256": "c20113c50e5b9db863975fd41e5c45f13f87dc5395c3a7a37d5b2bd7e5ed436f",
       "palette": {
         "opaque": true,
         "quantized": true,
@@ -1809,8 +1882,7 @@
       "section": null,
       "sectionCounts": {
         "activities": 6,
-        "readouts": 6,
-        "controls": 6
+        "pinned": 12
       },
       "returnDepth": 0,
       "lastNavigation": null,
@@ -1821,8 +1893,8 @@
         "activity-1",
         "notification",
         "pin-weather",
-        "pin-phone",
         "control-light",
+        "pin-phone",
         "control-find"
       ],
       "boundsViolations": [],
@@ -1929,56 +2001,67 @@
         {
           "source": "Weather",
           "shown": "Weather",
-          "size": 12,
+          "size": 11,
           "bounds": {
             "x": 29,
             "y": 145,
-            "width": 39.69140625,
-            "height": 10
+            "width": 36.3837890625,
+            "height": 8
           }
         },
         {
           "source": "13°C",
           "shown": "13°C",
-          "size": 23,
+          "size": 20,
           "bounds": {
             "x": 12,
-            "y": 156,
-            "width": 44.941986083984375,
-            "height": 17
+            "y": 155,
+            "width": 39.0799560546875,
+            "height": 14
+          }
+        },
+        {
+          "source": "Kitchen light",
+          "shown": "Kitchen light",
+          "size": 11,
+          "bounds": {
+            "x": 127,
+            "y": 145,
+            "width": 55.7841796875,
+            "height": 10
+          }
+        },
+        {
+          "source": "65%",
+          "shown": "65%",
+          "size": 20,
+          "bounds": {
+            "x": 110,
+            "y": 154,
+            "width": 35.859954833984375,
+            "height": 16
           }
         },
         {
           "source": "Phone",
           "shown": "Phone",
-          "size": 12,
+          "size": 11,
           "bounds": {
-            "x": 127,
-            "y": 145,
-            "width": 30.345703125,
-            "height": 10
+            "x": 29,
+            "y": 180,
+            "width": 27.81689453125,
+            "height": 8
           }
         },
         {
           "source": "76%",
           "shown": "76%",
-          "size": 23,
+          "size": 20,
           "bounds": {
-            "x": 110,
-            "y": 156,
-            "width": 41.906005859375,
-            "height": 18
-          }
-        },
-        {
-          "source": "Light on",
-          "shown": "Light on",
-          "size": 14,
-          "bounds": {
-            "x": 29,
-            "y": 189.5,
-            "width": 45.541015625,
-            "height": 14
+            "x": 12,
+            "y": 189,
+            "width": 36.43995666503906,
+            "height": 16
           }
         },
         {
@@ -1987,7 +2070,7 @@
           "size": 14,
           "bounds": {
             "x": 127,
-            "y": 189.5,
+            "y": 186,
             "width": 61.6259765625,
             "height": 14
           }
@@ -2045,42 +2128,42 @@
           "x": 4,
           "y": 141,
           "width": 94,
-          "height": 37,
-          "selected": false
-        },
-        {
-          "id": "pin-phone",
-          "x": 102,
-          "y": 141,
-          "width": 94,
-          "height": 37,
+          "height": 32,
           "selected": false
         },
         {
           "id": "control-light",
-          "x": 4,
-          "y": 183,
+          "x": 102,
+          "y": 141,
           "width": 94,
-          "height": 25,
+          "height": 32,
+          "selected": false
+        },
+        {
+          "id": "pin-phone",
+          "x": 4,
+          "y": 176,
+          "width": 94,
+          "height": 32,
           "selected": false
         },
         {
           "id": "control-find",
           "x": 102,
-          "y": 183,
+          "y": 176,
           "width": 94,
-          "height": 25,
+          "height": 32,
           "selected": false
         }
       ],
       "width": 200,
       "height": 228,
-      "bytes": 9497,
-      "sha256": "477aae7410ee0dd36f0b8ea7c5fb7031dfbf5aa5de124ab307291ec92159ed16",
+      "bytes": 9693,
+      "sha256": "1d51ae6c00d637152acadacbb01fa6a233791da2ca7794b3cce6a63b8f63fa65",
       "palette": {
         "opaque": true,
         "quantized": true,
-        "colors": 7
+        "colors": 8
       }
     },
     {
@@ -2094,8 +2177,7 @@
       "section": null,
       "sectionCounts": {
         "activities": 6,
-        "readouts": 6,
-        "controls": 6
+        "pinned": 12
       },
       "returnDepth": 0,
       "lastNavigation": null,
@@ -2106,8 +2188,8 @@
         "activity-1",
         "notification",
         "pin-weather",
-        "pin-phone",
         "control-light",
+        "pin-phone",
         "control-find"
       ],
       "boundsViolations": [],
@@ -2214,34 +2296,34 @@
         {
           "source": "13°C",
           "shown": "13°C",
-          "size": 20,
+          "size": 19,
           "bounds": {
-            "x": 51.9200439453125,
+            "x": 53.8739013671875,
             "y": 168,
-            "width": 39.0799560546875,
+            "width": 37.1260986328125,
             "height": 14
+          }
+        },
+        {
+          "source": "65%",
+          "shown": "65%",
+          "size": 19,
+          "bounds": {
+            "x": 154.9329071044922,
+            "y": 167,
+            "width": 34.06709289550781,
+            "height": 16
           }
         },
         {
           "source": "76%",
           "shown": "76%",
-          "size": 20,
+          "size": 19,
           "bounds": {
-            "x": 152.56004333496094,
-            "y": 167,
-            "width": 36.43995666503906,
+            "x": 56.38189697265625,
+            "y": 192,
+            "width": 34.61810302734375,
             "height": 16
-          }
-        },
-        {
-          "source": "Light on",
-          "shown": "Light on",
-          "size": 14,
-          "bounds": {
-            "x": 29,
-            "y": 196,
-            "width": 45.541015625,
-            "height": 14
           }
         },
         {
@@ -2249,8 +2331,8 @@
           "shown": "Find phone",
           "size": 14,
           "bounds": {
-            "x": 127,
-            "y": 196,
+            "x": 128,
+            "y": 194.5,
             "width": 61.6259765625,
             "height": 14
           }
@@ -2308,38 +2390,38 @@
           "x": 4,
           "y": 164,
           "width": 94,
-          "height": 24,
-          "selected": false
-        },
-        {
-          "id": "pin-phone",
-          "x": 102,
-          "y": 164,
-          "width": 94,
-          "height": 24,
+          "height": 23,
           "selected": false
         },
         {
           "id": "control-light",
-          "x": 4,
-          "y": 192,
+          "x": 102,
+          "y": 164,
           "width": 94,
-          "height": 20,
+          "height": 23,
+          "selected": false
+        },
+        {
+          "id": "pin-phone",
+          "x": 4,
+          "y": 189,
+          "width": 94,
+          "height": 23,
           "selected": false
         },
         {
           "id": "control-find",
           "x": 102,
-          "y": 192,
+          "y": 189,
           "width": 94,
-          "height": 20,
+          "height": 23,
           "selected": false
         }
       ],
       "width": 200,
       "height": 228,
-      "bytes": 9352,
-      "sha256": "94e615fc64802a71489786623546d03fc5e617e68827592abccb186f612e7454",
+      "bytes": 9447,
+      "sha256": "c9adf9095e6798ccd7309633a6f5d7a63455d77408401bf12ac20d62cffe900c",
       "palette": {
         "opaque": true,
         "quantized": true,
@@ -2357,8 +2439,7 @@
       "section": null,
       "sectionCounts": {
         "activities": 6,
-        "readouts": 6,
-        "controls": 6
+        "pinned": 12
       },
       "returnDepth": 0,
       "lastNavigation": null,
@@ -2369,7 +2450,7 @@
         "activity-1",
         "notification",
         "pin-weather",
-        "control-find"
+        "control-light"
       ],
       "boundsViolations": [],
       "text": [
@@ -2484,14 +2565,25 @@
           }
         },
         {
-          "source": "Find phone",
-          "shown": "Find phone",
-          "size": 18,
+          "source": "Kitchen light",
+          "shown": "Kitchen light",
+          "size": 16,
           "bounds": {
             "x": 37,
-            "y": 177,
-            "width": 79.2333984375,
-            "height": 18
+            "y": 179,
+            "width": 81.140625,
+            "height": 15
+          }
+        },
+        {
+          "source": "65%",
+          "shown": "65%",
+          "size": 24,
+          "bounds": {
+            "x": 141.96812438964844,
+            "y": 175,
+            "width": 43.03187561035156,
+            "height": 19
           }
         },
         {
@@ -2551,7 +2643,7 @@
           "selected": false
         },
         {
-          "id": "control-find",
+          "id": "control-light",
           "x": 4,
           "y": 169,
           "width": 188,
@@ -2561,8 +2653,8 @@
       ],
       "width": 200,
       "height": 228,
-      "bytes": 8567,
-      "sha256": "ed834c6dfb1e824c8b8f26ce62514c6d4bd1233d0402da993aaacf3770353854",
+      "bytes": 9117,
+      "sha256": "df86826c8540b6c7d5532b8992314fbf65456d0ae92d79ae1ebc6eb3e42a0e55",
       "palette": {
         "opaque": true,
         "quantized": true,
@@ -2580,8 +2672,7 @@
       "section": null,
       "sectionCounts": {
         "activities": 6,
-        "readouts": 6,
-        "controls": 6
+        "pinned": 12
       },
       "returnDepth": 0,
       "lastNavigation": null,
@@ -2592,8 +2683,8 @@
         "activity-0",
         "notification",
         "pin-weather",
-        "pin-phone",
         "control-light",
+        "pin-phone",
         "control-find"
       ],
       "boundsViolations": [],
@@ -2700,56 +2791,67 @@
         {
           "source": "Weather",
           "shown": "Weather",
-          "size": 12,
+          "size": 11,
           "bounds": {
             "x": 29,
             "y": 145,
-            "width": 39.69140625,
-            "height": 10
+            "width": 36.3837890625,
+            "height": 8
           }
         },
         {
           "source": "13°C",
           "shown": "13°C",
-          "size": 23,
+          "size": 20,
           "bounds": {
             "x": 12,
-            "y": 156,
-            "width": 44.941986083984375,
-            "height": 17
+            "y": 155,
+            "width": 39.0799560546875,
+            "height": 14
+          }
+        },
+        {
+          "source": "Kitchen light",
+          "shown": "Kitchen light",
+          "size": 11,
+          "bounds": {
+            "x": 127,
+            "y": 145,
+            "width": 55.7841796875,
+            "height": 10
+          }
+        },
+        {
+          "source": "65%",
+          "shown": "65%",
+          "size": 20,
+          "bounds": {
+            "x": 110,
+            "y": 154,
+            "width": 35.859954833984375,
+            "height": 16
           }
         },
         {
           "source": "Phone",
           "shown": "Phone",
-          "size": 12,
+          "size": 11,
           "bounds": {
-            "x": 127,
-            "y": 145,
-            "width": 30.345703125,
-            "height": 10
+            "x": 29,
+            "y": 180,
+            "width": 27.81689453125,
+            "height": 8
           }
         },
         {
           "source": "76%",
           "shown": "76%",
-          "size": 23,
+          "size": 20,
           "bounds": {
-            "x": 110,
-            "y": 156,
-            "width": 41.906005859375,
-            "height": 18
-          }
-        },
-        {
-          "source": "Light on",
-          "shown": "Light on",
-          "size": 14,
-          "bounds": {
-            "x": 29,
-            "y": 189.5,
-            "width": 45.541015625,
-            "height": 14
+            "x": 12,
+            "y": 189,
+            "width": 36.43995666503906,
+            "height": 16
           }
         },
         {
@@ -2758,7 +2860,7 @@
           "size": 14,
           "bounds": {
             "x": 127,
-            "y": 189.5,
+            "y": 186,
             "width": 61.6259765625,
             "height": 14
           }
@@ -2816,38 +2918,38 @@
           "x": 4,
           "y": 141,
           "width": 94,
-          "height": 37,
-          "selected": false
-        },
-        {
-          "id": "pin-phone",
-          "x": 102,
-          "y": 141,
-          "width": 94,
-          "height": 37,
+          "height": 32,
           "selected": false
         },
         {
           "id": "control-light",
-          "x": 4,
-          "y": 183,
+          "x": 102,
+          "y": 141,
           "width": 94,
-          "height": 25,
+          "height": 32,
+          "selected": false
+        },
+        {
+          "id": "pin-phone",
+          "x": 4,
+          "y": 176,
+          "width": 94,
+          "height": 32,
           "selected": false
         },
         {
           "id": "control-find",
           "x": 102,
-          "y": 183,
+          "y": 176,
           "width": 94,
-          "height": 25,
+          "height": 32,
           "selected": false
         }
       ],
       "width": 200,
       "height": 228,
-      "bytes": 9289,
-      "sha256": "c6aad951cbfbb0e1bd90446cf5a7f3b0bc417439469a174398dad049f8e40e87",
+      "bytes": 9487,
+      "sha256": "04bdfd6411b0a919ca09abb72e21c02a22e6b991d164ed9523ea286cb794ae94",
       "palette": {
         "opaque": true,
         "quantized": true,
@@ -2865,8 +2967,7 @@
       "section": null,
       "sectionCounts": {
         "activities": 6,
-        "readouts": 6,
-        "controls": 6
+        "pinned": 12
       },
       "returnDepth": 0,
       "lastNavigation": null,
@@ -2877,8 +2978,8 @@
         "activity-0",
         "notification",
         "pin-weather",
-        "pin-phone",
         "control-light",
+        "pin-phone",
         "control-find"
       ],
       "boundsViolations": [],
@@ -2985,34 +3086,34 @@
         {
           "source": "13°C",
           "shown": "13°C",
-          "size": 20,
+          "size": 19,
           "bounds": {
-            "x": 51.9200439453125,
+            "x": 53.8739013671875,
             "y": 168,
-            "width": 39.0799560546875,
+            "width": 37.1260986328125,
             "height": 14
+          }
+        },
+        {
+          "source": "65%",
+          "shown": "65%",
+          "size": 19,
+          "bounds": {
+            "x": 154.9329071044922,
+            "y": 167,
+            "width": 34.06709289550781,
+            "height": 16
           }
         },
         {
           "source": "76%",
           "shown": "76%",
-          "size": 20,
+          "size": 19,
           "bounds": {
-            "x": 152.56004333496094,
-            "y": 167,
-            "width": 36.43995666503906,
+            "x": 56.38189697265625,
+            "y": 192,
+            "width": 34.61810302734375,
             "height": 16
-          }
-        },
-        {
-          "source": "Light on",
-          "shown": "Light on",
-          "size": 14,
-          "bounds": {
-            "x": 29,
-            "y": 196,
-            "width": 45.541015625,
-            "height": 14
           }
         },
         {
@@ -3020,8 +3121,8 @@
           "shown": "Find phone",
           "size": 14,
           "bounds": {
-            "x": 127,
-            "y": 196,
+            "x": 128,
+            "y": 194.5,
             "width": 61.6259765625,
             "height": 14
           }
@@ -3079,38 +3180,38 @@
           "x": 4,
           "y": 164,
           "width": 94,
-          "height": 24,
-          "selected": false
-        },
-        {
-          "id": "pin-phone",
-          "x": 102,
-          "y": 164,
-          "width": 94,
-          "height": 24,
+          "height": 23,
           "selected": false
         },
         {
           "id": "control-light",
-          "x": 4,
-          "y": 192,
+          "x": 102,
+          "y": 164,
           "width": 94,
-          "height": 20,
+          "height": 23,
+          "selected": false
+        },
+        {
+          "id": "pin-phone",
+          "x": 4,
+          "y": 189,
+          "width": 94,
+          "height": 23,
           "selected": false
         },
         {
           "id": "control-find",
           "x": 102,
-          "y": 192,
+          "y": 189,
           "width": 94,
-          "height": 20,
+          "height": 23,
           "selected": false
         }
       ],
       "width": 200,
       "height": 228,
-      "bytes": 9027,
-      "sha256": "5c423b6e864d538e2cb161e6d810fcdf7614268a4bde147905cb51c4ed8f964c",
+      "bytes": 9135,
+      "sha256": "b9d68f2a6d5af69a0b35d839a4ab816f19ee7936627ad35d35339497d0740086",
       "palette": {
         "opaque": true,
         "quantized": true,
@@ -3128,8 +3229,7 @@
       "section": null,
       "sectionCounts": {
         "activities": 6,
-        "readouts": 6,
-        "controls": 6
+        "pinned": 12
       },
       "returnDepth": 0,
       "lastNavigation": null,
@@ -3140,7 +3240,7 @@
         "activity-0",
         "notification",
         "pin-weather",
-        "control-find"
+        "control-light"
       ],
       "boundsViolations": [],
       "text": [
@@ -3255,14 +3355,25 @@
           }
         },
         {
-          "source": "Find phone",
-          "shown": "Find phone",
-          "size": 18,
+          "source": "Kitchen light",
+          "shown": "Kitchen light",
+          "size": 16,
           "bounds": {
             "x": 37,
-            "y": 177,
-            "width": 79.2333984375,
-            "height": 18
+            "y": 179,
+            "width": 81.140625,
+            "height": 15
+          }
+        },
+        {
+          "source": "65%",
+          "shown": "65%",
+          "size": 24,
+          "bounds": {
+            "x": 141.96812438964844,
+            "y": 175,
+            "width": 43.03187561035156,
+            "height": 19
           }
         },
         {
@@ -3322,7 +3433,7 @@
           "selected": false
         },
         {
-          "id": "control-find",
+          "id": "control-light",
           "x": 4,
           "y": 169,
           "width": 188,
@@ -3332,8 +3443,8 @@
       ],
       "width": 200,
       "height": 228,
-      "bytes": 8355,
-      "sha256": "0d455596dfa8f16888041daa3ae6a4b6f41d9b25bddf0d72b75d06cb54379856",
+      "bytes": 8909,
+      "sha256": "d1907e4c1f04952989abd232382ca1c95478b89467e567c04e537736f1dd0658",
       "palette": {
         "opaque": true,
         "quantized": true,
@@ -3351,8 +3462,7 @@
       "section": null,
       "sectionCounts": {
         "activities": 6,
-        "readouts": 6,
-        "controls": 6
+        "pinned": 12
       },
       "returnDepth": 0,
       "lastNavigation": null,
@@ -3363,8 +3473,8 @@
         "activity-1",
         "notification",
         "pin-weather",
-        "pin-phone",
         "control-light",
+        "pin-phone",
         "control-find"
       ],
       "boundsViolations": [],
@@ -3471,56 +3581,67 @@
         {
           "source": "Weather",
           "shown": "Weather",
-          "size": 12,
+          "size": 11,
           "bounds": {
             "x": 29,
             "y": 145,
-            "width": 39.69140625,
-            "height": 10
+            "width": 36.3837890625,
+            "height": 8
           }
         },
         {
           "source": "13°C",
           "shown": "13°C",
-          "size": 23,
+          "size": 20,
           "bounds": {
             "x": 12,
-            "y": 156,
-            "width": 44.941986083984375,
-            "height": 17
+            "y": 155,
+            "width": 39.0799560546875,
+            "height": 14
+          }
+        },
+        {
+          "source": "Kitchen light",
+          "shown": "Kitchen light",
+          "size": 11,
+          "bounds": {
+            "x": 127,
+            "y": 145,
+            "width": 55.7841796875,
+            "height": 10
+          }
+        },
+        {
+          "source": "65%",
+          "shown": "65%",
+          "size": 20,
+          "bounds": {
+            "x": 110,
+            "y": 154,
+            "width": 35.859954833984375,
+            "height": 16
           }
         },
         {
           "source": "Phone",
           "shown": "Phone",
-          "size": 12,
+          "size": 11,
           "bounds": {
-            "x": 127,
-            "y": 145,
-            "width": 30.345703125,
-            "height": 10
+            "x": 29,
+            "y": 180,
+            "width": 27.81689453125,
+            "height": 8
           }
         },
         {
           "source": "76%",
           "shown": "76%",
-          "size": 23,
+          "size": 20,
           "bounds": {
-            "x": 110,
-            "y": 156,
-            "width": 41.906005859375,
-            "height": 18
-          }
-        },
-        {
-          "source": "Light on",
-          "shown": "Light on",
-          "size": 14,
-          "bounds": {
-            "x": 29,
-            "y": 189.5,
-            "width": 45.541015625,
-            "height": 14
+            "x": 12,
+            "y": 189,
+            "width": 36.43995666503906,
+            "height": 16
           }
         },
         {
@@ -3529,7 +3650,7 @@
           "size": 14,
           "bounds": {
             "x": 127,
-            "y": 189.5,
+            "y": 186,
             "width": 61.6259765625,
             "height": 14
           }
@@ -3587,38 +3708,38 @@
           "x": 4,
           "y": 141,
           "width": 94,
-          "height": 37,
-          "selected": false
-        },
-        {
-          "id": "pin-phone",
-          "x": 102,
-          "y": 141,
-          "width": 94,
-          "height": 37,
+          "height": 32,
           "selected": false
         },
         {
           "id": "control-light",
-          "x": 4,
-          "y": 183,
+          "x": 102,
+          "y": 141,
           "width": 94,
-          "height": 25,
+          "height": 32,
+          "selected": false
+        },
+        {
+          "id": "pin-phone",
+          "x": 4,
+          "y": 176,
+          "width": 94,
+          "height": 32,
           "selected": false
         },
         {
           "id": "control-find",
           "x": 102,
-          "y": 183,
+          "y": 176,
           "width": 94,
-          "height": 25,
+          "height": 32,
           "selected": false
         }
       ],
       "width": 200,
       "height": 228,
-      "bytes": 10651,
-      "sha256": "fe45345f7f1ea40f1032774ead11a0891014fbff8cb7537fafc83ef491602061",
+      "bytes": 10837,
+      "sha256": "d87f10ba6cbcfcca6b5403b0a6234e4d261ecfec3d20cea82e354fba5bd7e52c",
       "palette": {
         "opaque": true,
         "quantized": true,
@@ -3636,8 +3757,7 @@
       "section": null,
       "sectionCounts": {
         "activities": 6,
-        "readouts": 6,
-        "controls": 6
+        "pinned": 12
       },
       "returnDepth": 0,
       "lastNavigation": null,
@@ -3648,8 +3768,8 @@
         "activity-1",
         "notification",
         "pin-weather",
-        "pin-phone",
         "control-light",
+        "pin-phone",
         "control-find"
       ],
       "boundsViolations": [],
@@ -3756,34 +3876,34 @@
         {
           "source": "13°C",
           "shown": "13°C",
-          "size": 20,
+          "size": 19,
           "bounds": {
-            "x": 51.9200439453125,
+            "x": 53.8739013671875,
             "y": 168,
-            "width": 39.0799560546875,
+            "width": 37.1260986328125,
             "height": 14
+          }
+        },
+        {
+          "source": "65%",
+          "shown": "65%",
+          "size": 19,
+          "bounds": {
+            "x": 154.9329071044922,
+            "y": 167,
+            "width": 34.06709289550781,
+            "height": 16
           }
         },
         {
           "source": "76%",
           "shown": "76%",
-          "size": 20,
+          "size": 19,
           "bounds": {
-            "x": 152.56004333496094,
-            "y": 167,
-            "width": 36.43995666503906,
+            "x": 56.38189697265625,
+            "y": 192,
+            "width": 34.61810302734375,
             "height": 16
-          }
-        },
-        {
-          "source": "Light on",
-          "shown": "Light on",
-          "size": 14,
-          "bounds": {
-            "x": 29,
-            "y": 196,
-            "width": 45.541015625,
-            "height": 14
           }
         },
         {
@@ -3791,8 +3911,8 @@
           "shown": "Find phone",
           "size": 14,
           "bounds": {
-            "x": 127,
-            "y": 196,
+            "x": 128,
+            "y": 194.5,
             "width": 61.6259765625,
             "height": 14
           }
@@ -3850,38 +3970,38 @@
           "x": 4,
           "y": 164,
           "width": 94,
-          "height": 24,
-          "selected": false
-        },
-        {
-          "id": "pin-phone",
-          "x": 102,
-          "y": 164,
-          "width": 94,
-          "height": 24,
+          "height": 23,
           "selected": false
         },
         {
           "id": "control-light",
-          "x": 4,
-          "y": 192,
+          "x": 102,
+          "y": 164,
           "width": 94,
-          "height": 20,
+          "height": 23,
+          "selected": false
+        },
+        {
+          "id": "pin-phone",
+          "x": 4,
+          "y": 189,
+          "width": 94,
+          "height": 23,
           "selected": false
         },
         {
           "id": "control-find",
           "x": 102,
-          "y": 192,
+          "y": 189,
           "width": 94,
-          "height": 20,
+          "height": 23,
           "selected": false
         }
       ],
       "width": 200,
       "height": 228,
-      "bytes": 11034,
-      "sha256": "240f7f07452bc2a913dac17cad47f85cf3ca15ddd812d29bda3492cd32203d6d",
+      "bytes": 11145,
+      "sha256": "1df13b078ea8c08d4dfa559e339d901e048dde17c8335201ec52bd3df454ca03",
       "palette": {
         "opaque": true,
         "quantized": true,
@@ -3899,8 +4019,7 @@
       "section": null,
       "sectionCounts": {
         "activities": 6,
-        "readouts": 6,
-        "controls": 6
+        "pinned": 12
       },
       "returnDepth": 0,
       "lastNavigation": null,
@@ -3911,7 +4030,7 @@
         "activity-1",
         "notification",
         "pin-weather",
-        "control-find"
+        "control-light"
       ],
       "boundsViolations": [],
       "text": [
@@ -4026,14 +4145,25 @@
           }
         },
         {
-          "source": "Find phone",
-          "shown": "Find phone",
-          "size": 18,
+          "source": "Kitchen light",
+          "shown": "Kitchen light",
+          "size": 16,
           "bounds": {
             "x": 37,
-            "y": 177,
-            "width": 79.2333984375,
-            "height": 18
+            "y": 179,
+            "width": 81.140625,
+            "height": 15
+          }
+        },
+        {
+          "source": "65%",
+          "shown": "65%",
+          "size": 24,
+          "bounds": {
+            "x": 141.96812438964844,
+            "y": 175,
+            "width": 43.03187561035156,
+            "height": 19
           }
         },
         {
@@ -4093,7 +4223,7 @@
           "selected": false
         },
         {
-          "id": "control-find",
+          "id": "control-light",
           "x": 4,
           "y": 169,
           "width": 188,
@@ -4103,8 +4233,8 @@
       ],
       "width": 200,
       "height": 228,
-      "bytes": 9506,
-      "sha256": "3767fed8baf747d6bd388bfaf0a6e893fa29f51bfbf144dc3a7bbb3552af5403",
+      "bytes": 10056,
+      "sha256": "ae39bb4054044813b4aca007d74aec2256a6fcbf4d282c4ae75ca46bf91853fb",
       "palette": {
         "opaque": true,
         "quantized": true,
@@ -4122,8 +4252,7 @@
       "section": null,
       "sectionCounts": {
         "activities": 0,
-        "readouts": 6,
-        "controls": 6
+        "pinned": 12
       },
       "returnDepth": 0,
       "lastNavigation": null,
@@ -4131,8 +4260,8 @@
       "selectedId": "pin-weather",
       "visibleIds": [
         "pin-weather",
-        "pin-phone",
         "control-light",
+        "pin-phone",
         "control-find"
       ],
       "boundsViolations": [],
@@ -4184,12 +4313,12 @@
         {
           "source": "Weather",
           "shown": "Weather",
-          "size": 12,
+          "size": 11,
           "bounds": {
             "x": 29,
             "y": 116,
-            "width": 39.69140625,
-            "height": 10
+            "width": 36.3837890625,
+            "height": 8
           }
         },
         {
@@ -4198,20 +4327,42 @@
           "size": 23,
           "bounds": {
             "x": 12,
-            "y": 144,
+            "y": 135,
             "width": 44.941986083984375,
             "height": 17
           }
         },
         {
-          "source": "Phone",
-          "shown": "Phone",
-          "size": 12,
+          "source": "Kitchen light",
+          "shown": "Kitchen light",
+          "size": 11,
           "bounds": {
             "x": 127,
             "y": 116,
-            "width": 30.345703125,
+            "width": 55.7841796875,
             "height": 10
+          }
+        },
+        {
+          "source": "65%",
+          "shown": "65%",
+          "size": 23,
+          "bounds": {
+            "x": 110,
+            "y": 135,
+            "width": 41.239013671875,
+            "height": 18
+          }
+        },
+        {
+          "source": "Phone",
+          "shown": "Phone",
+          "size": 11,
+          "bounds": {
+            "x": 29,
+            "y": 165,
+            "width": 27.81689453125,
+            "height": 8
           }
         },
         {
@@ -4219,21 +4370,10 @@
           "shown": "76%",
           "size": 23,
           "bounds": {
-            "x": 110,
-            "y": 144,
+            "x": 12,
+            "y": 184,
             "width": 41.906005859375,
             "height": 18
-          }
-        },
-        {
-          "source": "Light on",
-          "shown": "Light on",
-          "size": 14,
-          "bounds": {
-            "x": 29,
-            "y": 185,
-            "width": 45.541015625,
-            "height": 14
           }
         },
         {
@@ -4242,7 +4382,7 @@
           "size": 14,
           "bounds": {
             "x": 127,
-            "y": 185,
+            "y": 177,
             "width": 61.6259765625,
             "height": 14
           }
@@ -4259,13 +4399,13 @@
           }
         },
         {
-          "source": "Hold: All 6",
-          "shown": "Hold: All 6",
+          "source": "Hold: All 12",
+          "shown": "Hold: All 12",
           "size": 12,
           "bounds": {
-            "x": 141.609375,
+            "x": 135.544921875,
             "y": 215,
-            "width": 50.390625,
+            "width": 56.455078125,
             "height": 10
           }
         }
@@ -4276,38 +4416,38 @@
           "x": 4,
           "y": 112,
           "width": 94,
-          "height": 54,
+          "height": 44,
           "selected": true
         },
         {
-          "id": "pin-phone",
+          "id": "control-light",
           "x": 102,
           "y": 112,
           "width": 94,
-          "height": 54,
+          "height": 44,
           "selected": false
         },
         {
-          "id": "control-light",
+          "id": "pin-phone",
           "x": 4,
-          "y": 177,
+          "y": 161,
           "width": 94,
-          "height": 28,
+          "height": 44,
           "selected": false
         },
         {
           "id": "control-find",
           "x": 102,
-          "y": 177,
+          "y": 161,
           "width": 94,
-          "height": 28,
+          "height": 44,
           "selected": false
         }
       ],
       "width": 200,
       "height": 228,
-      "bytes": 7786,
-      "sha256": "b10096f8263c1983162964b2be607c23932572ae3537f2f64fe93bf988ac6697",
+      "bytes": 8193,
+      "sha256": "545e828ceeb7eb40123113df87b7a3d3d44777d812afe80cdf56eb58271a8064",
       "palette": {
         "opaque": true,
         "quantized": true,
@@ -4325,8 +4465,7 @@
       "section": null,
       "sectionCounts": {
         "activities": 0,
-        "readouts": 6,
-        "controls": 6
+        "pinned": 12
       },
       "returnDepth": 0,
       "lastNavigation": null,
@@ -4334,8 +4473,8 @@
       "selectedId": "pin-weather",
       "visibleIds": [
         "pin-weather",
-        "pin-phone",
         "control-light",
+        "pin-phone",
         "control-find"
       ],
       "boundsViolations": [],
@@ -4409,12 +4548,12 @@
         {
           "source": "Weather",
           "shown": "Weather",
-          "size": 12,
+          "size": 11,
           "bounds": {
             "x": 29,
             "y": 116,
-            "width": 39.69140625,
-            "height": 10
+            "width": 36.3837890625,
+            "height": 8
           }
         },
         {
@@ -4423,20 +4562,42 @@
           "size": 23,
           "bounds": {
             "x": 12,
-            "y": 144,
+            "y": 135,
             "width": 44.941986083984375,
             "height": 17
           }
         },
         {
-          "source": "Phone",
-          "shown": "Phone",
-          "size": 12,
+          "source": "Kitchen light",
+          "shown": "Kitchen light",
+          "size": 11,
           "bounds": {
             "x": 127,
             "y": 116,
-            "width": 30.345703125,
+            "width": 55.7841796875,
             "height": 10
+          }
+        },
+        {
+          "source": "65%",
+          "shown": "65%",
+          "size": 23,
+          "bounds": {
+            "x": 110,
+            "y": 135,
+            "width": 41.239013671875,
+            "height": 18
+          }
+        },
+        {
+          "source": "Phone",
+          "shown": "Phone",
+          "size": 11,
+          "bounds": {
+            "x": 29,
+            "y": 165,
+            "width": 27.81689453125,
+            "height": 8
           }
         },
         {
@@ -4444,21 +4605,10 @@
           "shown": "76%",
           "size": 23,
           "bounds": {
-            "x": 110,
-            "y": 144,
+            "x": 12,
+            "y": 184,
             "width": 41.906005859375,
             "height": 18
-          }
-        },
-        {
-          "source": "Light on",
-          "shown": "Light on",
-          "size": 14,
-          "bounds": {
-            "x": 29,
-            "y": 185,
-            "width": 45.541015625,
-            "height": 14
           }
         },
         {
@@ -4467,7 +4617,7 @@
           "size": 14,
           "bounds": {
             "x": 127,
-            "y": 185,
+            "y": 177,
             "width": 61.6259765625,
             "height": 14
           }
@@ -4484,13 +4634,13 @@
           }
         },
         {
-          "source": "Hold: All 6",
-          "shown": "Hold: All 6",
+          "source": "Hold: All 12",
+          "shown": "Hold: All 12",
           "size": 12,
           "bounds": {
-            "x": 141.609375,
+            "x": 135.544921875,
             "y": 215,
-            "width": 50.390625,
+            "width": 56.455078125,
             "height": 10
           }
         }
@@ -4501,38 +4651,38 @@
           "x": 4,
           "y": 112,
           "width": 94,
-          "height": 54,
+          "height": 44,
           "selected": true
         },
         {
-          "id": "pin-phone",
+          "id": "control-light",
           "x": 102,
           "y": 112,
           "width": 94,
-          "height": 54,
+          "height": 44,
           "selected": false
         },
         {
-          "id": "control-light",
+          "id": "pin-phone",
           "x": 4,
-          "y": 177,
+          "y": 161,
           "width": 94,
-          "height": 28,
+          "height": 44,
           "selected": false
         },
         {
           "id": "control-find",
           "x": 102,
-          "y": 177,
+          "y": 161,
           "width": 94,
-          "height": 28,
+          "height": 44,
           "selected": false
         }
       ],
       "width": 200,
       "height": 228,
-      "bytes": 7791,
-      "sha256": "8fc3e180b3a13f2d3f2753d09695e16914c7473ab7120f567fc702398b210169",
+      "bytes": 8193,
+      "sha256": "a0bf8f46e86ada0f13eaaa5cc580c32be217a61aaeee657fa7e762c040b3a739",
       "palette": {
         "opaque": true,
         "quantized": true,
@@ -4550,8 +4700,7 @@
       "section": null,
       "sectionCounts": {
         "activities": 0,
-        "readouts": 6,
-        "controls": 6
+        "pinned": 12
       },
       "returnDepth": 0,
       "lastNavigation": null,
@@ -4559,9 +4708,9 @@
       "selectedId": "pin-weather",
       "visibleIds": [
         "pin-weather",
-        "control-find",
+        "control-light",
         "pin-phone",
-        "control-light"
+        "control-find"
       ],
       "boundsViolations": [],
       "text": [
@@ -4610,14 +4759,25 @@
           }
         },
         {
-          "source": "Find phone",
-          "shown": "Find phone",
-          "size": 18,
+          "source": "Kitchen light",
+          "shown": "Kitchen light",
+          "size": 16,
           "bounds": {
             "x": 37,
-            "y": 69,
-            "width": 79.2333984375,
-            "height": 18
+            "y": 71,
+            "width": 81.140625,
+            "height": 15
+          }
+        },
+        {
+          "source": "65%",
+          "shown": "65%",
+          "size": 24,
+          "bounds": {
+            "x": 141.96812438964844,
+            "y": 67,
+            "width": 43.03187561035156,
+            "height": 19
           }
         },
         {
@@ -4643,25 +4803,14 @@
           }
         },
         {
-          "source": "Kitchen light",
-          "shown": "Kitchen light",
-          "size": 16,
+          "source": "Find phone",
+          "shown": "Find phone",
+          "size": 18,
           "bounds": {
             "x": 37,
-            "y": 135,
-            "width": 81.140625,
-            "height": 15
-          }
-        },
-        {
-          "source": "On · select to turn off",
-          "shown": "On · select to turn off",
-          "size": 14,
-          "bounds": {
-            "x": 37,
-            "y": 151,
-            "width": 119.5673828125,
-            "height": 11
+            "y": 141,
+            "width": 79.2333984375,
+            "height": 18
           }
         },
         {
@@ -4676,13 +4825,13 @@
           }
         },
         {
-          "source": "Hold: All 6",
-          "shown": "Hold: All 6",
+          "source": "Hold: All 12",
+          "shown": "Hold: All 12",
           "size": 12,
           "bounds": {
-            "x": 141.609375,
+            "x": 135.544921875,
             "y": 215,
-            "width": 50.390625,
+            "width": 56.455078125,
             "height": 10
           }
         }
@@ -4697,7 +4846,7 @@
           "selected": true
         },
         {
-          "id": "control-find",
+          "id": "control-light",
           "x": 4,
           "y": 61,
           "width": 188,
@@ -4713,7 +4862,7 @@
           "selected": false
         },
         {
-          "id": "control-light",
+          "id": "control-find",
           "x": 4,
           "y": 133,
           "width": 188,
@@ -4723,8 +4872,8 @@
       ],
       "width": 200,
       "height": 228,
-      "bytes": 7238,
-      "sha256": "45703e579afb69e40330b9376c488966b86887ac9f9c452603d67a7f430aba7f",
+      "bytes": 7256,
+      "sha256": "f5f840f439dea2c079e3b1fe0a67fd531610dd1c7e73b7c5b5b0841c4cd714df",
       "palette": {
         "opaque": true,
         "quantized": true,
@@ -4742,8 +4891,7 @@
       "section": null,
       "sectionCounts": {
         "activities": 6,
-        "readouts": 6,
-        "controls": 6
+        "pinned": 12
       },
       "returnDepth": 0,
       "lastNavigation": null,
@@ -4754,8 +4902,8 @@
         "activity-0",
         "notification",
         "pin-weather",
-        "pin-phone",
         "control-light",
+        "pin-phone",
         "control-find"
       ],
       "boundsViolations": [],
@@ -4873,34 +5021,34 @@
         {
           "source": "13°C",
           "shown": "13°C",
-          "size": 20,
+          "size": 19,
           "bounds": {
-            "x": 51.9200439453125,
+            "x": 53.8739013671875,
             "y": 168,
-            "width": 39.0799560546875,
+            "width": 37.1260986328125,
             "height": 14
+          }
+        },
+        {
+          "source": "65%",
+          "shown": "65%",
+          "size": 19,
+          "bounds": {
+            "x": 154.9329071044922,
+            "y": 167,
+            "width": 34.06709289550781,
+            "height": 16
           }
         },
         {
           "source": "76%",
           "shown": "76%",
-          "size": 20,
+          "size": 19,
           "bounds": {
-            "x": 152.56004333496094,
-            "y": 167,
-            "width": 36.43995666503906,
+            "x": 56.38189697265625,
+            "y": 192,
+            "width": 34.61810302734375,
             "height": 16
-          }
-        },
-        {
-          "source": "Light on",
-          "shown": "Light on",
-          "size": 14,
-          "bounds": {
-            "x": 29,
-            "y": 196,
-            "width": 45.541015625,
-            "height": 14
           }
         },
         {
@@ -4908,8 +5056,8 @@
           "shown": "Find phone",
           "size": 14,
           "bounds": {
-            "x": 127,
-            "y": 196,
+            "x": 128,
+            "y": 194.5,
             "width": 61.6259765625,
             "height": 14
           }
@@ -4967,38 +5115,38 @@
           "x": 4,
           "y": 164,
           "width": 94,
-          "height": 24,
-          "selected": false
-        },
-        {
-          "id": "pin-phone",
-          "x": 102,
-          "y": 164,
-          "width": 94,
-          "height": 24,
+          "height": 23,
           "selected": false
         },
         {
           "id": "control-light",
-          "x": 4,
-          "y": 192,
+          "x": 102,
+          "y": 164,
           "width": 94,
-          "height": 20,
+          "height": 23,
+          "selected": false
+        },
+        {
+          "id": "pin-phone",
+          "x": 4,
+          "y": 189,
+          "width": 94,
+          "height": 23,
           "selected": false
         },
         {
           "id": "control-find",
           "x": 102,
-          "y": 192,
+          "y": 189,
           "width": 94,
-          "height": 20,
+          "height": 23,
           "selected": false
         }
       ],
       "width": 200,
       "height": 228,
-      "bytes": 11136,
-      "sha256": "07b7a5a9931ec4e8af6c04b90ba37089f6aca2a6a392a785f074d5b786ba7e90",
+      "bytes": 11245,
+      "sha256": "9b217a179b30cffb07c8152e15789de8dfba2277df7a64e635b02b44c92e3b6d",
       "palette": {
         "opaque": true,
         "quantized": true,
@@ -5016,8 +5164,7 @@
       "section": null,
       "sectionCounts": {
         "activities": 6,
-        "readouts": 6,
-        "controls": 6
+        "pinned": 12
       },
       "returnDepth": 0,
       "lastNavigation": null,
@@ -5028,8 +5175,8 @@
         "activity-1",
         "notification",
         "pin-weather",
-        "pin-phone",
         "control-light",
+        "pin-phone",
         "control-find"
       ],
       "boundsViolations": [],
@@ -5136,56 +5283,67 @@
         {
           "source": "Weather",
           "shown": "Weather",
-          "size": 12,
+          "size": 11,
           "bounds": {
             "x": 29,
             "y": 145,
-            "width": 39.69140625,
-            "height": 10
+            "width": 36.3837890625,
+            "height": 8
           }
         },
         {
           "source": "13°C",
           "shown": "13°C",
-          "size": 23,
+          "size": 20,
           "bounds": {
             "x": 12,
-            "y": 156,
-            "width": 44.941986083984375,
-            "height": 17
+            "y": 155,
+            "width": 39.0799560546875,
+            "height": 14
+          }
+        },
+        {
+          "source": "Kitchen light",
+          "shown": "Kitchen light",
+          "size": 11,
+          "bounds": {
+            "x": 127,
+            "y": 145,
+            "width": 55.7841796875,
+            "height": 10
+          }
+        },
+        {
+          "source": "65%",
+          "shown": "65%",
+          "size": 20,
+          "bounds": {
+            "x": 110,
+            "y": 154,
+            "width": 35.859954833984375,
+            "height": 16
           }
         },
         {
           "source": "Phone",
           "shown": "Phone",
-          "size": 12,
+          "size": 11,
           "bounds": {
-            "x": 127,
-            "y": 145,
-            "width": 30.345703125,
-            "height": 10
+            "x": 29,
+            "y": 180,
+            "width": 27.81689453125,
+            "height": 8
           }
         },
         {
           "source": "76%",
           "shown": "76%",
-          "size": 23,
+          "size": 20,
           "bounds": {
-            "x": 110,
-            "y": 156,
-            "width": 41.906005859375,
-            "height": 18
-          }
-        },
-        {
-          "source": "Light on",
-          "shown": "Light on",
-          "size": 14,
-          "bounds": {
-            "x": 29,
-            "y": 189.5,
-            "width": 45.541015625,
-            "height": 14
+            "x": 12,
+            "y": 189,
+            "width": 36.43995666503906,
+            "height": 16
           }
         },
         {
@@ -5194,7 +5352,7 @@
           "size": 14,
           "bounds": {
             "x": 127,
-            "y": 189.5,
+            "y": 186,
             "width": 61.6259765625,
             "height": 14
           }
@@ -5252,38 +5410,38 @@
           "x": 4,
           "y": 141,
           "width": 94,
-          "height": 37,
-          "selected": false
-        },
-        {
-          "id": "pin-phone",
-          "x": 102,
-          "y": 141,
-          "width": 94,
-          "height": 37,
+          "height": 32,
           "selected": false
         },
         {
           "id": "control-light",
-          "x": 4,
-          "y": 183,
+          "x": 102,
+          "y": 141,
           "width": 94,
-          "height": 25,
+          "height": 32,
+          "selected": false
+        },
+        {
+          "id": "pin-phone",
+          "x": 4,
+          "y": 176,
+          "width": 94,
+          "height": 32,
           "selected": false
         },
         {
           "id": "control-find",
           "x": 102,
-          "y": 183,
+          "y": 176,
           "width": 94,
-          "height": 25,
+          "height": 32,
           "selected": false
         }
       ],
       "width": 200,
       "height": 228,
-      "bytes": 9306,
-      "sha256": "8998f15048733695f32600e2d898210ea4966c0133be2a9ac887db6b1e61dcc4",
+      "bytes": 9488,
+      "sha256": "8fa80ddf337a9fef1c27b3c33f1ba72b4ccb45484ae7559229bdd14fc63d8703",
       "palette": {
         "opaque": true,
         "quantized": true,
@@ -5301,8 +5459,7 @@
       "section": null,
       "sectionCounts": {
         "activities": 6,
-        "readouts": 6,
-        "controls": 6
+        "pinned": 12
       },
       "returnDepth": 0,
       "lastNavigation": null,
@@ -5313,8 +5470,8 @@
         "activity-1",
         "notification",
         "pin-weather",
-        "pin-phone",
         "control-light",
+        "pin-phone",
         "control-find"
       ],
       "boundsViolations": [],
@@ -5421,34 +5578,34 @@
         {
           "source": "13°C",
           "shown": "13°C",
-          "size": 20,
+          "size": 19,
           "bounds": {
-            "x": 51.9200439453125,
+            "x": 53.8739013671875,
             "y": 168,
-            "width": 39.0799560546875,
+            "width": 37.1260986328125,
             "height": 14
+          }
+        },
+        {
+          "source": "65%",
+          "shown": "65%",
+          "size": 19,
+          "bounds": {
+            "x": 154.9329071044922,
+            "y": 167,
+            "width": 34.06709289550781,
+            "height": 16
           }
         },
         {
           "source": "76%",
           "shown": "76%",
-          "size": 20,
+          "size": 19,
           "bounds": {
-            "x": 152.56004333496094,
-            "y": 167,
-            "width": 36.43995666503906,
+            "x": 56.38189697265625,
+            "y": 192,
+            "width": 34.61810302734375,
             "height": 16
-          }
-        },
-        {
-          "source": "Light on",
-          "shown": "Light on",
-          "size": 14,
-          "bounds": {
-            "x": 29,
-            "y": 196,
-            "width": 45.541015625,
-            "height": 14
           }
         },
         {
@@ -5456,8 +5613,8 @@
           "shown": "Find phone",
           "size": 14,
           "bounds": {
-            "x": 127,
-            "y": 196,
+            "x": 128,
+            "y": 194.5,
             "width": 61.6259765625,
             "height": 14
           }
@@ -5515,38 +5672,38 @@
           "x": 4,
           "y": 164,
           "width": 94,
-          "height": 24,
-          "selected": false
-        },
-        {
-          "id": "pin-phone",
-          "x": 102,
-          "y": 164,
-          "width": 94,
-          "height": 24,
+          "height": 23,
           "selected": false
         },
         {
           "id": "control-light",
-          "x": 4,
-          "y": 192,
+          "x": 102,
+          "y": 164,
           "width": 94,
-          "height": 20,
+          "height": 23,
+          "selected": false
+        },
+        {
+          "id": "pin-phone",
+          "x": 4,
+          "y": 189,
+          "width": 94,
+          "height": 23,
           "selected": false
         },
         {
           "id": "control-find",
           "x": 102,
-          "y": 192,
+          "y": 189,
           "width": 94,
-          "height": 20,
+          "height": 23,
           "selected": false
         }
       ],
       "width": 200,
       "height": 228,
-      "bytes": 9355,
-      "sha256": "ed137eec8ae656378bbc9576d290aaaab3c6333b3b8974ca54833644b0220fa5",
+      "bytes": 9455,
+      "sha256": "32fd680cee322f9ba1a5a2a5a0bdfa53148a9458e55a5948d6e0ca357911e820",
       "palette": {
         "opaque": true,
         "quantized": true,
@@ -5564,8 +5721,7 @@
       "section": null,
       "sectionCounts": {
         "activities": 6,
-        "readouts": 6,
-        "controls": 6
+        "pinned": 12
       },
       "returnDepth": 0,
       "lastNavigation": null,
@@ -5576,7 +5732,7 @@
         "activity-1",
         "notification",
         "pin-weather",
-        "control-find"
+        "control-light"
       ],
       "boundsViolations": [],
       "text": [
@@ -5691,14 +5847,25 @@
           }
         },
         {
-          "source": "Find phone",
-          "shown": "Find phone",
-          "size": 18,
+          "source": "Kitchen light",
+          "shown": "Kitchen light",
+          "size": 16,
           "bounds": {
             "x": 37,
-            "y": 177,
-            "width": 79.2333984375,
-            "height": 18
+            "y": 179,
+            "width": 81.140625,
+            "height": 15
+          }
+        },
+        {
+          "source": "65%",
+          "shown": "65%",
+          "size": 24,
+          "bounds": {
+            "x": 141.96812438964844,
+            "y": 175,
+            "width": 43.03187561035156,
+            "height": 19
           }
         },
         {
@@ -5758,7 +5925,7 @@
           "selected": false
         },
         {
-          "id": "control-find",
+          "id": "control-light",
           "x": 4,
           "y": 169,
           "width": 188,
@@ -5768,8 +5935,8 @@
       ],
       "width": 200,
       "height": 228,
-      "bytes": 8361,
-      "sha256": "abaae714fd026e5162ad8888b3b5ec769b0ca4174fda1b555c224611d64fbeed",
+      "bytes": 8920,
+      "sha256": "3ecccc15e2e2c4103d891c7cec03f52b70b06bbfcde305afccff1c3a1625aadb",
       "palette": {
         "opaque": true,
         "quantized": true,
@@ -5787,8 +5954,7 @@
       "section": null,
       "sectionCounts": {
         "activities": 6,
-        "readouts": 6,
-        "controls": 6
+        "pinned": 12
       },
       "returnDepth": 0,
       "lastNavigation": null,
@@ -5799,8 +5965,8 @@
         "activity-1",
         "notification",
         "pin-weather",
-        "pin-phone",
         "control-light",
+        "pin-phone",
         "control-find"
       ],
       "boundsViolations": [],
@@ -5907,56 +6073,67 @@
         {
           "source": "Weather",
           "shown": "Weather",
-          "size": 12,
+          "size": 11,
           "bounds": {
             "x": 29,
             "y": 145,
-            "width": 39.69140625,
-            "height": 10
+            "width": 36.3837890625,
+            "height": 8
           }
         },
         {
           "source": "13°C",
           "shown": "13°C",
-          "size": 23,
+          "size": 20,
           "bounds": {
             "x": 12,
-            "y": 156,
-            "width": 44.941986083984375,
-            "height": 17
+            "y": 155,
+            "width": 39.0799560546875,
+            "height": 14
+          }
+        },
+        {
+          "source": "Kitchen light",
+          "shown": "Kitchen light",
+          "size": 11,
+          "bounds": {
+            "x": 127,
+            "y": 145,
+            "width": 55.7841796875,
+            "height": 10
+          }
+        },
+        {
+          "source": "65%",
+          "shown": "65%",
+          "size": 20,
+          "bounds": {
+            "x": 110,
+            "y": 154,
+            "width": 35.859954833984375,
+            "height": 16
           }
         },
         {
           "source": "Phone",
           "shown": "Phone",
-          "size": 12,
+          "size": 11,
           "bounds": {
-            "x": 127,
-            "y": 145,
-            "width": 30.345703125,
-            "height": 10
+            "x": 29,
+            "y": 180,
+            "width": 27.81689453125,
+            "height": 8
           }
         },
         {
           "source": "76%",
           "shown": "76%",
-          "size": 23,
+          "size": 20,
           "bounds": {
-            "x": 110,
-            "y": 156,
-            "width": 41.906005859375,
-            "height": 18
-          }
-        },
-        {
-          "source": "Light on",
-          "shown": "Light on",
-          "size": 14,
-          "bounds": {
-            "x": 29,
-            "y": 189.5,
-            "width": 45.541015625,
-            "height": 14
+            "x": 12,
+            "y": 189,
+            "width": 36.43995666503906,
+            "height": 16
           }
         },
         {
@@ -5965,7 +6142,7 @@
           "size": 14,
           "bounds": {
             "x": 127,
-            "y": 189.5,
+            "y": 186,
             "width": 61.6259765625,
             "height": 14
           }
@@ -6012,38 +6189,38 @@
           "x": 4,
           "y": 141,
           "width": 94,
-          "height": 37,
-          "selected": false
-        },
-        {
-          "id": "pin-phone",
-          "x": 102,
-          "y": 141,
-          "width": 94,
-          "height": 37,
+          "height": 32,
           "selected": false
         },
         {
           "id": "control-light",
-          "x": 4,
-          "y": 183,
+          "x": 102,
+          "y": 141,
           "width": 94,
-          "height": 25,
+          "height": 32,
+          "selected": false
+        },
+        {
+          "id": "pin-phone",
+          "x": 4,
+          "y": 176,
+          "width": 94,
+          "height": 32,
           "selected": false
         },
         {
           "id": "control-find",
           "x": 102,
-          "y": 183,
+          "y": 176,
           "width": 94,
-          "height": 25,
+          "height": 32,
           "selected": false
         }
       ],
       "width": 200,
       "height": 228,
-      "bytes": 9279,
-      "sha256": "cc0a4f286b9dbf8fb6cf99eb8a9df6a915aae58ffe2ac3654ecc400222cbb47f",
+      "bytes": 9466,
+      "sha256": "c2f1f2a53723e039581d82ba06ef0d831ab53ea93a4bfcfbb2c51627268cbc60",
       "palette": {
         "opaque": true,
         "quantized": true,
@@ -6061,8 +6238,7 @@
       "section": null,
       "sectionCounts": {
         "activities": 6,
-        "readouts": 6,
-        "controls": 6
+        "pinned": 12
       },
       "returnDepth": 0,
       "lastNavigation": null,
@@ -6073,8 +6249,8 @@
         "activity-1",
         "notification",
         "pin-weather",
-        "pin-phone",
         "control-light",
+        "pin-phone",
         "control-find"
       ],
       "boundsViolations": [],
@@ -6181,56 +6357,67 @@
         {
           "source": "Weather",
           "shown": "Weather",
-          "size": 12,
+          "size": 11,
           "bounds": {
             "x": 29,
             "y": 145,
-            "width": 39.69140625,
-            "height": 10
+            "width": 36.3837890625,
+            "height": 8
           }
         },
         {
           "source": "13°C",
           "shown": "13°C",
-          "size": 23,
+          "size": 20,
           "bounds": {
             "x": 12,
-            "y": 156,
-            "width": 44.941986083984375,
-            "height": 17
+            "y": 155,
+            "width": 39.0799560546875,
+            "height": 14
+          }
+        },
+        {
+          "source": "Kitchen light",
+          "shown": "Kitchen light",
+          "size": 11,
+          "bounds": {
+            "x": 127,
+            "y": 145,
+            "width": 55.7841796875,
+            "height": 10
+          }
+        },
+        {
+          "source": "65%",
+          "shown": "65%",
+          "size": 20,
+          "bounds": {
+            "x": 110,
+            "y": 154,
+            "width": 35.859954833984375,
+            "height": 16
           }
         },
         {
           "source": "Phone",
           "shown": "Phone",
-          "size": 12,
+          "size": 11,
           "bounds": {
-            "x": 127,
-            "y": 145,
-            "width": 30.345703125,
-            "height": 10
+            "x": 29,
+            "y": 180,
+            "width": 27.81689453125,
+            "height": 8
           }
         },
         {
           "source": "76%",
           "shown": "76%",
-          "size": 23,
+          "size": 20,
           "bounds": {
-            "x": 110,
-            "y": 156,
-            "width": 41.906005859375,
-            "height": 18
-          }
-        },
-        {
-          "source": "Light on",
-          "shown": "Light on",
-          "size": 14,
-          "bounds": {
-            "x": 29,
-            "y": 189.5,
-            "width": 45.541015625,
-            "height": 14
+            "x": 12,
+            "y": 189,
+            "width": 36.43995666503906,
+            "height": 16
           }
         },
         {
@@ -6239,7 +6426,7 @@
           "size": 14,
           "bounds": {
             "x": 127,
-            "y": 189.5,
+            "y": 186,
             "width": 61.6259765625,
             "height": 14
           }
@@ -6256,13 +6443,13 @@
           }
         },
         {
-          "source": "Hold: All 6",
-          "shown": "Hold: All 6",
+          "source": "Hold: All 12",
+          "shown": "Hold: All 12",
           "size": 12,
           "bounds": {
-            "x": 141.609375,
+            "x": 135.544921875,
             "y": 215,
-            "width": 50.390625,
+            "width": 56.455078125,
             "height": 10
           }
         }
@@ -6297,38 +6484,38 @@
           "x": 4,
           "y": 141,
           "width": 94,
-          "height": 37,
-          "selected": false
-        },
-        {
-          "id": "pin-phone",
-          "x": 102,
-          "y": 141,
-          "width": 94,
-          "height": 37,
+          "height": 32,
           "selected": false
         },
         {
           "id": "control-light",
-          "x": 4,
-          "y": 183,
+          "x": 102,
+          "y": 141,
           "width": 94,
-          "height": 25,
+          "height": 32,
+          "selected": false
+        },
+        {
+          "id": "pin-phone",
+          "x": 4,
+          "y": 176,
+          "width": 94,
+          "height": 32,
           "selected": false
         },
         {
           "id": "control-find",
           "x": 102,
-          "y": 183,
+          "y": 176,
           "width": 94,
-          "height": 25,
+          "height": 32,
           "selected": true
         }
       ],
       "width": 200,
       "height": 228,
-      "bytes": 9335,
-      "sha256": "495e9edec894936ca2b1a9dde402b171e0bbce6f1a44735c5ef7defcdfc3cd5b",
+      "bytes": 9502,
+      "sha256": "b7a546ea02a3b4d67f4101329744bea76202f9d073cc703e58107743ca5d04ab",
       "palette": {
         "opaque": true,
         "quantized": true,
@@ -6346,8 +6533,7 @@
       "section": null,
       "sectionCounts": {
         "activities": 6,
-        "readouts": 6,
-        "controls": 6
+        "pinned": 12
       },
       "returnDepth": 0,
       "lastNavigation": null,
@@ -6358,8 +6544,8 @@
         "activity-1",
         "notification",
         "pin-weather",
-        "pin-phone",
         "control-light",
+        "pin-phone",
         "control-find"
       ],
       "boundsViolations": [],
@@ -6466,34 +6652,34 @@
         {
           "source": "13°C",
           "shown": "13°C",
-          "size": 20,
+          "size": 19,
           "bounds": {
-            "x": 51.9200439453125,
+            "x": 53.8739013671875,
             "y": 168,
-            "width": 39.0799560546875,
+            "width": 37.1260986328125,
             "height": 14
+          }
+        },
+        {
+          "source": "65%",
+          "shown": "65%",
+          "size": 19,
+          "bounds": {
+            "x": 154.9329071044922,
+            "y": 167,
+            "width": 34.06709289550781,
+            "height": 16
           }
         },
         {
           "source": "76%",
           "shown": "76%",
-          "size": 20,
+          "size": 19,
           "bounds": {
-            "x": 152.56004333496094,
-            "y": 167,
-            "width": 36.43995666503906,
+            "x": 56.38189697265625,
+            "y": 192,
+            "width": 34.61810302734375,
             "height": 16
-          }
-        },
-        {
-          "source": "Light on",
-          "shown": "Light on",
-          "size": 14,
-          "bounds": {
-            "x": 29,
-            "y": 196,
-            "width": 45.541015625,
-            "height": 14
           }
         },
         {
@@ -6501,8 +6687,8 @@
           "shown": "Find phone",
           "size": 14,
           "bounds": {
-            "x": 127,
-            "y": 196,
+            "x": 128,
+            "y": 194.5,
             "width": 61.6259765625,
             "height": 14
           }
@@ -6549,38 +6735,38 @@
           "x": 4,
           "y": 164,
           "width": 94,
-          "height": 24,
-          "selected": false
-        },
-        {
-          "id": "pin-phone",
-          "x": 102,
-          "y": 164,
-          "width": 94,
-          "height": 24,
+          "height": 23,
           "selected": false
         },
         {
           "id": "control-light",
-          "x": 4,
-          "y": 192,
+          "x": 102,
+          "y": 164,
           "width": 94,
-          "height": 20,
+          "height": 23,
+          "selected": false
+        },
+        {
+          "id": "pin-phone",
+          "x": 4,
+          "y": 189,
+          "width": 94,
+          "height": 23,
           "selected": false
         },
         {
           "id": "control-find",
           "x": 102,
-          "y": 192,
+          "y": 189,
           "width": 94,
-          "height": 20,
+          "height": 23,
           "selected": false
         }
       ],
       "width": 200,
       "height": 228,
-      "bytes": 9274,
-      "sha256": "d3685af2108115ceedee5fb98b3f18ad0287e41714e53f32cd34af39e12f04c2",
+      "bytes": 9377,
+      "sha256": "ee02c13fd0a95578ca441f3433b184548ac664b9e34ab04937a3a118570e8cc6",
       "palette": {
         "opaque": true,
         "quantized": true,
@@ -6598,8 +6784,7 @@
       "section": null,
       "sectionCounts": {
         "activities": 6,
-        "readouts": 6,
-        "controls": 6
+        "pinned": 12
       },
       "returnDepth": 0,
       "lastNavigation": null,
@@ -6610,8 +6795,8 @@
         "activity-1",
         "notification",
         "pin-weather",
-        "pin-phone",
         "control-light",
+        "pin-phone",
         "control-find"
       ],
       "boundsViolations": [],
@@ -6718,34 +6903,34 @@
         {
           "source": "13°C",
           "shown": "13°C",
-          "size": 20,
+          "size": 19,
           "bounds": {
-            "x": 51.9200439453125,
+            "x": 53.8739013671875,
             "y": 168,
-            "width": 39.0799560546875,
+            "width": 37.1260986328125,
             "height": 14
+          }
+        },
+        {
+          "source": "65%",
+          "shown": "65%",
+          "size": 19,
+          "bounds": {
+            "x": 154.9329071044922,
+            "y": 167,
+            "width": 34.06709289550781,
+            "height": 16
           }
         },
         {
           "source": "76%",
           "shown": "76%",
-          "size": 20,
+          "size": 19,
           "bounds": {
-            "x": 152.56004333496094,
-            "y": 167,
-            "width": 36.43995666503906,
+            "x": 56.38189697265625,
+            "y": 192,
+            "width": 34.61810302734375,
             "height": 16
-          }
-        },
-        {
-          "source": "Light on",
-          "shown": "Light on",
-          "size": 14,
-          "bounds": {
-            "x": 29,
-            "y": 196,
-            "width": 45.541015625,
-            "height": 14
           }
         },
         {
@@ -6753,8 +6938,8 @@
           "shown": "Find phone",
           "size": 14,
           "bounds": {
-            "x": 127,
-            "y": 196,
+            "x": 128,
+            "y": 194.5,
             "width": 61.6259765625,
             "height": 14
           }
@@ -6771,13 +6956,13 @@
           }
         },
         {
-          "source": "Hold: All 6",
-          "shown": "Hold: All 6",
+          "source": "Hold: All 12",
+          "shown": "Hold: All 12",
           "size": 12,
           "bounds": {
-            "x": 141.609375,
+            "x": 135.544921875,
             "y": 215,
-            "width": 50.390625,
+            "width": 56.455078125,
             "height": 10
           }
         }
@@ -6812,38 +6997,38 @@
           "x": 4,
           "y": 164,
           "width": 94,
-          "height": 24,
-          "selected": false
-        },
-        {
-          "id": "pin-phone",
-          "x": 102,
-          "y": 164,
-          "width": 94,
-          "height": 24,
+          "height": 23,
           "selected": false
         },
         {
           "id": "control-light",
-          "x": 4,
-          "y": 192,
+          "x": 102,
+          "y": 164,
           "width": 94,
-          "height": 20,
+          "height": 23,
+          "selected": false
+        },
+        {
+          "id": "pin-phone",
+          "x": 4,
+          "y": 189,
+          "width": 94,
+          "height": 23,
           "selected": false
         },
         {
           "id": "control-find",
           "x": 102,
-          "y": 192,
+          "y": 189,
           "width": 94,
-          "height": 20,
+          "height": 23,
           "selected": true
         }
       ],
       "width": 200,
       "height": 228,
-      "bytes": 9264,
-      "sha256": "99be04f9687d46e9f4f896483ed0137c098e9c01c720f7a38ab74ed2322994f7",
+      "bytes": 9409,
+      "sha256": "f182a5eb7c619d463ae9252461381fcb7b9e52f368d53d8d5c2af41b0ed8d64b",
       "palette": {
         "opaque": true,
         "quantized": true,
@@ -6861,8 +7046,7 @@
       "section": null,
       "sectionCounts": {
         "activities": 6,
-        "readouts": 6,
-        "controls": 6
+        "pinned": 12
       },
       "returnDepth": 0,
       "lastNavigation": null,
@@ -6873,7 +7057,7 @@
         "activity-1",
         "notification",
         "pin-weather",
-        "control-find"
+        "control-light"
       ],
       "boundsViolations": [],
       "text": [
@@ -6988,14 +7172,25 @@
           }
         },
         {
-          "source": "Find phone",
-          "shown": "Find phone",
-          "size": 18,
+          "source": "Kitchen light",
+          "shown": "Kitchen light",
+          "size": 16,
           "bounds": {
             "x": 37,
-            "y": 177,
-            "width": 79.2333984375,
-            "height": 18
+            "y": 179,
+            "width": 81.140625,
+            "height": 15
+          }
+        },
+        {
+          "source": "65%",
+          "shown": "65%",
+          "size": 24,
+          "bounds": {
+            "x": 141.96812438964844,
+            "y": 175,
+            "width": 43.03187561035156,
+            "height": 19
           }
         },
         {
@@ -7044,7 +7239,7 @@
           "selected": false
         },
         {
-          "id": "control-find",
+          "id": "control-light",
           "x": 4,
           "y": 169,
           "width": 188,
@@ -7054,8 +7249,8 @@
       ],
       "width": 200,
       "height": 228,
-      "bytes": 8386,
-      "sha256": "d7d38bd1d306e4273545194ad9cbdb40ae9a464f3eeb0c9b304e35c8278e1b88",
+      "bytes": 8938,
+      "sha256": "70a10376b9674dea68d91a943ac0bd0944be1b994e6455d85c6d643121e58748",
       "palette": {
         "opaque": true,
         "quantized": true,
@@ -7073,19 +7268,18 @@
       "section": null,
       "sectionCounts": {
         "activities": 6,
-        "readouts": 6,
-        "controls": 6
+        "pinned": 12
       },
       "returnDepth": 0,
       "lastNavigation": null,
       "actionCount": 0,
       "selectedId": "control-find",
       "visibleIds": [
-        "activity-1",
         "notification",
         "pin-weather",
-        "control-find",
-        "pin-phone"
+        "control-light",
+        "pin-phone",
+        "control-find"
       ],
       "boundsViolations": [],
       "text": [
@@ -7112,34 +7306,12 @@
           }
         },
         {
-          "source": "Night Drive",
-          "shown": "Night Drive",
-          "size": 16,
-          "bounds": {
-            "x": 40,
-            "y": 27,
-            "width": 71.5546875,
-            "height": 15
-          }
-        },
-        {
-          "source": "The Midnight",
-          "shown": "The Midnight",
-          "size": 14,
-          "bounds": {
-            "x": 40,
-            "y": 43,
-            "width": 74.142578125,
-            "height": 14
-          }
-        },
-        {
           "source": "Sam · Signal",
           "shown": "Sam · Signal",
           "size": 14,
           "bounds": {
             "x": 37,
-            "y": 63,
+            "y": 27,
             "width": 70.109375,
             "height": 14
           }
@@ -7150,7 +7322,7 @@
           "size": 16,
           "bounds": {
             "x": 37,
-            "y": 78,
+            "y": 42,
             "width": 103.0859375,
             "height": 12
           }
@@ -7161,7 +7333,7 @@
           "size": 16,
           "bounds": {
             "x": 37,
-            "y": 107,
+            "y": 71,
             "width": 52.921875,
             "height": 12
           }
@@ -7172,20 +7344,31 @@
           "size": 24,
           "bounds": {
             "x": 138.1041259765625,
-            "y": 103,
+            "y": 67,
             "width": 46.8958740234375,
             "height": 18
           }
         },
         {
-          "source": "Find phone",
-          "shown": "Find phone",
-          "size": 18,
+          "source": "Kitchen light",
+          "shown": "Kitchen light",
+          "size": 16,
           "bounds": {
             "x": 37,
-            "y": 141,
-            "width": 79.2333984375,
-            "height": 18
+            "y": 107,
+            "width": 81.140625,
+            "height": 15
+          }
+        },
+        {
+          "source": "65%",
+          "shown": "65%",
+          "size": 24,
+          "bounds": {
+            "x": 141.96812438964844,
+            "y": 103,
+            "width": 43.03187561035156,
+            "height": 19
           }
         },
         {
@@ -7194,7 +7377,7 @@
           "size": 16,
           "bounds": {
             "x": 37,
-            "y": 179,
+            "y": 143,
             "width": 40.4609375,
             "height": 12
           }
@@ -7205,9 +7388,20 @@
           "size": 24,
           "bounds": {
             "x": 141.27212524414062,
-            "y": 175,
+            "y": 139,
             "width": 43.727874755859375,
             "height": 19
+          }
+        },
+        {
+          "source": "Find phone",
+          "shown": "Find phone",
+          "size": 18,
+          "bounds": {
+            "x": 37,
+            "y": 177,
+            "width": 79.2333984375,
+            "height": 18
           }
         },
         {
@@ -7222,30 +7416,22 @@
           }
         },
         {
-          "source": "Hold: All 6",
-          "shown": "Hold: All 6",
+          "source": "Hold: All 12",
+          "shown": "Hold: All 12",
           "size": 12,
           "bounds": {
-            "x": 141.609375,
+            "x": 135.544921875,
             "y": 215,
-            "width": 50.390625,
+            "width": 56.455078125,
             "height": 10
           }
         }
       ],
       "regions": [
         {
-          "id": "activity-1",
-          "x": 4,
-          "y": 25,
-          "width": 192,
-          "height": 32,
-          "selected": false
-        },
-        {
           "id": "notification",
           "x": 4,
-          "y": 61,
+          "y": 25,
           "width": 188,
           "height": 32,
           "selected": false
@@ -7253,7 +7439,23 @@
         {
           "id": "pin-weather",
           "x": 4,
+          "y": 61,
+          "width": 188,
+          "height": 32,
+          "selected": false
+        },
+        {
+          "id": "control-light",
+          "x": 4,
           "y": 97,
+          "width": 188,
+          "height": 32,
+          "selected": false
+        },
+        {
+          "id": "pin-phone",
+          "x": 4,
+          "y": 133,
           "width": 188,
           "height": 32,
           "selected": false
@@ -7261,28 +7463,20 @@
         {
           "id": "control-find",
           "x": 4,
-          "y": 133,
-          "width": 188,
-          "height": 32,
-          "selected": true
-        },
-        {
-          "id": "pin-phone",
-          "x": 4,
           "y": 169,
           "width": 188,
           "height": 32,
-          "selected": false
+          "selected": true
         }
       ],
       "width": 200,
       "height": 228,
-      "bytes": 8237,
-      "sha256": "9d3c0e3a34252eea3c0b6487552e1265747912b4a5244f2cd5a36afbb4f886e7",
+      "bytes": 8435,
+      "sha256": "ccad50e9eb983add2a76d3576197e608725dba9901a8f0f6e1e9aaaca3829ce9",
       "palette": {
         "opaque": true,
         "quantized": true,
-        "colors": 15
+        "colors": 7
       }
     },
     {
@@ -7296,8 +7490,7 @@
       "section": null,
       "sectionCounts": {
         "activities": 6,
-        "readouts": 6,
-        "controls": 6
+        "pinned": 12
       },
       "returnDepth": 1,
       "lastNavigation": null,
@@ -7417,8 +7610,7 @@
       "section": null,
       "sectionCounts": {
         "activities": 6,
-        "readouts": 6,
-        "controls": 6
+        "pinned": 12
       },
       "returnDepth": 1,
       "lastNavigation": null,
@@ -7529,8 +7721,7 @@
       "section": null,
       "sectionCounts": {
         "activities": 6,
-        "readouts": 6,
-        "controls": 6
+        "pinned": 12
       },
       "returnDepth": 0,
       "lastNavigation": "notifications",
@@ -7541,8 +7732,8 @@
         "activity-1",
         "notification",
         "pin-weather",
-        "pin-phone",
         "control-light",
+        "pin-phone",
         "control-find"
       ],
       "boundsViolations": [],
@@ -7649,34 +7840,34 @@
         {
           "source": "13°C",
           "shown": "13°C",
-          "size": 20,
+          "size": 19,
           "bounds": {
-            "x": 51.9200439453125,
+            "x": 53.8739013671875,
             "y": 168,
-            "width": 39.0799560546875,
+            "width": 37.1260986328125,
             "height": 14
+          }
+        },
+        {
+          "source": "65%",
+          "shown": "65%",
+          "size": 19,
+          "bounds": {
+            "x": 154.9329071044922,
+            "y": 167,
+            "width": 34.06709289550781,
+            "height": 16
           }
         },
         {
           "source": "76%",
           "shown": "76%",
-          "size": 20,
+          "size": 19,
           "bounds": {
-            "x": 152.56004333496094,
-            "y": 167,
-            "width": 36.43995666503906,
+            "x": 56.38189697265625,
+            "y": 192,
+            "width": 34.61810302734375,
             "height": 16
-          }
-        },
-        {
-          "source": "Light on",
-          "shown": "Light on",
-          "size": 14,
-          "bounds": {
-            "x": 29,
-            "y": 196,
-            "width": 45.541015625,
-            "height": 14
           }
         },
         {
@@ -7684,8 +7875,8 @@
           "shown": "Find phone",
           "size": 14,
           "bounds": {
-            "x": 127,
-            "y": 196,
+            "x": 128,
+            "y": 194.5,
             "width": 61.6259765625,
             "height": 14
           }
@@ -7732,38 +7923,38 @@
           "x": 4,
           "y": 164,
           "width": 94,
-          "height": 24,
-          "selected": false
-        },
-        {
-          "id": "pin-phone",
-          "x": 102,
-          "y": 164,
-          "width": 94,
-          "height": 24,
+          "height": 23,
           "selected": false
         },
         {
           "id": "control-light",
-          "x": 4,
-          "y": 192,
+          "x": 102,
+          "y": 164,
           "width": 94,
-          "height": 20,
+          "height": 23,
+          "selected": false
+        },
+        {
+          "id": "pin-phone",
+          "x": 4,
+          "y": 189,
+          "width": 94,
+          "height": 23,
           "selected": false
         },
         {
           "id": "control-find",
           "x": 102,
-          "y": 192,
+          "y": 189,
           "width": 94,
-          "height": 20,
+          "height": 23,
           "selected": false
         }
       ],
       "width": 200,
       "height": 228,
-      "bytes": 9274,
-      "sha256": "d3685af2108115ceedee5fb98b3f18ad0287e41714e53f32cd34af39e12f04c2",
+      "bytes": 9377,
+      "sha256": "ee02c13fd0a95578ca441f3433b184548ac664b9e34ab04937a3a118570e8cc6",
       "palette": {
         "opaque": true,
         "quantized": true,
@@ -7781,8 +7972,7 @@
       "section": null,
       "sectionCounts": {
         "activities": 6,
-        "readouts": 6,
-        "controls": 6
+        "pinned": 12
       },
       "returnDepth": 0,
       "lastNavigation": null,
@@ -7793,8 +7983,8 @@
         "activity-1",
         "notification",
         "pin-weather",
-        "pin-phone",
         "control-light",
+        "pin-phone",
         "control-find"
       ],
       "boundsViolations": [],
@@ -7901,34 +8091,34 @@
         {
           "source": "13°C",
           "shown": "13°C",
-          "size": 20,
+          "size": 19,
           "bounds": {
-            "x": 51.9200439453125,
+            "x": 53.8739013671875,
             "y": 168,
-            "width": 39.0799560546875,
+            "width": 37.1260986328125,
+            "height": 14
+          }
+        },
+        {
+          "source": "Off",
+          "shown": "Off",
+          "size": 19,
+          "bounds": {
+            "x": 165.0830078125,
+            "y": 168,
+            "width": 23.9169921875,
             "height": 14
           }
         },
         {
           "source": "76%",
           "shown": "76%",
-          "size": 20,
+          "size": 19,
           "bounds": {
-            "x": 152.56004333496094,
-            "y": 167,
-            "width": 36.43995666503906,
+            "x": 56.38189697265625,
+            "y": 192,
+            "width": 34.61810302734375,
             "height": 16
-          }
-        },
-        {
-          "source": "Light off",
-          "shown": "Light off",
-          "size": 14,
-          "bounds": {
-            "x": 29,
-            "y": 196,
-            "width": 47.82421875,
-            "height": 14
           }
         },
         {
@@ -7936,8 +8126,8 @@
           "shown": "Find phone",
           "size": 14,
           "bounds": {
-            "x": 127,
-            "y": 196,
+            "x": 128,
+            "y": 194.5,
             "width": 61.6259765625,
             "height": 14
           }
@@ -7954,13 +8144,13 @@
           }
         },
         {
-          "source": "Hold: All 6",
-          "shown": "Hold: All 6",
+          "source": "Hold: All 12",
+          "shown": "Hold: All 12",
           "size": 12,
           "bounds": {
-            "x": 141.609375,
+            "x": 135.544921875,
             "y": 215,
-            "width": 50.390625,
+            "width": 56.455078125,
             "height": 10
           }
         }
@@ -7995,38 +8185,38 @@
           "x": 4,
           "y": 164,
           "width": 94,
-          "height": 24,
-          "selected": false
-        },
-        {
-          "id": "pin-phone",
-          "x": 102,
-          "y": 164,
-          "width": 94,
-          "height": 24,
+          "height": 23,
           "selected": false
         },
         {
           "id": "control-light",
-          "x": 4,
-          "y": 192,
+          "x": 102,
+          "y": 164,
           "width": 94,
-          "height": 20,
+          "height": 23,
           "selected": true
+        },
+        {
+          "id": "pin-phone",
+          "x": 4,
+          "y": 189,
+          "width": 94,
+          "height": 23,
+          "selected": false
         },
         {
           "id": "control-find",
           "x": 102,
-          "y": 192,
+          "y": 189,
           "width": 94,
-          "height": 20,
+          "height": 23,
           "selected": false
         }
       ],
       "width": 200,
       "height": 228,
-      "bytes": 9304,
-      "sha256": "74d548327dc63360d47dd8ec955d8ee675f9b6244fabcdbff5739a6cb16968cf",
+      "bytes": 9260,
+      "sha256": "66552b8ed966bf7346fbde7a0be21285abf931661d20703c0ec2446fe2c5d92b",
       "palette": {
         "opaque": true,
         "quantized": true,
@@ -8044,8 +8234,7 @@
       "section": null,
       "sectionCounts": {
         "activities": 6,
-        "readouts": 6,
-        "controls": 6
+        "pinned": 12
       },
       "returnDepth": 0,
       "lastNavigation": null,
@@ -8056,8 +8245,8 @@
         "activity-1",
         "notification",
         "pin-weather",
-        "pin-phone",
         "control-light",
+        "pin-phone",
         "control-find"
       ],
       "boundsViolations": [],
@@ -8164,56 +8353,67 @@
         {
           "source": "Weather",
           "shown": "Weather",
-          "size": 12,
+          "size": 11,
           "bounds": {
             "x": 29,
             "y": 145,
-            "width": 39.69140625,
-            "height": 10
+            "width": 36.3837890625,
+            "height": 8
           }
         },
         {
           "source": "13°C",
           "shown": "13°C",
-          "size": 23,
+          "size": 20,
           "bounds": {
             "x": 12,
-            "y": 156,
-            "width": 44.941986083984375,
-            "height": 17
+            "y": 155,
+            "width": 39.0799560546875,
+            "height": 14
+          }
+        },
+        {
+          "source": "Kitchen light",
+          "shown": "Kitchen light",
+          "size": 11,
+          "bounds": {
+            "x": 127,
+            "y": 145,
+            "width": 55.7841796875,
+            "height": 10
+          }
+        },
+        {
+          "source": "65%",
+          "shown": "65%",
+          "size": 20,
+          "bounds": {
+            "x": 110,
+            "y": 154,
+            "width": 35.859954833984375,
+            "height": 16
           }
         },
         {
           "source": "Phone",
           "shown": "Phone",
-          "size": 12,
+          "size": 11,
           "bounds": {
-            "x": 127,
-            "y": 145,
-            "width": 30.345703125,
-            "height": 10
+            "x": 29,
+            "y": 180,
+            "width": 27.81689453125,
+            "height": 8
           }
         },
         {
           "source": "76%",
           "shown": "76%",
-          "size": 23,
+          "size": 20,
           "bounds": {
-            "x": 110,
-            "y": 156,
-            "width": 41.906005859375,
-            "height": 18
-          }
-        },
-        {
-          "source": "Light off",
-          "shown": "Light off",
-          "size": 14,
-          "bounds": {
-            "x": 29,
-            "y": 189.5,
-            "width": 47.82421875,
-            "height": 14
+            "x": 12,
+            "y": 189,
+            "width": 36.43995666503906,
+            "height": 16
           }
         },
         {
@@ -8222,7 +8422,7 @@
           "size": 14,
           "bounds": {
             "x": 127,
-            "y": 189.5,
+            "y": 186,
             "width": 61.6259765625,
             "height": 14
           }
@@ -8280,38 +8480,38 @@
           "x": 4,
           "y": 141,
           "width": 94,
-          "height": 37,
-          "selected": false
-        },
-        {
-          "id": "pin-phone",
-          "x": 102,
-          "y": 141,
-          "width": 94,
-          "height": 37,
+          "height": 32,
           "selected": false
         },
         {
           "id": "control-light",
-          "x": 4,
-          "y": 183,
+          "x": 102,
+          "y": 141,
           "width": 94,
-          "height": 25,
+          "height": 32,
+          "selected": false
+        },
+        {
+          "id": "pin-phone",
+          "x": 4,
+          "y": 176,
+          "width": 94,
+          "height": 32,
           "selected": false
         },
         {
           "id": "control-find",
           "x": 102,
-          "y": 183,
+          "y": 176,
           "width": 94,
-          "height": 25,
+          "height": 32,
           "selected": false
         }
       ],
       "width": 200,
       "height": 228,
-      "bytes": 9360,
-      "sha256": "c633a224df423e0e5f20d326b7af0064a8a3006883fa2a3b76a7bbcaa98a5635",
+      "bytes": 9524,
+      "sha256": "4681bacc630d8a45faa26312b23cba1484b060459d22c858706e083d748c50e8",
       "palette": {
         "opaque": true,
         "quantized": true,
@@ -8329,8 +8529,7 @@
       "section": "activities",
       "sectionCounts": {
         "activities": 6,
-        "readouts": 6,
-        "controls": 6
+        "pinned": 12
       },
       "returnDepth": 1,
       "lastNavigation": null,
@@ -8553,18 +8752,17 @@
       }
     },
     {
-      "file": "screens/snapshot-all-readouts-light.png",
+      "file": "screens/snapshot-all-pinned-reading-light.png",
       "layout": "snapshot",
       "scenario": "timer-media",
       "theme": "light",
       "swapped": false,
       "messagePreview": true,
       "mode": "section",
-      "section": "readouts",
+      "section": "pinned",
       "sectionCounts": {
         "activities": 6,
-        "readouts": 6,
-        "controls": 6
+        "pinned": 12
       },
       "returnDepth": 1,
       "lastNavigation": null,
@@ -8572,32 +8770,32 @@
       "selectedId": "pin-weather",
       "visibleIds": [
         "pin-weather",
+        "control-light",
         "pin-phone",
-        "pin-watch",
-        "pin-humidity",
-        "pin-calendar"
+        "control-find",
+        "pin-watch"
       ],
       "boundsViolations": [],
       "text": [
         {
-          "source": "Readouts",
-          "shown": "Readouts",
+          "source": "Pinned",
+          "shown": "Pinned",
           "size": 16,
           "bounds": {
             "x": 8,
             "y": 3,
-            "width": 59.9765625,
+            "width": 44.4609375,
             "height": 12
           }
         },
         {
-          "source": "1/6",
-          "shown": "1/6",
+          "source": "1/12",
+          "shown": "1/12",
           "size": 14,
           "bounds": {
-            "x": 173.201171875,
+            "x": 166.1259765625,
             "y": 4,
-            "width": 18.798828125,
+            "width": 25.8740234375,
             "height": 12
           }
         },
@@ -8624,12 +8822,34 @@
           }
         },
         {
+          "source": "Kitchen light",
+          "shown": "Kitchen light",
+          "size": 16,
+          "bounds": {
+            "x": 37,
+            "y": 71,
+            "width": 81.140625,
+            "height": 15
+          }
+        },
+        {
+          "source": "65%",
+          "shown": "65%",
+          "size": 24,
+          "bounds": {
+            "x": 141.96812438964844,
+            "y": 67,
+            "width": 43.03187561035156,
+            "height": 19
+          }
+        },
+        {
           "source": "Phone",
           "shown": "Phone",
           "size": 16,
           "bounds": {
             "x": 37,
-            "y": 71,
+            "y": 107,
             "width": 40.4609375,
             "height": 12
           }
@@ -8640,9 +8860,20 @@
           "size": 24,
           "bounds": {
             "x": 141.27212524414062,
-            "y": 67,
+            "y": 103,
             "width": 43.727874755859375,
             "height": 19
+          }
+        },
+        {
+          "source": "Find phone",
+          "shown": "Find phone",
+          "size": 18,
+          "bounds": {
+            "x": 37,
+            "y": 141,
+            "width": 79.2333984375,
+            "height": 18
           }
         },
         {
@@ -8651,7 +8882,7 @@
           "size": 16,
           "bounds": {
             "x": 37,
-            "y": 107,
+            "y": 179,
             "width": 39.671875,
             "height": 12
           }
@@ -8662,53 +8893,9 @@
           "size": 24,
           "bounds": {
             "x": 141.48812866210938,
-            "y": 103,
+            "y": 175,
             "width": 43.511871337890625,
             "height": 19
-          }
-        },
-        {
-          "source": "Humidity",
-          "shown": "Humidity",
-          "size": 16,
-          "bounds": {
-            "x": 37,
-            "y": 143,
-            "width": 57.578125,
-            "height": 15
-          }
-        },
-        {
-          "source": "42%",
-          "shown": "42%",
-          "size": 24,
-          "bounds": {
-            "x": 139.4961395263672,
-            "y": 139,
-            "width": 45.50386047363281,
-            "height": 19
-          }
-        },
-        {
-          "source": "Next event",
-          "shown": "Next event",
-          "size": 16,
-          "bounds": {
-            "x": 37,
-            "y": 179,
-            "width": 68.5546875,
-            "height": 12
-          }
-        },
-        {
-          "source": "15:30",
-          "shown": "15:30",
-          "size": 24,
-          "bounds": {
-            "x": 131.64813232421875,
-            "y": 176,
-            "width": 53.35186767578125,
-            "height": 17
           }
         },
         {
@@ -8744,7 +8931,7 @@
           "selected": true
         },
         {
-          "id": "pin-phone",
+          "id": "control-light",
           "x": 4,
           "y": 61,
           "width": 188,
@@ -8752,7 +8939,7 @@
           "selected": false
         },
         {
-          "id": "pin-watch",
+          "id": "pin-phone",
           "x": 4,
           "y": 97,
           "width": 188,
@@ -8760,7 +8947,7 @@
           "selected": false
         },
         {
-          "id": "pin-humidity",
+          "id": "control-find",
           "x": 4,
           "y": 133,
           "width": 188,
@@ -8768,7 +8955,7 @@
           "selected": false
         },
         {
-          "id": "pin-calendar",
+          "id": "pin-watch",
           "x": 4,
           "y": 169,
           "width": 188,
@@ -8778,8 +8965,8 @@
       ],
       "width": 200,
       "height": 228,
-      "bytes": 8248,
-      "sha256": "be46a03ba9ac6250d8acbadfbe093ec77d4642e402b65f46a03d60f5285a998c",
+      "bytes": 7808,
+      "sha256": "ce78d1b55a8de69e7fda70f34a464b27225c65274d9e18fa4f126c2da61a6c4e",
       "palette": {
         "opaque": true,
         "quantized": true,
@@ -8787,52 +8974,73 @@
       }
     },
     {
-      "file": "screens/snapshot-all-controls-light.png",
+      "file": "screens/snapshot-all-pinned-action-light.png",
       "layout": "snapshot",
       "scenario": "timer-media",
       "theme": "light",
       "swapped": false,
       "messagePreview": true,
       "mode": "section",
-      "section": "controls",
+      "section": "pinned",
       "sectionCounts": {
         "activities": 6,
-        "readouts": 6,
-        "controls": 6
+        "pinned": 12
       },
       "returnDepth": 1,
       "lastNavigation": null,
       "actionCount": 0,
       "selectedId": "control-light",
       "visibleIds": [
+        "pin-weather",
         "control-light",
+        "pin-phone",
         "control-find",
-        "control-desk",
-        "control-hall",
-        "control-evening"
+        "pin-watch"
       ],
       "boundsViolations": [],
       "text": [
         {
-          "source": "Controls",
-          "shown": "Controls",
+          "source": "Pinned",
+          "shown": "Pinned",
           "size": 16,
           "bounds": {
             "x": 8,
             "y": 3,
-            "width": 54.4140625,
+            "width": 44.4609375,
             "height": 12
           }
         },
         {
-          "source": "1/6",
-          "shown": "1/6",
+          "source": "2/12",
+          "shown": "2/12",
           "size": 14,
           "bounds": {
-            "x": 173.201171875,
+            "x": 166.1259765625,
             "y": 4,
-            "width": 18.798828125,
+            "width": 25.8740234375,
             "height": 12
+          }
+        },
+        {
+          "source": "Weather",
+          "shown": "Weather",
+          "size": 16,
+          "bounds": {
+            "x": 37,
+            "y": 35,
+            "width": 52.921875,
+            "height": 12
+          }
+        },
+        {
+          "source": "13°C",
+          "shown": "13°C",
+          "size": 24,
+          "bounds": {
+            "x": 138.1041259765625,
+            "y": 31,
+            "width": 46.8958740234375,
+            "height": 18
           }
         },
         {
@@ -8841,20 +9049,42 @@
           "size": 16,
           "bounds": {
             "x": 37,
-            "y": 27,
+            "y": 71,
             "width": 81.140625,
             "height": 15
           }
         },
         {
-          "source": "Off · select to turn on",
-          "shown": "Off · select to turn on",
-          "size": 14,
+          "source": "65%",
+          "shown": "65%",
+          "size": 24,
+          "bounds": {
+            "x": 141.96812438964844,
+            "y": 67,
+            "width": 43.03187561035156,
+            "height": 19
+          }
+        },
+        {
+          "source": "Phone",
+          "shown": "Phone",
+          "size": 16,
           "bounds": {
             "x": 37,
-            "y": 43,
-            "width": 119.5673828125,
-            "height": 11
+            "y": 107,
+            "width": 40.4609375,
+            "height": 12
+          }
+        },
+        {
+          "source": "76%",
+          "shown": "76%",
+          "size": 24,
+          "bounds": {
+            "x": 141.27212524414062,
+            "y": 103,
+            "width": 43.727874755859375,
+            "height": 19
           }
         },
         {
@@ -8863,64 +9093,31 @@
           "size": 18,
           "bounds": {
             "x": 37,
-            "y": 69,
+            "y": 141,
             "width": 79.2333984375,
             "height": 18
           }
         },
         {
-          "source": "Desk light",
-          "shown": "Desk light",
+          "source": "Watch",
+          "shown": "Watch",
           "size": 16,
           "bounds": {
             "x": 37,
-            "y": 99,
-            "width": 64.1953125,
-            "height": 15
+            "y": 179,
+            "width": 39.671875,
+            "height": 12
           }
         },
         {
-          "source": "Off · select to turn on",
-          "shown": "Off · select to turn on",
-          "size": 14,
+          "source": "85%",
+          "shown": "85%",
+          "size": 24,
           "bounds": {
-            "x": 37,
-            "y": 115,
-            "width": 119.5673828125,
-            "height": 11
-          }
-        },
-        {
-          "source": "Hall light",
-          "shown": "Hall light",
-          "size": 16,
-          "bounds": {
-            "x": 37,
-            "y": 135,
-            "width": 58.0078125,
-            "height": 15
-          }
-        },
-        {
-          "source": "On · select to turn off",
-          "shown": "On · select to turn off",
-          "size": 14,
-          "bounds": {
-            "x": 37,
-            "y": 151,
-            "width": 119.5673828125,
-            "height": 11
-          }
-        },
-        {
-          "source": "Evening scene",
-          "shown": "Evening scene",
-          "size": 18,
-          "bounds": {
-            "x": 37,
-            "y": 177,
-            "width": 103.5263671875,
-            "height": 18
+            "x": 141.48812866210938,
+            "y": 175,
+            "width": 43.511871337890625,
+            "height": 19
           }
         },
         {
@@ -8948,23 +9145,23 @@
       ],
       "regions": [
         {
-          "id": "control-light",
+          "id": "pin-weather",
           "x": 4,
           "y": 25,
-          "width": 188,
-          "height": 32,
-          "selected": true
-        },
-        {
-          "id": "control-find",
-          "x": 4,
-          "y": 61,
           "width": 188,
           "height": 32,
           "selected": false
         },
         {
-          "id": "control-desk",
+          "id": "control-light",
+          "x": 4,
+          "y": 61,
+          "width": 188,
+          "height": 32,
+          "selected": true
+        },
+        {
+          "id": "pin-phone",
           "x": 4,
           "y": 97,
           "width": 188,
@@ -8972,7 +9169,7 @@
           "selected": false
         },
         {
-          "id": "control-hall",
+          "id": "control-find",
           "x": 4,
           "y": 133,
           "width": 188,
@@ -8980,7 +9177,7 @@
           "selected": false
         },
         {
-          "id": "control-evening",
+          "id": "pin-watch",
           "x": 4,
           "y": 169,
           "width": 188,
@@ -8990,8 +9187,8 @@
       ],
       "width": 200,
       "height": 228,
-      "bytes": 8303,
-      "sha256": "1c291a68052e7d9054bc27138346bb1f4badd44626ea5020a94781919d742ba3",
+      "bytes": 7919,
+      "sha256": "cf9fd297afe06f03c065ff14186ae1e71558f520d40fd2020b00a31ee84a98dc",
       "palette": {
         "opaque": true,
         "quantized": true,
@@ -9009,8 +9206,7 @@
       "section": null,
       "sectionCounts": {
         "activities": 6,
-        "readouts": 6,
-        "controls": 6
+        "pinned": 12
       },
       "returnDepth": 0,
       "lastNavigation": null,
@@ -9021,8 +9217,8 @@
         "activity-1",
         "notification",
         "pin-weather",
-        "pin-phone",
         "control-light",
+        "pin-phone",
         "control-find"
       ],
       "boundsViolations": [],
@@ -9129,56 +9325,67 @@
         {
           "source": "Weather",
           "shown": "Weather",
-          "size": 12,
+          "size": 11,
           "bounds": {
             "x": 29,
             "y": 145,
-            "width": 39.69140625,
-            "height": 10
+            "width": 36.3837890625,
+            "height": 8
           }
         },
         {
           "source": "13°C",
           "shown": "13°C",
-          "size": 23,
+          "size": 20,
           "bounds": {
             "x": 12,
-            "y": 156,
-            "width": 44.941986083984375,
-            "height": 17
+            "y": 155,
+            "width": 39.0799560546875,
+            "height": 14
+          }
+        },
+        {
+          "source": "Kitchen light",
+          "shown": "Kitchen light",
+          "size": 11,
+          "bounds": {
+            "x": 127,
+            "y": 145,
+            "width": 55.7841796875,
+            "height": 10
+          }
+        },
+        {
+          "source": "65%",
+          "shown": "65%",
+          "size": 20,
+          "bounds": {
+            "x": 110,
+            "y": 154,
+            "width": 35.859954833984375,
+            "height": 16
           }
         },
         {
           "source": "Phone",
           "shown": "Phone",
-          "size": 12,
+          "size": 11,
           "bounds": {
-            "x": 127,
-            "y": 145,
-            "width": 30.345703125,
-            "height": 10
+            "x": 29,
+            "y": 180,
+            "width": 27.81689453125,
+            "height": 8
           }
         },
         {
           "source": "76%",
           "shown": "76%",
-          "size": 23,
+          "size": 20,
           "bounds": {
-            "x": 110,
-            "y": 156,
-            "width": 41.906005859375,
-            "height": 18
-          }
-        },
-        {
-          "source": "Light off",
-          "shown": "Light off",
-          "size": 14,
-          "bounds": {
-            "x": 29,
-            "y": 189.5,
-            "width": 47.82421875,
-            "height": 14
+            "x": 12,
+            "y": 189,
+            "width": 36.43995666503906,
+            "height": 16
           }
         },
         {
@@ -9187,7 +9394,7 @@
           "size": 14,
           "bounds": {
             "x": 127,
-            "y": 189.5,
+            "y": 186,
             "width": 61.6259765625,
             "height": 14
           }
@@ -9245,38 +9452,38 @@
           "x": 4,
           "y": 141,
           "width": 94,
-          "height": 37,
-          "selected": false
-        },
-        {
-          "id": "pin-phone",
-          "x": 102,
-          "y": 141,
-          "width": 94,
-          "height": 37,
+          "height": 32,
           "selected": false
         },
         {
           "id": "control-light",
-          "x": 4,
-          "y": 183,
+          "x": 102,
+          "y": 141,
           "width": 94,
-          "height": 25,
+          "height": 32,
+          "selected": false
+        },
+        {
+          "id": "pin-phone",
+          "x": 4,
+          "y": 176,
+          "width": 94,
+          "height": 32,
           "selected": false
         },
         {
           "id": "control-find",
           "x": 102,
-          "y": 183,
+          "y": 176,
           "width": 94,
-          "height": 25,
+          "height": 32,
           "selected": false
         }
       ],
       "width": 200,
       "height": 228,
-      "bytes": 9671,
-      "sha256": "8de4b5e70bdf24c4efbe3ad4c410edb0ebb25eef9814afac0b6b86e5f054ddc8",
+      "bytes": 9836,
+      "sha256": "0b8c036dc1347826a7d8009e16400165340fd84913c7b1497780bd4b2ad2ed44",
       "palette": {
         "opaque": true,
         "quantized": true,
@@ -9294,8 +9501,7 @@
       "section": "activities",
       "sectionCounts": {
         "activities": 6,
-        "readouts": 6,
-        "controls": 6
+        "pinned": 12
       },
       "returnDepth": 1,
       "lastNavigation": null,
@@ -9518,18 +9724,17 @@
       }
     },
     {
-      "file": "screens/snapshot-all-readouts-dark.png",
+      "file": "screens/snapshot-all-pinned-reading-dark.png",
       "layout": "snapshot",
       "scenario": "timer-media",
       "theme": "dark",
       "swapped": false,
       "messagePreview": true,
       "mode": "section",
-      "section": "readouts",
+      "section": "pinned",
       "sectionCounts": {
         "activities": 6,
-        "readouts": 6,
-        "controls": 6
+        "pinned": 12
       },
       "returnDepth": 1,
       "lastNavigation": null,
@@ -9537,32 +9742,32 @@
       "selectedId": "pin-weather",
       "visibleIds": [
         "pin-weather",
+        "control-light",
         "pin-phone",
-        "pin-watch",
-        "pin-humidity",
-        "pin-calendar"
+        "control-find",
+        "pin-watch"
       ],
       "boundsViolations": [],
       "text": [
         {
-          "source": "Readouts",
-          "shown": "Readouts",
+          "source": "Pinned",
+          "shown": "Pinned",
           "size": 16,
           "bounds": {
             "x": 8,
             "y": 3,
-            "width": 59.9765625,
+            "width": 44.4609375,
             "height": 12
           }
         },
         {
-          "source": "1/6",
-          "shown": "1/6",
+          "source": "1/12",
+          "shown": "1/12",
           "size": 14,
           "bounds": {
-            "x": 173.201171875,
+            "x": 166.1259765625,
             "y": 4,
-            "width": 18.798828125,
+            "width": 25.8740234375,
             "height": 12
           }
         },
@@ -9589,12 +9794,34 @@
           }
         },
         {
+          "source": "Kitchen light",
+          "shown": "Kitchen light",
+          "size": 16,
+          "bounds": {
+            "x": 37,
+            "y": 71,
+            "width": 81.140625,
+            "height": 15
+          }
+        },
+        {
+          "source": "65%",
+          "shown": "65%",
+          "size": 24,
+          "bounds": {
+            "x": 141.96812438964844,
+            "y": 67,
+            "width": 43.03187561035156,
+            "height": 19
+          }
+        },
+        {
           "source": "Phone",
           "shown": "Phone",
           "size": 16,
           "bounds": {
             "x": 37,
-            "y": 71,
+            "y": 107,
             "width": 40.4609375,
             "height": 12
           }
@@ -9605,9 +9832,20 @@
           "size": 24,
           "bounds": {
             "x": 141.27212524414062,
-            "y": 67,
+            "y": 103,
             "width": 43.727874755859375,
             "height": 19
+          }
+        },
+        {
+          "source": "Find phone",
+          "shown": "Find phone",
+          "size": 18,
+          "bounds": {
+            "x": 37,
+            "y": 141,
+            "width": 79.2333984375,
+            "height": 18
           }
         },
         {
@@ -9616,7 +9854,7 @@
           "size": 16,
           "bounds": {
             "x": 37,
-            "y": 107,
+            "y": 179,
             "width": 39.671875,
             "height": 12
           }
@@ -9627,53 +9865,9 @@
           "size": 24,
           "bounds": {
             "x": 141.48812866210938,
-            "y": 103,
+            "y": 175,
             "width": 43.511871337890625,
             "height": 19
-          }
-        },
-        {
-          "source": "Humidity",
-          "shown": "Humidity",
-          "size": 16,
-          "bounds": {
-            "x": 37,
-            "y": 143,
-            "width": 57.578125,
-            "height": 15
-          }
-        },
-        {
-          "source": "42%",
-          "shown": "42%",
-          "size": 24,
-          "bounds": {
-            "x": 139.4961395263672,
-            "y": 139,
-            "width": 45.50386047363281,
-            "height": 19
-          }
-        },
-        {
-          "source": "Next event",
-          "shown": "Next event",
-          "size": 16,
-          "bounds": {
-            "x": 37,
-            "y": 179,
-            "width": 68.5546875,
-            "height": 12
-          }
-        },
-        {
-          "source": "15:30",
-          "shown": "15:30",
-          "size": 24,
-          "bounds": {
-            "x": 131.64813232421875,
-            "y": 176,
-            "width": 53.35186767578125,
-            "height": 17
           }
         },
         {
@@ -9709,7 +9903,7 @@
           "selected": true
         },
         {
-          "id": "pin-phone",
+          "id": "control-light",
           "x": 4,
           "y": 61,
           "width": 188,
@@ -9717,7 +9911,7 @@
           "selected": false
         },
         {
-          "id": "pin-watch",
+          "id": "pin-phone",
           "x": 4,
           "y": 97,
           "width": 188,
@@ -9725,7 +9919,7 @@
           "selected": false
         },
         {
-          "id": "pin-humidity",
+          "id": "control-find",
           "x": 4,
           "y": 133,
           "width": 188,
@@ -9733,7 +9927,7 @@
           "selected": false
         },
         {
-          "id": "pin-calendar",
+          "id": "pin-watch",
           "x": 4,
           "y": 169,
           "width": 188,
@@ -9743,8 +9937,8 @@
       ],
       "width": 200,
       "height": 228,
-      "bytes": 8567,
-      "sha256": "2c219ed7be891415673732e40b07a245453414b4299d9cdb14cb4e5e31cb544b",
+      "bytes": 8020,
+      "sha256": "097db2ca15c70760aa93b6d94546e8b9a590e6a5ea63c83481e05ba078582f44",
       "palette": {
         "opaque": true,
         "quantized": true,
@@ -9752,52 +9946,73 @@
       }
     },
     {
-      "file": "screens/snapshot-all-controls-dark.png",
+      "file": "screens/snapshot-all-pinned-action-dark.png",
       "layout": "snapshot",
       "scenario": "timer-media",
       "theme": "dark",
       "swapped": false,
       "messagePreview": true,
       "mode": "section",
-      "section": "controls",
+      "section": "pinned",
       "sectionCounts": {
         "activities": 6,
-        "readouts": 6,
-        "controls": 6
+        "pinned": 12
       },
       "returnDepth": 1,
       "lastNavigation": null,
       "actionCount": 0,
       "selectedId": "control-light",
       "visibleIds": [
+        "pin-weather",
         "control-light",
+        "pin-phone",
         "control-find",
-        "control-desk",
-        "control-hall",
-        "control-evening"
+        "pin-watch"
       ],
       "boundsViolations": [],
       "text": [
         {
-          "source": "Controls",
-          "shown": "Controls",
+          "source": "Pinned",
+          "shown": "Pinned",
           "size": 16,
           "bounds": {
             "x": 8,
             "y": 3,
-            "width": 54.4140625,
+            "width": 44.4609375,
             "height": 12
           }
         },
         {
-          "source": "1/6",
-          "shown": "1/6",
+          "source": "2/12",
+          "shown": "2/12",
           "size": 14,
           "bounds": {
-            "x": 173.201171875,
+            "x": 166.1259765625,
             "y": 4,
-            "width": 18.798828125,
+            "width": 25.8740234375,
             "height": 12
+          }
+        },
+        {
+          "source": "Weather",
+          "shown": "Weather",
+          "size": 16,
+          "bounds": {
+            "x": 37,
+            "y": 35,
+            "width": 52.921875,
+            "height": 12
+          }
+        },
+        {
+          "source": "13°C",
+          "shown": "13°C",
+          "size": 24,
+          "bounds": {
+            "x": 138.1041259765625,
+            "y": 31,
+            "width": 46.8958740234375,
+            "height": 18
           }
         },
         {
@@ -9806,20 +10021,42 @@
           "size": 16,
           "bounds": {
             "x": 37,
-            "y": 27,
+            "y": 71,
             "width": 81.140625,
             "height": 15
           }
         },
         {
-          "source": "Off · select to turn on",
-          "shown": "Off · select to turn on",
-          "size": 14,
+          "source": "65%",
+          "shown": "65%",
+          "size": 24,
+          "bounds": {
+            "x": 141.96812438964844,
+            "y": 67,
+            "width": 43.03187561035156,
+            "height": 19
+          }
+        },
+        {
+          "source": "Phone",
+          "shown": "Phone",
+          "size": 16,
           "bounds": {
             "x": 37,
-            "y": 43,
-            "width": 119.5673828125,
-            "height": 11
+            "y": 107,
+            "width": 40.4609375,
+            "height": 12
+          }
+        },
+        {
+          "source": "76%",
+          "shown": "76%",
+          "size": 24,
+          "bounds": {
+            "x": 141.27212524414062,
+            "y": 103,
+            "width": 43.727874755859375,
+            "height": 19
           }
         },
         {
@@ -9828,64 +10065,31 @@
           "size": 18,
           "bounds": {
             "x": 37,
-            "y": 69,
+            "y": 141,
             "width": 79.2333984375,
             "height": 18
           }
         },
         {
-          "source": "Desk light",
-          "shown": "Desk light",
+          "source": "Watch",
+          "shown": "Watch",
           "size": 16,
           "bounds": {
             "x": 37,
-            "y": 99,
-            "width": 64.1953125,
-            "height": 15
+            "y": 179,
+            "width": 39.671875,
+            "height": 12
           }
         },
         {
-          "source": "Off · select to turn on",
-          "shown": "Off · select to turn on",
-          "size": 14,
+          "source": "85%",
+          "shown": "85%",
+          "size": 24,
           "bounds": {
-            "x": 37,
-            "y": 115,
-            "width": 119.5673828125,
-            "height": 11
-          }
-        },
-        {
-          "source": "Hall light",
-          "shown": "Hall light",
-          "size": 16,
-          "bounds": {
-            "x": 37,
-            "y": 135,
-            "width": 58.0078125,
-            "height": 15
-          }
-        },
-        {
-          "source": "On · select to turn off",
-          "shown": "On · select to turn off",
-          "size": 14,
-          "bounds": {
-            "x": 37,
-            "y": 151,
-            "width": 119.5673828125,
-            "height": 11
-          }
-        },
-        {
-          "source": "Evening scene",
-          "shown": "Evening scene",
-          "size": 18,
-          "bounds": {
-            "x": 37,
-            "y": 177,
-            "width": 103.5263671875,
-            "height": 18
+            "x": 141.48812866210938,
+            "y": 175,
+            "width": 43.511871337890625,
+            "height": 19
           }
         },
         {
@@ -9913,23 +10117,23 @@
       ],
       "regions": [
         {
-          "id": "control-light",
+          "id": "pin-weather",
           "x": 4,
           "y": 25,
-          "width": 188,
-          "height": 32,
-          "selected": true
-        },
-        {
-          "id": "control-find",
-          "x": 4,
-          "y": 61,
           "width": 188,
           "height": 32,
           "selected": false
         },
         {
-          "id": "control-desk",
+          "id": "control-light",
+          "x": 4,
+          "y": 61,
+          "width": 188,
+          "height": 32,
+          "selected": true
+        },
+        {
+          "id": "pin-phone",
           "x": 4,
           "y": 97,
           "width": 188,
@@ -9937,7 +10141,7 @@
           "selected": false
         },
         {
-          "id": "control-hall",
+          "id": "control-find",
           "x": 4,
           "y": 133,
           "width": 188,
@@ -9945,7 +10149,7 @@
           "selected": false
         },
         {
-          "id": "control-evening",
+          "id": "pin-watch",
           "x": 4,
           "y": 169,
           "width": 188,
@@ -9955,8 +10159,8 @@
       ],
       "width": 200,
       "height": 228,
-      "bytes": 8640,
-      "sha256": "763ecc84b899722ec882b4a98b20ec1fb905baef3c0fc74f62d5935664293725",
+      "bytes": 8173,
+      "sha256": "9c1476dc099cf829fee1c0142fb7f8866a56a7c609f1259db8ab6ac85eed9ac9",
       "palette": {
         "opaque": true,
         "quantized": true,
@@ -9974,8 +10178,7 @@
       "section": "activities",
       "sectionCounts": {
         "activities": 6,
-        "readouts": 6,
-        "controls": 6
+        "pinned": 12
       },
       "returnDepth": 1,
       "lastNavigation": null,
@@ -10208,8 +10411,7 @@
       "section": "activities",
       "sectionCounts": {
         "activities": 6,
-        "readouts": 6,
-        "controls": 6
+        "pinned": 12
       },
       "returnDepth": 2,
       "lastNavigation": null,
@@ -10320,8 +10522,7 @@
       "section": "activities",
       "sectionCounts": {
         "activities": 6,
-        "readouts": 6,
-        "controls": 6
+        "pinned": 12
       },
       "returnDepth": 1,
       "lastNavigation": null,
@@ -10554,8 +10755,7 @@
       "section": null,
       "sectionCounts": {
         "activities": 6,
-        "readouts": 6,
-        "controls": 6
+        "pinned": 12
       },
       "returnDepth": 0,
       "lastNavigation": "notifications",
@@ -10566,8 +10766,8 @@
         "activity-1",
         "notification",
         "pin-weather",
-        "pin-phone",
         "control-light",
+        "pin-phone",
         "control-find"
       ],
       "boundsViolations": [],
@@ -10674,56 +10874,67 @@
         {
           "source": "Weather",
           "shown": "Weather",
-          "size": 12,
+          "size": 11,
           "bounds": {
             "x": 29,
             "y": 145,
-            "width": 39.69140625,
-            "height": 10
+            "width": 36.3837890625,
+            "height": 8
           }
         },
         {
           "source": "13°C",
           "shown": "13°C",
-          "size": 23,
+          "size": 20,
           "bounds": {
             "x": 12,
-            "y": 156,
-            "width": 44.941986083984375,
-            "height": 17
+            "y": 155,
+            "width": 39.0799560546875,
+            "height": 14
+          }
+        },
+        {
+          "source": "Kitchen light",
+          "shown": "Kitchen light",
+          "size": 11,
+          "bounds": {
+            "x": 127,
+            "y": 145,
+            "width": 55.7841796875,
+            "height": 10
+          }
+        },
+        {
+          "source": "65%",
+          "shown": "65%",
+          "size": 20,
+          "bounds": {
+            "x": 110,
+            "y": 154,
+            "width": 35.859954833984375,
+            "height": 16
           }
         },
         {
           "source": "Phone",
           "shown": "Phone",
-          "size": 12,
+          "size": 11,
           "bounds": {
-            "x": 127,
-            "y": 145,
-            "width": 30.345703125,
-            "height": 10
+            "x": 29,
+            "y": 180,
+            "width": 27.81689453125,
+            "height": 8
           }
         },
         {
           "source": "76%",
           "shown": "76%",
-          "size": 23,
+          "size": 20,
           "bounds": {
-            "x": 110,
-            "y": 156,
-            "width": 41.906005859375,
-            "height": 18
-          }
-        },
-        {
-          "source": "Light off",
-          "shown": "Light off",
-          "size": 14,
-          "bounds": {
-            "x": 29,
-            "y": 189.5,
-            "width": 47.82421875,
-            "height": 14
+            "x": 12,
+            "y": 189,
+            "width": 36.43995666503906,
+            "height": 16
           }
         },
         {
@@ -10732,7 +10943,7 @@
           "size": 14,
           "bounds": {
             "x": 127,
-            "y": 189.5,
+            "y": 186,
             "width": 61.6259765625,
             "height": 14
           }
@@ -10779,38 +10990,38 @@
           "x": 4,
           "y": 141,
           "width": 94,
-          "height": 37,
-          "selected": false
-        },
-        {
-          "id": "pin-phone",
-          "x": 102,
-          "y": 141,
-          "width": 94,
-          "height": 37,
+          "height": 32,
           "selected": false
         },
         {
           "id": "control-light",
-          "x": 4,
-          "y": 183,
+          "x": 102,
+          "y": 141,
           "width": 94,
-          "height": 25,
+          "height": 32,
+          "selected": false
+        },
+        {
+          "id": "pin-phone",
+          "x": 4,
+          "y": 176,
+          "width": 94,
+          "height": 32,
           "selected": false
         },
         {
           "id": "control-find",
           "x": 102,
-          "y": 183,
+          "y": 176,
           "width": 94,
-          "height": 25,
+          "height": 32,
           "selected": false
         }
       ],
       "width": 200,
       "height": 228,
-      "bytes": 9316,
-      "sha256": "aa9bf33986c141a8e95b4756fb68a6d5f7a95642df78feebbe8c8bea19a08765",
+      "bytes": 9466,
+      "sha256": "c2f1f2a53723e039581d82ba06ef0d831ab53ea93a4bfcfbb2c51627268cbc60",
       "palette": {
         "opaque": true,
         "quantized": true,
@@ -10824,56 +11035,56 @@
       "title": "overview-light",
       "width": 1312,
       "height": 666,
-      "sha256": "123d139ef5464d3da199fe6fba5b24f1cc19bb07a8784b895f0b9ce87fdc5422"
+      "sha256": "896c36f3cf269fa57e3eb4a5b971173e3dfe00fabd677703f124fc060343ba35"
     },
     {
       "file": "overview-dark.png",
       "title": "overview-dark",
       "width": 1312,
       "height": 666,
-      "sha256": "2a4663385cff0454ee01e33fb7cc67b9f2315c5c69b88fd1110f996dce3d153d"
+      "sha256": "c020e5062eceb2c59c8e99acc733df78c9eb3e927db5eccdf9a0d037cc44e932"
     },
     {
       "file": "alternate-activities.png",
       "title": "alternate-activities",
       "width": 1312,
       "height": 666,
-      "sha256": "f98febb540c5ffcd27c5dc33f4078e0dca66cb74b25c8b10fcfa7e20532aac2d"
+      "sha256": "a1cb0b8e13aaa0cdb4fd59c84973271ee1de2ac6c588f6831f1a7fbb27b30242"
     },
     {
       "file": "media-first.png",
       "title": "media-first",
       "width": 1312,
       "height": 666,
-      "sha256": "d718483c376edb8564fab54031767ed5dd2e6cb3e2467a96caa92f0cf2d88703"
+      "sha256": "373f695fc95bf2ce7846c7cc0a0289241f71a386e9d5807432f1d863934166ad"
     },
     {
       "file": "detail-overview.png",
       "title": "detail-overview",
       "width": 884,
       "height": 1218,
-      "sha256": "9e10f5317f7e2fce0ffcf14d1e7f6f039b762ff26b673349f3fbe7a838fe3beb"
+      "sha256": "6683ef6820cd0fe36f5eb4bfac8f97087c4ebd49650956fab390e4581085a3fd"
     },
     {
       "file": "expansion-overview.png",
       "title": "Snapshot and expanded groups",
       "width": 884,
       "height": 1218,
-      "sha256": "47ed2f6221748626dd939215b00a3d04fc0dfa15962062eadfbd3c5a83f23ccd"
+      "sha256": "d2f753348f80dff63195973f02a5d87baf8bd1759442168c31a764c985977331"
     },
     {
       "file": "expansion-dark.png",
       "title": "Expanded groups in dark",
       "width": 884,
       "height": 1218,
-      "sha256": "d7eb19193c488f10ab4b37acb938a1d6492f8778a507065dc3f67650fe61445c"
+      "sha256": "f1f8536f96d0a8907aa924ebe10bd0d157a36516379c0da87f484fc4e9b2b7da"
     },
     {
       "file": "expansion-navigation.png",
       "title": "Open details and return",
       "width": 884,
       "height": 1218,
-      "sha256": "4d6b7deeaeb53dc0077095a5140c0256f157786697a7c6ceae2f5b004acdaddc"
+      "sha256": "97359877267dcab7782bf40f5aebaade478e2ca44b96de08e3480b94aef3c599"
     }
   ]
 }

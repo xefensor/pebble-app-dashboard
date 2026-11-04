@@ -7,7 +7,8 @@ for the starting brief and distinguish proposals from settled requirements.
 - Dashboard is a separate stock Pebble watchapp, initially targeting Emery.
   No firmware/mobile-app fork or change to other apps is implied.
 - Support ordinary readings, commands and Activities as distinct capabilities.
-  Do not require an activity for every reading or control.
+  Combine readings and commands in one Pinned collection: a pin can expose a
+  value, a press action, or both. Do not require an activity for a reading/action.
 - Keep Dashboard settings and priority independent of Dynamic and the helper.
 - Activities metadata support does not imply an implemented command executor,
   Dashboard catalogue transport or native Timer controls. Check actual APIs.
@@ -24,12 +25,13 @@ for the starting brief and distinguish proposals from settled requirements.
 capture script verifies canvas bounds, palette and simulated navigation; it is
 not a native test suite. Keep preview controls disconnected from real phone APIs.
 The user wants Timer Pause/Resume later. The opening-screen goal is two current
-activities, latest notification, pinned items and controls. Snapshot is the chosen
-overview. Hold Select expands the selected activity/readout/control group; Back
+activities, latest notification and four pinned items. Snapshot is the chosen
+overview. Hold Select expands Activities or Pinned; Back
 restores the previous selection. A hold must never also execute a short press.
+Short Select performs a pin's optional action, otherwise opens its details.
 Notifications go directly to their native app (only a simulated intent here).
-Six entries per expanded group are fictional overflow examples, not a capacity
-decision. Latest notification is distinct from Dynamic's short alert.
+Six activities and twelve mixed pins are fictional overflow examples, not a
+capacity decision. Latest notification is distinct from Dynamic's short alert.
 
 There is no package manifest, SDK build or installable release artifact yet.
 Do not describe previews as native captures or physically tested behavior.

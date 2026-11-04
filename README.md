@@ -41,20 +41,28 @@ See [preview notes](previews/README.md) for scope and regeneration.
 ## Current discussion
 
 When opening Dashboard through Quick Launch, the user wants to see two current
-activities, the latest notification, pinned readings and controls. The previews
+activities, the latest notification and pinned items. The previews
 show the selected Snapshot layout and how its groups expand.
 Both activity positions support different types; Music has its own playback
 detail proposal.
 
-Snapshot shows two activities, one latest notification, two pinned readings and
-two controls. These visible slots do not set each collection's total capacity.
-Hold Select on an activity, readout or control to browse its group; the footer
-shows the available count. Short Select opens activity/readout details or uses
-the selected control. Back restores the previous item and list position, then
+Snapshot shows two activities, one latest notification and four pinned items.
+Pinned is one collection: an item can have a displayed value, a press action,
+or both. Weather shows a temperature; Find phone offers an action; Kitchen light
+shows brightness and toggles on Select. Reading and command capabilities remain
+independent underneath; they can belong to the same displayed item.
+
+These visible slots do not set each collection's total capacity.
+Hold Select on an activity or pin to browse Activities or Pinned; the footer
+shows the available count. Short Select performs the pin's action when present,
+otherwise opens its details. Activities open their contextual detail view.
+Back restores the previous item and list position, then
 the original Snapshot item. A hold must not also execute the short-press action.
 Selecting the notification goes directly to native Notifications; the browser
-records that navigation intent without launching a real app. Six entries per
-group demonstrate overflow in the preview; six is not a proposed capacity limit.
+records that navigation intent without launching a real app. Six activities and
+twelve mixed pins demonstrate overflow; these counts are not capacity limits.
+The light's 65% value and toggle are simulated; no brightness-adjustment UI or
+real plugin command is implemented by this preview.
 
 The user also wants Timer Pause/Resume inside Dashboard, deferred until later.
 This is recorded scope, not an implemented Timer command capability.

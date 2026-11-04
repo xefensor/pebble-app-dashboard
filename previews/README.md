@@ -8,32 +8,37 @@ the exported images and checks.
 ## Compared layouts
 
 1. **Snapshot** shows both activities, the latest notice, Weather and Phone
-   readings, a light control and Find phone on the initial screen.
+   values, a light's brightness/toggle and Find phone as four Pinned items.
 2. **Activity focus** gives the first activity more room, keeping the same items
    in compact rows/tiles. Swap activities to see media in that larger position.
 3. **One list** initially shows both activities, the latest notice, Weather and
-   Find phone. Move down to reach the other reading/control. Selection stays
+   Kitchen light. Move down to reach the other pins. Selection stays
    visible while the list moves.
 
 ## Snapshot navigation
 
-Up/Down selects a row or tile. Short Select opens activity or reading details,
-uses a control, or records the intent to open native Notifications. Notifications
-do not get a separate Dashboard detail screen. Control tiles advertise Toggle
-or Ring in the footer. Music's
-detail previews previous/play/next; other detail screens have appropriate app
-navigation. All controls are simulations and send no phone command.
+Up/Down selects a row or tile. Pinned is one collection, containing items with
+a value, an action, or both. Kitchen light shows 65% brightness and toggles on
+Select; Find phone has an action without a value; Weather shows a temperature
+and opens details. The footer advertises the selected action, such as Toggle,
+Ring or Open. Items with actions execute them and remain selected in their
+current screen. All actions are simulations and send no phone command.
 
-Hold the middle/Select button for 600 ms on an activity, reading or control to
-open its entire group. The footer advertises `Hold: All 6` for these fictional
-examples. Up/Down moves through six entries, with at most five visible rows and
-a scrollbar. Six is demo data, not a capacity decision. There are no additional
-hidden activities in the quiet example. Holding a control never also runs it.
+Activities open their details. Music's detail previews previous/play/next;
+other activity details have appropriate app navigation. Selecting a notification
+records the intent to open native Notifications, without a Dashboard detail.
+
+Hold the middle/Select button for 600 ms to browse Activities or Pinned. Every
+pin opens the same Pinned list, whether it has a value, an action, or both. The
+footer advertises `Hold: All 6` for Activities and `Hold: All 12` for Pinned.
+These are fictional counts, not capacity decisions. Up/Down browses the group,
+with at most five visible rows and a scrollbar. There are no additional hidden
+activities in the quiet example. Holding an actionable pin never also runs it.
 
 Back from detail restores the exact selected group row and viewport; Back from
 the group restores the original Snapshot selection. Short Select on an expanded
-control executes it and stays in Controls. Notifications go straight to the
-native app, represented only by a status message below the browser preview.
+pin with an action executes it and stays in Pinned. Notifications go straight to
+the native app, represented only by a status message below the browser preview.
 
 Keyboard: arrows navigate, tap Enter/Space to Select, hold Enter/Space to expand,
 Escape returns. H is an alternative hold-preview shortcut. Pointer cancellation,

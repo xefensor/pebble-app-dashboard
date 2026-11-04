@@ -36,7 +36,7 @@ if (plan) {
     output, contactSheets:['overview-light.png','overview-dark.png','alternate-activities.png','media-first.png','detail-overview.png',
       'expansion-overview.png','expansion-dark.png','expansion-navigation.png'],
     checks:['64-colour opaque pixels','bounded drawing','button and keyboard navigation','static idle frames','selected/detail captures',
-      'six entries in every expanded group','detail and section Back restoration','real pointer/keyboard hold suppresses tap','native notification handoff intent',
+      'six activities and twelve mixed pinned entries','value and optional action on the same pinned item','detail and section Back restoration','real pointer/keyboard hold suppresses tap','native notification handoff intent',
       'focused Snapshot page real hold and Back']},null,2));
   process.exit(0);
 }
@@ -117,7 +117,8 @@ async function pointerSelect(layout,hold=false) {
 function assertSection(current,section,layout) {
   assert.equal(current.mode,'section',layout+' hold must open a section');
   assert.equal(current.section,section,layout+' opened the wrong section');
-  assert.equal(current.sectionCounts[section],6,layout+' '+section+' must offer six fictional entries');
+  const expected=section==='activities'?6:12;
+  assert.equal(current.sectionCounts[section],expected,layout+' '+section+' has the wrong fictional entry count');
   assert.ok(current.visibleIds.length>0&&current.visibleIds.length<=5,layout+' section viewport must contain at most five rows');
   assert.ok(current.visibleIds.includes(current.selectedId),layout+' section selection must stay visible');
 }
@@ -281,22 +282,53 @@ async function run() {
     readingDetails.push({layout:id,detailSelectReturns:true,selectedReadingRetained:true});
   }
 
-  const groups=[['activities','activity-0','All activities'],['readouts','pin-weather','All readings'],['controls','control-light','All controls']];
+  const mixedPins=[];
+  for(const layout of layouts) {
+    await configure();await api('select',layout,'control-light');
+    // Previous simulations can leave the light off. Start this check on the
+    // reported 65% state, then prove that the same pin is also actionable.
+    if(!(await view(layout)).text.some(item=>item.source==='65%'))await api('press',layout,'select');
+    const before=await view(layout);
+    assert.ok(before.text.some(item=>item.source==='65%'),layout+' light pin must show its brightness reading');
+    assert.ok(before.text.some(item=>item.source==='Select: Toggle'),layout+' light brightness pin must advertise its optional action');
+    await api('press',layout,'select');const off=await view(layout);
+    assert.equal(off.mode,'overview');assert.equal(off.selectedId,'control-light');
+    assert.equal(off.actionCount,before.actionCount+1,layout+' brightness pin must toggle once');
+    assert.ok(off.text.some(item=>item.source==='Off'),layout+' toggled brightness pin must show Off');
+    await api('press',layout,'select');
+    assert.ok((await view(layout)).text.some(item=>item.source==='65%'),layout+' light toggle must restore its reported brightness');
+    await api('press',layout,'hold');let pinned=await view(layout);assertSection(pinned,'pinned',layout);
+    assert.ok(pinned.text.some(item=>item.source==='65%'),layout+' the mixed Pinned list must also show brightness');
+    assert.ok(pinned.visibleIds.includes('pin-weather')&&pinned.visibleIds.includes('control-light')&&pinned.visibleIds.includes('control-find'),
+      layout+' Pinned must mix a value-only reading, value/action light and action-only Find phone');
+    const heldCount=pinned.actionCount;
+    await api('press',layout,'down');await api('press',layout,'down');pinned=await view(layout);
+    assert.equal(pinned.selectedId,'control-find',layout+' unified list ordering must reach Find phone after Light and Phone');
+    assert.ok(pinned.text.some(item=>item.source==='Select: Ring'),layout+' action-only pin must keep its own action hint');
+    await api('press',layout,'select');const rang=await view(layout);assertSection(rang,'pinned',layout);
+    assert.equal(rang.actionCount,heldCount+1);assert.equal(rang.selectedId,'control-find');
+    await api('press',layout,'back');assert.equal((await view(layout)).selectedId,'control-light');
+    mixedPins.push({layout,valueAndActionSamePin:true,brightnessToggleUpdatesReading:true,
+      valueOnlyAndActionOnlyInSameGroup:true,actionStaysInPinned:true,backRestoresOrigin:true});
+  }
+
+  const groups=[['activities','activity-0','All activities','activities'],['pinned','pin-weather','Pinned: value only','pinned-reading'],['pinned','control-light','Pinned: value + action','pinned-action']];
   const sectionNavigation=[],notificationNavigation=[],holdGestures=[];
   const expansionFrames={light:[],dark:[]},navigationFrames=[];
   for(const theme of ['light','dark']) {
     await configure('timer-media',theme);
     const overview=await capture('snapshot','snapshot-expand-overview-'+theme);
     overview.label='Snapshot';overview.note='Select opens / runs · hold Select shows more';expansionFrames[theme].push(overview);
-    for(const [section,trigger,label] of groups) {
+    for(const [section,trigger,label,fileLabel] of groups) {
       await api('select','snapshot',trigger);await api('press','snapshot','hold');
-      assertSection(await view('snapshot'),section,'snapshot');
-      const frame=await capture('snapshot','snapshot-all-'+section+'-'+theme);
-      frame.label=label;frame.note='Six entries · Up / Down · Back restores Snapshot';expansionFrames[theme].push(frame);
+      const current=await view('snapshot');assertSection(current,section,'snapshot');
+      const frame=await capture('snapshot','snapshot-all-'+fileLabel+'-'+theme);
+      frame.label=label;frame.note=section==='activities'?'6 examples · Up / Down · Back restores Snapshot':
+        trigger==='control-light'?'Same list · brightness + Select to toggle':'12 mixed pins · values and optional actions';expansionFrames[theme].push(frame);
       await api('press','snapshot','back');assert.equal((await view('snapshot')).selectedId,trigger);
     }
   }
-  await sheet('expansion-overview',expansionFrames.light,'Snapshot stays short. Hold Select on an activity, reading or control to see its group.',2);
+  await sheet('expansion-overview',expansionFrames.light,'Hold Select for Activities or Pinned. A pinned item can show a value and have an action.',2);
   await sheet('expansion-dark',expansionFrames.dark,'The same four screens in the dark theme. Synthetic data; browser design preview.',2);
 
   for(const layout of layouts) {
@@ -307,19 +339,24 @@ async function run() {
       const last=await view(layout);assertSection(last,section,layout);
       assert.ok(!first.visibleIds.includes(last.selectedId),layout+' '+section+' must scroll beyond the initial five rows');
       assert.notDeepEqual(last.visibleIds,first.visibleIds,layout+' '+section+' viewport must follow selection');
-      if(section!=='controls') {
-        await api('press',layout,'select');assert.equal((await view(layout)).mode,'detail',layout+' expanded row Select opens detail');
-        await api('press',layout,'back');const returned=await view(layout);
-        assertSection(returned,section,layout);assert.equal(returned.selectedId,last.selectedId,layout+' detail Back must retain the selected occurrence');
-        assert.deepEqual(returned.visibleIds,last.visibleIds,layout+' detail Back must retain section position');
+      // The last Pinned row may execute an action. Use the Sunrise reading to
+      // verify a value-only detail inside the same mixed group.
+      if(section==='pinned') {
+        for(let step=0;step<last.sectionCounts.pinned&&((await view(layout)).selectedId!=='pin-sunrise');step++)await api('press',layout,'up');
+        assert.equal((await view(layout)).selectedId,'pin-sunrise',layout+' must expose the Sunrise reading in Pinned');
       }
+      const beforeDetail=await view(layout);
+      await api('press',layout,'select');assert.equal((await view(layout)).mode,'detail',layout+' expanded value-only row Select opens detail');
+      await api('press',layout,'back');const detailReturned=await view(layout);
+      assertSection(detailReturned,section,layout);assert.equal(detailReturned.selectedId,beforeDetail.selectedId,layout+' detail Back must retain the selected occurrence');
+      assert.deepEqual(detailReturned.visibleIds,beforeDetail.visibleIds,layout+' detail Back must retain section position');
       await api('press',layout,'back');const returned=await view(layout);
       assert.equal(returned.mode,'overview',layout+' section Back returns to overview');
       assert.equal(returned.selectedId,overview.selectedId,layout+' section Back retains the original card');
       assert.deepEqual(returned.visibleIds,overview.visibleIds,layout+' section Back retains the original viewport');
       assert.equal(returned.returnDepth,0,layout+' Back should consume the section return frame');
-      sectionNavigation.push({layout,section,total:first.sectionCounts[section],viewportLimit:5,sixthEntryReachable:true,
-        detailBackRetainsRowAndViewport:section!=='controls',overviewBackRetainsCellAndViewport:true});
+      sectionNavigation.push({layout,section,origin:trigger,total:first.sectionCounts[section],viewportLimit:5,lastEntryReachable:true,
+        detailBackRetainsRowAndViewport:true,overviewBackRetainsCellAndViewport:true});
     }
     await configure();await api('select',layout,'notification');await api('press',layout,'select');const notification=await view(layout);
     assert.equal(notification.mode,'overview',layout+' notification opens the native app, not a Dashboard detail');
@@ -345,7 +382,7 @@ async function run() {
   for(const layout of layouts) {
     await configure();await api('select',layout,'control-light');const before=await view(layout);
     assert.equal(typeof before.actionCount,'number',layout+' must expose actionCount');
-    await pointerSelect(layout,true);let after=await view(layout);assertSection(after,'controls',layout);
+    await pointerSelect(layout,true);let after=await view(layout);assertSection(after,'pinned',layout);
     assert.equal(after.actionCount,before.actionCount,layout+' pointer hold release must not toggle a control');
     await api('press',layout,'back');await pointerSelect(layout);after=await view(layout);
     assert.equal(after.mode,'overview',layout+' fresh pointer tap after hold stays overview');
@@ -354,7 +391,7 @@ async function run() {
       await configure();await api('select',layout,'control-light');await focusCanvas(layout);const count=(await view(layout)).actionCount;
       await key('keyDown',keyName,code);await sleep(850);
       await key('keyDown',keyName,code,{autoRepeat:true});await key('keyUp',keyName,code);
-      after=await view(layout);assertSection(after,'controls',layout);
+      after=await view(layout);assertSection(after,'pinned',layout);
       assert.equal(after.actionCount,count,layout+' '+code+' hold release must not run its control');
       await tapKey('Escape');assert.equal((await view(layout)).mode,'overview');
       await tapKey(keyName,code);after=await view(layout);
@@ -362,7 +399,7 @@ async function run() {
     }
     await configure();await api('select',layout,'control-light');const sectionCount=(await view(layout)).actionCount;
     await api('press',layout,'hold');await api('press',layout,'select');after=await view(layout);
-    assertSection(after,'controls',layout);assert.equal(after.actionCount,sectionCount+1,layout+' an expanded control must run exactly once and retain its group');
+    assertSection(after,'pinned',layout);assert.equal(after.actionCount,sectionCount+1,layout+' an expanded actionable pin must run exactly once and retain Pinned');
     await configure();await api('select',layout,'activity-0');await pointerSelect(layout,true);
     assertSection(await view(layout),'activities',layout);
     holdGestures.push({layout,pointerHoldControlSuppressesTap:true,pointerFreshTapRunsOnce:true,
@@ -397,7 +434,7 @@ async function run() {
   assert.deepEqual(focusedAfter.visibleIds,focusedBefore.visibleIds);
   await api('select','snapshot','control-light');const focusedCount=(await api('inspect')).layouts.snapshot.actionCount;
   await pointerSelect('snapshot',true);const focusedControl=(await api('inspect')).layouts.snapshot;
-  assertSection(focusedControl,'controls','focused snapshot');assert.equal(focusedControl.actionCount,focusedCount);
+  assertSection(focusedControl,'pinned','focused snapshot');assert.equal(focusedControl.actionCount,focusedCount);
   await api('press','snapshot','back');assert.equal((await api('inspect')).layouts.snapshot.selectedId,'control-light');
   const focusedEntrySmoke={entry:'previews/snapshot.html',layouts:['snapshot'],canvases:1,
     realKeyboardHoldOpensActivities:true,backRetainsOriginalItemAndViewport:true,realPointerHoldDoesNotRunControl:true};
@@ -405,9 +442,13 @@ async function run() {
   const report={result:'PASS',scope:'Code-native Chromium design previews with synthetic data; not a Pebble SDK build, native screenshot, live plugin or physical-watch test.',
     dimensions:[200,228],captureScriptSha256:sha(fs.readFileSync(__filename)),sourceHashes:inputs(path.join(root,'previews')),scenarios,layouts,
     idle:{staticPixels:true,repeatingIntervals:idleAfter.intervals,framesBefore:idleBefore,framesAfter:idleAfter},
-    selectedChecks,readingDetails,privacy,keyboard,sectionNavigation,notificationNavigation,holdGestures,focusedEntrySmoke,
+    selectedChecks,readingDetails,mixedPins,privacy,keyboard,sectionNavigation,notificationNavigation,holdGestures,focusedEntrySmoke,
     browserExceptions:exceptions,captures,contactSheets:sheets};
   fs.writeFileSync(path.join(output,'validation.json'),JSON.stringify(report,null,2)+'\n');
+  for(const group of ['readouts','controls'])for(const theme of ['light','dark']) {
+    const obsolete=path.join(output,'screens','snapshot-all-'+group+'-'+theme+'.png');
+    if(fs.existsSync(obsolete))fs.unlinkSync(obsolete);
+  }
   console.log(JSON.stringify({result:report.result,captures:captures.length,contactSheets:sheets.length,dimensions:report.dimensions,output},null,2));
 }
 

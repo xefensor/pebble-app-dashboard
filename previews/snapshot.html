@@ -12,7 +12,7 @@
   <header class="page-header">
     <div class="eyebrow"><span class="brand-mark" aria-hidden="true">D</span> PEBBLE DASHBOARD <span class="study-label">SNAPSHOT · EXPANSION</span></div>
     <h1>A quick look. More when you need it.</h1>
-    <p class="intro">Select opens or uses the highlighted item. Hold Select to see its whole group.<br>Back returns to the exact item you came from.</p>
+    <p class="intro">Pinned items can show a value, perform an action, or do both.<br>Select uses the item. Hold Select to see all Pinned items.</p>
   </header>
   <section class="toolbar" aria-label="Preview settings">
     <label>Example <select id="scenario"><option value="timer-media">Timer + music</option><option value="workout-navigation">Workout + directions</option><option value="long">Long text + long timer</option><option value="quiet">Nothing running</option></select></label>
@@ -27,7 +27,7 @@
   <section class="studies" aria-label="Interactive Snapshot preview">
     <article class="study" data-layout="snapshot">
       <div class="study-title"><span>01</span><h2>Snapshot</h2></div>
-      <p class="description">Two activities, a notification, two readings and two controls in the overview. Six fictional entries in each expanded group.</p>
+      <p class="description">Two activities, a notification and four Pinned items. Kitchen light shows its brightness and toggles on Select.</p>
       <div class="watch-area">
         <div class="watch" data-layout="snapshot">
           <canvas width="200" height="228" tabindex="0" role="img" aria-label="Snapshot Dashboard preview"></canvas>
@@ -37,13 +37,13 @@
           <button class="hardware down" data-key="down" aria-label="Snapshot: Down">⌄</button>
         </div>
       </div>
-      <p class="tradeoff">Hold the middle button for 0.6 seconds. The footer shows when more entries are available. Holding a control opens its group without running it.</p>
+      <p class="tradeoff">Hold the middle button for 0.6 seconds to see all Activities or Pinned items. Holding the light opens Pinned without toggling it.</p>
     </article>
   </section>
-  <div class="interaction-help"><strong>Try it:</strong> hold Select on Tea to browse Activities. Back, then move to Weather or Light and hold again. Use Up / Down to reach the sixth entry. Keyboard: ↑ ↓, tap or hold Enter / Space, Esc; H also previews a hold.</div>
+  <div class="interaction-help"><strong>Try it:</strong> move to Kitchen light and tap Select to toggle it. Hold Select on Light or Weather to browse the same Pinned list. Back restores your selection. Keyboard: ↑ ↓, tap or hold Enter / Space, Esc; H also previews a hold.</div>
   <p id="status" class="status" role="status" aria-live="polite">Loading local fonts…</p>
   <section class="notes">
-    <div><h3>Snapshot is a summary</h3><p>The group lists can contain more than the opening screen. Six entries demonstrate overflow here; that is example data, not a proposed maximum.</p></div>
+    <div><h3>One Pinned collection</h3><p>Weather shows a value, Find phone has an action, and Kitchen light has both. Six activities and twelve pins demonstrate overflow; these are example counts, not proposed limits.</p></div>
     <div><h3>Notifications open their app</h3><p>Selecting the notification records a native Notifications navigation intent. The browser stays on Snapshot and reports it below the watch. Timer Pause/Resume is deferred.</p></div>
     <div><h3>Local concept preview</h3><p>Fictional data and simulated controls. No phone commands or native apps are launched. These 200 × 228 drawings are browser concepts, not watch captures. <a href="index.html">Earlier layout comparison</a>.</p></div>
   </section>

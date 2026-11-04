@@ -24,7 +24,7 @@
   const tracks=['Night Drive','Sunset','Lost Boy'];
   const status=document.getElementById('status');
   let context,drawLog,gesture=null;
-  const groupNames={activities:'Activities',readouts:'Readouts',controls:'Controls'};
+  const groupNames={activities:'Activities',pinned:'Pinned'};
 
   function announce(message){status.textContent=message;}
   function colors(){return state.theme==='dark'?{bg:'#000000',ink:'#FFFFFF',muted:'#AAAAAA',line:'#555555',accent:'#55AAFF'}:
@@ -121,35 +121,37 @@
   }
   function items(){
     const s=scene(),weather={id:'pin-weather',kind:'weather',name:'Weather',value:'13°C'},phone={id:'pin-phone',kind:'phone',name:'Phone',value:'76%'};
-    const light={id:'control-light',kind:'light',name:'Kitchen light',value:state.lightOn?'On':'Off'},find={id:'control-find',kind:'find',name:'Find phone'};
+    const light={id:'control-light',kind:'light',name:'Kitchen light',value:state.lightOn?'65%':'Off',action:{kind:'toggle',label:'Toggle'}},
+      find={id:'control-find',kind:'find',name:'Find phone',action:{kind:'ring',label:'Ring'}};
     const activities=s.activities.length?[...s.activities,
       {id:'activity-2',kind:'navigation',name:'Oak Street',value:'200 m',caption:'Directions'},
       {id:'activity-3',kind:'workout',name:'Walk',value:'1.4 km',caption:'Workout'},
       {id:'activity-4',kind:'download',name:'Podcast',value:'42%',caption:'Download'},
       {id:'activity-5',kind:'delivery',name:'Delivery',value:'18 min',caption:'Delivery'}]:[];
-    const readouts=[weather,phone,
+    // A pin may expose a value, a press action, or both. Its icon describes the
+    // source; it does not decide whether the item is actionable.
+    const pinned=[weather,light,phone,find,
       {id:'pin-watch',kind:'battery',name:'Watch',value:'85%'},
+      {id:'control-desk',kind:'light',name:'Desk light',value:state.extraLights.desk?'40%':'Off',action:{kind:'toggle',label:'Toggle'}},
       {id:'pin-humidity',kind:'humidity',name:'Humidity',value:'42%'},
+      {id:'control-hall',kind:'light',name:'Hall light',value:state.extraLights.hall?'80%':'Off',action:{kind:'toggle',label:'Toggle'}},
       {id:'pin-calendar',kind:'calendar',name:'Next event',value:'15:30'},
-      {id:'pin-sunrise',kind:'sunrise',name:'Sunrise',value:'06:58'}];
-    const controls=[light,find,
-      {id:'control-desk',kind:'light',name:'Desk light',value:state.extraLights.desk?'On':'Off'},
-      {id:'control-hall',kind:'light',name:'Hall light',value:state.extraLights.hall?'On':'Off'},
-      {id:'control-evening',kind:'scene',name:'Evening scene'},
-      {id:'control-reading',kind:'scene',name:'Reading scene'}];
-    return {activities:s.activities,notification:s.notification,weather,phone,light,find,groups:{activities,readouts,controls},
-      ordered:[...s.activities,...(s.notification?[s.notification]:[]),weather,phone,light,find],
-      listed:[...s.activities,...(s.notification?[s.notification]:[]),weather,find,phone,light]};
+      {id:'control-evening',kind:'scene',name:'Evening scene',action:{kind:'run',label:'Run'}},
+      {id:'pin-sunrise',kind:'sunrise',name:'Sunrise',value:'06:58'},
+      {id:'control-reading',kind:'scene',name:'Reading scene',action:{kind:'run',label:'Run'}}];
+    return {activities:s.activities,notification:s.notification,pinned:pinned.slice(0,4),groups:{activities,pinned},
+      ordered:[...s.activities,...(s.notification?[s.notification]:[]),...pinned.slice(0,4)],
+      listed:[...s.activities,...(s.notification?[s.notification]:[]),...pinned.slice(0,4)]};
   }
   function entries(layout){const data=items(),section=views[layout]&&views[layout].section;return section?data.groups[section]:layout==='list'?data.listed:data.ordered;}
   function selected(layout){return entries(layout).find(item=>item.id===views[layout].selectedId);}
-  function groupFor(entry){return entry.id.startsWith('activity-')?'activities':entry.id.startsWith('pin-')?'readouts':entry.id.startsWith('control-')?'controls':null;}
+  function groupFor(entry){return entry.id.startsWith('activity-')?'activities':entry.id.startsWith('pin-')||entry.id.startsWith('control-')?'pinned':null;}
   function header(label='Dashboard',trailing='13:42'){const c=colors();text(label,8,15,16,c.ink,132);text(trailing,192,15,14,c.muted,47,'right');line(6,19.5,194,19.5,c.line);}
   function footer(layout,detail=false){
     const c=colors(),view=views[layout],data=entries(layout),index=data.findIndex(v=>v.id===view.selectedId),entry=selected(layout);
     line(6,212.5,194,212.5,c.line);
     const group=entry&&groupFor(entry);
-    let action='Open';if(entry&&entry.kind==='find')action='Ring';if(entry&&entry.kind==='light')action='Toggle';if(entry&&entry.kind==='scene')action='Run';
+    let action=entry&&entry.action?entry.action.label:'Open';
     if(detail)action=entry&&entry.kind==='media'?(view.detailFocus===1?(state.playing?'Pause':'Play'):view.detailFocus===0?'Previous':'Next'):
       group==='activities'?'Open app':'Back';
     if(entry&&entry.kind==='notification')action='Notifications';
@@ -178,28 +180,29 @@
     text(state.messagePreview?n.body:'New message',10,y+34,16,p.ink,178);
   }
   function pinTile(item,x,y,w,h){
-    const p=panel(item.id,x,y,w,h,true);icon(item.kind,x+7,y+5,12,p.accent);
-    text(item.name,x+25,y+14,12,p.muted,w-31);number(item.value,x+8,y+h-5,23,p.ink,w-16,'left');
+    const p=panel(item.id,x,y,w,h,true);
+    if(item.value!==undefined){
+      icon(item.kind,x+7,y+3,12,p.accent);text(item.name,x+25,y+12,11,p.muted,w-30);
+      number(item.value,x+8,y+h-4,h<38?20:23,p.ink,w-16,'left');
+    }else{
+      icon(item.kind,x+6,y+(h-15)/2,15,p.accent);text(item.name,x+25,y+h/2+5,14,p.ink,w-30);
+    }
   }
   function pinCompact(item,x,y,w,h){
-    const p=panel(item.id,x,y,w,h,true);icon(item.kind,x+7,y+5,15,p.accent);number(item.value,x+w-7,y+h-6,20,p.ink,w-30,'right');
-  }
-  function control(item,x,y,w,h){
-    const p=panel(item.id,x,y,w,h,true);icon(item.kind,x+6,y+(h-14)/2,14,p.accent);
-    text(item.kind==='light'?'Light '+(state.lightOn?'on':'off'):'Find phone',x+25,y+h/2+5,14,p.ink,w-30);
+    const p=panel(item.id,x,y,w,h,true);icon(item.kind,x+7,y+(h-15)/2,15,p.accent);
+    if(item.value!==undefined)number(item.value,x+w-7,y+h-5,19,p.ink,w-30,'right');
+    else text(item.name,x+26,y+h/2+5,14,p.ink,w-31);
   }
   function emptyActivities(y){const c=colors();icon('timer',88,y,24,c.muted);text('No live activities',100,y+43,18,c.ink,184,'center');}
   function snapshot(layout){
     const data=items();header();
     if(!data.activities.length){
       emptyActivities(35);text('Your favourites are ready',100,99,14,colors().muted,184,'center');
-      pinTile(data.weather,4,112,94,54);pinTile(data.phone,102,112,94,54);
-      control(data.light,4,177,94,28);control(data.find,102,177,94,28);
+      data.pinned.forEach((item,i)=>pinTile(item,4+(i%2)*98,112+Math.floor(i/2)*49,94,44));
     }else{
       data.activities.slice(0,2).forEach((a,i)=>activityRow(a,20+i*36));
       if(data.notification)notification(data.notification,95,41);
-      pinTile(data.weather,4,141,94,37);pinTile(data.phone,102,141,94,37);
-      control(data.light,4,183,94,25);control(data.find,102,183,94,25);
+      data.pinned.forEach((item,i)=>pinTile(item,4+(i%2)*98,141+Math.floor(i/2)*35,94,32));
     }
     footer(layout);
   }
@@ -217,8 +220,7 @@
     }
     if(data.activities[1])activityRow(data.activities[1],82,36);
     if(data.notification)notification(data.notification,121,38);
-    pinCompact(data.weather,4,164,94,24);pinCompact(data.phone,102,164,94,24);
-    control(data.light,4,192,94,20);control(data.find,102,192,94,20);
+    data.pinned.forEach((item,i)=>pinCompact(item,4+(i%2)*98,164+Math.floor(i/2)*25,94,23));
     footer(layout);
   }
   function listRow(item,y){
@@ -227,10 +229,9 @@
     icon(item.kind,10,y+9,18,p.accent);
     if(item.kind==='notification'){
       text(item.sender+' · '+item.app,37,y+15,14,p.muted,146);text(state.messagePreview?item.body:'New message',37,y+31,16,p.ink,148);
-    }else if(groupFor(item)==='readouts'){
-      text(item.name,37,y+24,16,p.ink,80);number(item.value,185,y+26,24,p.ink,69,'right');
-    }else if(item.kind==='light'){
-      text(item.name,37,y+16,16,p.ink,146);text(item.value==='On'?'On · select to turn off':'Off · select to turn on',37,y+31,14,p.muted,146);
+    }else if(item.value!==undefined){
+      const valueWidth=Math.min(69,measure(item.value,24,/^[0-9:.,°CF%+−-]+$/.test(item.value)));
+      text(item.name,37,y+24,16,p.ink,140-valueWidth);number(item.value,185,y+26,24,p.ink,69,'right');
     }else{text(item.name,37,y+24,18,p.ink,146);}
   }
   function list(layout){
@@ -322,9 +323,9 @@
         if(view.detailFocus===1)state.playing=!state.playing;
         else state.track=(state.track+(view.detailFocus===0?-1:1)+tracks.length)%tracks.length;
         renderAll();announce('Simulated music control. No phone command sent.');
-      }else if(groupFor(entry)==='readouts')goBack(layout);
+      }else if(groupFor(entry)==='pinned')goBack(layout);
       else{view.lastNavigation=entry.kind;announce('Preview: Open '+(entry.caption||entry.name)+' app. Navigation intent only.');}
-    }else if(groupFor(entry)==='controls'){
+    }else if(entry.action){
       view.actionCount++;
       if(entry.id==='control-light')state.lightOn=!state.lightOn;
       else if(entry.id==='control-desk')state.extraLights.desk=!state.extraLights.desk;
