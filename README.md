@@ -1,7 +1,7 @@
 # Dashboard
 
 A stock Pebble watchapp for current activities, the latest available notification
-and pinned readings/actions. **0.4.0 is a local Emery development candidate.**
+and pinned readings/actions. **0.4.0 is a published Emery development prerelease.**
 
 The native app, phone runtime and bundled settings page are implemented in
 [xefensor/pebble-app-dashboard](https://github.com/xefensor/pebble-app-dashboard).
@@ -12,9 +12,15 @@ fixtures are not evidence of live phone operation.
 
 ## Try the build
 
-The current local candidate is `dist/Dashboard-0.4.0.pbw`; it has not been
-published. Build instructions are below. The previous published development
-build remains [Dashboard 0.3.1](https://github.com/xefensor/pebble-app-dashboard/releases/download/v0.3.1/Dashboard-0.3.1.pbw),
+Download [Dashboard 0.4.0](https://github.com/xefensor/pebble-app-dashboard/releases/download/v0.4.0/Dashboard-0.4.0.pbw),
+[source](https://github.com/xefensor/pebble-app-dashboard/releases/download/v0.4.0/Dashboard-0.4.0-source.zip),
+[debugging files](https://github.com/xefensor/pebble-app-dashboard/releases/download/v0.4.0/Dashboard-0.4.0-debug.zip)
+and [checksums](https://github.com/xefensor/pebble-app-dashboard/releases/download/v0.4.0/SHA256SUMS.txt).
+The release is pinned to tested source
+[`dc3bbd5`](https://github.com/xefensor/pebble-app-dashboard/tree/dc3bbd53c79d70daf188cbcd8a0d1074c00d8819).
+Later documentation commits preserve those package/source/debug bytes. The local
+copy remains `dist/Dashboard-0.4.0.pbw`; build instructions are below.
+The previous [Dashboard 0.3.1](https://github.com/xefensor/pebble-app-dashboard/releases/download/v0.3.1/Dashboard-0.3.1.pbw) remains available,
 with source, debug files and checksums in its
 [development release](https://github.com/xefensor/pebble-app-dashboard/releases/tag/v0.3.1).
 Install the PBW using the official Pebble phone app with plugins

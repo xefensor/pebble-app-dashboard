@@ -1,5 +1,12 @@
 # Dashboard 0.4.0 pin settings verification
 
+Published as the [0.4.0 development prerelease](https://github.com/xefensor/pebble-app-dashboard/releases/tag/v0.4.0)
+on 5 November 2026, from tested source
+[`dc3bbd53c79d70daf188cbcd8a0d1074c00d8819`](https://github.com/xefensor/pebble-app-dashboard/tree/dc3bbd53c79d70daf188cbcd8a0d1074c00d8819).
+All four uploaded assets were downloaded and verified against the local build,
+source ZIP, debug ZIP and canonical checksums before publication. The source ZIP
+keeps its tested commit comment; later main documentation does not rewrite it.
+
 Local branch `feature/simple-pin-settings-0.4.0` starts from clean Dashboard
 0.3.3 commit `be58d4599ebd2c74ea374c1c16fa5ebff5f2199d`. The saved v1 settings
 shape, exact reading/action bindings, native UI and app identity are retained.
@@ -80,7 +87,7 @@ Final PBW SHA-256:
 Debug ZIP SHA-256:
 `54c2de2459d245d7c80ac5489af1cd948ab5ccf2ffc03571993cd8f9d729e514`.
 Earlier artifacts are recorded in [previous-artifacts.json](previous-artifacts.json).
-No publication or real phone/physical-watch test is claimed.
+No real phone/physical-watch test is claimed.
 
 ```sh
 source ../recovery-validation/env.sh

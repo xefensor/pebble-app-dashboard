@@ -1,6 +1,6 @@
 # Dashboard maintainer notes
 
-This repository contains the native Dashboard development candidate (0.4.0),
+This repository contains the native Dashboard development prerelease (0.4.0),
 its phone runtime/settings, and earlier browser design studies. Read README.md
 and docs/IMPLEMENTATION.md. Preserve UUID f76f9fc1-2944-4248-bcc5-3eea2af0183b,
 DSH1 message keys and existing published sibling apps.
@@ -132,3 +132,9 @@ need to allow it in Pebble and reopen settings. Do not promise an inline prompt.
 Internet can affect the stock default read-permission policy; document this
 without silently changing grants or starting sources from settings. Native UI,
 control dispatch, activity policy and Timer control support stay independent.
+
+Published v0.4.0 is frozen at tested source
+dc3bbd53c79d70daf188cbcd8a0d1074c00d8819. Its source ZIP carries that Git commit
+comment; later documentation on main must not rewrite published artifacts or
+retag the version. Validate release-source/archive identity against that commit,
+not a later documentation-only HEAD. Runtime source/debug hashes remain exact.
