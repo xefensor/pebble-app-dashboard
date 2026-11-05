@@ -1,7 +1,7 @@
 # Dashboard notices
 
 Dashboard and the copied suite build helpers use the PolyForm Noncommercial
-License 1.0.0 and required notice in LICENSE. The pinned Pebble Activities 0.4.2
+License 1.0.0 and required notice in LICENSE. The pinned Pebble Activities
 runtime has the same license; its full notice ships in the PBW.
 
 Pebble SDK phone helpers retain their Google LLC copyright and Apache License

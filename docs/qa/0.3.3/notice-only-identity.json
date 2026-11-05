@@ -1,0 +1,28 @@
+{
+  "result": "PASS",
+  "testedPbwSha256": "9306c213111c8e18be276486c6e0d97bc8183e3e531bb920434bb17bde36889e",
+  "finalPbwSha256": "fd3a1c758bc1bd045fdd00f94fe32b6d65e5caef5186a3e164de0549f2b80bc9",
+  "onlyChangedEntry": "THIRD-PARTY-NOTICES.md",
+  "nativeAndPhonePluginConfigBytesIdentical": true,
+  "nativePayloadByteIdentical": true,
+  "nativeCapturesRemainLabelledWithTestedCandidate": true,
+  "scope": "Removed a stale Activities version from the bundled license notice after native QA. No SDK rebuild or native/phone/plugin/config changes. Actual native captures retain their original exact candidate hash.",
+  "unchangedEntriesSha256": {
+    "LICENSE": "d98d3677d07448a915a4ec03e84d888c3e7ead3eaa8b371288705be3d497d40f",
+    "appinfo.json": "02d220cf119035dbff948a2ac4d6a9cf19539f6c75696bb0af49ca1b89a3674f",
+    "config.html": "245a5e49af79f652201baee10fd027b9a5069cc5c98dd10f4b3fb223bed83741",
+    "emery/app_resources.pbpack": "94511ccd37e0309987f80c3b1f9b9a2ce4cb3cea9453d2f56470e1d35b93fe3c",
+    "emery/manifest.json": "5c0c2d591f6614677c19cfda75f8cb64a59f7c62596dd693d5409f1131cd1285",
+    "emery/pebble-app.bin": "f3bc810b3250ace847a71e06a9413b3e694d0bdd546d7ca91a6949d0f78fb6ee",
+    "licenses/Apache-2.0.txt": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+    "licenses/OFL-Fredoka.txt": "5c9e7eee5c6b25f4b05b8d53b2e470ea4962f9ced742d044a98f7d95d1375bab",
+    "licenses/OFL-RobotoCondensed.txt": "0e4cc6ece88573545be2ed25835363662a6182ba4a4c1b5c8feda52add30e8a6",
+    "licenses/pebble-activities-LICENSE.txt": "d98d3677d07448a915a4ec03e84d888c3e7ead3eaa8b371288705be3d497d40f",
+    "pebble-js-app.js": "670dd7e399743e9adf40e00344aac15158249c5021c1f106062be4ea7993c460",
+    "plugin.js": "d6c1727fd1134a2f708539b9197e24d3d6594d301968e9e8c34d5af69380b172"
+  },
+  "changedNoticeSha256": {
+    "old": "5748035b65a6e3915e7249b1230356bc6e5ef5c713c94eb83b41a362e4642eb3",
+    "final": "3570d89c36e7d65b4d63df53ebff93592f1072a0ff4f16983313d4b57903cd43"
+  }
+}

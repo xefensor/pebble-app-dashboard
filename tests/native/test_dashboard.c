@@ -87,7 +87,38 @@ static void reconnect_focus(void){
   assert(db_state_apply(&state,&pending)&&!state.selected_token&&state.selection_lost&&!db_selected(&state));
   uint16_t index=0;assert(db_state_move(&state,1,&index)&&db_selected(&state)->token==8);
 }
+static void withdrawn_focus_stays_inert(void){
+  DbState state;db_state_init(&state,4);db_state_expect(&state,1,DB_OVERVIEW,0,7);
+  DbSnapshot frame={.session=4,.request=1,.sequence=1,.mode=DB_OVERVIEW,.status=DB_READY,.count=2,.total=2};
+  frame.items[0]=(DbItem){.token=7,.version=1,.role=DB_ROLE_ACTIVITY,.flags=DB_APP};
+  frame.items[1]=(DbItem){.token=8,.version=1,.role=DB_ROLE_PIN,.flags=DB_ACTION};
+  assert(db_state_apply(&state,&frame)&&db_selected(&state)->token==7);
+  frame.sequence++;frame.count=frame.total=1;frame.items[0]=frame.items[1];
+  assert(db_state_apply(&state,&frame)&&state.selection_lost&&!db_selected(&state));
+  frame.sequence++;
+  assert(db_state_apply(&state,&frame)&&state.selection_lost&&!db_selected(&state));
+  frame.sequence++;frame.items[0].token=9;
+  assert(db_state_apply(&state,&frame)&&state.selection_lost&&!db_selected(&state));
+  uint16_t index=0;assert(db_state_move(&state,1,&index)&&db_selected(&state)->token==9);
+  // A ready reconnect/Back reply can omit the requested target without an
+  // intermediate LOADING frame. It must not choose a different app/action.
+  db_state_expect(&state,2,DB_OVERVIEW,0,7);frame.request=2;frame.sequence++;
+  assert(db_state_apply(&state,&frame)&&state.selection_lost&&!db_selected(&state));
+  db_state_expect(&state,3,DB_OVERVIEW,0,7);db_state_fail_view(&state,DB_ERROR);
+  assert(state.selected_token==7&&state.selection_lost&&!db_selected(&state)&&!state.snapshot.count);
+  frame.request=3;frame.sequence++;frame.items[0].token=7;
+  assert(db_state_apply(&state,&frame)&&db_selected(&state)->token==7);
+  db_state_expect(&state,4,DB_OVERVIEW,0,7);db_state_fail_view(&state,DB_ERROR);
+  frame.request=4;frame.sequence++;frame.items[0].token=8;
+  assert(db_state_apply(&state,&frame)&&state.selection_lost&&!db_selected(&state));
+}
 static void direct_media_action(void){
+  DbItem media={.flags=DB_IS_MEDIA};char identity[144];
+  snprintf(media.name,sizeof(media.name),"Music");snprintf(media.subtitle,sizeof(media.subtitle),"Samurai");
+  db_item_media_identity(&media,identity,sizeof(identity));assert(!strcmp(identity,"Samurai"));
+  media.flags|=DB_PAUSED;db_item_media_identity(&media,identity,sizeof(identity));assert(!strcmp(identity,"Paused · Samurai"));
+  media.subtitle[0]=0;db_item_media_identity(&media,identity,sizeof(identity));assert(!strcmp(identity,"Paused · Music"));
+  media.name[0]=0;db_item_media_identity(&media,identity,sizeof(identity));assert(!strcmp(identity,"Paused · Music"));
   DbItem item={.token=2,.version=1,.valid_until=2000,.role=DB_ROLE_ACTIVITY,.kind=DB_MUSIC,.flags=DB_ACTION|DB_IS_MEDIA|DB_MEDIA_PREVIOUS|DB_MEDIA_TOGGLE|DB_MEDIA_NEXT};
   assert(db_item_direct_action(&item,1000)==1);
   item.flags|=DB_PAUSED;assert(db_item_direct_action(&item,1000)==1);
@@ -211,5 +242,5 @@ int main(int argc,char **argv){
     free(frame);printf("C parser: %d actual runtime frames accepted\n",argc-2);return 0;
   }
   for(int i=1;i<argc;i++)fixture(argv[i]);
-  clocks();reconnect_focus();direct_media_action();control_slots();identity_and_privacy();static_placeholder();notification_shortcut();printf("native model: %u binary fixtures; malformed, stale, selection, privacy, sparse controls and clock checks passed\n",checked);return 0;
+  clocks();reconnect_focus();withdrawn_focus_stays_inert();direct_media_action();control_slots();identity_and_privacy();static_placeholder();notification_shortcut();printf("native model: %u binary fixtures; malformed, stale, selection, privacy, sparse controls and clock checks passed\n",checked);return 0;
 }

@@ -206,10 +206,10 @@ static void activity_main(GContext *ctx,const DbItem *item){
   GColor ink=panel(ctx,item,GRect(4,29,CONTENT_W-8,73),false);
   if(!db_item_current(item,utc_now())){text(ctx,"Activity unavailable",20,10,73,CONTENT_W-20,ink);return;}
   if(item->flags&DB_IS_MEDIA){
-    char title[193];clean_text(title,sizeof(title),item->title);unsigned split=0;
+    char title[193],identity[144];clean_text(title,sizeof(title),item->title);db_item_media_identity(item,identity,sizeof(identity));unsigned split=0;
     if(width_of(title,5)>CONTENT_W-20){for(unsigned i=0;title[i];i++)if(title[i]==' '){char saved=title[i];title[i]=0;if(width_of(title,5)<=CONTENT_W-20)split=i;title[i]=saved;}}
-    if(split){char first[193];memcpy(first,title,split);first[split]=0;text(ctx,first,24,10,54,CONTENT_W-20,ink);text(ctx,title+split+1,24,10,77,CONTENT_W-20,ink);picture(ctx,item,10,80,20,ink);text(ctx,item->subtitle[0]?item->subtitle:item->name,20,37,100,CONTENT_W-47,ink);}
-    else{text(ctx,title,24,10,59,CONTENT_W-20,ink);picture(ctx,item,10,65,32,ink);text(ctx,item->subtitle[0]?item->subtitle:item->name,20,50,91,CONTENT_W-60,ink);}
+    if(split){char first[193];memcpy(first,title,split);first[split]=0;text(ctx,first,24,10,54,CONTENT_W-20,ink);text(ctx,title+split+1,24,10,77,CONTENT_W-20,ink);picture(ctx,item,10,80,20,ink);text(ctx,identity,20,37,100,CONTENT_W-47,ink);}
+    else{text(ctx,title,24,10,59,CONTENT_W-20,ink);picture(ctx,item,10,65,32,ink);text(ctx,identity,20,50,91,CONTENT_W-60,ink);}
   }else{
     char value[64];item_value(item,value,sizeof(value));
     if(value[0])value_text(ctx,value,10,76,CONTENT_W-20,item->clock_mode?40:32,ink,GTextAlignmentLeft);
@@ -251,7 +251,7 @@ static void snapshot(GContext *ctx){
 }
 static void list_row(GContext *ctx,const DbItem *item,int y){
   GColor ink=panel(ctx,item,GRect(4,y,CONTENT_W-9,38),false);char value[64];item_value(item,value,sizeof(value));picture(ctx,item,9,y+6,26,ink);
-  if(item->flags&DB_IS_MEDIA){text(ctx,item->title,20,42,y+18,CONTENT_W-53,ink);text(ctx,item->subtitle[0]?item->subtitle:item->name,20,42,y+37,CONTENT_W-53,ink);}
+  if(item->flags&DB_IS_MEDIA){char identity[144];db_item_media_identity(item,identity,sizeof(identity));text(ctx,item->title,20,42,y+18,CONTENT_W-53,ink);text(ctx,identity,20,42,y+37,CONTENT_W-53,ink);}
   else if(value[0]){text(ctx,item->title[0]?item->title:item->name,20,42,y+17,CONTENT_W-53,ink);value_text(ctx,value,42,y+39,CONTENT_W-53,24,ink,GTextAlignmentLeft);}
   else text(ctx,item->title[0]?item->title:item->name,24,42,y+29,CONTENT_W-53,ink);
 }
@@ -358,7 +358,7 @@ static bool read_uint(DictionaryIterator *dict,uint32_t key,uint32_t *value){
   else return false;
   return true;
 }
-static void view_failed(void *context){(void)context;s_view_timeout=NULL;if(!s_state.loading)return;stop_repeat();bool dark=s_state.snapshot.dark;s_state.loading=false;s_state.ready=true;memset(&s_state.snapshot,0,sizeof(s_state.snapshot));s_state.snapshot.dark=dark;s_state.snapshot.mode=s_state.desired_mode;s_state.snapshot.status=s_has_connection?DB_ERROR:DB_OFFLINE;s_state.selected_token=0;update_ticks();repaint();}
+static void view_failed(void *context){(void)context;s_view_timeout=NULL;if(!s_state.loading)return;stop_repeat();db_state_fail_view(&s_state,s_has_connection?DB_ERROR:DB_OFFLINE);update_ticks();repaint();}
 static void clear_feedback(void *context){(void)context;s_action_timeout=NULL;memset(&s_command,0,sizeof(s_command));repaint();}
 static void finish_feedback(void){
   if(s_action_timeout){app_timer_cancel(s_action_timeout);s_action_timeout=NULL;}
@@ -392,6 +392,7 @@ static void publish_focus(void){
   if(item&&s_state.snapshot.mode!=DB_MEDIA)queue_message((Outbound){.op=DB_OP_FOCUS,.mode=s_state.snapshot.mode,.request=s_state.view_request,.offset=s_state.snapshot.offset,.index=s_state.selected_index,.token=item->token,.version=item->version});
 }
 static void request_view(uint8_t mode,uint16_t offset,uint16_t index,uint32_t token,bool hello){
+  if(!hello)s_state.selection_lost=false; //Deliberate navigation can choose a new row.
   uint32_t request=next_request();db_state_expect(&s_state,request,mode,index,token);
   if(s_view_timeout)app_timer_cancel(s_view_timeout);
   s_view_timeout=app_timer_register(VIEW_TIMEOUT_MS,view_failed,NULL);

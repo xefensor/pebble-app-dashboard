@@ -1,13 +1,13 @@
 {
   "package": "pebble-activities",
-  "version": "0.4.3",
-  "archive": "pebble-activities-0.4.3.tgz",
-  "sha256": "049b5db1a20ccfec123291f8807302a6ee65835c5ca171bc302b546ad4b72123",
+  "version": "0.4.4",
+  "archive": "pebble-activities-0.4.4.tgz",
+  "sha256": "dffec3e05041515fbf9385a641adf6b40aedda7e8460c0d11ecb4ed019cd5abe",
   "repository": "https://github.com/xefensor/pebble-activities",
-  "integrity": "sha512-zUj0DoPK6EeT7Xrd0GcbkbXgRF8ErDlE7UBNEIbcNmaluItmpYrRXJ0qiNdUcKo+UzZYS/fGSOwDVrRixdJeVA==",
+  "integrity": "sha512-HidapoVkKbj3g+zkermucSXlxjluwFxyrsysmCP4pYLTLhWVDjQxFia3qzjkT3IKCJTJ4KOhwODUjZOMbSIUDA==",
   "sdk": "4.33.1",
   "platforms": [
     "emery"
   ],
-  "source_commit": "fbd3ce42771a299e9ce79a23338ac254387f9d1b"
+  "source_commit": "df4f30f4a66419ce835959eeeec6de7999704fa0"
 }

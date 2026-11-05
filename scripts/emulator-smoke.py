@@ -28,7 +28,7 @@ sys.path.insert(0,str(ROOT.parent/'recovery-validation'))
 def digest(data):return hashlib.sha256(data).hexdigest()
 
 
-def run(pbw,output,expected_sha256=None,notifications_only=False,ux_only=False,reliability_only=False):
+def run(pbw,output,expected_sha256=None,notifications_only=False,ux_only=False,reliability_only=False,paused_repro=False,activities_only=False):
     from pipe_emulator import connect
     from libpebble2.services.appmessage import AppMessageService,Uint32,ByteArray,CString
     from libpebble2.services.screenshot import Screenshot
@@ -310,10 +310,10 @@ def run(pbw,output,expected_sha256=None,notifications_only=False,ux_only=False,r
         proofs.append({'check':'Snapshot with no activity or notification uses a neutral idle state and safely retains configured pins','passed':True})
         with peer.lock:peer.activities=saved_activities;peer.pins=saved_pins;peer.notice=saved_notice;peer.action_behavior='success'
         peer.publish();select_snapshot(1)
-    def write_report():
-        report={'result':'PASS','version':json.loads((ROOT/'package.json').read_text())['version'],
+    def write_report(result='PASS'):
+        report={'result':result,'version':json.loads((ROOT/'package.json').read_text())['version'],
             'scope':'Real native Emery QEMU UI and AppMessage requests with an explicit fictional protocol peer; no phone JavaScript, live plugins, real app launches or physical watch.',
-            'focusedNotificationsOnly':notifications_only,'focusedUxOnly':ux_only,'focusedReliabilityOnly':reliability_only,'candidatePbwSha256':digest(pbw.read_bytes()),'nativeOnlyPbwSha256':digest(native.read_bytes()),
+            'focusedNotificationsOnly':notifications_only,'focusedUxOnly':ux_only,'focusedReliabilityOnly':reliability_only,'pausedMediaReproduction':paused_repro,'focusedActivitiesOnly':activities_only,'candidatePbwSha256':digest(pbw.read_bytes()),'nativeOnlyPbwSha256':digest(native.read_bytes()),
             'nativePayloadSha256':{name:digest(data) for name,data in payload.items()},'phoneJavascriptExecuted':False,
             'stateDirectory':str(state_dir),'session':peer.session,'checks':proofs,'captures':captures,
             'requests':[{str(k):v for k,v in request.items()} for request in requests],
@@ -337,6 +337,69 @@ def run(pbw,output,expected_sha256=None,notifications_only=False,ux_only=False,r
         assert guide_pixels!=dismissed
         proofs.append({'check':'First-use native button guide explains controls; dismissal consumes Select without dispatching an action or app launch','passed':True})
         restart_without_guide()
+        if paused_repro or activities_only:
+            snapshot_home()
+            with peer.lock:
+                originals=copy.deepcopy(peer.activities)
+                music=copy.deepcopy(next(x for x in originals if x['token']==2))
+                music['flags']&=~32;music['value']='Playing';music['controls'][1]='Pause'
+                peer.activities=[music]+[x for x in originals if x['token']!=2]
+            peer.publish();select_snapshot(3)
+            active=capture('media-primary-active-unselected',.1)
+            music['flags']|=32;music['value']='Paused';music['controls'][1]='Play';music['version']+=1
+            peer.publish();paused=capture('media-primary-paused-unselected',.1)
+            def crop(pixels,bounds):return Image.frombytes('RGB',(200,228),pixels).crop(bounds).tobytes()
+            identical=crop(active,primary_roi)==crop(paused,primary_roi)
+            if paused_repro:
+                assert identical
+                proofs.append({'check':'Paused Media primary is pixel-identical to active when another row is selected; playback state is invisible','reproduced':True,'region':primary_roi})
+                return write_report('REPRODUCED')
+            assert not identical
+            music['subtitle']='';music['version']+=1;peer.publish();paused_empty=capture('media-paused-no-artist',.1)
+            music['flags']&=~32;music['value']='Playing';music['version']+=1;peer.publish();active_empty=capture('media-active-no-artist',.1)
+            assert crop(paused_empty,primary_roi)!=crop(active_empty,primary_roi)
+            music['flags']|=32;music['value']='Paused';music['version']+=1;peer.publish();button('Up',.75)
+            await_condition(lambda:active_mode()==1,'Activities list did not open');capture('media-paused-activity-list',.1);button('Back')
+            proofs.append({'check':'Paused Media is visible in the existing primary/footer and list row, with and without artist, independently of sidebar selection','passed':True})
+
+            # Use the actual public summary projection, not a hand-corrected
+            # media flag. A standard activity is allowed to use the media icon.
+            projection="""
+const summary=require('pebble-activities/summary'),sources=require('./src/pkjs/sources');
+const provider='11111111-2222-4333-8444-555555555555',seconds=2000000000;
+const record=summary.standard('recording',{name:'Recorder',icon:'media',headline:summary.countdown({deadline:seconds+300}),actions:[{id:'stop',label:'Stop',action:'stop',args:{id:'recording'},semantic:'stop'}],openApp:{watchAppUuid:'22222222-2222-4333-8444-555555555555'}});
+const card=summary.toView({provider,record,revision:1,observedAt:seconds,validUntil:seconds+3600,private:false});
+const item=sources.fromActivity(card,[{uuid:provider,actions:[{name:'stop'}]}],seconds);
+item.token=91;item.version=1;process.stdout.write(JSON.stringify(item));
+"""
+            standard=json.loads(subprocess.check_output(['node','-e',projection],cwd=ROOT,text=True))
+            assert not standard['flags']&4 and standard['kind']==2 and standard['clockMode']==1
+            assert standard['controls']==['Stop','',''] and standard['anchor']==peer.fixture_now+300
+            (output/'standard-media-icon-projection.json').write_text(json.dumps(standard,indent=2)+'\n')
+            with peer.lock:peer.activities=[standard]
+            peer.publish();select_snapshot(91);capture('standard-media-icon-countdown',.1)
+            before=counts();button('Select');await_condition(lambda:active_mode()==3,'Generic controls did not open')
+            assert counts()==before;capture('standard-media-icon-stop-controls',.1)
+            button('Select');await_condition(lambda:len(peer.actions)==before[0]+1,'Generic Stop intent missing')
+            assert peer.actions[-1][key('DB_TOKEN')]==91 and peer.actions[-1][key('DB_ACTION')]==0
+            button('Back');before=len(peer.opens);button('Select',.75)
+            await_condition(lambda:len(peer.opens)==before+1,'Standard media-icon destination missing')
+            assert peer.opens[-1][key('DB_TOKEN')]==91
+            proofs.append({'check':'Real summary.standard media-icon projection encodes/displays its countdown and generic Stop control; tap opens controls, original slot0 dispatches, and hold retains the same exact destination token','passed':True})
+
+            # A second complete frame must not silently select the new primary.
+            with peer.lock:peer.activities=[music]
+            peer.publish();capture('withdrawn-selection-inert',2.2)
+            peer.publish();capture('withdrawn-selection-repeated-frame-inert',.1)
+            before=counts();button('Select');button('Select',.75);assert counts()==before
+            button('Down');await_condition(lambda:peer.view.get(key('DB_TOKEN')) in (2,3),'Explicit navigation did not recover a current row')
+            recovered=peer.view[key('DB_TOKEN')];capture('withdrawn-selection-navigation-recovered',.1)
+            assert recovered in peer.frames[-1]['tokens']
+            button('Up',.75);await_condition(lambda:active_mode()==1,'Explicit collection navigation remained inert')
+            capture('withdrawn-selection-collection-recovered',.1)
+            proofs.append({'check':'A withdrawn selected activity remains inert through repeated complete frames and Select/hold; deliberate navigation and collection entry recover current rows','passed':True})
+            assert not errors
+            return write_report()
         if reliability_only:
             def inject(frame):
                 send({key('DB_DATA'):ByteArray(encode(frame))})
@@ -641,6 +704,8 @@ if __name__=='__main__':
     parser.add_argument('--notifications-only',action='store_true',help='Focused empty Notifications navigation, expiry and app-open checks')
     parser.add_argument('--ux-only',action='store_true',help='Focused guide, feedback, hold preview, confirmation, sparse controls and idle UX checks')
     parser.add_argument('--reliability-only',action='store_true',help='Focused final-zero paint, exact unavailable capability expiry and inert bootstrap identity checks')
+    parser.add_argument('--paused-media-repro',action='store_true',help='Record the old invisible paused-primary bug against a supplied baseline PBW')
+    parser.add_argument('--activities-only',action='store_true',help='Focused activity presentation/selection checks')
     args=parser.parse_args()
-    if sum((args.notifications_only,args.ux_only,args.reliability_only))>1:parser.error('Choose at most one focused suite')
-    run(args.pbw,args.output,args.expected_sha256,args.notifications_only,args.ux_only,args.reliability_only)
+    if sum((args.notifications_only,args.ux_only,args.reliability_only,args.paused_media_repro,args.activities_only))>1:parser.error('Choose at most one focused suite')
+    run(args.pbw,args.output,args.expected_sha256,args.notifications_only,args.ux_only,args.reliability_only,args.paused_media_repro,args.activities_only)

@@ -1,18 +1,18 @@
 # Dashboard
 
 A stock Pebble watchapp for current activities, the latest available notification
-and pinned readings/actions. **0.3.2 is a local Emery development candidate.**
+and pinned readings/actions. **0.3.3 is a local Emery development candidate.**
 
 The native app, phone runtime and bundled settings page are implemented in
 [xefensor/pebble-app-dashboard](https://github.com/xefensor/pebble-app-dashboard).
 Build and portable/emulator checks are recorded under
-[docs/qa/0.3.2](docs/qa/0.3.2). Real-phone permissions/provider integration and
+[docs/qa/0.3.3](docs/qa/0.3.3). Real-phone permissions/provider integration and
 physical-watch comfort/battery still need device testing. Synthetic SDK/emulator
 fixtures are not evidence of live phone operation.
 
 ## Try the build
 
-The current local candidate is `dist/Dashboard-0.3.2.pbw`; it has not been
+The current local candidate is `dist/Dashboard-0.3.3.pbw`; it has not been
 published. Build instructions are below. The previous published development
 build remains [Dashboard 0.3.1](https://github.com/xefensor/pebble-app-dashboard/releases/download/v0.3.1/Dashboard-0.3.1.pbw),
 with source, debug files and checksums in its
@@ -54,10 +54,14 @@ Holds start after 600 ms; list navigation repeats every 140 ms while held.
 Opening a collection never also scrolls it; releasing adds no tap or extra step.
 Back restores the original item, viewport and control focus. Live reordering
 preserves selection by identity, including moves made locally within a page.
+If that activity disappears, Select and hold stay inert through subsequent
+updates. Use Up or Down to choose a current item; reconnect never silently
+substitutes another app or action for the requested activity.
 Phone-runtime restart establishes a new native session; old replies and action
 tokens cannot acquire a different target.
 
 Music toggles playback directly on Select when the source declares play/pause.
+Paused Music says Paused in its artist row, even when another item is selected.
 Hold Select opens the native Music app for the rest of its controls. Other
 activities can expose up to three provider-declared controls. Only present
 controls take space; navigation preserves their original action indices and
@@ -94,6 +98,11 @@ Choose sources/properties and stable instances, add optional actions with typed
 arguments, and reorder pins. Dashboard's activity priority/visibility is separate
 from Dynamic. Saves are explicit; failed loads never silently replace saved
 preferences. Confirmed settings changes notify the running phone runtime.
+Within one provider at the same saved priority, active entries precede paused
+and finished entries; countdowns use the soonest deadline first. An explicit
+instance priority still wins. Countdown tie-breaking preserves text positions
+within each state group and never moves another provider. An activity's icon does not choose its
+layout: a standard countdown can use a music icon and keep ordinary controls.
 
 Defaults are Weather temperature, Phone battery, local Watch battery and Find
 phone. No fictional home-light provider is installed. Find phone runs only on an
@@ -197,4 +206,4 @@ native captures are in the versioned QA folder. Those browser studies predate
 the larger 0.3.0 Snapshot and its direct Music play/pause behavior.
 
 Licensed under the suite's PolyForm Noncommercial terms; see LICENSE and
-THIRD-PARTY-NOTICES.md. Activities 0.4.3 is vendored with checksum provenance.
+THIRD-PARTY-NOTICES.md. Activities 0.4.4 is vendored with checksum provenance.

@@ -587,3 +587,53 @@ test('hidden provider avoids activity subscriptions while its explicit reading p
   assert.equal(pebble.subscriptions.filter(entry=>entry.request.category==='activity'&&!entry.closed).length,1,'one hidden instance must not disable its whole provider');
   assert.equal(pebble.subscriptions.filter(entry=>entry.request.category==='home'&&!entry.closed).length,1);source.stop();assert.equal(time.count(),0);
 });
+
+test('standard activity with a media icon keeps its typed countdown and generic controls',()=>{
+  const summary=require('pebble-activities/summary'),seconds=T/1000;
+  const record=summary.standard('recording',{name:'Recorder',icon:'media',headline:summary.countdown({deadline:seconds+45}),
+    actions:[{id:'stop',label:'Stop',action:'stop',args:{id:'recording'},semantic:'stop'}],openApp:{watchAppUuid:OTHER}});
+  const card=summary.toView({provider:UUID,record,revision:1,observedAt:seconds,validUntil:seconds+120,private:false});
+  assert.notEqual(card.presentation,2);assert.equal(card.kind,'media');
+  const entry=sourcesModule.fromActivity(card,[plugin(UUID,'activity','summary',[{name:'stop'}])],seconds);
+  assert.equal(entry.flags&F.MEDIA,0);assert.equal(entry.clockMode,1);assert.equal(entry.anchor,seconds+45);
+  assert.equal(entry.title,'Recorder');assert.deepEqual(entry.controls,['Stop','','']);assert.equal(entry._openApp.watchAppUuid,OTHER);
+  const bytes=Buffer.from(protocol.encode({session:1,request:1,sequence:1,now:seconds,mode:0,status:1,total:1,items:[{...entry,token:1,version:1}]}));
+  assert.equal(bytes.readUInt16LE(44)&F.MEDIA,0);assert.equal(bytes[46],protocol.kind.media);assert.equal(bytes[47],1);assert.equal(bytes.readUInt32LE(48),seconds+45);
+});
+
+test('provider default order promotes running soonest countdowns while explicit instance priority wins',async()=>{
+  const seconds=T/1000;
+  const card=(id,state,deadline)=>({provider:UUID,id,kind:'timer',state,revision:1,observedAt:seconds,validUntil:seconds+3600,
+    showTerminal:state==='completed',caption:id,main:{type:'clock',mode:'deadline',running:state==='active',anchorAt:seconds,baseSeconds:deadline-seconds,validUntil:seconds+3600},openApp:{watchAppUuid:OTHER}});
+  const cards=[card('Tea','active',seconds+600),card('Paused','paused',seconds+10),card('Done','completed',seconds),card('Pasta','active',seconds+500)];
+  const time=clock(),pebble=sdk([plugin(UUID,'activity','summary')]);const source=sourcesModule({...time,pebble,activitiesHost:host(cards)});
+  const prefs={...minimal(),disabledActivities:['builtin:music'],showNotifications:false};
+  source.start(settings.normalize(prefs));await flush();
+  assert.deepEqual(source.snapshot().activities.map(entry=>entry._activityId),['Pasta','Tea','Paused','Done']);
+  source.start(settings.normalize({...prefs,activityOrder:['activity:'+UUID+':Tea',UUID]}));await flush();
+  assert.deepEqual(source.snapshot().activities.map(entry=>entry._activityId),['Tea','Pasta','Paused','Done']);source.stop();
+});
+
+test('default countdown ranking preserves other providers and text positions and carries exact destinations',async()=>{
+  const seconds=T/1000;
+  const card=(id,provider,main)=>({provider,id,kind:'activity',state:'active',revision:1,validUntil:seconds+3600,name:id,main,openApp:{watchAppUuid:id==='Pasta'?OTHER:UUID}});
+  const countdown=n=>({type:'clock',mode:'deadline',running:true,anchorAt:seconds,baseSeconds:n,validUntil:seconds+3600});
+  const text={type:'text',text:'Text activity',validUntil:seconds+3600};
+  const cards=[card('Tea',UUID,countdown(600)),card('Other provider',OTHER,text),card('Note',UUID,text),card('Pasta',UUID,countdown(500))];
+  const time=clock(),pebble=sdk([plugin(UUID,'activity','summary'),plugin(OTHER,'activity','summary')]);const source=sourcesModule({...time,pebble,activitiesHost:host(cards)});
+  const prefs={...minimal(),disabledActivities:['builtin:music'],showNotifications:false};source.start(settings.normalize(prefs));await flush();
+  assert.deepEqual(source.snapshot().activities.map(entry=>entry._activityId),['Pasta','Other provider','Note','Tea']);
+  assert.equal(source.snapshot().activities[0]._openApp.watchAppUuid,OTHER);
+  source.start(settings.normalize({...prefs,activityOrder:[OTHER,UUID]}));await flush();
+  assert.deepEqual(source.snapshot().activities.map(entry=>entry._activityId),['Other provider','Pasta','Note','Tea']);source.stop();
+});
+
+test('unrelated malformed declarations cannot suppress a valid activity action or Music source',async()=>{
+  const seconds=T/1000,card={provider:UUID,id:'go',revision:1,state:'active',kind:'activity',validUntil:seconds+60,main:{type:'text',text:'Route',validUntil:seconds+60},actions:[{id:'go',label:'Go',action:'go',args:{}}]};
+  const entry=sourcesModule.fromActivity(card,[{uuid:UUID,actions:[null,12,{name:'go'}]}],seconds);
+  assert.equal(entry.controls[0],'Go');assert.equal(entry._commands[0].action,'go');
+  const declaration=musicPlugin();declaration.sources.unshift(null,17);
+  const f=sourceFixture(minimal(),[declaration]);await flush();
+  f.pebble.emit('music','track',envelope(MUSIC,[{instanceId:'track',properties:{title:prop('Present song'),playing:bool(true)}}]));
+  assert.equal(f.source.snapshot().activities[0].title,'Present song');f.source.stop();
+});

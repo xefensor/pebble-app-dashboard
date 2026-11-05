@@ -1,0 +1,210 @@
+{
+  "result": "REPRODUCED",
+  "version": "0.3.3",
+  "scope": "Real native Emery QEMU UI and AppMessage requests with an explicit fictional protocol peer; no phone JavaScript, live plugins, real app launches or physical watch.",
+  "focusedNotificationsOnly": false,
+  "focusedUxOnly": false,
+  "focusedReliabilityOnly": false,
+  "pausedMediaReproduction": true,
+  "focusedActivitiesOnly": false,
+  "candidatePbwSha256": "ed4ba30c86f0cfbc5f788d74bdca97fa61b9357fbcb9bd21e25ac29147b6aa67",
+  "nativeOnlyPbwSha256": "7ef1f535f99f2bb6f3ebf01f1491c03bed636ae21afeee68c0eb45d3e2ced726",
+  "nativePayloadSha256": {
+    "emery/app_resources.pbpack": "94511ccd37e0309987f80c3b1f9b9a2ce4cb3cea9453d2f56470e1d35b93fe3c",
+    "emery/manifest.json": "9100acba7b4607c614fe8cc95df12a933b2a42c1fb4728d9061220b8cb640a43",
+    "emery/pebble-app.bin": "d56cac1143911846c678775339b42547fb35ff5aacb2e6367bada48fbc75fcd0"
+  },
+  "phoneJavascriptExecuted": false,
+  "stateDirectory": "/tmp/dashboard-033-paused-baseline",
+  "session": 763543287,
+  "checks": [
+    {
+      "check": "First-use native button guide explains controls; dismissal consumes Select without dispatching an action or app launch",
+      "passed": true
+    },
+    {
+      "check": "First-use guide dismissal persists across a native app restart; ordinary navigation works immediately and dispatches no action",
+      "passed": true
+    },
+    {
+      "check": "Paused Media primary is pixel-identical to active when another row is selected; playback state is invisible",
+      "reproduced": true,
+      "region": [
+        4,
+        29,
+        162,
+        102
+      ]
+    }
+  ],
+  "captures": [
+    {
+      "name": "first-use-button-guide",
+      "file": "first-use-button-guide.png",
+      "sha256": "090c51cd9f887128b03312f91f1b254b0829f7e12814ae04ba4b012b622747a2",
+      "rgbSha256": "92fd1ec24bc212d6ab14cf76a9e92ef5c0776b530b408cfff539f0d1cb7b62ed",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "first-use-guide-dismissed",
+      "file": "first-use-guide-dismissed.png",
+      "sha256": "734f5b964d161f43c5b9451da79b48c50d7e624b65e583ef7c5031b61d3ceeb5",
+      "rgbSha256": "40bf8d81f35e97a5625d82d0ef09bd49df56f14db683dca89a3034fa5258c71f",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "guide-dismissed-after-restart",
+      "file": "guide-dismissed-after-restart.png",
+      "sha256": "d7f94912b044d70683d47415a724c64e2f993eb7eace5f8383cfa8c45348cfab",
+      "rgbSha256": "e7659c076c4a3bd4a881bdfa8dea8cb60a5bfe46668e3d3ab2bda13c06abefb1",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "media-primary-active-unselected",
+      "file": "media-primary-active-unselected.png",
+      "sha256": "2550bc407349a08bb6a3d903553046b166446feb822e37bd9b4e8e8f69c0faa0",
+      "rgbSha256": "baeabdf84f2bcc01976634b42bb075d5a0d28442f2c02faf4970fabf15132370",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "media-primary-paused-unselected",
+      "file": "media-primary-paused-unselected.png",
+      "sha256": "2550bc407349a08bb6a3d903553046b166446feb822e37bd9b4e8e8f69c0faa0",
+      "rgbSha256": "baeabdf84f2bcc01976634b42bb075d5a0d28442f2c02faf4970fabf15132370",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    }
+  ],
+  "requests": [
+    {
+      "4000": 1,
+      "4001": 748470005,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0
+    },
+    {
+      "4000": 7,
+      "4001": 748470005,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 1,
+      "4006": 1
+    },
+    {
+      "4000": 1,
+      "4001": 763543287,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0
+    },
+    {
+      "4000": 7,
+      "4001": 763543287,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 1,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 763543287,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 1,
+      "4005": 3,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 763543287,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 1,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 763543287,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 3,
+      "4005": 6,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 763543287,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 2,
+      "4005": 4,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 763543287,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 1,
+      "4005": 3,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 763543287,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 2,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 763543287,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 1,
+      "4005": 3,
+      "4006": 1
+    }
+  ],
+  "mockActions": [],
+  "mockAppOpens": [],
+  "visualReview": {
+    "reviewed": false
+  }
+}

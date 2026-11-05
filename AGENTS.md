@@ -1,6 +1,6 @@
 # Dashboard maintainer notes
 
-This repository contains the native Dashboard development candidate (0.3.2),
+This repository contains the native Dashboard development candidate (0.3.3),
 its phone runtime/settings, and earlier browser design studies. Read README.md
 and docs/IMPLEMENTATION.md. Preserve UUID f76f9fc1-2944-4248-bcc5-3eea2af0183b,
 DSH1 message keys and existing published sibling apps.
@@ -101,3 +101,15 @@ terminal for source/watch work even if settings are saved or reloaded afterward.
 Pass UUID-form disabled activities to the host's disabledProviders setting so
 hidden providers are not subscribed. Instance-only exclusions stay local, and
 explicit reading pins from that provider remain independent.
+
+Version 0.3.3 preserves saved provider/instance priority. Within one provider
+and equal preference rank, active precedes paused/terminal; countdowns sort by
+nearest deadline within their own lifecycle slots. Other provider/text positions
+stay stable. Typed presentation chooses Media, not its icon; a standard activity
+can use a media icon while retaining its generic clock/actions. Paused Media
+must be visible in its existing artist footer independently of sidebar focus.
+Missing selection stays inert through repeated complete snapshots and requested
+target timeout/reconnect. Only an exact restored token or deliberate navigation
+can restore actionable focus. Never carry private snapshot content through a
+failed view. Malformed unrelated source/action declaration entries must not
+prevent a valid activity/control or Music source from being displayed.

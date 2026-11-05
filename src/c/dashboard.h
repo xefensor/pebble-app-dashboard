@@ -60,6 +60,7 @@ typedef struct {
 bool db_decode(const uint8_t *bytes,size_t length,DbSnapshot *out);
 void db_state_init(DbState *state,uint32_t session);
 void db_state_expect(DbState *state,uint32_t request,uint8_t mode,uint16_t index,uint32_t token);
+void db_state_fail_view(DbState *state,uint8_t status);
 bool db_state_apply(DbState *state,const DbSnapshot *snapshot);
 const DbItem *db_selected(const DbState *state);
 bool db_item_current(const DbItem *item,uint32_t now);
@@ -68,6 +69,7 @@ bool db_item_actionable(const DbItem *item,uint32_t now);
 int db_item_direct_action(const DbItem *item,uint32_t now);
 bool db_control_present(const DbItem *item,unsigned index);
 void db_item_value(const DbItem *item,uint32_t now,char *buffer,size_t size);
+void db_item_media_identity(const DbItem *item,char *buffer,size_t size);
 bool db_state_move(DbState *state,int delta,uint16_t *index);
 void db_state_remember(DbState *state);
 bool db_state_back(DbState *state,DbReturn *value);

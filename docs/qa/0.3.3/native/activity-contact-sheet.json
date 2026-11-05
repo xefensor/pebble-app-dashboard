@@ -1,0 +1,50 @@
+{
+  "candidatePbwSha256": "9306c213111c8e18be276486c6e0d97bc8183e3e531bb920434bb17bde36889e",
+  "derivativeContactSheet": true,
+  "scale": 2,
+  "resampling": "nearest",
+  "sources": [
+    {
+      "file": "media-primary-active-unselected.png",
+      "sha256": "ace744dcb6abce2b46f6ed007d94bee803552177510ebff3225c7a4b06050443",
+      "nativePixelsModified": false
+    },
+    {
+      "file": "media-primary-paused-unselected.png",
+      "sha256": "c0780ed3298f5567fa3373e41125ed5a336c9292248abbca1bc34815331cb1fe",
+      "nativePixelsModified": false
+    },
+    {
+      "file": "media-paused-no-artist.png",
+      "sha256": "b6a19c89a3ec446c52b08437747692665615dcc6dfe4c716af826414495d6ff7",
+      "nativePixelsModified": false
+    },
+    {
+      "file": "media-paused-activity-list.png",
+      "sha256": "b404a9fec7b4c1e42176e31f8a16ae77ab8315de95934dcfc3a941fa789a89e6",
+      "nativePixelsModified": false
+    },
+    {
+      "file": "standard-media-icon-countdown.png",
+      "sha256": "03bb41af477bd5090e6d2e8b943b59a76c546f2244992a99f2161e2e7195f369",
+      "nativePixelsModified": false
+    },
+    {
+      "file": "standard-media-icon-stop-controls.png",
+      "sha256": "d9e98c609583788834c3f210ec519700105eeb58e12d729545300384aec155a3",
+      "nativePixelsModified": false
+    },
+    {
+      "file": "withdrawn-selection-repeated-frame-inert.png",
+      "sha256": "e41c9f56074fa9b09c32c926c64bfe087a56145996ca94fb4da7a163e38d7fd0",
+      "nativePixelsModified": false
+    },
+    {
+      "file": "withdrawn-selection-navigation-recovered.png",
+      "sha256": "f274fff71b640c66c7602eddab381ef9be11b0c75cc81870509288e01ab0ba54",
+      "nativePixelsModified": false
+    }
+  ],
+  "inheritedByFinalPbwSha256": "fd3a1c758bc1bd045fdd00f94fe32b6d65e5caef5186a3e164de0549f2b80bc9",
+  "nativeInheritanceProof": "../notice-only-identity.json"
+}

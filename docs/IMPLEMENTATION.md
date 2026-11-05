@@ -59,6 +59,20 @@ its late response is ignored. Subscription updates, errors and expiry invalidate
 older read responses. No command is retried or optimistically reflected.
 `src/pkjs/index.js` is root-owned thin event wiring.
 
+Activity projection treats the typed `presentation` field as authoritative.
+Only an absent presentation uses the legacy music/media-kind fallback. A
+standard activity with a media icon still carries its clock and generic action
+indices. Ignore malformed unrelated action/source declaration elements before
+matching a declaration; public catalogue sanitization does not sanitize the raw
+SDK entries used by the active source runtime.
+
+Activity ordering first honors saved exact-instance and provider ranks. Within
+one provider at the same rank, active precedes paused and terminal. Countdown
+entries reorder by running/nearest deadline only within their lifecycle's
+countdown slots. Decorating original positions and sorting independent groups
+keeps other providers/text slots stable and avoids a non-transitive comparator.
+The item, command and destination bindings move together, never just its label.
+
 `settings.js` exports `defaults()`, `normalize(value)`, `load(storage)`,
 `save(storage,value)`; normalization rejects invalid/oversized input by throwing.
 Saved key `dashboard.settings.v1`; settings only, never live content.
@@ -201,6 +215,9 @@ meaningful identity. Music tap dispatches play/pause slot1 directly only when
 declared; hold opens the verified associated Music app. Generic activities can
 still open useful labelled controls. Optional artwork/icon and source clocks are
 local watch rendering.
+Paused Media prefixes its existing artist/provider footer with `Paused ·`,
+including a Music fallback when artist metadata is empty. This is independent
+of which overview row has the sidebar focus; artwork/text geometry is retained.
 Only received control labels/availability bits establish a present control; do
 not infer disabled actions or invent declarations. The public summary API does
 not currently carry a separate per-action disabled state. Native focus retains
@@ -228,6 +245,12 @@ the expiry plan because their independent action/app capabilities can remain
 available until that deadline. The expiry callback still redacts private content
 and bindings before scheduling the next deadline.
 Retain selection by token, never auto-run new items when a source disappears.
+Once a complete frame omits a selected token, later frames remain inert instead
+of selecting the replacement row. Ready reconnect/Back replies obey the same
+rule even without an intermediate LOADING frame. A failed view clears every
+snapshot byte but retains the opaque requested token, allowing only its exact
+late restoration. Up/Down and intentional new collection entry can select a
+current row. A reconnect HELLO is not deliberate replacement navigation.
 Group Back restores overview selection; controls Back restores the originating item.
 Native loading/offline/permission failures stay navigable. New view requests
 invalidate old responses; timed-out requests cannot leave an indefinite spinner.

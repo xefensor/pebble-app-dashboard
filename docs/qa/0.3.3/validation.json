@@ -1,0 +1,53 @@
+{
+  "result": "PASS",
+  "version": "0.3.3",
+  "baselineCommit": "e60e8276a3f5b30ccb0dfe3148217f63b360d555",
+  "pbwSha256": "fd3a1c758bc1bd045fdd00f94fe32b6d65e5caef5186a3e164de0549f2b80bc9",
+  "debugSha256": "b6160c9e3a0f86ca7897e556f5771c41912635aa689c750e6ad1bdf3f64a6173",
+  "buildSourceHashesMatch": true,
+  "nativeCaptures": 14,
+  "nativeBehaviorChecks": 5,
+  "sdkRamBytes": 32526,
+  "sdkFreeHeapBytes": 98546,
+  "sdkResourceBytes": 64208,
+  "dependency": {
+    "package": "pebble-activities",
+    "version": "0.4.4",
+    "archive": "pebble-activities-0.4.4.tgz",
+    "sha256": "dffec3e05041515fbf9385a641adf6b40aedda7e8460c0d11ecb4ed019cd5abe",
+    "repository": "https://github.com/xefensor/pebble-activities",
+    "integrity": "sha512-HidapoVkKbj3g+zkermucSXlxjluwFxyrsysmCP4pYLTLhWVDjQxFia3qzjkT3IKCJTJ4KOhwODUjZOMbSIUDA==",
+    "sdk": "4.33.1",
+    "platforms": [
+      "emery"
+    ],
+    "source_commit": "df4f30f4a66419ce835959eeeec6de7999704fa0"
+  },
+  "tests": {
+    "node": 79,
+    "portableNativeSuites": 2,
+    "encodedFixtures": 16,
+    "packagedRuntimeFrames": 30,
+    "browserSettingsChecks": 24,
+    "browserCaptures": 7,
+    "addressUndefinedSanitizers": "PASS; leak scan disabled for sandbox ptrace compatibility",
+    "globalPackagedIntegration": "PASS; exact final artifact in packaged-handoff.json"
+  },
+  "physicalPhoneOrWatchTested": false,
+  "hardwareBatteryMeasured": false,
+  "sdkWarning": "Existing SDK linker LOAD segment has RWX permissions.",
+  "rootReview": "Approved focused source and actual native PNGs; final packaged cross-app integration passed.",
+  "previousResourcesUnchanged": true,
+  "nativeEvidence": {
+    "testedPbwSha256": "9306c213111c8e18be276486c6e0d97bc8183e3e531bb920434bb17bde36889e",
+    "finalNativePayloadByteIdentical": true,
+    "onlyChangedPbwEntry": "THIRD-PARTY-NOTICES.md",
+    "proof": "notice-only-identity.json"
+  },
+  "baselineNativeReproduction": {
+    "candidatePbwSha256": "ed4ba30c86f0cfbc5f788d74bdca97fa61b9357fbcb9bd21e25ac29147b6aa67",
+    "result": "REPRODUCED",
+    "evidence": "baseline-native/emulator.json",
+    "note": "Version field names this QA harness target; artifact hash identifies the actually installed Dashboard0.3.2 baseline."
+  }
+}

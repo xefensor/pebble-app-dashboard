@@ -42,9 +42,9 @@ function emptyItem(identity, title, kind, role) {
   return {_identity:identity, title:clean(title), subtitle:'',value:'',name:clean(title,64),appLabel:'',actionLabel:'',controls:[],
     flags:0,kind:kind || 0,role:role || 0,clockMode:0,anchor:0,baseSeconds:0,validUntil:0,_commands:[],_openApp:null,_sourceValidUntil:null};
 }
-function declarations(plugin) { return plugin && Array.isArray(plugin.actions) ? plugin.actions : []; }
+function declarations(plugin) { return plugin && Array.isArray(plugin.actions) ? plugin.actions.filter(object) : []; }
 function declares(plugin, category, item) {
-  return plugin && Array.isArray(plugin.sources) && plugin.sources.some(function (source) { return source.category === category && Array.isArray(source.items) && source.items.indexOf(item) >= 0; });
+  return plugin && Array.isArray(plugin.sources) && plugin.sources.some(function (source) { return object(source) && source.category === category && Array.isArray(source.items) && source.items.indexOf(item) >= 0; });
 }
 function command(plugin, name, args, label, confirmation) {
   if (!plugin || !uuid(plugin.uuid)) return null;
@@ -74,7 +74,7 @@ function finalizeActions(entry) {
   return entry;
 }
 function fromActivity(card, plugins, seconds) {
-  var main = card.main || {}, media = card.presentation === 2 || card.kind === 'music' || card.kind === 'media';
+  var main = card.main || {}, media = card.presentation === undefined ? card.kind === 'music' || card.kind === 'media' : card.presentation === 2;
   var support = card.support && (!seconds || card.support.validUntil > seconds) ? card.support : null;
   var chosen=!media&&card.compactItem===1&&support?support:main;
   var identity = 'activity:' + card.provider + ':' + card.id;
@@ -84,6 +84,7 @@ function fromActivity(card, plugins, seconds) {
   entry._sourceRevision = card.revision;
   entry.validUntil = entry._sourceValidUntil; entry.name = clean(card.name || card.providerName || card.caption || 'Activity',64);
   entry._activityId = card.id;
+  entry._activityState = card.state;
   if (media) {
     entry.flags |= F.MEDIA; entry.subtitle = clean(support && support.text || card.caption || '',128);
     entry.value = card.playback === 'paused' ? 'Paused' : card.playback === 'playing' ? 'Playing' : '';
@@ -109,11 +110,39 @@ function fromActivity(card, plugins, seconds) {
   var actions = Array.isArray(card.actions) ? card.actions : [];
   if (card.unconfirmed) actions=[];
   actions.forEach(function (action, index) {
+    if(!object(action))return;
     var slot = media ? action.semantic === 'previous' ? 0 : action.semantic === 'next' ? 2 :
       (card.playback === 'paused' && ['play','resume'].indexOf(action.semantic) >= 0 || card.playback !== 'paused' && action.semantic === 'pause') ? 1 : -1 : index;
     if (slot >= 0 && slot <= 2) entry._commands[slot] = command(provider,action.action,action.args,action.label,false);
   });
   return finalizeActions(entry);
+}
+function orderActivities(all,settings) {
+  function stage(entry){return entry._activityState==='completed'||entry._activityState==='cancelled'?2:entry.flags&F.PAUSED?1:0;}
+  var groups=Object.create(null),records=all.map(function(entry,index){
+    var key=entry._identity==='builtin:music'?'builtin:music':entry._provider;
+    var rank=settings.activityOrder.indexOf(entry._identity);if(rank<0)rank=settings.activityOrder.indexOf(key);
+    if(rank<0)rank=settings.activityOrder.length;
+    var record={entry:entry,index:index,rank:rank},group=rank+'|'+key;
+    (groups[group]||(groups[group]=[])).push(index);return record;
+  });
+  Object.keys(groups).forEach(function(key){
+    var positions=groups[key],ranked=positions.map(function(index){return records[index];});
+    ranked.sort(function(a,b){return stage(a.entry)-stage(b.entry)||a.index-b.index;});
+    // Reorder countdowns only in their own lifecycle slots. This retains other
+    // content/provider positions and avoids a non-transitive mixed comparator.
+    [0,1,2].forEach(function(lifecycle){
+      var slots=[];ranked.forEach(function(record,index){if(stage(record.entry)===lifecycle&&record.entry.clockMode===1)slots.push(index);});
+      var clocks=slots.map(function(index){return ranked[index];}).sort(function(a,b){
+        var x=a.entry,y=b.entry;if(!!x.anchor!==!!y.anchor)return x.anchor?-1:1;
+        return (x.anchor||x.baseSeconds)-(y.anchor||y.baseSeconds)||a.index-b.index;
+      });
+      slots.forEach(function(index,n){ranked[index]=clocks[n];});
+    });
+    var ordered=ranked.map(function(record){return record.entry;});
+    positions.forEach(function(index,n){records[index].entry=ordered[n];});
+  });
+  return records.sort(function(a,b){return a.rank-b.rank||a.index-b.index;}).map(function(record){return record.entry;});
 }
 
 module.exports = function createSources(options) {
@@ -284,12 +313,7 @@ module.exports = function createSources(options) {
       var key=entry._identity==='builtin:music'?'builtin:music':entry._provider;
       return settings.disabledActivities.indexOf(key)<0 && settings.disabledActivities.indexOf(entry._identity)<0;
     });
-    all.sort(function (a,b) {
-      var ak=a._identity==='builtin:music'?'builtin:music':a._provider,bk=b._identity==='builtin:music'?'builtin:music':b._provider;
-      var ai=settings.activityOrder.indexOf(a._identity),bi=settings.activityOrder.indexOf(b._identity);
-      if(ai<0)ai=settings.activityOrder.indexOf(ak);if(bi<0)bi=settings.activityOrder.indexOf(bk);
-      return (ai<0?settings.activityOrder.length:ai)-(bi<0?settings.activityOrder.length:bi);
-    });
+    all=orderActivities(all,settings);
     if (notice && notice._instanceId && all.some(function (entry) { return entry._provider===notice._provider && entry._activityId===notice._instanceId; })) notice=notificationLauncher(false);
     var activityStatus=activities?activities.status():{complete:true,available:false,error:'PLUGINS_UNAVAILABLE'};
     var errors=Object.keys(groups).map(function(key){return groups[key].error;}).filter(function(value){return value&&value!=='ACTION_ONLY';});

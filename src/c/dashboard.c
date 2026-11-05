@@ -101,6 +101,14 @@ void db_state_init(DbState *state,uint32_t session){memset(state,0,sizeof(*state
 void db_state_expect(DbState *state,uint32_t request,uint8_t mode,uint16_t index,uint32_t token){
   state->view_request=request;state->desired_mode=mode;state->desired_index=index;state->selected_token=token;state->loading=true;
 }
+void db_state_fail_view(DbState *state,uint8_t status){
+  bool dark=state->snapshot.dark;state->loading=false;state->ready=true;
+  memset(&state->snapshot,0,sizeof(state->snapshot));state->snapshot.dark=dark;
+  state->snapshot.mode=state->desired_mode;state->snapshot.status=status;
+  // Retain only the opaque requested token, never old private content. A late
+  // matching reply can restore that identity, not a different actionable row.
+  state->selection_lost=state->selected_token!=0||state->selection_lost;
+}
 bool db_control_present(const DbItem *item,unsigned index){
   static const uint16_t bits[]={DB_MEDIA_PREVIOUS,DB_MEDIA_TOGGLE,DB_MEDIA_NEXT};
   return item&&index<3&&(item->controls[index][0]||(item->flags&bits[index]));
@@ -116,7 +124,7 @@ static void normalize_control_focus(DbState *state){
 bool db_state_apply(DbState *state,const DbSnapshot *snapshot){
   if(snapshot->session!=state->session||snapshot->request!=state->view_request||snapshot->mode!=state->desired_mode||
     (state->last_sequence&&(int32_t)(snapshot->sequence-state->last_sequence)<=0))return false;
-  uint32_t token=state->selected_token;bool loading=state->loading;
+  uint32_t token=state->selected_token;bool loading=state->loading,lost=state->selection_lost;
   state->snapshot=*snapshot;state->last_sequence=snapshot->sequence;state->loading=false;state->ready=true;
   int selected=-1;for(unsigned i=0;i<snapshot->count;i++)if(snapshot->items[i].token==token){selected=(int)i;break;}
   if(selected<0&&token&&snapshot->status==DB_LOADING&&(loading||state->selection_lost)){
@@ -124,8 +132,12 @@ bool db_state_apply(DbState *state,const DbSnapshot *snapshot){
     // focus inert through bootstrap instead of selecting an unrelated action.
     state->selection_lost=true;return true;
   }
+  if(selected<0&&(token||(lost&&!loading))){
+    // A missing selected/requested identity is not a request to select the
+    // next row. Repeated updates keep it inert until deliberate navigation.
+    state->selected_token=0;state->selection_lost=true;normalize_control_focus(state);return true;
+  }
   if(selected<0&&snapshot->count){
-    if(token&&!loading){state->selected_token=0;state->selection_lost=true;normalize_control_focus(state);return true;}
     uint16_t desired=loading?state->desired_index:state->selected_index;
     if(desired<snapshot->offset)desired=snapshot->offset;
     if(desired>=snapshot->offset+snapshot->count)desired=snapshot->offset+snapshot->count-1;
@@ -213,6 +225,11 @@ bool db_state_redact(DbState *state,uint32_t now,bool disconnected){
   }
   if(changed)normalize_control_focus(state);
   return changed;
+}
+void db_item_media_identity(const DbItem *item,char *buffer,size_t size){
+  const char *identity=item->subtitle[0]?item->subtitle:item->name;
+  if(item->flags&DB_PAUSED)snprintf(buffer,size,"Paused · %s",identity[0]?identity:"Music");
+  else snprintf(buffer,size,"%s",identity);
 }
 bool db_state_running_clock(const DbState *state,uint32_t now){
   if(state->loading||!state->ready)return false;
