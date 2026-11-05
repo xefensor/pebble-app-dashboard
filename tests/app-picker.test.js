@@ -14,16 +14,21 @@ function hit(overrides) {
 
 test('common app targets use exact watchapp identities independently of plugin identities', () => {
   const apps = picker.common();
-  assert.deepEqual(apps, [
-    {uuid:sources.MUSIC_APP, name:'Music', author:'Pebble', icon:'media', origin:'common'},
-    {uuid:sources.NOTIFICATIONS_APP, name:'Notifications', author:'Pebble', icon:'notification', origin:'common'},
+  assert.deepEqual(['Weather','Music','Notifications','Timer'].map(name => apps.find(app => app.name === name)), [
+    {uuid:'61b22bc8-1e29-460d-a236-3fe409a439ff', name:'Weather', author:'Pebble', icon:'weather', origin:'system'},
+    {uuid:sources.MUSIC_APP, name:'Music', author:'Pebble', icon:'media', origin:'system'},
+    {uuid:sources.NOTIFICATIONS_APP, name:'Notifications', author:'Pebble', icon:'notification', origin:'system'},
     {uuid:'50e9ef12-a5ab-4369-a3b5-3447bfba5151', name:'Timer', author:'Xef', icon:'timer', origin:'common'}
   ]);
-  assert.notEqual(apps[0].uuid, sources.MUSIC);
-  assert.notEqual(apps[1].uuid, sources.NOTIFICATIONS);
+  assert.notEqual(apps.find(app => app.name === 'Music').uuid, sources.MUSIC);
+  assert.notEqual(apps.find(app => app.name === 'Notifications').uuid, sources.NOTIFICATIONS);
+  assert.notEqual(apps.find(app => app.name === 'Weather').uuid, '00000000-0000-0000-0001-000000000002');
+  assert.equal(new Set(apps.map(app => app.uuid)).size, apps.length);
+  assert.ok(apps.every(app => settings.icons.includes(app.icon)));
   assert.ok(apps.every(app => !Object.hasOwn(app, 'installed')));
   apps[0].name = 'Changed'; apps.pop();
-  assert.equal(picker.common()[0].name, 'Music'); assert.equal(picker.common().length, 3);
+  assert.equal(picker.common().find(app => app.name === 'Weather').name, 'Weather');
+  assert.ok(picker.common().some(app => app.name === 'Timer'));
 });
 
 test('automatic labels fit the existing 32-byte settings contract without splitting Unicode', () => {
@@ -65,7 +70,7 @@ test('a real public store hit keeps its own UUID and author rather than the know
   assert.deepEqual(picker.parseResults({hits:[hit()]}), [
     {uuid:UUID, name:'Timer', author:'Ty Nichols', origin:'store', icon:'generic'}
   ]);
-  assert.notEqual(picker.parseResults({hits:[hit()]})[0].uuid, picker.common()[2].uuid);
+  assert.notEqual(picker.parseResults({hits:[hit()]})[0].uuid, picker.common().find(app => app.name === 'Timer').uuid);
 });
 
 test('search accepts compatible scaled binaries and companion watchapps but rejects binaryless and wrong-platform entries', () => {

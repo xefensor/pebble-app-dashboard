@@ -1,6 +1,6 @@
 # Dashboard maintainer notes
 
-This repository contains the native Dashboard local candidate (0.4.1),
+This repository contains the native Dashboard local candidate (0.4.2),
 its phone runtime/settings, and earlier browser design studies. Read README.md
 and docs/IMPLEMENTATION.md. Preserve UUID f76f9fc1-2944-4248-bcc5-3eea2af0183b,
 DSH1 message keys and existing published sibling apps.
@@ -148,3 +148,14 @@ Set the native Window background as well as the canvas palette. First-ever launc
 defaults to light, as does an upgrade before the first saved theme; a phone-side
 change while closed arrives in the first accepted
 snapshot. Fixture builds ignore preferences and must not overwrite them.
+
+Version 0.4.2 adds named PebbleOS app choices independent of store search. Keep
+their watchapp identities aligned with the shipped mobile SystemApps/SystemAppIDs
+files linked in docs/APP-PICKER.md; a plugin ID or internal OS registry number is
+not a launch UUID. Known native entries use the system origin and their own
+optgroup; do not label them installed or add network requests to select one.
+Keep availability caveats and exact command binding checks. Do not offer Calendar,
+Send Text, Reminders or side-effect system toggles based only on constants.
+Choosing/removing an app must preserve a pin's reading/action and custom label/icon;
+do not silently add app bindings to default or saved pins. The settings v1 and
+DSH1 shapes, native code and existing startup-theme fix are unchanged.

@@ -1,0 +1,38 @@
+{
+  "result": "PASS",
+  "version": "0.4.2",
+  "pbwSha256": "e54b9df39aa4f7b0b7abecd8fff00b1abaf3cbcaab550066c9565de2819acdf4",
+  "debugSha256": "397e3a8e493235db5acc2303188b77dd8c661b096d843070ec74a1946aaaef77",
+  "configSha256": "485d14d116be64c600b25273cf00a2eec230ce5bef828cfe219a1c79ea5fae13",
+  "debugSourcesMatchCurrentSource": true,
+  "packagedRuntimeMatchesDebug": true,
+  "unchangedNativeAndResourceSources": {
+    "src/c/dashboard.c": "a070f1e6eb286bb68cf2637db30ac919ced124f7d9daae72c1b931d2cd46fa8c",
+    "src/c/dashboard.h": "708edc192126da33264db6546a9f1fcbeaa31921dd083a869304277ab489ef4b",
+    "src/c/dashboard_deadline.c": "9b7febac9e9590ae8221139885d83199e1481c3a053d07713c03c56c73e316d9",
+    "src/c/dashboard_deadline.h": "7b47357445242f31b0799abf2988b87c48863f76632e0e4cbfd6f751b5a32143",
+    "src/c/main.c": "9f7d4d34a8853074f682c517a6e25133b53af3e06f2cef88769602863980c5bf",
+    "resources/fonts/Fredoka-Bold-Clock.ttf": "526d2361818275d1f9d1df6ce1835095058b84ec989e50e22f271237cc304000",
+    "resources/fonts/OFL-Fredoka.txt": "5c9e7eee5c6b25f4b05b8d53b2e470ea4962f9ced742d044a98f7d95d1375bab",
+    "resources/fonts/OFL-RobotoCondensed.txt": "0e4cc6ece88573545be2ed25835363662a6182ba4a4c1b5c8feda52add30e8a6",
+    "resources/fonts/RobotoCondensed-Bold.ttf": "6e949e8aa3f6e0b4db88aacafccf0c0e55e708c4564c8f3d145792adbbf80ef6",
+    "resources/images/menu-icon.png": "a9973a33f05a20d63b92d0c1ce3d62c29eb25cba00913c97e3557deefe6e9164"
+  },
+  "identicalTo041": {
+    "emery/app_resources.pbpack": "94511ccd37e0309987f80c3b1f9b9a2ce4cb3cea9453d2f56470e1d35b93fe3c",
+    "plugin.js": "d6c1727fd1134a2f708539b9197e24d3d6594d301968e9e8c34d5af69380b172"
+  },
+  "nativeBinary": {
+    "length": 22170,
+    "sha256": "ded9f4c2f767b3383bd78e272cf883fdb5894a03f0403b44804365fd225ade56",
+    "changedOffsets": [
+      124,
+      125
+    ],
+    "onlyAllowedField": "SDK resource timestamp at offsets 124:128; all other bytes identical"
+  },
+  "previousArtifactCount": 24,
+  "nativeMemoryBytes": 32666,
+  "resourceBytes": 64208,
+  "scope": "SDK production build and isolated packaged/browser fixtures; no live phone or physical-watch launch test."
+}

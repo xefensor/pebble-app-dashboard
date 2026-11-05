@@ -1,7 +1,7 @@
 # Dashboard
 
 A stock Pebble watchapp for current activities, the latest available notification
-and pinned readings/actions. **0.4.1 is a local Emery development candidate;
+and pinned readings/actions. **0.4.2 is a local Emery development candidate;
 0.4.0 remains the published prerelease.**
 
 The native app, phone runtime and bundled settings page are implemented in
@@ -21,8 +21,9 @@ The release is pinned to tested source
 [`dc3bbd5`](https://github.com/xefensor/pebble-app-dashboard/tree/dc3bbd53c79d70daf188cbcd8a0d1074c00d8819).
 Later documentation commits preserve those package/source/debug bytes. The local
 copy remains `dist/Dashboard-0.4.0.pbw`; build instructions are below.
-The local 0.4.1 candidate is `dist/Dashboard-0.4.1.pbw`; its startup-theme
-checks are recorded in [docs/qa/0.4.1](docs/qa/0.4.1).
+The local 0.4.2 candidate is `dist/Dashboard-0.4.2.pbw`; its native-app picker
+checks are recorded in [docs/qa/0.4.2](docs/qa/0.4.2). The startup-theme checks
+remain in [docs/qa/0.4.1](docs/qa/0.4.1).
 The previous [Dashboard 0.3.1](https://github.com/xefensor/pebble-app-dashboard/releases/download/v0.3.1/Dashboard-0.3.1.pbw) remains available,
 with source, debug files and checksums in its
 [development release](https://github.com/xefensor/pebble-app-dashboard/releases/tag/v0.3.1).
@@ -107,8 +108,12 @@ and preserves any name or icon you have edited. Finish with **Add pin** or **Don
 then use the page's **Save** to apply your changes. Other pins stay locked while
 you finish or cancel the current item.
 
-For **Hold Select**, choose an app by name. Music, Notifications and this suite's
-Timer are available as common choices. **Find another app by name** searches the
+For **Hold Select**, choose an app by name. **PebbleOS apps** offers Weather,
+Music, Notifications, Alarms, Workout, Health, Timeline, Settings and Watchfaces
+without store search or UUID entry; availability depends on your watch and OS.
+This suite's Timer is under **Other apps**. For example, edit a Weather pin and
+choose **Hold Select → Open app → Weather**, then Done and Save. Its reading and
+any separate tap action are preserved. **Find another app by name** searches the
 official public Pebble store and shows name/author choices; selecting one fills
 its actual watchapp destination. Choose an app already installed on your watch.
 The current phone SDK cannot supply an installed-watchapp list, and store search

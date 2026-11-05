@@ -33,8 +33,15 @@ function createAppPickerModel() {
   function label(value) { return text(value, 32, 32); }
   function common() {
     return [
-      {uuid:'1f03293d-47af-4f28-b960-f2b02a6dd757', name:'Music', author:'Pebble', icon:'media', origin:'common'},
-      {uuid:'b2cae818-10f8-46df-ad2b-98ad2254a3c1', name:'Notifications', author:'Pebble', icon:'notification', origin:'common'},
+      {uuid:'61b22bc8-1e29-460d-a236-3fe409a439ff', name:'Weather', author:'Pebble', icon:'weather', origin:'system'},
+      {uuid:'1f03293d-47af-4f28-b960-f2b02a6dd757', name:'Music', author:'Pebble', icon:'media', origin:'system'},
+      {uuid:'b2cae818-10f8-46df-ad2b-98ad2254a3c1', name:'Notifications', author:'Pebble', icon:'notification', origin:'system'},
+      {uuid:'67a32d95-ef69-46d4-a0b9-854cc62f97f9', name:'Alarms', author:'Pebble', icon:'timer', origin:'system'},
+      {uuid:'fef82c82-7176-4e22-88de-35a3fc18d43f', name:'Workout', author:'Pebble', icon:'workout', origin:'system'},
+      {uuid:'36d8c6ed-4c83-4fa1-a9e2-8f12dc941f8c', name:'Health', author:'Pebble', icon:'workout', origin:'system'},
+      {uuid:'426ccd53-b380-4d83-8d06-9893de3477ce', name:'Timeline', author:'Pebble', icon:'calendar', origin:'system'},
+      {uuid:'07e0d9cb-8957-4bf7-9d42-35bf47caadfe', name:'Settings', author:'Pebble', icon:'generic', origin:'system'},
+      {uuid:'18e443ce-38fd-47c8-84d5-6d0c775fbe55', name:'Watchfaces', author:'Pebble', icon:'generic', origin:'system'},
       {uuid:'50e9ef12-a5ab-4369-a3b5-3447bfba5151', name:'Timer', author:'Xef', icon:'timer', origin:'common'}
     ];
   }

@@ -16,7 +16,12 @@ No sibling app, firmware or mobile-app changes are required.
 
 ## Phone module contracts
 
-Settings 0.4.0 retains the saved v1 pin shape. The editor offers independent
+Settings 0.4.0 retains the saved v1 pin shape. Since 0.4.2, the associated-app
+selector has a PebbleOS apps group for verified native destinations, including
+Weather, without store search. Existing pins are not migrated. Native choices
+change only `openApp`; readings, actions and custom labels/icons remain separate.
+See [native identities and availability](APP-PICKER.md).
+The editor offers independent
 reading, tap action and hold-app sections, with quick setup and local Done/Cancel
 before the global confirmed Save. Other pin edits/reordering are disabled while
 an item is open to protect its index and unfinished draft.

@@ -15,11 +15,50 @@ advanced UUID option for sideloaded/private apps and already saved destinations.
 See the [official plugin guide](https://developer.repebble.com/guides/plugins/preview/)
 and the pinned [Watch State implementation](https://github.com/coredevices/mobileapp/blob/89f31dca3fd344ae9923fe9ca2f27b0f1f8a0230/libpebble3/src/commonMain/kotlin/io/rebble/libpebblecommon/plugin/WatchStatePlugin.kt).
 
-Common destinations use the known native Music and Notifications IDs already
-used by Dashboard's source bindings, and the exact UUID in this suite's Timer
-manifest. They are shortcuts to known app identities, not an installed-app scan.
-The Timer choice refers to this suite's Timer; a store app with the same name can
-have a different author and UUID. Common choices work without store search.
+Dashboard 0.4.2 separates **PebbleOS apps** from other named destinations, saved
+apps and store results. Native apps are selectable without store search or an
+Internet grant. The verified destinations are:
+
+| PebbleOS app | Native watchapp UUID |
+| --- | --- |
+| Weather | `61b22bc8-1e29-460d-a236-3fe409a439ff` |
+| Music | `1f03293d-47af-4f28-b960-f2b02a6dd757` |
+| Notifications | `b2cae818-10f8-46df-ad2b-98ad2254a3c1` |
+| Alarms | `67a32d95-ef69-46d4-a0b9-854cc62f97f9` |
+| Workout | `fef82c82-7176-4e22-88de-35a3fc18d43f` |
+| Health | `36d8c6ed-4c83-4fa1-a9e2-8f12dc941f8c` |
+| Timeline | `426ccd53-b380-4d83-8d06-9893de3477ce` |
+| Settings | `07e0d9cb-8957-4bf7-9d42-35bf47caadfe` |
+| Watchfaces | `18e443ce-38fd-47c8-84d5-6d0c775fbe55` |
+
+These come from mobile 1.17.0.1's
+[native locker list](https://github.com/coredevices/mobileapp/blob/89f31dca3fd344ae9923fe9ca2f27b0f1f8a0230/libpebble3/src/commonMain/kotlin/io/rebble/libpebblecommon/locker/SystemApps.kt#L15)
+and [SystemAppIDs](https://github.com/coredevices/mobileapp/blob/89f31dca3fd344ae9923fe9ca2f27b0f1f8a0230/libpebble3/src/commonMain/kotlin/io/rebble/libpebblecommon/SystemAppIDs.kt#L7),
+checked on 5 November 2026. These two files are unchanged on current main.
+They are known identities, not an installed-app scan. Native options omit the
+redundant Pebble author suffix inside their named group. This suite's Timer
+remains under **Other apps**, using the exact UUID in its manifest. A store Timer
+with a different author can have a different identity.
+
+Weather's UUID is also used by the rich native
+[PebbleOS 4.44.3 Weather app](https://github.com/coredevices/PebbleOS/blob/2acda4073252801f74c7a29c6480a7a6e53424f6/fw/apps/system/weather/weather.c#L763)
+and defined in its
+[timeline header](https://github.com/coredevices/PebbleOS/blob/2acda4073252801f74c7a29c6480a7a6e53424f6/include/pbl/services/timeline/timeline.h#L288).
+Do not substitute the phone Weather plugin ID or an internal negative OS registry
+number. Weather availability requires the phone's
+[Weather capability](https://github.com/coredevices/PebbleOS/blob/2acda4073252801f74c7a29c6480a7a6e53424f6/fw/services/weather/weather_service.c#L297).
+Mobile metadata excludes Aplite for Weather, Health and Workout; Dashboard targets
+Emery. Health visibility also has a firmware
+[capability condition](https://github.com/coredevices/PebbleOS/blob/2acda4073252801f74c7a29c6480a7a6e53424f6/fw/apps/system/health/health.c#L173).
+The picker explains that availability depends on watch and PebbleOS version;
+it does not assert that every listed target is present or launchable now.
+
+Calendar, Send Text and Reminders constants alone do not establish a supported
+launch target: they are absent from this mobile native locker list and allowed
+shortcut map, so they are not offered. System toggles are not added as app
+destinations. Choosing Weather changes only the pin's optional `openApp` binding;
+its reading, tap action and existing custom name/icon remain independent. Default
+and previously saved pins are not silently assigned new destinations.
 
 ## Official public store search
 
@@ -123,7 +162,8 @@ while hidden/removed entries are unavailable, as described by the
 temporarily unavailable and does not cover every sideloaded/private app.
 
 After selection the existing Watch State `launch_app` action still requires a
-connection, `LaunchApps`, and an app available in the user's locker. Saving a
+connection, `LaunchApps`, and an app available in the user's locker (including
+the mobile app's native system entries) or its supported system shortcut map. Saving a
 destination cannot guarantee that a later launch will succeed. Keep the existing
 one-connected-watch limitation and current runtime binding/error handling.
 
