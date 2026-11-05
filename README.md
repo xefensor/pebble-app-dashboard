@@ -1,7 +1,7 @@
 # Dashboard
 
 A stock Pebble watchapp for current activities, the latest available notification
-and pinned readings/actions. **0.4.2 is a local Emery development candidate;
+and pinned readings/actions. **0.4.3 is a local Emery development candidate;
 0.4.0 remains the published prerelease.**
 
 The native app, phone runtime and bundled settings page are implemented in
@@ -21,8 +21,9 @@ The release is pinned to tested source
 [`dc3bbd5`](https://github.com/xefensor/pebble-app-dashboard/tree/dc3bbd53c79d70daf188cbcd8a0d1074c00d8819).
 Later documentation commits preserve those package/source/debug bytes. The local
 copy remains `dist/Dashboard-0.4.0.pbw`; build instructions are below.
-The local 0.4.2 candidate is `dist/Dashboard-0.4.2.pbw`; its native-app picker
-checks are recorded in [docs/qa/0.4.2](docs/qa/0.4.2). The startup-theme checks
+The local 0.4.3 candidate is `dist/Dashboard-0.4.3.pbw`; its settings save/reopen
+checks are recorded in [docs/qa/0.4.3](docs/qa/0.4.3). The native-app picker checks
+remain in [docs/qa/0.4.2](docs/qa/0.4.2). The startup-theme checks
 remain in [docs/qa/0.4.1](docs/qa/0.4.1).
 The previous [Dashboard 0.3.1](https://github.com/xefensor/pebble-app-dashboard/releases/download/v0.3.1/Dashboard-0.3.1.pbw) remains available,
 with source, debug files and checksums in its
@@ -104,15 +105,18 @@ device/source data supplies the value.
 Pins have separate **Show a reading**, **Tap Select** and **Hold Select** choices.
 Quick setup buttons take you to the right part of the editor; these capabilities
 can still be combined in one pin. App selection fills a new pin's name and icon,
-and preserves any name or icon you have edited. Finish with **Add pin** or **Done**,
-then use the page's **Save** to apply your changes. Other pins stay locked while
-you finish or cancel the current item.
+and preserves any name or icon you have edited. The page's **Save** applies the
+pin currently open in the editor along with your other changes. **Add pin** or
+**Done** can optionally keep the item in your draft while you edit other items.
+Other pins stay locked while you finish or cancel the current item. Opening an
+editor or using quick setup does not automatically focus a field or open the
+keyboard. Failed saves retain your unfinished fields and do not claim success.
 
 For **Hold Select**, choose an app by name. **PebbleOS apps** offers Weather,
 Music, Notifications, Alarms, Workout, Health, Timeline, Settings and Watchfaces
 without store search or UUID entry; availability depends on your watch and OS.
 This suite's Timer is under **Other apps**. For example, edit a Weather pin and
-choose **Hold Select → Open app → Weather**, then Done and Save. Its reading and
+choose **Hold Select → Open app → Weather**, then **Save**. Its reading and
 any separate tap action are preserved. **Find another app by name** searches the
 official public Pebble store and shows name/author choices; selecting one fills
 its actual watchapp destination. Choose an app already installed on your watch.

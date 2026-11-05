@@ -60,6 +60,37 @@ destinations. Choosing Weather changes only the pin's optional `openApp` binding
 its reading, tap action and existing custom name/icon remain independent. Default
 and previously saved pins are not silently assigned new destinations.
 
+## Saving an edited destination
+
+Since 0.4.3, **Save** includes the pin currently open in the editor. A separate
+Done step is optional. Validation failure writes nothing, and a pending or failed
+save keeps the form. No editor, quick-setup button or result selection calls
+focus(); only a user choosing a field opens its keyboard/picker.
+
+The page routes the complete normalized preferences through current SDK targets.
+When Dashboard PKJS exists, its `save_settings` config handler calls
+`runtime.configure(settings)` and acknowledges the actual saved value. When
+closed, the settings plugin saves independently. After a plugin acknowledgment,
+the page rechecks for PKJS that may have started during the write and synchronizes
+the same value before claiming success. The acknowledgment must contain the exact
+normalized candidate. A transport failure while PKJS remains present, or unknown
+target availability, stays unconfirmed. Only a fresh query confirming shutdown
+permits plugin fallback; at most three writes handle changing runtime topology.
+
+This order matters on Android. In mobile 1.17.0.1,
+[WebViewJsRunner.restoreLocalStorage](https://github.com/coredevices/mobileapp/blob/89f31dca3fd344ae9923fe9ca2f27b0f1f8a0230/libpebble3/src/androidMain/kotlin/io/rebble/libpebblecommon/js/WebViewJsRunner.kt#L278)
+restores a DOM snapshot and mirrors writes to native storage, but DOM reads do
+not refresh when the config plugin writes native preferences. SDK
+[stop/saveState](https://github.com/coredevices/mobileapp/blob/89f31dca3fd344ae9923fe9ca2f27b0f1f8a0230/libpebble3/src/androidMain/kotlin/io/rebble/libpebblecommon/js/WebViewJsRunner.kt#L374)
+then saves the entire DOM map, potentially replacing a newly saved Weather
+destination with its old value. A plugin save followed by `reload_settings` is
+insufficient because that reload also reads the old DOM. The active writer must
+update both views. On normal closure,
+[handleAppStop](https://github.com/coredevices/mobileapp/blob/89f31dca3fd344ae9923fe9ca2f27b0f1f8a0230/libpebble3/src/commonMain/kotlin/io/rebble/libpebblecommon/connection/endpointmanager/CompanionAppLifecycleManager.kt#L67)
+awaits stop before removing the PKJS session, enabling the confirmed-absence
+fallback. Regression tests model separate DOM/native views and teardown; a
+single shared JavaScript Map masks the overwrite. No mobile fork is required.
+
 ## Official public store search
 
 The mobile 1.17.0.1 source publishes the Pebble store's client search configuration

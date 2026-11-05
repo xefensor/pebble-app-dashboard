@@ -6,7 +6,9 @@ const fs=require('node:fs'),path=require('node:path'),os=require('node:os'),asse
 const {spawn,execFileSync}=require('node:child_process'),{pathToFileURL}=require('node:url');
 const root=path.resolve(__dirname,'..');
 const version=JSON.parse(fs.readFileSync(path.join(root,'package.json'),'utf8')).version;
-const output=path.join(root,'docs/qa',version,'settings');
+const outputOption=process.argv.indexOf('--output');
+const output=outputOption<0?path.join(root,'docs/qa',version,'settings'):path.resolve(process.argv[outputOption+1]);
+const reproduceWeatherReopen=process.argv.includes('--reproduce-weather-reopen');
 const model=require('../src/pkjs/settings');
 const PLUGIN='00aabbcc-2233-4455-6677-889900aabbcc';
 const MUSIC_APP='1f03293d-47af-4f28-b960-f2b02a6dd757',WEATHER_APP='61b22bc8-1e29-460d-a236-3fe409a439ff',CUSTOM_APP='aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee';
@@ -23,9 +25,10 @@ async function click(selector) {return evaluate(`(()=>{const el=document.querySe
 async function field(id,value,event='change') {return evaluate(`(()=>{const el=document.getElementById(${JSON.stringify(id)});el[el.type==='checkbox'?'checked':'value']=${JSON.stringify(value)};el.dispatchEvent(new Event(${JSON.stringify(event)},{bubbles:true}));return true;})()`);}
 async function image(name) {const result=await send('Page.captureScreenshot',{format:'png',captureBeyondViewport:false});fs.writeFileSync(path.join(output,name+'.png'),Buffer.from(result.data,'base64'));}
 async function activitiesImage(name) {await evaluate(`document.getElementById('activities-status').closest('section').scrollIntoView({block:'start'})`);await image(name);}
+async function noAutomaticTextFocus(label) {assert.equal(await evaluate(`!!document.activeElement?.matches('textarea,input:not([type="checkbox"]):not([type="radio"]):not([type="button"]):not([type="submit"])')`),false,label+' must not automatically focus a text field');}
 async function newPin(kind) {
   const selector='#pin-'+kind;
-  if(!await evaluate(`!!document.querySelector(${JSON.stringify(selector)})?.offsetParent`))await click('#add-pin');
+  if(!await evaluate(`!!document.querySelector(${JSON.stringify(selector)})?.offsetParent`)){await click('#add-pin');await noAutomaticTextFocus('Add pin');}
   await until(`!!document.querySelector(${JSON.stringify(selector)})?.offsetParent`,'pin setup choice '+kind);
   await click(selector);await until(`!document.getElementById('editor').hidden`,'pin editor');
 }
@@ -55,8 +58,9 @@ function fakeBridge(initial) {
   const home='00aabbcc-2233-4455-6677-889900aabbcc';
   const state=window.__settingsTest={store:initial,calls:[],loadFailure:false,saveFailure:false,catalogueDelay:0};
   const catalogue={plugins:[{uuid:home,name:'Home lights',sources:[{category:'home',items:['light'],properties:{name:['shortText'],brightness:['numericValue'],on:['boolean']}}],actions:[{name:'set_on',label:'Set light',parameters:{type:'object',properties:{item:{type:'string'},instanceId:{type:'string'},on:{type:'boolean'}},required:['item','instanceId','on']}},{name:'set_label',label:'Set label',parameters:{type:'object',properties:{label:{type:'string'}},required:['label']}}]}],instances:[],activities:[{key:home,name:'Timer provider'},{key:'builtin:music',name:'Music'}]};
-  window.Pebble={addEventListener(type,fn){if(type==='ready')window.addEventListener('load',()=>{fn({target:'pkjs'});fn({target:'plugin'});},{once:true});},sendMessage(target,message){
+  window.Pebble={targets(){return Promise.resolve([{id:'plugin'},{id:'pkjs'}]);},addEventListener(type,fn){if(type==='ready')window.addEventListener('load',()=>{fn({target:'pkjs'});fn({target:'plugin'});},{once:true});},sendMessage(target,message){
     if(target==='pkjs'&&message.type==='reload_settings'){state.calls.push({target:'pkjs',type:message.type});return Promise.resolve({ok:true});}
+    if(target==='pkjs'&&message.type==='save_settings'){state.calls.push({target:'pkjs',type:message.type});state.store=JSON.parse(JSON.stringify(message.settings));return state.saveFailure?Promise.reject(Error('uncertain')):Promise.resolve({ok:true,settings:state.store});}
     if(target==='pkjs'&&message.type==='catalogue'){state.calls.push({target:'pkjs',type:message.type});return new Promise(resolve=>setTimeout(()=>resolve({ok:true,catalogue}),state.catalogueDelay));}
     if(target!=='plugin')return Promise.reject(Error('Unsupported target'));
     state.calls.push(JSON.parse(JSON.stringify(message)));
@@ -73,10 +77,12 @@ function fakeBridge(initial) {
 // Real Dashboard config handlers are used below, with the distinct API surfaces
 // verified in the official SDK: plugin has storage/readSource; only PKJS has
 // enumeratePlugins. No native HELLO is sent and no live source may be touched.
-function actualContexts() {
+function actualContexts(options={}) {
   const values=new Map(),events={},calls={enumerations:0,reads:0,subscriptions:0,actions:0,appMessages:0};
   const storage={getItem:key=>values.get(key)??null,setItem:(key,value)=>values.set(key,value)};
   model.save(storage,model.defaults());
+  const domValues=new Map(values);
+  const pkjsStorage=options.androidStorage?{getItem:key=>domValues.get(key)??null,setItem:(key,value)=>{domValues.set(key,value);values.set(key,value);}}:storage;
   const metadata=[{uuid:PLUGIN,name:'Installed Timer',sources:[{category:'activity',items:['summary'],properties:require('pebble-activities/summary').SOURCE_PROPERTIES}],actions:[]}];
   let flags={},pluginHandler;
   const forbidden=name=>()=>{calls[name]++;throw Error('Settings must not '+name);};
@@ -86,10 +92,10 @@ function actualContexts() {
     enumeratePlugins:()=>{calls.enumerations++;if(flags.catalogueFailure)return Promise.reject(Error('permission denied'));return Promise.resolve(metadata);},
     readSource:forbidden('reads'),subscribeToSource:forbidden('subscriptions'),invokeAction:forbidden('actions'),
     sendAppMessage:()=>{calls.appMessages++;},openURL:()=>{throw Error('Unexpected navigation');}};
-  vm.runInNewContext(fs.readFileSync(path.join(root,'src/pkjs/index.js'),'utf8'),{Pebble:pkjs,localStorage:storage,require:name=>require(path.resolve(root,'src/pkjs',name)),setTimeout,clearTimeout,Promise,console});
-  return {calls,storage,metadata,dispatch(request,respond){
+  vm.runInNewContext(fs.readFileSync(path.join(root,'src/pkjs/index.js'),'utf8'),{Pebble:pkjs,localStorage:pkjsStorage,require:name=>require(path.resolve(root,'src/pkjs',name)),setTimeout,clearTimeout,Promise,console});
+  return {calls,storage,metadata,teardownPkjs(){if(options.androidStorage){const saved=new Map(domValues);values.clear();for(const [key,value] of saved)values.set(key,value);}},dispatch(request,respond){
     flags=request.flags||{};
-    const delay=request.message.type==='load_settings'?flags.settingsDelay:request.message.type==='catalogue'?request.target==='plugin'&&flags.pluginCatalogueDelay!==undefined?flags.pluginCatalogueDelay:flags.catalogueDelay:0;
+    const delay=request.message.type==='load_settings'?flags.settingsDelay:request.message.type==='save_settings'?flags.saveDelay:request.message.type==='catalogue'?request.target==='plugin'&&flags.pluginCatalogueDelay!==undefined?flags.pluginCatalogueDelay:flags.catalogueDelay:0;
     const reply=response=>setTimeout(()=>respond(response),delay||0);
     if(request.target==='plugin')pluginHandler(request.message,reply);
     else if(request.target==='pkjs'&&flags.pkjsReady)events.configmessage({data:request.message,respond:reply});
@@ -97,14 +103,14 @@ function actualContexts() {
   }};
 }
 function supportedContexts(options) {
-  const state=window.__settingsTest={mode:'real-handlers',generation:options.generation,calls:[],pkjsReady:false,catalogueFailure:false,settingsDelay:options.settingsDelay||0,catalogueDelay:options.catalogueDelay||0,pluginCatalogueDelay:options.pluginCatalogueDelay};
+  const state=window.__settingsTest={mode:'real-handlers',generation:options.generation,calls:[],pkjsReady:!!options.pkjsReady,catalogueFailure:false,settingsDelay:options.settingsDelay||0,catalogueDelay:options.catalogueDelay||0,pluginCatalogueDelay:options.pluginCatalogueDelay,saveDelay:0};
   const listeners=[],pending=new Map();let id=0;
   state.emitReady=function(target){if(target==='pkjs')state.pkjsReady=true;listeners.forEach(fn=>fn({target}));};
   window.__dashboardConfigReply=function(id,response){const resolve=pending.get(id);if(resolve){pending.delete(id);resolve(response);}};
   window.Pebble={targets(){return Promise.resolve(state.pkjsReady?[{id:'plugin',name:'Dashboard settings'},{id:'pkjs',name:'Dashboard'}]:[{id:'plugin',name:'Dashboard settings'}]);},addEventListener(type,fn){if(type==='ready')listeners.push(fn);},sendMessage(target,message){
     state.calls.push({target,type:message.type});const request=++id;
     if(target==='pkjs'&&state.transportFailure)return Promise.reject(Error('PKJS transport unavailable'));
-    return new Promise(resolve=>{pending.set(request,resolve);window.__dashboardConfigCall(JSON.stringify({id:request,target,message,flags:{pkjsReady:state.pkjsReady,catalogueFailure:state.catalogueFailure,settingsDelay:state.settingsDelay,catalogueDelay:state.catalogueDelay,pluginCatalogueDelay:state.pluginCatalogueDelay}}));});
+    return new Promise(resolve=>{pending.set(request,resolve);window.__dashboardConfigCall(JSON.stringify({id:request,target,message,flags:{pkjsReady:state.pkjsReady,catalogueFailure:state.catalogueFailure,settingsDelay:state.settingsDelay,catalogueDelay:state.catalogueDelay,pluginCatalogueDelay:state.pluginCatalogueDelay,saveDelay:state.saveDelay}}));});
   }};
   window.addEventListener('load',()=>state.emitReady('plugin'),{once:true});
 }
@@ -116,7 +122,7 @@ async function run() {
     htmlPath=path.join(scratch,'config.html');fs.writeFileSync(htmlPath,content);
     const hash=value=>require('node:crypto').createHash('sha256').update(value).digest('hex');
     artifactBinding={configOrigin:'actual archived PBW config.html',pbw:path.basename(pbwPath),pbwSha256:hash(fs.readFileSync(pbwPath)),configSha256:hash(content)};
-    assert.equal(content.toString(),fs.readFileSync(path.join(root,'config.html'),'utf8'),'Packaged settings differ from current generated page');
+    if(!reproduceWeatherReopen)assert.equal(content.toString(),fs.readFileSync(path.join(root,'config.html'),'utf8'),'Packaged settings differ from current generated page');
   }
   browser=spawn(process.env.CHROMIUM_BINARY||'/usr/bin/chromium',['--headless=new','--no-sandbox','--disable-gpu','--disable-dev-shm-usage','--disable-background-networking','--no-first-run','--remote-debugging-port=0','--user-data-dir='+scratch,'about:blank'],{stdio:['ignore',logFd,logFd],detached:true});
   const portFile=path.join(scratch,'DevToolsActivePort');for(let step=0;step<200&&!fs.existsSync(portFile);step++){if(browser.exitCode!==null)throw Error(fs.readFileSync(path.join(scratch,'chromium.log'),'utf8').slice(-1800));await sleep(25);}assert.ok(fs.existsSync(portFile),'Chromium socket unavailable');
@@ -133,6 +139,26 @@ async function run() {
   await send('Page.navigate',{url:pathToFileURL(htmlPath).href});
   await until(`document.getElementById('pins')&&document.querySelectorAll('#pins>li').length===4`,'saved settings loaded');
   await until(`document.querySelectorAll('#activities>li').length===2`,'metadata loaded');
+  if(reproduceWeatherReopen){
+    contextBridge=actualContexts();let generation=0;
+    async function reopen(){
+      await send('Page.removeScriptToEvaluateOnNewDocument',{identifier:bridgeScript});
+      bridgeScript=(await send('Page.addScriptToEvaluateOnNewDocument',{source:'('+supportedContexts.toString()+')('+JSON.stringify({generation:++generation})+');'})).identifier;
+      await send('Page.reload',{ignoreCache:true});
+      await until(`window.__settingsTest?.generation===${generation}&&document.querySelectorAll('#pins>li').length===4&&!document.getElementById('add-pin').disabled`,'real backend full settings reopen');
+    }
+    async function editorState(){return evaluate(`({target:document.getElementById('app-target').value,label:document.getElementById('app-label').value,uuid:document.getElementById('app-uuid').value,focused:document.activeElement?.id||'',saveDisabled:document.getElementById('save').disabled})`);}
+    await reopen();await click('#pins>li:first-child button');await field('app-target',WEATHER_APP);
+    const selected=await editorState();await click('#save');
+    const savedBeforeReopen=model.load(contextBridge.storage).pins[0];
+    await reopen();await click('#pins>li:first-child button');const afterGlobalSave=await editorState();
+    await field('app-target',WEATHER_APP);await click('#editor-save');await click('#save');
+    await until(`document.getElementById('status').textContent==='Settings saved.'`,'documented localDone then globalSave');
+    const savedWithDone=model.load(contextBridge.storage).pins[0];
+    await reopen();await click('#pins>li:first-child button');const afterDoneSave=await editorState();
+    const report={result:afterGlobalSave.target===WEATHER_APP?'NOT_REPRODUCED':'REPRODUCED',scope:'Actual archived settings HTML, full Page.reload and real source config-plugin settings storage; fictional SDK metadata and no app launch.',artifactBinding,selectedBeforeGlobalSave:selected,savedBeforeReopen,reopenedAfterGlobalSave:afterGlobalSave,savedAfterDoneAndSave:savedWithDone,reopenedAfterDoneAndSave:afterDoneSave,sourceCalls:contextBridge.calls};
+    fs.writeFileSync(path.join(output,'weather-reopen-reproduction.json'),JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify(report,null,2));return;
+  }
   assert.equal(await evaluate(`document.getElementById('save').disabled`),true);
   assert.equal(await evaluate(`document.querySelector('#pins>li button[aria-label^="Move"]').disabled`),true,'first pin Up must remain disabled');
   await image('overview-light');
@@ -148,11 +174,11 @@ async function run() {
   assert.equal(await evaluate(`document.getElementById('add-pin').disabled||document.querySelector('#pins>li button').disabled`),false,'Done restores pin editing controls');
   await click('#save');await until(`document.getElementById('status').textContent==='Settings saved.'`,'confirmed save');
   let saved=await evaluate('window.__settingsTest.store');assert.equal(saved.dark,true);assert.equal(saved.pins[4].reading.instanceId,'3');assert.equal(saved.pins[4].action.toggleProperty,'on');assert.deepEqual(saved.pins[4].action.args,{});
-  assert.ok(await evaluate(`window.__settingsTest.calls.some(call=>call.target==='pkjs'&&call.type==='reload_settings')`),'confirmed saves should notify a running PKJS host');
+  assert.ok(await evaluate(`window.__settingsTest.calls.some(call=>call.target==='pkjs'&&call.type==='save_settings')`),'a running PKJS host must write the exact saved preferences into its own cache');
   // Reordering is explicit and the pin remains a value+action pair.
   await click('#pins>li:last-child button[aria-label^="Move"][aria-label$="up"]');await click('#save');await until(`document.getElementById('status').textContent==='Settings saved.'`,'reorder save');saved=await evaluate('window.__settingsTest.store');assert.equal(saved.pins[3].id,saved.pins.filter(pin=>pin.label==='Kitchen light')[0].id);
   // Late discovery cannot overwrite the editor's in-progress source or label.
-  await click('#pins>li:nth-child(4) button');await field('pin-label','Kitchen draft','input');
+  await click('#pins>li:nth-child(4) button');await noAutomaticTextFocus('Edit pin');await field('pin-label','Kitchen draft','input');
   await evaluate('window.__settingsTest.catalogueDelay=80');await click('#refresh-catalogue');await sleep(150);
   assert.equal(await evaluate(`document.getElementById('pin-label').value`),'Kitchen draft');assert.equal(await evaluate(`document.getElementById('property').value`),'brightness');
   await image('pin-editor');
@@ -368,8 +394,59 @@ async function run() {
     assert.equal(await evaluate(`document.querySelector('#activities>li input').checked`),false,'both reply orders preserve saved visibility');
     assert.equal(await evaluate(`document.getElementById('save').disabled`),true,'discovery cannot dirty preferences');
   }
-  assert.deepEqual({...contextBridge.calls,enumerations:0},{enumerations:0,reads:0,subscriptions:0,actions:0,appMessages:0},'configuration must remain metadata-only without native HELLO');
+  const contextTotals={...contextBridge.calls},reopenedWeather=[];
+  for(const route of ['plugin','pkjs']){
+    contextBridge=actualContexts({androidStorage:true});
+    await reopen({pkjsReady:route==='pkjs',waitCatalogue:false,pluginCatalogueDelay:120});
+    await click('#pins>li:first-child button');await noAutomaticTextFocus('Real-backend edit');
+    const before=model.load(contextBridge.storage);
+    await field('app-target',WEATHER_APP);
+    if(route==='pkjs'){
+      await field('app-target','__custom__');await field('app-uuid','bad-id','input');await field('app-label','Draft Weather','input');await field('pin-label','Weather draft','input');
+      await click('#save');
+      assert.ok(await evaluate(`document.getElementById('editor-error').textContent.includes('UUID')`),'invalid active editor must show validation failure');
+      assert.deepEqual(model.load(contextBridge.storage),before,'validation cannot write replacement settings');
+      assert.equal(await evaluate(`window.__settingsTest.calls.filter(call=>call.type==='save_settings').length`),0);
+      assert.equal(await evaluate(`document.getElementById('app-uuid').value`),'bad-id');
+      await field('app-target',WEATHER_APP);await evaluate(`window.__settingsTest.transportFailure=true`);await click('#save');
+      await until(`document.getElementById('status').textContent.includes('not confirmed')`,'active PKJS save refusal remains uncertain');
+      assert.equal(await evaluate(`document.getElementById('editor').hidden`),false);
+      assert.equal(await evaluate(`document.getElementById('pin-label').value`),'Weather draft');
+      assert.equal(await evaluate(`document.getElementById('app-target').value`),WEATHER_APP);
+      assert.equal(await evaluate(`window.__settingsTest.calls.some(call=>call.target==='plugin'&&call.type==='save_settings')`),false,'still-running PKJS failure must not fall through to plugin storage');
+      assert.deepEqual(model.load(contextBridge.storage),before);
+      await evaluate(`window.__settingsTest.transportFailure=false;window.__settingsTest.saveDelay=300`);
+    }
+    assert.equal(await evaluate(`document.getElementById('save').disabled`),false,'footer Save must accept the active pin without Done');
+    await click('#save');
+    if(route==='pkjs'){
+      assert.equal(await evaluate(`document.getElementById('editor').hidden`),false,'editor stays until the backend acknowledgement');
+      assert.equal(await evaluate(`document.getElementById('editor-cancel').disabled`),true,'saving editor cannot be discarded before acknowledgement');
+    }
+    await until(`document.getElementById('status').textContent==='Settings saved.'`,'one-click real-backend Weather save '+route);
+    assert.equal(await evaluate(`window.__settingsTest.calls.filter(call=>call.type==='save_settings').at(-1).target`),route);
+    const saved=model.load(contextBridge.storage).pins[0];assert.deepEqual(saved.openApp,{watchAppUuid:WEATHER_APP,label:'Weather'});
+    assert.deepEqual(saved.reading,before.pins[0].reading);
+    if(route==='pkjs')contextBridge.teardownPkjs();
+    assert.deepEqual(model.load(contextBridge.storage).pins[0],saved,'PKJS teardown cannot overwrite the new native preferences');
+    await reopen({waitCatalogue:false,pluginCatalogueDelay:120});
+    await click('#pins>li:first-child button');await noAutomaticTextFocus('Full-page reopened editor');
+    const expected={target:WEATHER_APP,label:'Weather',uuid:WEATHER_APP};
+    const current=()=>evaluate(`({target:document.getElementById('app-target').value,label:document.getElementById('app-label').value,uuid:document.getElementById('app-uuid').value})`);
+    assert.deepEqual(await current(),expected);
+    await sleep(180);assert.deepEqual(await current(),expected,'late metadata cannot clear a reopened destination');
+    assert.deepEqual(model.load(contextBridge.storage).pins[0],saved);
+    const focus=await evaluate(`({id:document.activeElement?.id||'',tag:document.activeElement?.tagName||'',textFocused:!!document.activeElement?.matches('textarea,input:not([type="checkbox"]):not([type="radio"]):not([type="button"]):not([type="submit"])')})`);
+    assert.equal(focus.textFocused,false);
+    if(route==='pkjs'){await evaluate(`document.getElementById('app-target').closest('fieldset').scrollIntoView({block:'start'})`);await image('weather-after-save-reopen');appScreens.push('weather-after-save-reopen.png');}
+    await click('#editor-cancel');await click('#add-pin');await noAutomaticTextFocus('Real-backend Add pin');await click('#editor-cancel');
+    reopenedWeather.push({route,fullPageReload:true,androidSeparatePrefsAndPkjsDom:true,pkjsTeardownTested:route==='pkjs',savedPin:saved,reopenedEditor:expected,lateMetadataPreserved:true,focusAfterReopen:focus});
+    for(const name of Object.keys(contextTotals))contextTotals[name]+=contextBridge.calls[name];
+  }
+  appChecks.push('one footer Save accepts the active Weather editor and survives full-page reload through closed-plugin and live-PKJS backends, separate Android stores and PKJS teardown');
+  appChecks.push('active-editor validation and live-target save failure preserve inputs without writes or unsafe plugin fallback; retry waits for acknowledgement and Add/Edit never focus text automatically');
+  assert.deepEqual({...contextTotals,enumerations:0},{enumerations:0,reads:0,subscriptions:0,actions:0,appMessages:0},'configuration must remain metadata-only without native HELLO');
   assert.deepEqual(exceptions,[]);
-  const result={result:'PASS',scope:'Chromium settings with an intercepted app-store XHR model, UI bridge fixtures and actual Dashboard source plugin/PKJS config handlers on separate official SDK API surfaces; no real network, live phone, source/action invocation or app launch.',artifactBinding,checks:['mixed pin typed action+reading','exact instance binding','automatic toggle target/state arguments without duplicate entry','ordinary action fields remain required','on/off toggle property','pin reorder','confirmed save notifies running PKJS','late catalogue preserves draft','uncertain save readback','load failure disables editing','retry','short dark viewport no overflow','Find phone never probed','closed first install explains discovery with Music visible','closed settings save through actual plugin handler without PKJS','closed settings read actual public metadata cache without enumeration','PKJS target discovers inactive installed providers','late PKJS readiness preserves unsaved settings','discovery failure preserves provider choices and shows retry','current SDK targets detect watchapp closure without a shutdown event','older SDK missing targets and PKJS rejection use one bounded cache fallback','stale cached reply cannot replace newer live discovery','both settings/catalogue reply orders preserve priority and visibility','no source reads, subscriptions, actions or native messages',...appChecks],appSearchRequests:searched,contextCalls:contextBridge.calls,screens:['overview-light.png','pin-editor.png','overview-dark-small.png','activities-watch-closed-first-install.png','activities-live-discovery.png','activities-watch-closed-cache.png','activities-discovery-error.png',...appScreens]};fs.writeFileSync(path.join(output,'validation.json'),JSON.stringify(result,null,2)+'\n');console.log(JSON.stringify(result,null,2));
+  const result={result:'PASS',scope:'Chromium settings with an intercepted app-store XHR model, UI bridge fixtures and actual Dashboard source plugin/PKJS config handlers on separate official SDK API surfaces; focused saves also model separate Android native preferences and PKJS DOM storage/teardown. No real network, live phone, source/action invocation or app launch.',artifactBinding,checks:['mixed pin typed action+reading','exact instance binding','automatic toggle target/state arguments without duplicate entry','ordinary action fields remain required','on/off toggle property','pin reorder','confirmed save writes through running PKJS','late catalogue preserves draft','uncertain save readback','load failure disables editing','retry','short dark viewport no overflow','Find phone never probed','closed first install explains discovery with Music visible','closed settings save through actual plugin handler without PKJS','closed settings read actual public metadata cache without enumeration','PKJS target discovers inactive installed providers','late PKJS readiness preserves unsaved settings','discovery failure preserves provider choices and shows retry','current SDK targets detect watchapp closure without a shutdown event','older SDK missing targets and PKJS rejection use one bounded cache fallback','stale cached reply cannot replace newer live discovery','both settings/catalogue reply orders preserve priority and visibility','no source reads, subscriptions, actions or native messages',...appChecks],reopenedWeather,appSearchRequests:searched,contextCalls:contextTotals,screens:['overview-light.png','pin-editor.png','overview-dark-small.png','activities-watch-closed-first-install.png','activities-live-discovery.png','activities-watch-closed-cache.png','activities-discovery-error.png',...appScreens]};fs.writeFileSync(path.join(output,'validation.json'),JSON.stringify(result,null,2)+'\n');console.log(JSON.stringify(result,null,2));
 }
 run().catch(error=>{console.error(error);process.exitCode=1;}).finally(async()=>{try{if(socket)socket.close();}catch(_){}if(browser){try{process.kill(-browser.pid,'SIGTERM');}catch(_){}}if(logFd!==undefined)fs.closeSync(logFd);if(scratch)fs.rmSync(scratch,{recursive:true,force:true});});

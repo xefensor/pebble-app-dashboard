@@ -62,6 +62,33 @@ function runtimeFixture(prefs=minimal(),plugins=[]){
   runtime.ready();runtime.message(native(pebble,protocol.op.HELLO,55,1));time.advance(0);
   return {time,pebble,storage,runtime,frame:()=>decode(pebble.sent.filter(m=>m[protocol.keys.DB_DATA]).at(-1)[protocol.keys.DB_DATA])};
 }
+function pkjsConfigFixture(storage){
+  const fs=require('node:fs'),vm=require('node:vm'),requireIndex=require('node:module').createRequire(require.resolve('../src/pkjs/index'));
+  const time=clock(),pebble=sdk(),events={};let runtime;
+  pebble.addEventListener=(name,handler)=>events[name]=handler;
+  vm.runInNewContext(fs.readFileSync(require.resolve('../src/pkjs/index'),'utf8'),{
+    Pebble:pebble,localStorage:storage,
+    require(name){
+      if(name==='./runtime')return options=>(runtime=createRuntime({...options,...time,activitiesHost:host()}));
+      return requireIndex(name);
+    }
+  });
+  return {time,pebble,events,get runtime(){return runtime;},receive(message){
+    let response;events.configmessage({data:message,respond:value=>response=value});
+    assert.notEqual(response,undefined,'synchronous settings handler must answer');return response;
+  }};
+}
+function androidSettingsStores(prefs){
+  // Stock Android PKJS restores a DOM snapshot once and mirrors writes to the
+  // native store. The settings plugin reads that native store directly. SDK
+  // teardown persists the DOM map wholesale, so a plugin-only write can be lost.
+  const nativeValues=new Map([[settings.key,JSON.stringify(settings.normalize(prefs))]]),domValues=new Map(nativeValues);
+  const pluginStorage={getItem:key=>nativeValues.get(key)??null,setItem:(key,value)=>nativeValues.set(key,value)};
+  const pkjsStorage={getItem:key=>domValues.get(key)??null,setItem(key,value){domValues.set(key,value);nativeValues.set(key,value);}};
+  return {nativeValues,domValues,pluginStorage,pkjsStorage,teardown(){
+    const snapshot=[...domValues];nativeValues.clear();for(const [key,value] of snapshot)nativeValues.set(key,value);
+  }};
+}
 
 test('installed activity discovery matches the real SDK declaration shape and pinned consumer without needing active cards',()=>{
   const api=require('pebble-activities/host'),summary=require('pebble-activities/summary');
@@ -108,6 +135,59 @@ test('actual PKJS configmessage serves metadata and preserves the prior public c
   const before=storage.getItem(metadata.key);pebble.enumeratePlugins=()=>Promise.reject(Error('service unavailable'));
   result=await receive({type:'catalogue'});assert.equal(result.ok,false);assert.match(result.message,/Retry discovery/);assert.equal(storage.getItem(metadata.key),before);
   assert.equal(pebble.subscriptions.length,0);assert.equal(pebble.invocations.length,0);assert.equal(storage.getItem('dashboard.settings.v1'),null,'discovery cannot write replacement preferences');
+});
+
+test('actual PKJS save keeps Weather in separate Android DOM and plugin stores after teardown',()=>{
+  const stores=androidSettingsStores(settings.defaults()),f=pkjsConfigFixture(stores.pkjsStorage);
+  let receivePlugin;require('../src/plugin').register({registerConfigHandler:fn=>receivePlugin=fn},stores.pluginStorage);
+  const chosen=settings.defaults();chosen.pins[0].openApp={watchAppUuid:'61b22bc8-1e29-460d-a236-3fe409a439ff',label:'Weather'};
+  chosen.dark=true;
+  // Reproduce the old plugin-save/reload sequence against the two actual API
+  // surfaces. Reload cannot refresh an already restored Android DOM snapshot.
+  let pluginReply;receivePlugin({type:'save_settings',settings:chosen},value=>pluginReply=value);
+  assert.equal(pluginReply.ok,true);assert.deepEqual(settings.load(stores.pluginStorage),chosen);
+  assert.equal(f.receive({type:'reload_settings'}).ok,true);
+  assert.equal(settings.load(stores.pkjsStorage).pins[0].openApp,undefined);
+  stores.teardown();assert.equal(settings.load(stores.pluginStorage).pins[0].openApp,undefined);
+
+  const response=f.receive({type:'save_settings',settings:chosen});
+  assert.equal(response.ok,true);assert.deepEqual(response.settings,chosen);
+  assert.deepEqual(settings.load(stores.pkjsStorage),chosen);
+  receivePlugin({type:'load_settings'},value=>pluginReply=value);
+  assert.equal(pluginReply.ok,true);assert.deepEqual(pluginReply.settings,chosen);
+  f.runtime.stop();stores.teardown();
+  receivePlugin({type:'load_settings'},value=>pluginReply=value);
+  assert.deepEqual(pluginReply.settings,chosen,'closing PKJS must not restore the old app destination');
+  assert.equal(f.pebble.subscriptions.length,0);assert.equal(f.pebble.invocations.length,0);
+  assert.equal(f.pebble.sent.length,0);assert.equal(f.time.count(),0);
+});
+
+test('PKJS settings save rejects malformed payloads atomically and stopped runtimes stay terminal',()=>{
+  const stores=androidSettingsStores(settings.defaults()),f=pkjsConfigFixture(stores.pkjsStorage);
+  const nativeBefore=[...stores.nativeValues],domBefore=[...stores.domValues];
+  for(const value of [undefined,null,{},[],{...settings.defaults(),pins:[{id:'invalid',label:'Invalid',openApp:{watchAppUuid:'not-a-uuid',label:'Weather'}}]}]){
+    const response=f.receive({type:'save_settings',settings:value});assert.equal(response.ok,false);
+    assert.deepEqual([...stores.nativeValues],nativeBefore);assert.deepEqual([...stores.domValues],domBefore);
+  }
+  f.runtime.stop();
+  const chosen=settings.defaults();chosen.pins[0].openApp={watchAppUuid:'61b22bc8-1e29-460d-a236-3fe409a439ff',label:'Weather'};
+  const response=f.receive({type:'save_settings',settings:chosen});
+  assert.equal(response.ok,true);assert.deepEqual(response.settings,chosen);
+  assert.deepEqual(settings.load(stores.pkjsStorage),chosen);assert.deepEqual(settings.load(stores.pluginStorage),chosen);
+  f.events.ready();f.events.appmessage({payload:native(f.pebble,protocol.op.HELLO,55,1)});f.time.advance(120000);
+  assert.equal(f.pebble.subscriptions.length,0);assert.equal(f.pebble.invocations.length,0);
+  assert.equal(f.pebble.sent.length,0);assert.equal(f.time.count(),0);
+});
+
+test('closed settings plugin can save Weather without a PKJS context or watch work',()=>{
+  const stores=androidSettingsStores(settings.defaults());let receive;
+  require('../src/plugin').register({registerConfigHandler:fn=>receive=fn},stores.pluginStorage);
+  const chosen=settings.defaults();chosen.pins[0].openApp={watchAppUuid:'61b22bc8-1e29-460d-a236-3fe409a439ff',label:'Weather'};
+  let response;receive({type:'save_settings',settings:chosen},value=>response=value);
+  assert.equal(response.ok,true);assert.deepEqual(response.settings,chosen);
+  receive({type:'load_settings'},value=>response=value);assert.deepEqual(response.settings,chosen);
+  assert.notEqual(stores.pkjsStorage.getItem(settings.key),stores.pluginStorage.getItem(settings.key),
+    'fixture must retain distinct DOM and native stores rather than masking the SDK boundary');
 });
 
 test('public catalogue cache strips live fields and invocation arguments, bounds schemas and rejects unreadable oversized caches',()=>{

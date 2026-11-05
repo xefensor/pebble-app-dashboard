@@ -1,0 +1,64 @@
+{
+  "result": "REPRODUCED",
+  "scope": "Actual archived settings HTML, full Page.reload and real source config-plugin settings storage; fictional SDK metadata and no app launch.",
+  "artifactBinding": {
+    "configOrigin": "actual archived PBW config.html",
+    "pbw": "Dashboard-0.4.2.pbw",
+    "pbwSha256": "e54b9df39aa4f7b0b7abecd8fff00b1abaf3cbcaab550066c9565de2819acdf4",
+    "configSha256": "485d14d116be64c600b25273cf00a2eec230ce5bef828cfe219a1c79ea5fae13"
+  },
+  "selectedBeforeGlobalSave": {
+    "target": "61b22bc8-1e29-460d-a236-3fe409a439ff",
+    "label": "Weather",
+    "uuid": "61b22bc8-1e29-460d-a236-3fe409a439ff",
+    "focused": "pin-label",
+    "saveDisabled": true
+  },
+  "savedBeforeReopen": {
+    "id": "weather",
+    "label": "Weather",
+    "icon": "weather",
+    "reading": {
+      "category": "weather",
+      "item": "location",
+      "property": "temperature",
+      "index": 0
+    }
+  },
+  "reopenedAfterGlobalSave": {
+    "target": "",
+    "label": "",
+    "uuid": "",
+    "focused": "pin-label",
+    "saveDisabled": true
+  },
+  "savedAfterDoneAndSave": {
+    "id": "weather",
+    "label": "Weather",
+    "icon": "weather",
+    "reading": {
+      "category": "weather",
+      "item": "location",
+      "property": "temperature",
+      "index": 0
+    },
+    "openApp": {
+      "watchAppUuid": "61b22bc8-1e29-460d-a236-3fe409a439ff",
+      "label": "Weather"
+    }
+  },
+  "reopenedAfterDoneAndSave": {
+    "target": "61b22bc8-1e29-460d-a236-3fe409a439ff",
+    "label": "Weather",
+    "uuid": "61b22bc8-1e29-460d-a236-3fe409a439ff",
+    "focused": "pin-label",
+    "saveDisabled": true
+  },
+  "sourceCalls": {
+    "enumerations": 0,
+    "reads": 0,
+    "subscriptions": 0,
+    "actions": 0,
+    "appMessages": 0
+  }
+}

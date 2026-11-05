@@ -22,9 +22,14 @@ Weather, without store search. Existing pins are not migrated. Native choices
 change only `openApp`; readings, actions and custom labels/icons remain separate.
 See [native identities and availability](APP-PICKER.md).
 The editor offers independent
-reading, tap action and hold-app sections, with quick setup and local Done/Cancel
-before the global confirmed Save. Other pin edits/reordering are disabled while
-an item is open to protect its index and unfinished draft.
+reading, tap action and hold-app sections, with quick setup and optional local
+Done/Cancel. Since 0.4.3 the global Save also gathers and validates an open editor
+without requiring Done first. The pure gather step does not replace the draft;
+validation and transport failures retain the form, and only a confirmed save
+closes it. Other pin edits/reordering are disabled while an item is open to
+protect its index and unfinished draft. Saving disables Cancel as well as inputs.
+Editor opening, quick setup and store-result selection never call focus();
+explicit navigation scrolls to the section without opening the keyboard.
 
 `app-picker.js` exports `common`, `label`, `searchUrl`, `parseResults` and a
 self-contained `browserFactory` embedded beside the settings model in both
@@ -58,7 +63,10 @@ returning `{ready,message,configure,stop,configuration,catalogue,reloadSettings,
 legacy settings page. When `needsRepair` is true, pass no valid initial settings
 to that page so it requires explicit repair instead of presenting saved defaults.
 `configure(settings)` validates and saves preferences then rebinds sources.
-`reloadSettings()` adopts already-saved settings without writing them again;
+`reloadSettings()` adopts settings already visible to that runtime's storage
+without writing them again; it cannot refresh Android's separate DOM snapshot
+from a config-plugin write. The settings page uses the confirmed active-writer
+route documented in [APP-PICKER.md](APP-PICKER.md), not a reload notification.
 `connectionChanged(connected)` updates live connection state.
 `stop()` is terminal for watch/source work. Later explicit settings saves,
 reloads and public catalogue reads can remain useful, but cannot restart

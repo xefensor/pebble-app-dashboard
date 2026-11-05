@@ -21,7 +21,7 @@ function behavior(initial, makeModel, makeApps) {
   function dirty() { return loaded && (repairing || uncertain || JSON.stringify(draft) !== confirmed); }
   function controls() {
     document.querySelectorAll('[data-edit]').forEach(function(field) { field.disabled = !loaded || pending() || editing !== null && !!field.closest('#pins') || field.getAttribute('data-boundary') === 'true' || field.getAttribute('data-automatic') === 'true'; });
-    $('save').disabled = !loaded || pending() || editing !== null || !dirty();
+    $('save').disabled = !loaded || pending() || editing === null && !dirty();
     $('discard').disabled = pending() || !loaded || !dirty() && editing === null;
     $('discard').textContent = legacy ? 'Cancel' : uncertain ? 'Reload saved' : 'Discard';
     $('save').textContent = pending() ? 'Saving…' : 'Save';
@@ -29,6 +29,7 @@ function behavior(initial, makeModel, makeApps) {
     $('add-pin').disabled = !loaded || pending() || editing !== null || draft.pins.length >= 64;
     $('preview').disabled = !loaded || pending() || !draft.showNotifications;
     $('editor').hidden = editing === null;
+    $('editor-cancel').disabled = pending();
     if (editing !== null) {
       $('editor-heading').textContent = editing.index < draft.pins.length ? 'Edit pinned item' : 'Add pinned item';
       $('editor-save').textContent = editing.index < draft.pins.length ? 'Done' : 'Add pin';
@@ -268,7 +269,7 @@ function behavior(initial, makeModel, makeApps) {
       var button = node('button'); button.type = 'button'; button.setAttribute('data-edit', ''); button.setAttribute('data-app-uuid', entry.uuid);
       button.setAttribute('aria-label', 'Choose ' + entry.name + (entry.author ? ' by ' + entry.author : ''));
       button.appendChild(node('strong', entry.name)); if (entry.author) button.appendChild(node('span', entry.author, 'hint'));
-      button.onclick = function() { $('app-target').value = entry.uuid; selectApp(); $('app-search-panel').open = false; $('app-target').focus(); };
+      button.onclick = function() { $('app-target').value = entry.uuid; selectApp(); $('app-search-panel').open = false; $('app-target').scrollIntoView({block:'center'}); };
       list.appendChild(button);
     });
   }
@@ -406,7 +407,7 @@ function behavior(initial, makeModel, makeApps) {
     $('app-search-query').value = ''; $('app-status').textContent = ''; $('app-search-panel').open = false; $('app-advanced').open = false;
     renderAppChoices(pin.openApp ? pin.openApp.watchAppUuid : '');
     $('editor-error').textContent = ''; $('inspect-status').textContent = '';
-    refreshEditorChoices(); controls(); say('Choose what this pin shows or does, then finish the item and Save.'); $('pin-label').focus(); $('editor').scrollIntoView({block:'start', behavior:'auto'});
+    refreshEditorChoices(); controls(); say('Edit this pin, then Save to apply your changes.'); $('editor').scrollIntoView({block:'start', behavior:'auto'});
   }
   function gatherArguments() {
     var args;
@@ -425,24 +426,27 @@ function behavior(initial, makeModel, makeApps) {
     if (automatic) ['item','instanceId','on'].forEach(function(name) { delete args[name]; });
     return args;
   }
+  function editedSettings() {
+    var pin = {id:editing.pin.id, label:$('pin-label').value.trim(), icon:$('icon').value};
+    if ($('has-reading').checked) {
+      var source = currentSource(); if (!source || !$('property').value) throw Error('Choose a source and reading.');
+      pin.reading = {category:source.category, item:source.item, property:$('property').value}; if (source.plugin) pin.reading.plugin = source.plugin;
+      var instance = $('instance').value; if (instance.indexOf('id:') === 0) pin.reading.instanceId = instance.slice(3); else pin.reading.index = Number(instance.slice(6));
+    }
+    if ($('action').value === 'builtin:find-phone') pin.builtin = 'find-phone';
+    else if ($('action').value !== 'none') {
+      var action = currentAction(); if (!action) throw Error('Choose an available action or keep its saved binding.');
+      pin.action = {plugin:action.plugin, action:action.action, args:gatherArguments(), label:$('action-label').value.trim(), confirm:$('confirm-action').checked};
+      if ($('toggle').value) { if (!pin.reading) throw Error('Choose a reading before binding its on/off state.'); pin.action.toggleProperty = $('toggle').value; }
+    }
+    if ($('app-target').value) pin.openApp = {watchAppUuid:$('app-target').value === '__custom__' ? $('app-uuid').value.trim() : $('app-target').value, label:$('app-label').value.trim()};
+    var next = clone(draft); if (editing.index < next.pins.length) next.pins[editing.index] = pin; else next.pins.push(pin);
+    return model.normalize(next);
+  }
   function acceptEditor(event) {
-    if (event) event.preventDefault(); if (!editing) return;
+    if (event) event.preventDefault(); if (!editing || pending()) return;
     try {
-      var pin = {id:editing.pin.id, label:$('pin-label').value.trim(), icon:$('icon').value};
-      if ($('has-reading').checked) {
-        var source = currentSource(); if (!source || !$('property').value) throw Error('Choose a source and reading.');
-        pin.reading = {category:source.category, item:source.item, property:$('property').value}; if (source.plugin) pin.reading.plugin = source.plugin;
-        var instance = $('instance').value; if (instance.indexOf('id:') === 0) pin.reading.instanceId = instance.slice(3); else pin.reading.index = Number(instance.slice(6));
-      }
-      if ($('action').value === 'builtin:find-phone') pin.builtin = 'find-phone';
-      else if ($('action').value !== 'none') {
-        var action = currentAction(); if (!action) throw Error('Choose an available action or keep its saved binding.');
-        pin.action = {plugin:action.plugin, action:action.action, args:gatherArguments(), label:$('action-label').value.trim(), confirm:$('confirm-action').checked};
-        if ($('toggle').value) { if (!pin.reading) throw Error('Choose a reading before binding its on/off state.'); pin.action.toggleProperty = $('toggle').value; }
-      }
-      if ($('app-target').value) pin.openApp = {watchAppUuid:$('app-target').value === '__custom__' ? $('app-uuid').value.trim() : $('app-target').value, label:$('app-label').value.trim()};
-      var next = clone(draft); if (editing.index < next.pins.length) next.pins[editing.index] = pin; else next.pins.push(pin);
-      draft = model.normalize(next); cancelAppSearch(); editing = null; inspectVersion++; renderPins(); controls(); say('Pinned item updated. Save to apply your changes.');
+      draft = editedSettings(); cancelAppSearch(); editing = null; inspectVersion++; renderPins(); controls(); say('Pinned item updated. Save to apply your changes.');
     } catch (error) { $('editor-error').textContent = error.message || 'Check this pinned item.'; }
   }
   $('editor-form').onsubmit = acceptEditor;
@@ -454,9 +458,9 @@ function behavior(initial, makeModel, makeApps) {
   $('icon').onchange = function() { if (editing) editing.iconChanged = true; };
   $('app-target').onchange = selectApp; $('app-search').onclick = searchApps; $('app-label').oninput = renderAppState;
   $('app-search-query').onkeydown = function(event) { if (event.key === 'Enter') { event.preventDefault(); searchApps(); } };
-  $('pin-reading').onclick = function() { $('has-reading').checked = true; renderEditorState(); $('source').onchange(); $('source').focus(); };
-  $('pin-action').onclick = function() { $('action').focus(); };
-  $('pin-app').onclick = function() { $('app-target').focus(); };
+  $('pin-reading').onclick = function() { $('has-reading').checked = true; renderEditorState(); $('source').onchange(); $('reading-fields').scrollIntoView({block:'center'}); };
+  $('pin-action').onclick = function() { $('action').scrollIntoView({block:'center'}); };
+  $('pin-app').onclick = function() { $('app-target').scrollIntoView({block:'center'}); };
   $('instance').onchange = automaticArguments; $('toggle').onchange = automaticArguments;
   $('source').onchange = function() { inspectVersion++; $('instance').value = 'index:0'; refreshProperties(); $('inspect-status').textContent = ''; var source = currentSource(); if (source) suggestName(readingTitle({category:source.category,property:$('property').value,plugin:source.plugin}), source.category === 'weather' ? 'weather' : source.category === 'phone' ? 'phone' : source.category === 'watch-local' ? 'battery' : 'generic'); };
   $('property').onchange = function() { var source = currentSource(); if (source) suggestName(readingTitle({category:source.category,property:$('property').value,plugin:source.plugin})); };
@@ -480,25 +484,47 @@ function behavior(initial, makeModel, makeApps) {
     apply(JSON.parse(confirmed), repairing);
   };
   function saveFailed() { phase = 'ready'; uncertain = true; controls(); say('Save not confirmed. Reload saved settings or save again.', true); }
-  function notifyPkjs() {
-    if (!pkjsReady) return;
-    var saved = confirmed;
-    function refreshFailed() {
-      if (confirmed === saved && !dirty() && editing === null && phase === 'ready') say('Settings saved. Reopen Dashboard if the watch has not updated.');
-    }
+  function settingsTarget(complete, failure) {
+    if (typeof Pebble.targets !== 'function') { complete(pkjsReady ? 'pkjs' : 'plugin'); return; }
+    var settled = false, timer = setTimeout(function() { finish(failure); }, 7000);
+    function finish(fn, value) { if (settled) return; settled = true; clearTimeout(timer); fn(value); }
     try {
-      Promise.resolve(Pebble.sendMessage('pkjs', {type:'reload_settings'})).then(function(response) { if (!response || !response.ok) refreshFailed(); }, refreshFailed);
-    } catch (error) { refreshFailed(); }
+      Promise.resolve(Pebble.targets()).then(function(targets) {
+        if (!Array.isArray(targets)) { finish(failure); return; }
+        finish(complete, targets.some(function(target) { return target && target.id === 'pkjs'; }) ? 'pkjs' : 'plugin');
+      }, function() { finish(failure); });
+    } catch (error) { finish(failure); }
   }
   $('save').onclick = function(event) {
     if (event) event.preventDefault(); if ($('save').disabled) return;
-    var chosen; try { chosen = model.normalize(draft); } catch (error) { say(error.message, true); return; }
+    var chosen; try { chosen = editing !== null ? editedSettings() : model.normalize(draft); }
+    catch (error) { if (editing !== null) $('editor-error').textContent = error.message || 'Check this pinned item.'; else say(error.message, true); return; }
     if (legacy) { location.href = 'pebblejs://close#' + encodeURIComponent(JSON.stringify(chosen)); return; }
+    cancelAppSearch(); inspectVersion++;
     phase = 'saving'; controls(); say('Saving settings…');
-    request({type:'save_settings', settings:chosen}, function(response) {
-      if (!response || !response.ok) { saveFailed(); return; }
-      try { apply(response.settings || chosen, false); say('Settings saved.'); notifyPkjs(); } catch (error) { saveFailed(); }
-    }, saveFailed);
+    var attempts = 0;
+    function saved(value) { apply(value, false); say('Settings saved.'); }
+    function write(target) {
+      if (++attempts > 3) { saveFailed(); return; }
+      request({type:'save_settings', settings:chosen}, function(response) {
+        var value;
+        try {
+          if (!response || !response.ok) throw Error();
+          value = model.normalize(response.settings);
+          if (JSON.stringify(value) !== JSON.stringify(chosen)) throw Error();
+        } catch (error) { saveFailed(); return; }
+        // Android PKJS keeps a separate storage snapshot. It must own live
+        // writes, including when it starts during a closed-plugin save.
+        if (target === 'plugin') settingsTarget(function(current) { if (current === 'pkjs') write(current); else saved(value); }, saveFailed);
+        else saved(value);
+      }, function() {
+        if (target !== 'pkjs') { saveFailed(); return; }
+        // Only confirmed shutdown permits the plugin fallback: a still-live
+        // PKJS could later overwrite it with its stale storage snapshot.
+        settingsTarget(function(current) { if (current === 'plugin') write(current); else saveFailed(); }, saveFailed);
+      }, 'settings', target);
+    }
+    settingsTarget(write, saveFailed);
   };
   function measureFooter() {
     var footer = $('actions'), height = footer.getBoundingClientRect().height, viewport = window.visualViewport && window.visualViewport.height || window.innerHeight;

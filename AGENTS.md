@@ -1,6 +1,6 @@
 # Dashboard maintainer notes
 
-This repository contains the native Dashboard local candidate (0.4.2),
+This repository contains the native Dashboard local candidate (0.4.3),
 its phone runtime/settings, and earlier browser design studies. Read README.md
 and docs/IMPLEMENTATION.md. Preserve UUID f76f9fc1-2944-4248-bcc5-3eea2af0183b,
 DSH1 message keys and existing published sibling apps.
@@ -159,3 +159,19 @@ Send Text, Reminders or side-effect system toggles based only on constants.
 Choosing/removing an app must preserve a pin's reading/action and custom label/icon;
 do not silently add app bindings to default or saved pins. The settings v1 and
 DSH1 shapes, native code and existing startup-theme fix are unchanged.
+
+Version 0.4.3 fixes direct Save while editing and separate Android storage views.
+Keep global Save usable with an open editor. Gather/validate into a candidate
+without mutating the draft or closing the editor until persistence is confirmed.
+Done/Add pin remain optional local draft steps; validation or failed save keeps
+the form. Do not programmatically focus text or select fields; scroll only.
+Use current Pebble.targets() to save through live PKJS runtime.configure, which
+updates its DOM snapshot and native storage. A plugin save followed by reload
+notification is unsafe on Android: SDK shutdown can overwrite it with old DOM.
+When PKJS is absent, use the config plugin; recheck after its ACK to synchronize
+a newly started PKJS. On PKJS transport failure, fallback only after a fresh
+target query confirms it disappeared; otherwise retain an unconfirmed draft.
+Bound topology handoffs to three writes, require the exact normalized settings
+in the acknowledgment, and preserve terminal runtime.stop behavior. Keep both
+the real closed-page browser regressions and separate DOM/native storage model;
+a shared Map cannot reproduce the SDK overwrite. See docs/APP-PICKER.md sources.

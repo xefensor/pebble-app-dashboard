@@ -30,6 +30,13 @@ Pebble.addEventListener('configmessage',function(event){
     if(message&&message.type==='catalogue'){
       runtime.catalogue().then(function(value){event.respond({ok:true,catalogue:value,cached:false});},function(){event.respond({ok:false,message:'Could not read installed plugins. Retry discovery.'});});return;
     }
+    if(message&&message.type==='save_settings'){
+      // Android PKJS reads a restored DOM snapshot, while the config plugin
+      // writes native preferences directly. Save through the live runtime so
+      // its DOM and native store agree before SDK teardown persists the DOM.
+      var saved=runtime.configure(message.settings);
+      event.respond({ok:true,settings:saved});return;
+    }
     if(!message||message.type!=='reload_settings'){event.respond({ok:false});return;}
     var current=settings.load(localStorage);
     if(!current){event.respond({ok:false});return;}

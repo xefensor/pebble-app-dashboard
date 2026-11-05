@@ -105,6 +105,12 @@ async function main(){
   for(const value of storage.values.values()){assert.ok(!value.includes('Fictional track'));assert.ok(!value.includes('Fictional sender'));assert.ok(!value.includes('Private test text'));}
   let config;const configEvents={};vm.runInNewContext(fs.readFileSync(path.join(packed,'plugin.js'),'utf8'),{Pebble:{registerConfigHandler:fn=>config=fn},localStorage:storage,Promise,console},{filename:'packaged-dashboard-plugin.js',timeout:5000});
   config({type:'load_settings'},value=>configEvents.loaded=value);assert.equal(configEvents.loaded.ok,true);assert.equal(configEvents.loaded.settings.dark,true);
+  const activeSave=JSON.parse(JSON.stringify(configEvents.loaded.settings));
+  activeSave.pins[0].openApp={watchAppUuid:'61b22bc8-1e29-460d-a236-3fe409a439ff',label:'Weather'};
+  let activeReply;events.configmessage({data:{type:'save_settings',settings:activeSave},respond:value=>activeReply=value});await settle();
+  assert.equal(activeReply.ok,true);assert.deepEqual(JSON.parse(JSON.stringify(activeReply.settings)),settings.normalize(activeSave));
+  config({type:'load_settings'},value=>configEvents.loaded=value);
+  assert.equal(configEvents.loaded.settings.pins[0].openApp.watchAppUuid,'61b22bc8-1e29-460d-a236-3fe409a439ff');
   config({type:'catalogue'},value=>configEvents.catalogue=value);assert.equal(configEvents.catalogue.ok,true);assert.equal(configEvents.catalogue.cached,true);assert.ok(configEvents.catalogue.catalogue.activities.some(provider=>provider.key===TIMER));assert.equal(configEvents.catalogue.catalogue.instances.length,0);
   storage.setItem('dashboard.settings.v1','unreadable');events.showConfiguration();await settle();
   assert.ok(decodeURIComponent(urls.at(-1)).includes('"needsRepair":true'),'Legacy configuration must visibly permit an explicit repair');
