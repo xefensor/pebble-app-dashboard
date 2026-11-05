@@ -1,0 +1,70 @@
+{
+  "result": "HARNESS_RECONNECT_SESSION_ASSUMPTION",
+  "candidatePbwSha256": "cc5b91320a116ef8716b8a71336246455fd0f7811c07cd63f5c1a2ee8199ca17",
+  "captures": [
+    {
+      "file": "first-use-button-guide.png",
+      "sha256": "3097be8d3500220ac54c0c5bcc1164b26629d14b80601ce5118359e7f212e6ed",
+      "nativePixelsModified": false
+    },
+    {
+      "file": "first-use-guide-dismissed.png",
+      "sha256": "4b9bc367ff434b710b0b7a5162e1fcf383f0f10cc8601db1baaf80fc0b70ebbb",
+      "nativePixelsModified": false
+    },
+    {
+      "file": "guide-dismissed-after-restart.png",
+      "sha256": "25aee3e0e81d6b01bce9832414067d79058866eb7c758d24f86f7d5a324a8878",
+      "nativePixelsModified": false
+    },
+    {
+      "file": "startup-dark-loading-timeout.png",
+      "sha256": "2a1976d9fc1c347504b6af1cff42b6db437329c2e9ad34c8191c1ee2853e5922",
+      "nativePixelsModified": false
+    },
+    {
+      "file": "startup-dark-loading-without-phone-frame.png",
+      "sha256": "f07c65b4ea53990cd638dafe580ec4688601c0266c27c119a41d42336f437022",
+      "nativePixelsModified": false
+    },
+    {
+      "file": "startup-dark-rejects-wrong-request-light.png",
+      "sha256": "f07c65b4ea53990cd638dafe580ec4688601c0266c27c119a41d42336f437022",
+      "nativePixelsModified": false
+    },
+    {
+      "file": "startup-first-ever-default-light-guide.png",
+      "sha256": "090c51cd9f887128b03312f91f1b254b0829f7e12814ae04ba4b012b622747a2",
+      "nativePixelsModified": false
+    },
+    {
+      "file": "startup-first-valid-light-snapshot.png",
+      "sha256": "3f57691e58e0550a13a7dc483d886b305bc0f9cc1aabbd7123568dfae28f70ba",
+      "nativePixelsModified": false
+    },
+    {
+      "file": "startup-light-loading-timeout.png",
+      "sha256": "038826c38f9ff68f24d2af6f671d462ad9b2efc9a97d12744df1ed01db7862e2",
+      "nativePixelsModified": false
+    },
+    {
+      "file": "startup-light-loading-without-phone-frame.png",
+      "sha256": "f62fba57bd531ba4fb020fd4e9e598d71ccdf6dc992e877103bb143c483e97f1",
+      "nativePixelsModified": false
+    },
+    {
+      "file": "startup-light-offline-relaunch.png",
+      "sha256": "10ce006c9458bbfc04f1e75091328840e70a84e15c5a86db77a2006d232a968b",
+      "nativePixelsModified": false
+    }
+  ],
+  "failure": "Reconnect was expected to rotate the native session; connection_changed actually issues a new HELLO request in the same process/session.",
+  "correction": "Wait for a fresh HELLO request identity; only process restart or DB_OP_READY rotates the epoch. QEMU may deliver an offline outbox to the synthetic peer.",
+  "firmwareLog": {
+    "file": "firmware.log",
+    "sha256": "5a83042fdede617b184fd5223e6c983c4b029279395c73178b4de111dac24deb"
+  },
+  "productChangesRequired": false,
+  "mustRerunOnFreshFlash": true,
+  "scope": "Native Emery QEMU and synthetic protocol peer only."
+}

@@ -1,0 +1,41 @@
+{
+  "result": "HARNESS_FOREGROUND_ASSERTION",
+  "candidatePbwSha256": "cc5b91320a116ef8716b8a71336246455fd0f7811c07cd63f5c1a2ee8199ca17",
+  "nativePayloadSha256": {
+    "emery/app_resources.pbpack": "94511ccd37e0309987f80c3b1f9b9a2ce4cb3cea9453d2f56470e1d35b93fe3c",
+    "emery/manifest.json": "72ca282869e8a72ff2400a43d8484440e3887ea724e505b4cec59ed9601324cc",
+    "emery/pebble-app.bin": "aa54d36dd2898290e99941ce6ef4767b7c9e900645c1a65cb86c1abcea22aa64"
+  },
+  "captures": [
+    {
+      "file": "first-use-button-guide.png",
+      "sha256": "3097be8d3500220ac54c0c5bcc1164b26629d14b80601ce5118359e7f212e6ed",
+      "nativePixelsModified": false
+    },
+    {
+      "file": "first-use-guide-dismissed.png",
+      "sha256": "b6d07e43209c0a97b77f1cea36b3173e145f2a183ce2f8cdc593259a3f95c313",
+      "nativePixelsModified": false
+    },
+    {
+      "file": "guide-dismissed-after-restart.png",
+      "sha256": "b85221bbdc2c371ae71ad75bfa8b056024b71386edb4bc054e2023704add4ed8",
+      "nativePixelsModified": false
+    },
+    {
+      "file": "startup-first-ever-default-light-guide.png",
+      "sha256": "090c51cd9f887128b03312f91f1b254b0829f7e12814ae04ba4b012b622747a2",
+      "nativePixelsModified": false
+    }
+  ],
+  "failure": "Immediate AppRunState query after new HELLO did not yet report the new foreground target.",
+  "correction": "Wait up to4seconds for foreground to settle before capture; retain exact theme/session checks.",
+  "firmwareLog": {
+    "path": "/tmp/dashboard-041-startup/firmware.log",
+    "sha256": "d953f60f9bc3774a87dbd90467b04e48eb7fceea96d1b4882f863066a6e0b44e",
+    "file": "firmware.log"
+  },
+  "productChangesRequired": false,
+  "mustRerunOnFreshFlash": true,
+  "scope": "Native Emery QEMU with synthetic protocol peer; no real phone/private user data."
+}

@@ -1,0 +1,730 @@
+{
+  "result": "PASS",
+  "version": "0.4.1",
+  "scope": "Real native Emery QEMU UI and AppMessage requests with an explicit fictional protocol peer; no phone JavaScript, live plugins, real app launches or physical watch.",
+  "focusedNotificationsOnly": false,
+  "focusedUxOnly": false,
+  "focusedReliabilityOnly": false,
+  "pausedMediaReproduction": false,
+  "focusedActivitiesOnly": false,
+  "focusedStartupThemeOnly": true,
+  "candidatePbwSha256": "cc5b91320a116ef8716b8a71336246455fd0f7811c07cd63f5c1a2ee8199ca17",
+  "nativeOnlyPbwSha256": "6c41e0eead0fc50c2d80e505a4f986f5787d35f19825025b03a5542d0b54aed1",
+  "nativePayloadSha256": {
+    "emery/app_resources.pbpack": "94511ccd37e0309987f80c3b1f9b9a2ce4cb3cea9453d2f56470e1d35b93fe3c",
+    "emery/manifest.json": "72ca282869e8a72ff2400a43d8484440e3887ea724e505b4cec59ed9601324cc",
+    "emery/pebble-app.bin": "aa54d36dd2898290e99941ce6ef4767b7c9e900645c1a65cb86c1abcea22aa64"
+  },
+  "phoneJavascriptExecuted": false,
+  "stateDirectory": "/tmp/dashboard-041-startup-verified",
+  "freshIsolatedFlash": true,
+  "session": 801871789,
+  "checks": [
+    {
+      "check": "Fresh isolated first launch defaults to light before receiving any phone frame, retaining the first-use guide",
+      "passed": true
+    },
+    {
+      "check": "First-use native button guide explains controls; dismissal consumes Select without dispatching an action or app launch",
+      "passed": true
+    },
+    {
+      "check": "First-use guide dismissal persists across a native app restart; ordinary navigation works immediately and dispatches no action",
+      "passed": true
+    },
+    {
+      "check": "Confirmed dark and light themes survive process relaunch with all phone frames withheld, six-second loading timeout and actual stock-debounced offline startup",
+      "passed": true,
+      "darkRestart": {
+        "previousConnectedSession": 782997350,
+        "newConnectedSession": 785094505,
+        "online": true,
+        "phoneFramesSent": 0
+      },
+      "lightRestart": {
+        "previousConnectedSession": 785094505,
+        "newConnectedSession": 791254865,
+        "online": true,
+        "phoneFramesSent": 0
+      },
+      "lightOffline": {
+        "previousConnectedSession": 791254865,
+        "newConnectedSession": null,
+        "online": false,
+        "phoneFramesSent": 0
+      },
+      "darkOffline": {
+        "previousConnectedSession": 798463920,
+        "newConnectedSession": null,
+        "online": false,
+        "phoneFramesSent": 0
+      },
+      "disconnectWaitSecondsEach": 26
+    },
+    {
+      "check": "A wrong-request frame cannot change theme; first accepted snapshots switch dark to light and light to dark, and the new confirmed theme persists",
+      "passed": true
+    },
+    {
+      "check": "Guide dismissal remains saved, connected restarts use fresh native sessions and no restored selected token; no action or app-open replay occurs",
+      "passed": true
+    }
+  ],
+  "captures": [
+    {
+      "name": "startup-first-ever-default-light-guide",
+      "file": "startup-first-ever-default-light-guide.png",
+      "sha256": "090c51cd9f887128b03312f91f1b254b0829f7e12814ae04ba4b012b622747a2",
+      "rgbSha256": "92fd1ec24bc212d6ab14cf76a9e92ef5c0776b530b408cfff539f0d1cb7b62ed",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "first-use-button-guide",
+      "file": "first-use-button-guide.png",
+      "sha256": "3097be8d3500220ac54c0c5bcc1164b26629d14b80601ce5118359e7f212e6ed",
+      "rgbSha256": "dbc5a814317e0fbc02f2cfff9ab6ff796c985d255fccc22d4b6f12ec916e9ed7",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "first-use-guide-dismissed",
+      "file": "first-use-guide-dismissed.png",
+      "sha256": "74764461f90a051f9c8c62c68fb47511e44d68cef45ae21ca0f37f3d24d0ba22",
+      "rgbSha256": "c89ccb4b86e964cfa61bea3b44475c1ed67c6c65c61465b6dc6bdb900eb240a5",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "guide-dismissed-after-restart",
+      "file": "guide-dismissed-after-restart.png",
+      "sha256": "c877eebe93feea94f2d747b80f9a40569e223b2ee31f9c05d898b2f96ebf820d",
+      "rgbSha256": "5b236ad5852e9e74f3b4a652ffcd044ec68069f83c3e4e4cd2bc24bce91bedd2",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "startup-dark-loading-without-phone-frame",
+      "file": "startup-dark-loading-without-phone-frame.png",
+      "sha256": "b1d25bb172df39b5a85e53ec50da064de5881ac4e927596a1964a1cafbb2325c",
+      "rgbSha256": "acffeea4f75caac1a1c7c5dbe6a68ac97628139b97945459314fd3cdce9e587e",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "startup-dark-rejects-wrong-request-light",
+      "file": "startup-dark-rejects-wrong-request-light.png",
+      "sha256": "b1d25bb172df39b5a85e53ec50da064de5881ac4e927596a1964a1cafbb2325c",
+      "rgbSha256": "acffeea4f75caac1a1c7c5dbe6a68ac97628139b97945459314fd3cdce9e587e",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "startup-dark-loading-timeout",
+      "file": "startup-dark-loading-timeout.png",
+      "sha256": "31430e65020f1feb66a25d98ce94275a83124c92fc147e53c99fdabe2cc23cba",
+      "rgbSha256": "f3283f96b95cabbf54e0c60fb4a2aab36cc03dc0615dad520a16e11738ddf24c",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "startup-first-valid-light-snapshot",
+      "file": "startup-first-valid-light-snapshot.png",
+      "sha256": "c17a8f48f9ee4344ff2ca21949556635d0175d41277d7ec053038b665a06d919",
+      "rgbSha256": "05fe696e175d5924af2f702c3f3d67860f94dcd46574dce4cd2f816c4c6e2cc7",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "startup-light-loading-without-phone-frame",
+      "file": "startup-light-loading-without-phone-frame.png",
+      "sha256": "a45dd7513178c589c928215d2e644885dcebfbc85a10a1fa98cde4511b0f355f",
+      "rgbSha256": "d43a0805974d46679771e3f0d2739017783578940c496c34b96af225ba012d64",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "startup-light-loading-timeout",
+      "file": "startup-light-loading-timeout.png",
+      "sha256": "592632a167b61f73fbb34fdf174f226d88dcd3024e87cd82ece2b5be8483ee97",
+      "rgbSha256": "6c505047d9a2fe87261394ca7dc1a077c626822b5cda76ebe9906bf012f5759a",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "startup-light-offline-relaunch",
+      "file": "startup-light-offline-relaunch.png",
+      "sha256": "10ce006c9458bbfc04f1e75091328840e70a84e15c5a86db77a2006d232a968b",
+      "rgbSha256": "34f525c1c122cd2ecd9f6cd85f2efe8bc2d8ae1764f9aae42562870b1e8310d0",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "startup-first-valid-dark-after-reconnect",
+      "file": "startup-first-valid-dark-after-reconnect.png",
+      "sha256": "fa52bc0d9c05ffef30e6ffb16fec5beb41778bc625f8344618a7067a853b12b3",
+      "rgbSha256": "b1405b8d29306ba189ed65d346222066d9d5d5c5937446acf9948e5735ebf9dd",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "startup-dark-offline-relaunch",
+      "file": "startup-dark-offline-relaunch.png",
+      "sha256": "a5b42f23553faf7157b5ac40e5e552931443d2ef1cff5c9a72f9d053cef6e4e2",
+      "rgbSha256": "9867fa314bedf1b911cced9192dd486b0f2bea95d78df9e8c195818beb2c8499",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    }
+  ],
+  "themePixelChecks": [
+    {
+      "capture": "startup-first-ever-default-light-guide.png",
+      "dark": false,
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "backgroundPoints": [
+        [
+          1,
+          10
+        ],
+        [
+          1,
+          80
+        ],
+        [
+          1,
+          225
+        ],
+        [
+          164,
+          225
+        ]
+      ],
+      "sidebarPoint": [
+        190,
+        10
+      ],
+      "sidebarColor": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "capture": "startup-dark-loading-without-phone-frame.png",
+      "dark": true,
+      "background": [
+        0,
+        0,
+        0
+      ],
+      "backgroundPoints": [
+        [
+          1,
+          10
+        ],
+        [
+          1,
+          80
+        ],
+        [
+          1,
+          225
+        ],
+        [
+          164,
+          225
+        ]
+      ],
+      "sidebarPoint": [
+        190,
+        10
+      ],
+      "sidebarColor": [
+        255,
+        255,
+        255
+      ]
+    },
+    {
+      "capture": "startup-dark-rejects-wrong-request-light.png",
+      "dark": true,
+      "background": [
+        0,
+        0,
+        0
+      ],
+      "backgroundPoints": [
+        [
+          1,
+          10
+        ],
+        [
+          1,
+          80
+        ],
+        [
+          1,
+          225
+        ],
+        [
+          164,
+          225
+        ]
+      ],
+      "sidebarPoint": [
+        190,
+        10
+      ],
+      "sidebarColor": [
+        255,
+        255,
+        255
+      ]
+    },
+    {
+      "capture": "startup-dark-loading-timeout.png",
+      "dark": true,
+      "background": [
+        0,
+        0,
+        0
+      ],
+      "backgroundPoints": [
+        [
+          1,
+          10
+        ],
+        [
+          1,
+          80
+        ],
+        [
+          1,
+          225
+        ],
+        [
+          164,
+          225
+        ]
+      ],
+      "sidebarPoint": [
+        190,
+        10
+      ],
+      "sidebarColor": [
+        255,
+        255,
+        255
+      ]
+    },
+    {
+      "capture": "startup-first-valid-light-snapshot.png",
+      "dark": false,
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "backgroundPoints": [
+        [
+          1,
+          10
+        ],
+        [
+          1,
+          80
+        ],
+        [
+          1,
+          225
+        ],
+        [
+          164,
+          225
+        ]
+      ],
+      "sidebarPoint": [
+        190,
+        10
+      ],
+      "sidebarColor": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "capture": "startup-light-loading-without-phone-frame.png",
+      "dark": false,
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "backgroundPoints": [
+        [
+          1,
+          10
+        ],
+        [
+          1,
+          80
+        ],
+        [
+          1,
+          225
+        ],
+        [
+          164,
+          225
+        ]
+      ],
+      "sidebarPoint": [
+        190,
+        10
+      ],
+      "sidebarColor": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "capture": "startup-light-loading-timeout.png",
+      "dark": false,
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "backgroundPoints": [
+        [
+          1,
+          10
+        ],
+        [
+          1,
+          80
+        ],
+        [
+          1,
+          225
+        ],
+        [
+          164,
+          225
+        ]
+      ],
+      "sidebarPoint": [
+        190,
+        10
+      ],
+      "sidebarColor": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "capture": "startup-light-offline-relaunch.png",
+      "dark": false,
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "backgroundPoints": [
+        [
+          1,
+          10
+        ],
+        [
+          1,
+          80
+        ],
+        [
+          1,
+          225
+        ],
+        [
+          164,
+          225
+        ]
+      ],
+      "sidebarPoint": [
+        190,
+        10
+      ],
+      "sidebarColor": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "capture": "startup-first-valid-dark-after-reconnect.png",
+      "dark": true,
+      "background": [
+        0,
+        0,
+        0
+      ],
+      "backgroundPoints": [
+        [
+          1,
+          10
+        ],
+        [
+          1,
+          80
+        ],
+        [
+          1,
+          225
+        ],
+        [
+          164,
+          225
+        ]
+      ],
+      "sidebarPoint": [
+        190,
+        10
+      ],
+      "sidebarColor": [
+        255,
+        255,
+        255
+      ]
+    },
+    {
+      "capture": "startup-dark-offline-relaunch.png",
+      "dark": true,
+      "background": [
+        0,
+        0,
+        0
+      ],
+      "backgroundPoints": [
+        [
+          1,
+          10
+        ],
+        [
+          1,
+          80
+        ],
+        [
+          1,
+          225
+        ],
+        [
+          164,
+          225
+        ]
+      ],
+      "sidebarPoint": [
+        190,
+        10
+      ],
+      "sidebarColor": [
+        255,
+        255,
+        255
+      ]
+    }
+  ],
+  "requests": [
+    {
+      "4000": 1,
+      "4001": 747411300,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0
+    },
+    {
+      "4000": 7,
+      "4001": 747411300,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 1,
+      "4006": 1
+    },
+    {
+      "4000": 1,
+      "4001": 782997350,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0
+    },
+    {
+      "4000": 7,
+      "4001": 782997350,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 1,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 782997350,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 1,
+      "4005": 3,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 782997350,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 1,
+      "4006": 1
+    },
+    {
+      "4000": 1,
+      "4001": 785094505,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0
+    },
+    {
+      "4000": 7,
+      "4001": 785094505,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 1,
+      "4006": 1
+    },
+    {
+      "4000": 1,
+      "4001": 791254865,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0
+    },
+    {
+      "4000": 1,
+      "4001": 798463920,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0
+    },
+    {
+      "4000": 1,
+      "4001": 798463920,
+      "4002": 2,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0
+    },
+    {
+      "4000": 7,
+      "4001": 798463920,
+      "4002": 2,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 1,
+      "4006": 1
+    },
+    {
+      "4000": 1,
+      "4001": 801871789,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0
+    }
+  ],
+  "mockActions": [],
+  "mockAppOpens": [],
+  "visualReview": {
+    "reviewed": true,
+    "result": "PASS",
+    "reviewer": "Root independently inspected dark/light loading and dark offline source PNGs; QA reviewed theme palette/contrast across all sampled frames.",
+    "contactSheet": "startup-theme-contact-sheet.png"
+  },
+  "firmwareLog": {
+    "file": "firmware.log",
+    "sha256": "9866660c514e8db9d3a10420508fd25b0a232b11eb7bc476d220652f71e9ff27",
+    "scope": "Isolated Emery QEMU with synthetic peer only."
+  },
+  "testLimits": [
+    "Startup uses only the last confirmed theme; a preference changed while closed takes effect on the next accepted frame.",
+    "First launch or upgrade without this preference defaults light until a validated theme arrives.",
+    "Captures sample settled app frames; they do not measure every OS transition/physical-display frame. Native window-background-before-push ordering was reviewed separately.",
+    "Real native app and OS connection debounce with synthetic AppMessage peer; no phone JavaScript or physical watch.",
+    "QEMU may expose an offline outbox to the peer, unlike an actual mobile connection; no offline handshake guarantee is claimed."
+  ],
+  "initialHarnessAttempts": [
+    {
+      "evidence": "before-foreground-wait/failure.json",
+      "kind": "HarnessOnly",
+      "fix": "Bounded4s foreground settlement after new HELLO."
+    },
+    {
+      "evidence": "before-reconnect-request-wait/failure.json",
+      "kind": "HarnessOnly",
+      "fix": "Reconnect waits for a new HELLO request, retaining the same native process session."
+    }
+  ]
+}

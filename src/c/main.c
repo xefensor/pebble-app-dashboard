@@ -14,6 +14,7 @@
 #define ACTION_TIMEOUT_MS 12000
 #define OUTBOX_CAPACITY 4
 #define GUIDE_SEEN_KEY 1
+#define THEME_DARK_KEY 2
 #define HOLD_PREVIEW_MS 250
 
 typedef struct {uint8_t op,mode,action,confirm;uint16_t offset,index;uint32_t request,token,version;} Outbound;
@@ -29,6 +30,9 @@ static Command s_command;
 static AppTimer *s_view_timeout,*s_action_timeout,*s_repeat,*s_hold_timer;
 static DbDeadline s_expiry;
 static bool s_guide,s_select_down,s_hold_preview,s_hold_intent;
+#ifndef DASHBOARD_FIXTURE
+static bool s_saved_dark;
+#endif
 static int s_repeat_delta;
 static bool s_repeat_held;
 static uint32_t s_press_token,s_press_version;
@@ -434,8 +438,14 @@ static void inbox(DictionaryIterator *dict,void *context){
   if(data&&data->type==TUPLE_BYTE_ARRAY){
     DbSnapshot *incoming=malloc(sizeof(*incoming));if(!incoming){view_failed(NULL);return;}
     if(db_decode((const uint8_t *)data->value,data->length,incoming)){
-      bool was_loading=s_state.loading,redraw=s_state.loading||!s_state.ready||!visually_equal(&s_state.snapshot,incoming);uint32_t selected=s_state.selected_token;uint16_t selected_index=s_state.selected_index;
+      bool was_loading=s_state.loading,theme_changed=s_state.snapshot.dark!=incoming->dark,redraw=s_state.loading||!s_state.ready||!visually_equal(&s_state.snapshot,incoming);uint32_t selected=s_state.selected_token;uint16_t selected_index=s_state.selected_index;
       if(db_state_apply(&s_state,incoming)){
+        if(theme_changed)window_set_background_color(s_window,background());
+#ifndef DASHBOARD_FIXTURE
+        // Save only the accepted preference, never snapshot content or bindings.
+        // Unchanged frames do not write flash; a failed write can retry later.
+        if(s_saved_dark!=s_state.snapshot.dark&&persist_write_bool(THEME_DARK_KEY,s_state.snapshot.dark)>=0)s_saved_dark=s_state.snapshot.dark;
+#endif
         if(s_view_timeout){app_timer_cancel(s_view_timeout);s_view_timeout=NULL;}
         if(s_state.snapshot.mode==DB_MEDIA&&s_state.focus>2)s_state.focus=1;
         if(s_select_down&&!pressed_item())cancel_hold_preview();
@@ -584,9 +594,11 @@ static void init(void){
   db_state_init(&s_state,session);
 #ifndef DASHBOARD_FIXTURE
   s_guide=!persist_read_bool(GUIDE_SEEN_KEY);
+  s_saved_dark=persist_read_bool(THEME_DARK_KEY);s_state.snapshot.dark=s_saved_dark;
 #endif
   s_has_connection=connection_service_peek_pebble_app_connection();s_state.connected=s_has_connection;
   s_window=window_create();if(!s_window)return;s_canvas=layer_create(GRect(0,0,SCREEN_W,SCREEN_H));if(!s_canvas)return;
+  window_set_background_color(s_window,background());
   layer_set_update_proc(s_canvas,update);layer_add_child(window_get_root_layer(s_window),s_canvas);window_set_click_config_provider(s_window,configure_clicks);
   app_message_register_inbox_received(inbox);app_message_register_inbox_dropped(inbox_dropped);app_message_register_outbox_sent(outbox_sent);app_message_register_outbox_failed(outbox_failed);
   if(app_message_open(9216,256)!=APP_MSG_OK){s_state.ready=true;s_state.snapshot.status=DB_ERROR;}
@@ -604,6 +616,7 @@ static void init(void){
     }
     fixture->now=utc_now();
     s_state.session=fixture->session;db_state_expect(&s_state,fixture->request,fixture->mode,0,fixture->count?fixture->items[0].token:0);db_state_apply(&s_state,fixture);
+    window_set_background_color(s_window,background());
     if(s_view_timeout){app_timer_cancel(s_view_timeout);s_view_timeout=NULL;}s_has_connection=true;update_ticks();repaint();
   }
   free(fixture);

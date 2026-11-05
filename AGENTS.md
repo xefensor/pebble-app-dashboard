@@ -1,6 +1,6 @@
 # Dashboard maintainer notes
 
-This repository contains the native Dashboard development prerelease (0.4.0),
+This repository contains the native Dashboard local candidate (0.4.1),
 its phone runtime/settings, and earlier browser design studies. Read README.md
 and docs/IMPLEMENTATION.md. Preserve UUID f76f9fc1-2944-4248-bcc5-3eea2af0183b,
 DSH1 message keys and existing published sibling apps.
@@ -54,7 +54,8 @@ An overview hold opens its collection once; continuing that same hold must not
 start scrolling. A release must never add another navigation step or action.
 App hints name the destination, and activity reordering preserves selection and
 control focus. First use shows a static readable button guide, dismissed without
-triggering an item action; persist only its dismissal flag. Holding Select can
+triggering an item action; persist its dismissal flag and the last confirmed
+theme preference, never private content or capabilities. Holding Select can
 preview the exact app destination in the header. Header/sidebar feedback must
 leave the two pin rows visible. Explain selected unavailable readings without
 disabling independent commands. Generic control navigation skips absent slots
@@ -138,3 +139,12 @@ dc3bbd53c79d70daf188cbcd8a0d1074c00d8819. Its source ZIP carries that Git commit
 comment; later documentation on main must not rewrite published artifacts or
 retag the version. Validate release-source/archive identity against that commit,
 not a later documentation-only HEAD. Runtime source/debug hashes remain exact.
+
+Version 0.4.1 restores the last accepted theme before the first native frame.
+Keep persistence key 1 for guide dismissal and key 2 for the dark preference.
+Only db_state_apply success may update the preference; unchanged frames do not
+write flash. Preserve theme through timeout/offline/READY without caching content.
+Set the native Window background as well as the canvas palette. First-ever launch
+defaults to light, as does an upgrade before the first saved theme; a phone-side
+change while closed arrives in the first accepted
+snapshot. Fixture builds ignore preferences and must not overwrite them.

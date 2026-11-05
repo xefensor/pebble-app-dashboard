@@ -1,7 +1,8 @@
 # Dashboard
 
 A stock Pebble watchapp for current activities, the latest available notification
-and pinned readings/actions. **0.4.0 is a published Emery development prerelease.**
+and pinned readings/actions. **0.4.1 is a local Emery development candidate;
+0.4.0 remains the published prerelease.**
 
 The native app, phone runtime and bundled settings page are implemented in
 [xefensor/pebble-app-dashboard](https://github.com/xefensor/pebble-app-dashboard).
@@ -20,6 +21,8 @@ The release is pinned to tested source
 [`dc3bbd5`](https://github.com/xefensor/pebble-app-dashboard/tree/dc3bbd53c79d70daf188cbcd8a0d1074c00d8819).
 Later documentation commits preserve those package/source/debug bytes. The local
 copy remains `dist/Dashboard-0.4.0.pbw`; build instructions are below.
+The local 0.4.1 candidate is `dist/Dashboard-0.4.1.pbw`; its startup-theme
+checks are recorded in [docs/qa/0.4.1](docs/qa/0.4.1).
 The previous [Dashboard 0.3.1](https://github.com/xefensor/pebble-app-dashboard/releases/download/v0.3.1/Dashboard-0.3.1.pbw) remains available,
 with source, debug files and checksums in its
 [development release](https://github.com/xefensor/pebble-app-dashboard/releases/tag/v0.3.1).
@@ -54,7 +57,13 @@ performing the underlying item's action. During a deliberate Select hold, the
 header previews the actual associated app and the sidebar shows the launch icon.
 Releasing after that preview but before the hold completes cancels the gesture
 without also performing the item's tap action.
-Only the guide-dismissed preference is saved on the watch.
+The watch saves the guide-dismissed preference and the last confirmed light/dark
+theme. Loading, offline and error screens use that theme immediately on launch,
+without waiting for the phone. With no cached theme, including the first launch
+after upgrading from 0.4.0, the default is light until the phone sends settings.
+If settings change while Dashboard is closed, startup uses the previous theme
+until the first accepted phone update supplies the new one. Activity content and
+action bindings are never saved on the watch.
 
 Holds start after 600 ms; list navigation repeats every 140 ms while held.
 Opening a collection never also scrolls it; releasing adds no tap or extra step.

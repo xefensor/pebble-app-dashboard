@@ -28,11 +28,11 @@ sys.path.insert(0,str(ROOT.parent/'recovery-validation'))
 def digest(data):return hashlib.sha256(data).hexdigest()
 
 
-def run(pbw,output,expected_sha256=None,notifications_only=False,ux_only=False,reliability_only=False,paused_repro=False,activities_only=False):
+def run(pbw,output,expected_sha256=None,notifications_only=False,ux_only=False,reliability_only=False,paused_repro=False,activities_only=False,startup_theme_only=False):
     from pipe_emulator import connect
     from libpebble2.services.appmessage import AppMessageService,Uint32,ByteArray,CString
     from libpebble2.services.screenshot import Screenshot
-    from libpebble2.protocol.apps import AppRunState,AppRunStateStart,AppRunStateStop
+    from libpebble2.protocol.apps import AppRunState,AppRunStateRequest,AppRunStateStart,AppRunStateStop
     from libpebble2.protocol.system import TimeMessage,SetUTC
     from libpebble2.communication.transports.qemu.protocol import QemuButton,QemuBluetoothConnection,QemuBattery
     from pebble_tool.commands.emucontrol import send_data_to_qemu
@@ -45,6 +45,8 @@ def run(pbw,output,expected_sha256=None,notifications_only=False,ux_only=False,r
     if not os.environ.get('PEBBLE_QA_STATE'):
         os.environ['PEBBLE_QA_STATE']=tempfile.mkdtemp(prefix='dashboard-emery-')
     state_dir=Path(os.environ['PEBBLE_QA_STATE'])
+    fresh_flash=not Path(os.environ.get('PEBBLE_QA_FLASH',str(state_dir/'spi-flash.bin'))).exists()
+    if startup_theme_only and not fresh_flash:raise RuntimeError('Startup theme QA requires a fresh isolated flash; do not reuse saved app data')
     native=output/'native-candidate.pbw'
     with zipfile.ZipFile(pbw) as source,zipfile.ZipFile(native,'w') as target:
         appinfo=json.loads(source.read('appinfo.json'))
@@ -58,7 +60,7 @@ def run(pbw,output,expected_sha256=None,notifications_only=False,ux_only=False,r
     target=uuid.UUID(appinfo['uuid']);keys=appinfo['messageKeys']
     encoder=subprocess.Popen(['node',str(ROOT/'tests/native-peer.cjs')],cwd=ROOT,stdin=subprocess.PIPE,stdout=subprocess.PIPE,text=True,bufsize=1)
     p=connect();service=AppMessageService(p)
-    condition=threading.Condition();receipts={};requests=[];errors=[];captures=[];proofs=[]
+    condition=threading.Condition();receipts={};requests=[];errors=[];captures=[];proofs=[];theme_samples=[]
     pending=queue.Queue();send_lock=threading.Lock();encoder_lock=threading.Lock()
     stopped=threading.Event()
 
@@ -173,6 +175,7 @@ def run(pbw,output,expected_sha256=None,notifications_only=False,ux_only=False,r
                         self.view.update(request);self.view['preserve']=True
             elif operation==5:pass
     peer=Peer()
+    if startup_theme_only:peer.respond=False;peer.dark=True
     def worker():
         while not stopped.is_set():
             try:request=pending.get(timeout=.1)
@@ -200,6 +203,14 @@ def run(pbw,output,expected_sha256=None,notifications_only=False,ux_only=False,r
         captures.append({'name':name,'file':path.name,'sha256':digest(path.read_bytes()),'rgbSha256':digest(rgb),'pixels':[200,228],'nativePixelsModified':False})
         print('Native capture:',name,flush=True);return rgb
     def counts():return len(peer.actions),len(peer.opens)
+    def theme_pixels(name,pixels,dark):
+        background=(0,0,0) if dark else (255,255,255);foreground=(255,255,255) if dark else (0,0,0)
+        points=[(1,10),(1,80),(1,225),(164,225)]
+        for x,y in points:assert tuple(pixels[(y*200+x)*3:(y*200+x)*3+3])==background,(name,x,y,'wrong background')
+        assert tuple(pixels[(10*200+190)*3:(10*200+190)*3+3])==foreground,(name,'sidebar contrast')
+        theme_samples.append({'capture':name+'.png','dark':dark,'background':list(background),'backgroundPoints':points,'sidebarPoint':[190,10],'sidebarColor':list(foreground)})
+    def themed_capture(name,dark,settle=.1):
+        pixels=capture(name,settle);theme_pixels(name,pixels,dark);return pixels
     def active_mode():return peer.view.get(key('DB_MODE')) if peer.view else None
     def snapshot_home():
         # Back out at most two context levels; root Back would quit, so inspect
@@ -313,9 +324,9 @@ def run(pbw,output,expected_sha256=None,notifications_only=False,ux_only=False,r
     def write_report(result='PASS'):
         report={'result':result,'version':json.loads((ROOT/'package.json').read_text())['version'],
             'scope':'Real native Emery QEMU UI and AppMessage requests with an explicit fictional protocol peer; no phone JavaScript, live plugins, real app launches or physical watch.',
-            'focusedNotificationsOnly':notifications_only,'focusedUxOnly':ux_only,'focusedReliabilityOnly':reliability_only,'pausedMediaReproduction':paused_repro,'focusedActivitiesOnly':activities_only,'candidatePbwSha256':digest(pbw.read_bytes()),'nativeOnlyPbwSha256':digest(native.read_bytes()),
+            'focusedNotificationsOnly':notifications_only,'focusedUxOnly':ux_only,'focusedReliabilityOnly':reliability_only,'pausedMediaReproduction':paused_repro,'focusedActivitiesOnly':activities_only,'focusedStartupThemeOnly':startup_theme_only,'candidatePbwSha256':digest(pbw.read_bytes()),'nativeOnlyPbwSha256':digest(native.read_bytes()),
             'nativePayloadSha256':{name:digest(data) for name,data in payload.items()},'phoneJavascriptExecuted':False,
-            'stateDirectory':str(state_dir),'session':peer.session,'checks':proofs,'captures':captures,
+            'stateDirectory':str(state_dir),'freshIsolatedFlash':fresh_flash,'session':peer.session,'checks':proofs,'captures':captures,'themePixelChecks':theme_samples,
             'requests':[{str(k):v for k,v in request.items()} for request in requests],
             'mockActions':[{str(k):v for k,v in request.items()} for request in peer.actions],
             'mockAppOpens':[{str(k):v for k,v in request.items()} for request in peer.opens],
@@ -328,6 +339,12 @@ def run(pbw,output,expected_sha256=None,notifications_only=False,ux_only=False,r
         p.send_packet(TimeMessage(message=SetUTC(unix_time=int(time.time()),utc_offset=0,tz_name='UTC')))
         send_data_to_qemu(p.transport,QemuBluetoothConnection(connected=True));send_data_to_qemu(p.transport,QemuBattery(percent=85,charging=False))
         ToolAppInstaller(p,str(native),quiet=True).install();p.send_packet(AppRunState(data=AppRunStateStart(uuid=target)))
+        if startup_theme_only:
+            await_condition(lambda:peer.view is not None,'First native HELLO missing',12)
+            assert not peer.frames
+            themed_capture('startup-first-ever-default-light-guide',False)
+            peer.respond=True;peer.publish()
+            proofs.append({'check':'Fresh isolated first launch defaults to light before receiving any phone frame, retaining the first-use guide','passed':True})
         await_condition(lambda:peer.view is not None and bool(peer.frames),'Native HELLO/frame exchange missing',12)
         primary_roi=(4,29,162,102);notice_roi=(4,108,162,151)
         guide_pixels=capture('first-use-button-guide',.1);before=counts()
@@ -337,6 +354,43 @@ def run(pbw,output,expected_sha256=None,notifications_only=False,ux_only=False,r
         assert guide_pixels!=dismissed
         proofs.append({'check':'First-use native button guide explains controls; dismissal consumes Select without dispatching an action or app launch','passed':True})
         restart_without_guide()
+        if startup_theme_only:
+            def restart_withheld(name,dark,online):
+                peer.respond=False;previous=peer.session;frames=len(peer.frames)
+                p.send_packet(AppRunState(data=AppRunStateStop(uuid=target)));time.sleep(.25)
+                p.send_packet(AppRunState(data=AppRunStateStart(uuid=target)))
+                if online:
+                    await_condition(lambda:peer.session!=previous,'Relaunch did not establish a fresh native session',12)
+                    assert peer.view.get(key('DB_TOKEN'),0)==0,'Startup restored an old selection binding'
+                else:time.sleep(.4)
+                await_condition(lambda:getattr(p.send_and_read(AppRunState(data=AppRunStateRequest()),AppRunState).data,'uuid',None)==target,'Native foreground did not settle after restart',4)
+                pixels=themed_capture(name,dark)
+                assert len(peer.frames)==frames,'Withheld phone unexpectedly sent a display frame'
+                return {'previousConnectedSession':previous,'newConnectedSession':peer.session if online else None,'online':online,'phoneFramesSent':0}
+            before=counts()
+            dark_restart=restart_withheld('startup-dark-loading-without-phone-frame',True,True)
+            # Decode-valid, wrong-request data must not change or persist theme.
+            rejected=peer.frame();rejected['request']+=1;rejected['dark']=False
+            send({key('DB_DATA'):ByteArray(encode(rejected))})
+            themed_capture('startup-dark-rejects-wrong-request-light',True)
+            time.sleep(6.2);themed_capture('startup-dark-loading-timeout',True)
+            peer.dark=False;peer.respond=True;peer.publish();themed_capture('startup-first-valid-light-snapshot',False)
+            light_restart=restart_withheld('startup-light-loading-without-phone-frame',False,True)
+            time.sleep(6.2);themed_capture('startup-light-loading-timeout',False)
+            send_data_to_qemu(p.transport,QemuBluetoothConnection(connected=False));time.sleep(26)
+            light_offline=restart_withheld('startup-light-offline-relaunch',False,False)
+            previous=peer.session;previous_request=peer.view.get(key('DB_REQUEST'));peer.respond=False
+            send_data_to_qemu(p.transport,QemuBluetoothConnection(connected=True))
+            await_condition(lambda:peer.session!=previous or peer.view.get(key('DB_REQUEST'))!=previous_request,'Offline process did not send a new HELLO request after reconnect',12)
+            peer.dark=True;peer.respond=True;peer.publish();themed_capture('startup-first-valid-dark-after-reconnect',True)
+            send_data_to_qemu(p.transport,QemuBluetoothConnection(connected=False));time.sleep(26)
+            dark_offline=restart_withheld('startup-dark-offline-relaunch',True,False)
+            assert counts()==before==(0,0)
+            proofs.append({'check':'Confirmed dark and light themes survive process relaunch with all phone frames withheld, six-second loading timeout and actual stock-debounced offline startup','passed':True,'darkRestart':dark_restart,'lightRestart':light_restart,'lightOffline':light_offline,'darkOffline':dark_offline,'disconnectWaitSecondsEach':26})
+            proofs.append({'check':'A wrong-request frame cannot change theme; first accepted snapshots switch dark to light and light to dark, and the new confirmed theme persists','passed':True})
+            proofs.append({'check':'Guide dismissal remains saved, connected restarts use fresh native sessions and no restored selected token; no action or app-open replay occurs','passed':True})
+            assert not errors
+            return write_report()
         if paused_repro or activities_only:
             snapshot_home()
             with peer.lock:
@@ -706,6 +760,7 @@ if __name__=='__main__':
     parser.add_argument('--reliability-only',action='store_true',help='Focused final-zero paint, exact unavailable capability expiry and inert bootstrap identity checks')
     parser.add_argument('--paused-media-repro',action='store_true',help='Record the old invisible paused-primary bug against a supplied baseline PBW')
     parser.add_argument('--activities-only',action='store_true',help='Focused activity presentation/selection checks')
+    parser.add_argument('--startup-theme-only',action='store_true',help='Focused first-launch, cached dark/light startup, timeout, offline and accepted-theme switch checks on fresh flash')
     args=parser.parse_args()
-    if sum((args.notifications_only,args.ux_only,args.reliability_only,args.paused_media_repro,args.activities_only))>1:parser.error('Choose at most one focused suite')
-    run(args.pbw,args.output,args.expected_sha256,args.notifications_only,args.ux_only,args.reliability_only,args.paused_media_repro,args.activities_only)
+    if sum((args.notifications_only,args.ux_only,args.reliability_only,args.paused_media_repro,args.activities_only,args.startup_theme_only))>1:parser.error('Choose at most one focused suite')
+    run(args.pbw,args.output,args.expected_sha256,args.notifications_only,args.ux_only,args.reliability_only,args.paused_media_repro,args.activities_only,args.startup_theme_only)

@@ -1,0 +1,38 @@
+{
+  "candidatePbwSha256": "cc5b91320a116ef8716b8a71336246455fd0f7811c07cd63f5c1a2ee8199ca17",
+  "derivativeContactSheet": true,
+  "scale": 2,
+  "resampling": "nearest",
+  "sources": [
+    {
+      "file": "startup-dark-loading-without-phone-frame.png",
+      "sha256": "b1d25bb172df39b5a85e53ec50da064de5881ac4e927596a1964a1cafbb2325c",
+      "nativePixelsModified": false
+    },
+    {
+      "file": "startup-dark-loading-timeout.png",
+      "sha256": "31430e65020f1feb66a25d98ce94275a83124c92fc147e53c99fdabe2cc23cba",
+      "nativePixelsModified": false
+    },
+    {
+      "file": "startup-dark-offline-relaunch.png",
+      "sha256": "a5b42f23553faf7157b5ac40e5e552931443d2ef1cff5c9a72f9d053cef6e4e2",
+      "nativePixelsModified": false
+    },
+    {
+      "file": "startup-light-loading-without-phone-frame.png",
+      "sha256": "a45dd7513178c589c928215d2e644885dcebfbc85a10a1fa98cde4511b0f355f",
+      "nativePixelsModified": false
+    },
+    {
+      "file": "startup-light-loading-timeout.png",
+      "sha256": "592632a167b61f73fbb34fdf174f226d88dcd3024e87cd82ece2b5be8483ee97",
+      "nativePixelsModified": false
+    },
+    {
+      "file": "startup-light-offline-relaunch.png",
+      "sha256": "10ce006c9458bbfc04f1e75091328840e70a84e15c5a86db77a2006d232a968b",
+      "nativePixelsModified": false
+    }
+  ]
+}

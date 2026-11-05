@@ -246,8 +246,21 @@ not infer disabled actions or invent declarations. The public summary API does
 not currently carry a separate per-action disabled state. Native focus retains
 the original 0/1/2 action index and skips absent slots, including after updates.
 
-The first-use guide is static and consumes its dismissal click. Only its boolean
-dismissal preference is persisted. Visible source clocks do not tick behind the
+The first-use guide is static and consumes its dismissal click. The watch persists
+its boolean dismissal preference (key 1) and, since 0.4.1, the last confirmed dark
+theme preference (key 2). Read that preference before creating/pushing the window;
+set both the canvas theme and native window background before the first frame.
+Only a successfully applied DSH1 snapshot may change the saved theme; rejected,
+stale or wrong-request frames must not. Write only when the preference differs
+from the last successful save, retrying on a later accepted frame after a storage
+failure. Missing/unreadable preferences default to light, including the first
+launch after upgrading from 0.4.0 before any confirmed theme has been saved.
+Loading, timeout,
+disconnect and READY preserve the theme without retaining any private content or
+capability. A theme changed on the phone while Dashboard is closed takes effect
+with the first accepted snapshot; the watch can only use the last confirmed
+preference before then. Fixture builds neither read nor write saved preferences.
+Visible source clocks do not tick behind the
 guide. A delayed raw-Select preview names the exact associated app without
 dispatching it. Once that preview appears, early release consumes the gesture
 without a tap action; ordinary quick taps remain unchanged. Stale/expired/replaced items cannot

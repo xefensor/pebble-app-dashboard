@@ -1,0 +1,24 @@
+{
+  "result": "PASS",
+  "version": "0.4.1",
+  "pbwSha256": "cc5b91320a116ef8716b8a71336246455fd0f7811c07cd63f5c1a2ee8199ca17",
+  "debugSha256": "d634ee0700ca4b9249bc2be26cb81dc1100205b4267a2e5757c0826b3593c705",
+  "debugSourcesMatchCurrentSource": true,
+  "packagedRuntimeMatchesDebug": true,
+  "identicalToPublished040": {
+    "config.html": "86022c0867ccc67d709558f3d8310097f2899bbb4c033a0e8f872aba961658ba",
+    "plugin.js": "d6c1727fd1134a2f708539b9197e24d3d6594d301968e9e8c34d5af69380b172",
+    "pebble-js-app.js": "769a579c0947fbfa80f9b56c89b75ac127e835e3d8656b9ae8777f391fd73784",
+    "emery/app_resources.pbpack": "94511ccd37e0309987f80c3b1f9b9a2ce4cb3cea9453d2f56470e1d35b93fe3c"
+  },
+  "previousArtifactCount": 21,
+  "nativeMemoryBytes": 32666,
+  "resourceBytes": 64208,
+  "automatedChecks": {
+    "javascriptTests": 88,
+    "portableNativeSuites": 2,
+    "encodedFixtures": 16,
+    "packagedRuntimeFramesDecodedByC": 30
+  },
+  "scope": "SDK production build and isolated packaged runtime; focused native emulator results recorded separately. No physical-watch or live-phone test."
+}
