@@ -572,3 +572,18 @@ test('post-stop settings save, reload and catalogue reads remain useful without 
   assert.equal(f.pebble.subscriptions.length,subscriptions);assert.ok(f.pebble.subscriptions.every(entry=>entry.closed));
   assert.equal(f.pebble.sent.length,messages);assert.equal(f.time.count(),0);
 });
+
+test('hidden provider avoids activity subscriptions while its explicit reading pin and instance-only exclusions stay independent',async()=>{
+  const summary=require('pebble-activities/summary'),realHost=require('pebble-activities/host');
+  const declaration={uuid:UUID,name:'Device provider',sources:[{category:'activity',items:['summary'],properties:summary.SOURCE_PROPERTIES},{category:'home',items:['light'],properties:{brightness:['numericValue']}}],actions:[]};
+  const pin={id:'light',label:'Light',reading:{plugin:UUID,category:'home',item:'light',property:'brightness'}};
+  const time=clock(),pebble=sdk([declaration]);const source=sourcesModule({...time,pebble,activitiesHost:realHost});
+  source.start(settings.normalize({...minimal([pin]),showNotifications:false,disabledActivities:[UUID,'builtin:music']}));await flush();time.advance(0);await flush();
+  assert.equal(pebble.subscriptions.filter(entry=>entry.request.category==='activity').length,0,'provider visibility policy prevents the activity read entirely');
+  assert.equal(pebble.subscriptions.filter(entry=>entry.request.category==='home'&&!entry.closed).length,1);
+  pebble.emit('home','light',envelope(UUID,[{instanceId:'lamp',properties:{brightness:{numericValue:{value:70,unit:'%'}}}}]),UUID);
+  assert.equal(source.snapshot().pins[0].value,'70%');source.stop();assert.equal(time.count(),0);
+  source.start(settings.normalize({...minimal([pin]),showNotifications:false,disabledActivities:['activity:'+UUID+':one','builtin:music']}));await flush();time.advance(0);await flush();
+  assert.equal(pebble.subscriptions.filter(entry=>entry.request.category==='activity'&&!entry.closed).length,1,'one hidden instance must not disable its whole provider');
+  assert.equal(pebble.subscriptions.filter(entry=>entry.request.category==='home'&&!entry.closed).length,1);source.stop();assert.equal(time.count(),0);
+});

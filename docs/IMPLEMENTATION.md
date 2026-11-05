@@ -46,6 +46,10 @@ HELLO requests and unchanged connection notifications do not rebind. Stopped or
 cancelled sources stay stopped on later connection events. Disconnect invalidates
 in-flight discovery/read callbacks and cancels polling timers; settings reloads
 must not restart subscriptions while disconnected.
+UUID-form activity exclusions are forwarded as disabledProviders to the shared
+host, avoiding their source subscriptions. Instance exclusions still filter only
+their local display records. Explicit ordinary reading pins keep their own
+independent subscriptions, including readings from a hidden activity provider.
 
 The 30-second heartbeat still checks saved settings and renews required live
 transport leases, but sends no unchanged static snapshot. Refresh reads after

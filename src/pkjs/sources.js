@@ -304,7 +304,7 @@ module.exports = function createSources(options) {
     settleTimer=later(function(){settleTimer=null;notify();},8000);
     var host=options.activitiesHost || require('pebble-activities/host');
     activities=host.createActivities({pebble:pebble,nativeFormat:3,now:now,later:later,cancelLater:cancel,
-      send:function (payload,success) { if(success)success(); },getSettings:function () { return {enabled:true}; },onChanged:notify});
+      send:function (payload,success) { if(success)success(); },getSettings:function () { return {enabled:true,disabledProviders:settings.disabledActivities.filter(uuid)}; },onChanged:notify});
     activities.refresh(true,2);
     if(settings.disabledActivities.indexOf('builtin:music')<0)
       bind('music','track',null,['title','artist','playing','artwork'],{w:40,h:40});

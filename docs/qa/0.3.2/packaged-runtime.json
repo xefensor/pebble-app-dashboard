@@ -2,8 +2,8 @@
   "result": "PASS",
   "scope": "Actual PBW phone and settings-plugin JavaScript executed with isolated fictional SDK sources/actions; not a live phone or physical watch test.",
   "version": "0.3.2",
-  "pbwSha256": "aad06d496935d05e5a7139a1ba1e8123fe4e3c155fb436d0029356bc97a18266",
-  "phoneSha256": "547e944edcac8624fca2320e2d4c103ea88c70d1e6cba47783762feb5b70b0d0",
+  "pbwSha256": "ed4ba30c86f0cfbc5f788d74bdca97fa61b9357fbcb9bd21e25ac29147b6aa67",
+  "phoneSha256": "7c1f0880231b3be4cb1eac8d4edc417c23148c6c7e4e854dab69d3cbdbd74a38",
   "proofs": {
     "realActivitiesProviderAndConsumer": true,
     "metadataOnlyPKJSConfiguration": true,

@@ -98,3 +98,6 @@ At 00:00 stop countdown redraws without inferring owner completion.
 The SDK's first tick can have zero changed units: paint the final zero before
 dropping a previous SECOND subscription. Terminal runtime.stop must remain
 terminal for source/watch work even if settings are saved or reloaded afterward.
+Pass UUID-form disabled activities to the host's disabledProviders setting so
+hidden providers are not subscribed. Instance-only exclusions stay local, and
+explicit reading pins from that provider remain independent.

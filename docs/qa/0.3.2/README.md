@@ -21,13 +21,13 @@ requested identity instead of falling back to an unrelated actionable row.
 
 | Check | Result |
 | --- | --- |
-| Node phone/protocol/settings | 74 passed (50/9/15) |
+| Node phone/protocol/settings | 75 passed (51/9/15) |
 | Native model/parser | 16 encoded fixtures passed, including zero/countdown ownership, unavailable capability expiry and bootstrap focus |
 | Fake-SDK deadline scheduler |Passed unchanged deadlines, replacement, firing, cancellation, clock correction, bounds and failed-allocation retry |
 | ASan/UBSan |Both native suites passed; leak scan disabled for sandbox ptrace compatibility |
 | SDK build / packaged runtime / artifact | Passed; 30 actual packaged frames accepted by C decoder |
 | Chromium settings | 24 checks and 7 captures; separate plugin/PKJS API surfaces, zero reads/subscriptions/actions/native messages |
-| Actual native focused Emery checks | 14 fresh captures / 6 checks; pre-review candidate evidence stays separately labelled |
+| Actual native focused Emery checks | 14 captures / 6 checks on aad06d49…; final phone-only rebuild inherits identical executable/resource bytes with SDK timestamp-only metadata differences |
 
 SDK 4.33.1 reports 32,370 bytes RAM, 98,702 bytes free heap and 64,208 resource
 bytes. Its existing RWX LOAD-segment linker warning remains. The reviewed
@@ -50,7 +50,15 @@ Measured portable work, not watch battery consumption:
   create 0 replacement subscriptions or periodic timers.
 
 PBW SHA-256:
+`ed4ba30c86f0cfbc5f788d74bdca97fa61b9357fbcb9bd21e25ac29147b6aa67`.
+
+The captured native candidate remains labelled
 `aad06d496935d05e5a7139a1ba1e8123fe4e3c155fb436d0029356bc97a18266`.
+The final hidden-provider policy change is phone-only: executable/relocation and
+resource bytes are identical. The SDK's resource timestamp at header offset 124
+and corresponding manifest timestamps/whole-file CRC changed during packaging.
+[The identity proof](native-payload-identity.json) validates those exact fields;
+it does not relabel old captures as a new runtime execution.
 
 The emulator uses an explicitly fictional protocol peer and exact packaged native
 bytes. Packaged JavaScript runs against an isolated SDK model. No real phone,
@@ -73,5 +81,5 @@ node scripts/check-packaged.cjs
 python3 scripts/test-native.py --frames-dir build/packaged-frames
 ASAN_OPTIONS=detect_leaks=0 python3 scripts/test-native.py --sanitize
 node scripts/check-settings.cjs
-python3 scripts/emulator-smoke.py --reliability-only --expected-sha256 aad06d496935d05e5a7139a1ba1e8123fe4e3c155fb436d0029356bc97a18266
+python3 scripts/emulator-smoke.py --reliability-only --expected-sha256 ed4ba30c86f0cfbc5f788d74bdca97fa61b9357fbcb9bd21e25ac29147b6aa67
 ```

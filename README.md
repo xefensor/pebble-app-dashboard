@@ -133,7 +133,9 @@ That lease never renews finite native-owner source validity.
 Reconnect refreshes source subscriptions and invalidates previous confirmations;
 duplicate connection events do not repeat that work. Late refresh reads cannot
 replace newer live readings or restore withdrawn permission. Static local/action
-views skip unchanged heartbeat frames; source leases and settings checks retain
+views skip unchanged heartbeat frames. Hidden activity providers are not read;
+explicit pinned readings from those providers remain independent. Source leases
+and settings checks retain
 their normal schedule. Countdown display stops ticking at zero while waiting for
 the owner to report completion. Original validity and privacy deadlines still
 clear content and capabilities at their precise native deadline.

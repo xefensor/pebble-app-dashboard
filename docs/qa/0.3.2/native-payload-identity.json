@@ -1,0 +1,32 @@
+{
+  "result": "PASS",
+  "testedPbwSha256": "aad06d496935d05e5a7139a1ba1e8123fe4e3c155fb436d0029356bc97a18266",
+  "finalPbwSha256": "ed4ba30c86f0cfbc5f788d74bdca97fa61b9357fbcb9bd21e25ac29147b6aa67",
+  "rawNativePayloadByteIdentical": false,
+  "nativeExecutableAndRelocationsByteIdentical": true,
+  "nativeResourcesByteIdentical": true,
+  "executableAfterSdkHeaderSha256": "b1ecb96f3f348721488cd607422586066a4d30d3d4b87df62f3f54e4ceb237e2",
+  "resourcePackSha256": "94511ccd37e0309987f80c3b1f9b9a2ce4cb3cea9453d2f56470e1d35b93fe3c",
+  "sdkTimestampField": {
+    "name": "RESOURCE_TIMESTAMP_ADDR",
+    "offset": 124,
+    "bytes": 4,
+    "old": 1793846092,
+    "new": 1793846611
+  },
+  "sdkDefinition": {
+    "file": "SDK4.33.1/sdk-core/pebble/common/tools/inject_metadata.py",
+    "sha256": "8f00cc7d36dbd85b99af925611265f0546755b36381a7b3b542df66f92bbc910",
+    "structSizeBytes": 130,
+    "loadSizeBytes": 21854
+  },
+  "manifestDifferencesOnly": "SDK generatedAt/application.timestamp/resources.timestamp plus correctly recomputed whole-file application CRC",
+  "manifestCrcVerifiedBySdkAlgorithm": true,
+  "finalNativePayloadSha256": {
+    "emery/app_resources.pbpack": "94511ccd37e0309987f80c3b1f9b9a2ce4cb3cea9453d2f56470e1d35b93fe3c",
+    "emery/manifest.json": "9100acba7b4607c614fe8cc95df12a933b2a42c1fb4728d9061220b8cb640a43",
+    "emery/pebble-app.bin": "d56cac1143911846c678775339b42547fb35ff5aacb2e6367bada48fbc75fcd0"
+  },
+  "newNativeRuntimeCapturesPerformed": false,
+  "scope": "Final change only passes UUID-form hidden activity providers to the phone host. 14 actual native captures remain labelled with tested PBW; code/resources are inherited through exact byte identity outside the SDK resource timestamp."
+}

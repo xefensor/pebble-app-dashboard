@@ -34,5 +34,7 @@
       "sha256": "b2e7d8936234e0717131076920a6fb6d11c54fab6e561fc6667aa8097c2d9ee8",
       "nativePixelsModified": false
     }
-  ]
+  ],
+  "inheritedByFinalPbwSha256": "ed4ba30c86f0cfbc5f788d74bdca97fa61b9357fbcb9bd21e25ac29147b6aa67",
+  "nativeInheritanceProof": "../native-payload-identity.json"
 }

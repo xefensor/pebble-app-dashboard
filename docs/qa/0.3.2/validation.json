@@ -2,8 +2,8 @@
   "result": "PASS",
   "version": "0.3.2",
   "baselineCommit": "6d75d9e",
-  "pbwSha256": "aad06d496935d05e5a7139a1ba1e8123fe4e3c155fb436d0029356bc97a18266",
-  "debugSha256": "81af8212c0eb4781b8ea459342cf17d77b86724fc1df5858933bdce40400f472",
+  "pbwSha256": "ed4ba30c86f0cfbc5f788d74bdca97fa61b9357fbcb9bd21e25ac29147b6aa67",
+  "debugSha256": "d5865b50acac5047e4dcd53e2d9f41486acb3bae2ba51f009b698e71bca0ac62",
   "buildSourceHashesMatch": true,
   "nativeCaptures": 14,
   "nativeBehaviorChecks": 6,
@@ -24,7 +24,7 @@
     "source_commit": "fbd3ce42771a299e9ce79a23338ac254387f9d1b"
   },
   "tests": {
-    "node": 74,
+    "node": 75,
     "portableNativeSuites": 2,
     "encodedFixtures": 16,
     "packagedRuntimeFrames": 30,
@@ -36,5 +36,11 @@
   "hardwareBatteryMeasured": false,
   "sdkWarning": "Existing SDK linker LOAD segment has RWX permissions.",
   "rootReview": "Approved final source and native contact sheet after independent lifecycle/first-tick review.",
-  "previousResourcesUnchanged": true
+  "previousResourcesUnchanged": true,
+  "nativeEvidence": {
+    "testedPbwSha256": "aad06d496935d05e5a7139a1ba1e8123fe4e3c155fb436d0029356bc97a18266",
+    "finalNativeExecutableAndResourcesByteIdentical": true,
+    "sdkResourceTimestampMetadataChanged": true,
+    "proof": "native-payload-identity.json"
+  }
 }
