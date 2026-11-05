@@ -1,0 +1,38 @@
+{
+  "result": "PASS",
+  "version": "0.3.2",
+  "baselineCommit": "6d75d9e",
+  "pbwSha256": "4f277fc435f96015976973b1babb92d938c093f4cae059844e389b87a7c37a6d",
+  "debugSha256": "d76bf39d376bec8f776f48f4adb8da4b4b10ea2c59b7b0939254a96ff1ca6219",
+  "buildSourceHashesMatch": true,
+  "nativeCaptures": 11,
+  "nativeBehaviorChecks": 5,
+  "sdkRamBytes": 32370,
+  "sdkFreeHeapBytes": 98702,
+  "sdkResourceBytes": 64208,
+  "dependency": {
+    "package": "pebble-activities",
+    "version": "0.4.3",
+    "archive": "pebble-activities-0.4.3.tgz",
+    "sha256": "049b5db1a20ccfec123291f8807302a6ee65835c5ca171bc302b546ad4b72123",
+    "repository": "https://github.com/xefensor/pebble-activities",
+    "integrity": "sha512-zUj0DoPK6EeT7Xrd0GcbkbXgRF8ErDlE7UBNEIbcNmaluItmpYrRXJ0qiNdUcKo+UzZYS/fGSOwDVrRixdJeVA==",
+    "sdk": "4.33.1",
+    "platforms": [
+      "emery"
+    ],
+    "source_commit": "fbd3ce42771a299e9ce79a23338ac254387f9d1b"
+  },
+  "tests": {
+    "node": 73,
+    "portableNativeSuites": 2,
+    "encodedFixtures": 16,
+    "packagedRuntimeFrames": 30,
+    "browserSettingsChecks": 24,
+    "browserCaptures": 7,
+    "addressUndefinedSanitizers": "PASS; leak scan disabled for ptrace compatibility"
+  },
+  "physicalPhoneOrWatchTested": false,
+  "hardwareBatteryMeasured": false,
+  "sdkWarning": "Existing SDK linker LOAD segment has RWX permissions."
+}

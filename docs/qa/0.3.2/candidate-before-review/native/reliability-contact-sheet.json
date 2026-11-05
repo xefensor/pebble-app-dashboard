@@ -1,0 +1,38 @@
+{
+  "candidatePbwSha256": "4f277fc435f96015976973b1babb92d938c093f4cae059844e389b87a7c37a6d",
+  "derivativeContactSheet": true,
+  "scale": 2,
+  "resampling": "nearest",
+  "sources": [
+    {
+      "file": "countdown-before-zero.png",
+      "sha256": "fc05704b5b2af2e2db74327f1051a4fa4f51edd1afa31ae42c4e684aa94bd71b",
+      "nativePixelsModified": false
+    },
+    {
+      "file": "countdown-final-zero.png",
+      "sha256": "e84e185c18058461b58e83a3cfdea126c5b8605d3560429ef6cc93d1f667beec",
+      "nativePixelsModified": false
+    },
+    {
+      "file": "unavailable-capability-before-expiry.png",
+      "sha256": "75b30cdf67a7d6b30868e0914e62ade9a92e6d6c45e5257d822eeb360e71d2bb",
+      "nativePixelsModified": false
+    },
+    {
+      "file": "unavailable-capability-expired.png",
+      "sha256": "e284bd05495ecb8994af1bbe24bc45d87f4ccd79c0e2a542866abc056a48e294",
+      "nativePixelsModified": false
+    },
+    {
+      "file": "requested-target-bootstrap-inert.png",
+      "sha256": "2fc7384948b59703c4d31a1b7684f0bb9aeb6a90734630ac9584fc9b695402f0",
+      "nativePixelsModified": false
+    },
+    {
+      "file": "requested-target-restored.png",
+      "sha256": "517901b575a37ba0682fc878b90101978656c7cdead9181908d913015491cbd5",
+      "nativePixelsModified": false
+    }
+  ]
+}

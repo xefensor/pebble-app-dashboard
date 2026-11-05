@@ -119,6 +119,11 @@ bool db_state_apply(DbState *state,const DbSnapshot *snapshot){
   uint32_t token=state->selected_token;bool loading=state->loading;
   state->snapshot=*snapshot;state->last_sequence=snapshot->sequence;state->loading=false;state->ready=true;
   int selected=-1;for(unsigned i=0;i<snapshot->count;i++)if(snapshot->items[i].token==token){selected=(int)i;break;}
+  if(selected<0&&token&&snapshot->status==DB_LOADING&&(loading||state->selection_lost)){
+    // Reconnect discovery can briefly omit the requested item. Keep that exact
+    // focus inert through bootstrap instead of selecting an unrelated action.
+    state->selection_lost=true;return true;
+  }
   if(selected<0&&snapshot->count){
     if(token&&!loading){state->selected_token=0;state->selection_lost=true;normalize_control_focus(state);return true;}
     uint16_t desired=loading?state->desired_index:state->selected_index;
@@ -211,6 +216,20 @@ bool db_state_redact(DbState *state,uint32_t now,bool disconnected){
 }
 bool db_state_running_clock(const DbState *state,uint32_t now){
   if(state->loading||!state->ready)return false;
-  for(unsigned i=0;i<state->snapshot.count;i++)if(db_item_current(&state->snapshot.items[i],now)&&state->snapshot.items[i].clock_mode&&state->snapshot.items[i].anchor)return true;
+  for(unsigned i=0;i<state->snapshot.count;i++){
+    const DbItem *item=&state->snapshot.items[i];
+    if(db_item_current(item,now)&&item->anchor&&
+       (item->clock_mode==2||(item->clock_mode==1&&item->anchor>now)))return true;
+  }
   return false;
+}
+uint32_t db_state_next_expiry(const DbState *state,uint32_t now){
+  uint32_t next=0;
+  for(unsigned i=0;i<state->snapshot.count;i++){
+    const uint32_t at=state->snapshot.items[i].valid_until;
+    // An unavailable reading can still have an independent action or app.
+    // Its binding must expire at the same exact deadline as a visible value.
+    if(at>now&&(!next||at<next))next=at;
+  }
+  return next;
 }

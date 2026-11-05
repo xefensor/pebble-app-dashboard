@@ -1,0 +1,38 @@
+{
+  "candidatePbwSha256": "aad06d496935d05e5a7139a1ba1e8123fe4e3c155fb436d0029356bc97a18266",
+  "derivativeContactSheet": true,
+  "scale": 2,
+  "resampling": "nearest",
+  "sources": [
+    {
+      "file": "first-second-callback-before-zero.png",
+      "sha256": "9a37ea2b56883120587dc7eab5fd2a7a439877994060b5299e62f75fc261718c",
+      "nativePixelsModified": false
+    },
+    {
+      "file": "first-second-callback-final-zero.png",
+      "sha256": "97797fc4fe5f2515bd692ea687c55aa169539836e0560ca4cfef89de875c9889",
+      "nativePixelsModified": false
+    },
+    {
+      "file": "unavailable-capability-before-expiry.png",
+      "sha256": "75b30cdf67a7d6b30868e0914e62ade9a92e6d6c45e5257d822eeb360e71d2bb",
+      "nativePixelsModified": false
+    },
+    {
+      "file": "unavailable-capability-expired.png",
+      "sha256": "e284bd05495ecb8994af1bbe24bc45d87f4ccd79c0e2a542866abc056a48e294",
+      "nativePixelsModified": false
+    },
+    {
+      "file": "requested-target-bootstrap-inert.png",
+      "sha256": "1dcd3284d5987de58b1183df8d73261dac2773330df54316289fb5a872a874bd",
+      "nativePixelsModified": false
+    },
+    {
+      "file": "requested-target-restored.png",
+      "sha256": "b2e7d8936234e0717131076920a6fb6d11c54fab6e561fc6667aa8097c2d9ee8",
+      "nativePixelsModified": false
+    }
+  ]
+}

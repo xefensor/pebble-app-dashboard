@@ -368,7 +368,7 @@ test('Snapshot has one activity, one notification and two pins while collections
   const entry=(id,role)=>({_identity:id,title:id,name:id,value:'',subtitle:'',appLabel:'',actionLabel:'',controls:[],kind:0,role,flags:0,
     validUntil:T/1000+120,_sourceValidUntil:T/1000+120,_provider:UUID,_commands:[]});
   const data={activities:Array.from({length:3},(_,i)=>entry('activity-'+i,0)),notification:entry('notice',1),pins:Array.from({length:6},(_,i)=>entry('pin-'+i,2)),loading:false,error:'',connected:true,available:true};
-  const runtime=createRuntime({...time,pebble,storage,tokenSeed:100,createSources(){return {start(){},stop(){},snapshot:()=>data,refreshPaths(){},configuration:()=>Promise.resolve({plugins:[],instances:[],activities:[]})};}});
+  const runtime=createRuntime({...time,pebble,storage,tokenSeed:100,createSources(){return {start(){},stop(){},snapshot:()=>data,refreshPaths(){},connectionChanged(){},configuration:()=>Promise.resolve({plugins:[],instances:[],activities:[]})};}});
   runtime.ready();runtime.message(native(pebble,protocol.op.HELLO,55,1));const frame=()=>decode(pebble.sent.filter(m=>m[protocol.keys.DB_DATA]).at(-1)[protocol.keys.DB_DATA]);
   assert.deepEqual(frame().items.map(item=>item.title),['activity-0','notice','pin-0','pin-1']);assert.deepEqual(frame().items.map(item=>item.role),[0,1,2,2]);assert.equal(frame().total,4);
   runtime.message(native(pebble,protocol.op.VIEW,55,2,{DB_MODE:1,DB_OFFSET:0}));assert.equal(frame().total,3);assert.equal(frame().items.length,3);
@@ -442,7 +442,7 @@ test('native focus survives a source revision race, heartbeat and insertion with
   const activity=i=>({_identity:'activity:'+i,title:'Activity '+i,name:'Provider',value:'',subtitle:'',appLabel:'',actionLabel:'',controls:[],kind:0,role:0,flags:0,
     validUntil:T/1000+120,_sourceValidUntil:T/1000+120,_provider:UUID,_commands:[]});
   let data={activities:Array.from({length:6},(_,i)=>activity(i)),notification:null,pins:[],loading:false,error:'',connected:true,available:true},changed;
-  const runtime=createRuntime({...time,pebble,storage,tokenSeed:100,createSources(options){changed=options.onChanged;return {start(){},stop(){},snapshot:()=>data,refreshPaths(){},configuration:()=>Promise.resolve({plugins:[],instances:[],activities:[]})};}});
+  const runtime=createRuntime({...time,pebble,storage,tokenSeed:100,createSources(options){changed=options.onChanged;return {start(){},stop(){},snapshot:()=>data,refreshPaths(){},connectionChanged(){},configuration:()=>Promise.resolve({plugins:[],instances:[],activities:[]})};}});
   runtime.ready();runtime.message(native(pebble,protocol.op.HELLO,55,1));
   runtime.message(native(pebble,protocol.op.VIEW,55,2,{DB_MODE:1,DB_OFFSET:0,DB_INDEX:0,DB_TOKEN:100}));
   const frame=()=>decode(pebble.sent.filter(m=>m[protocol.keys.DB_DATA]).at(-1)[protocol.keys.DB_DATA]);const focused=frame().items[4],sentBefore=pebble.sent.length;
@@ -461,4 +461,114 @@ test('source callbacks that never arrive leave a bounded loading state and recov
   time.advance(8001);assert.equal(source.snapshot().loading,false);assert.equal(source.snapshot().error,'SOURCE_TIMEOUT');
   pebble.emit('music','track',envelope(MUSIC,[{instanceId:'track',properties:{title:prop('Available now'),playing:bool(true)}}]));
   pebble.emit('notifications','notification',envelope(NOTIFICATIONS,[]));assert.equal(source.snapshot().error,'');source.stop();
+});
+
+test('disconnect cancels discovery and late callbacks; stopped sources cannot resurrect on connection events',async()=>{
+  const time=clock(),pebble=sdk();let enumerations=0,resolve;
+  pebble.enumeratePlugins=()=>{enumerations++;return new Promise(done=>resolve=done);};
+  const source=sourcesModule({...time,pebble,activitiesHost:host()});source.start(settings.normalize(minimal()));
+  const initial=pebble.subscriptions.length;
+  source.connectionChanged(true);source.connectionChanged(true);
+  assert.equal(pebble.subscriptions.length,initial);assert.equal(enumerations,1);
+  source.connectionChanged(false);assert.ok(pebble.subscriptions.every(entry=>entry.closed));assert.equal(time.count(),0);
+  resolve([musicPlugin()]);await flush();time.advance(180000);await flush();
+  assert.equal(enumerations,1,'offline catalogue polling stays stopped');assert.equal(time.count(),0);
+  source.start(settings.normalize(minimal()));assert.equal(pebble.subscriptions.length,initial,'settings reload cannot subscribe while disconnected');
+  source.connectionChanged(true);assert.equal(pebble.subscriptions.length,initial*2);assert.equal(enumerations,2);
+  source.stop();source.connectionChanged(false);source.connectionChanged(true);await flush();
+  assert.equal(pebble.subscriptions.length,initial*2,'stopped watch runtime stays stopped');assert.equal(time.count(),0);
+});
+
+test('explicitly hidden Music does not subscribe unless a configured pin reads it',async()=>{
+  const prefs={...minimal(),disabledActivities:['builtin:music']};
+  const hidden=sourceFixture(prefs);await flush();assert.equal(hidden.pebble.subscriptions.some(entry=>entry.request.category==='music'),false);hidden.source.stop();
+  const pinned=sourceFixture({...prefs,pins:[{id:'album',label:'Album',reading:{category:'music',item:'track',property:'album'}}]});await flush();
+  assert.equal(pinned.pebble.subscriptions.filter(entry=>entry.request.category==='music').length,1);pinned.source.stop();
+});
+
+test('refresh bursts coalesce and an older read cannot overwrite a subscription update or permission loss',async()=>{
+  const pin={id:'light',label:'Light',reading:{plugin:UUID,category:'home',item:'light',property:'brightness'}};
+  const f=sourceFixture(minimal([pin]),[plugin(UUID,'home','light')]);await flush();
+  const reads=[];f.pebble.readSource=()=>new Promise(resolve=>reads.push(resolve));
+  const value=n=>envelope(UUID,[{instanceId:'1',properties:{brightness:{numericValue:{value:n,unit:'%'}}}}]);
+  f.pebble.emit('home','light',value(10),UUID);
+  for(let n=0;n<8;n++)f.source.refreshPaths(['home/light']);
+  assert.equal(reads.length,1,'one read remains in flight');
+  f.pebble.emit('home','light',value(20),UUID);reads[0](value(10));await flush();
+  assert.equal(f.source.snapshot().pins[0].value,'20%');assert.equal(reads.length,2,'one follow-up covers the whole later burst');
+  reads[1](value(20));await flush();assert.equal(reads.length,2);
+  f.source.refreshPaths(['home/light']);f.pebble.fail('home','light','PERMISSION_DENIED');reads[2](value(90));await flush();
+  assert.equal(f.source.snapshot().pins[0].value,'—');assert.equal(f.source.snapshot().pins[0].subtitle,'Allow access');
+  f.source.stop();assert.equal(f.time.count(),0);
+});
+
+test('a timed-out refresh releases the coalescing slot and late responses cannot replace a newer read',async()=>{
+  const pin={id:'light',label:'Light',reading:{plugin:UUID,category:'home',item:'light',property:'brightness'}};
+  const f=sourceFixture(minimal([pin]),[plugin(UUID,'home','light')]);await flush();const reads=[];
+  f.pebble.readSource=()=>new Promise(resolve=>reads.push(resolve));
+  const value=n=>envelope(UUID,[{instanceId:'1',properties:{brightness:{numericValue:{value:n}}}}]);
+  f.pebble.emit('home','light',value(10),UUID);
+  f.source.refreshPaths(['home/light']);f.source.refreshPaths(['home/light']);f.time.advance(8000);
+  assert.equal(reads.length,2);reads[1](value(30));await flush();reads[0](value(5));await flush();
+  assert.equal(f.source.snapshot().pins[0].value,'30');f.source.stop();assert.equal(f.time.count(),0);
+});
+
+test('static local/action Snapshot sends no heartbeat frames while live transport leases still use the heartbeat',async()=>{
+  const prefs={...minimal([{id:'watch',label:'Watch',reading:{category:'watch-local',item:'battery',property:'level'}},{id:'find',label:'Find phone',builtin:'find-phone'}]),showNotifications:false,disabledActivities:['builtin:music']};
+  const f=runtimeFixture(prefs,[plugin(FIND,'phone','find_my_phone',[{name:'ring'}])]);await flush();f.time.advance(0);
+  const before=f.pebble.sent.filter(message=>message[protocol.keys.DB_DATA]).length;
+  f.time.advance(300000);await flush();f.time.advance(0);
+  assert.equal(f.pebble.sent.filter(message=>message[protocol.keys.DB_DATA]).length,before,'ten unchanged heartbeat snapshots suppressed');
+  assert.equal(f.pebble.subscriptions.length,0);f.runtime.stop();
+  f.runtime.connectionChanged(false);f.runtime.connectionChanged(true);assert.equal(f.pebble.subscriptions.length,0);assert.equal(f.time.count(),0);
+});
+
+test('same-session reconnect replaces source handles once and stale confirmation cannot authorize a new binding',async()=>{
+  const prefs={...minimal([{id:'device',label:'Device',action:{plugin:UUID,action:'erase',args:{id:'saved'},label:'Erase',confirm:true}}]),showNotifications:false};
+  const f=runtimeFixture(prefs,[plugin(UUID,'home','light',[{name:'erase',parameters:{type:'object',properties:{id:{type:'string'}},required:['id']}}])]);await flush();f.time.advance(0);
+  const initialSubscriptions=f.pebble.subscriptions.length;
+  const before=f.frame().items.find(item=>item.role===2);f.runtime.message(native(f.pebble,protocol.op.ACTION,55,2,{DB_TOKEN:before.token,DB_VERSION:before.version,DB_ACTION:0}));
+  assert.equal(f.pebble.sent.at(-1)[protocol.keys.DB_RESULT],protocol.result.CONFIRM);
+  f.runtime.message(native(f.pebble,protocol.op.HELLO,55,3));await flush();f.time.advance(0);
+  const after=f.frame().items.find(item=>item.role===2);assert.equal(after.token,before.token);assert.ok(after.version>before.version);
+  assert.equal(f.pebble.subscriptions.length,initialSubscriptions*2);assert.ok(f.pebble.subscriptions.slice(0,initialSubscriptions).every(entry=>entry.closed));
+  const version=after.version;f.runtime.message(native(f.pebble,protocol.op.HELLO,55,3));await flush();f.time.advance(0);
+  assert.equal(f.frame().items.find(item=>item.role===2).version,version,'duplicate handshake does not rebaseline');
+  assert.equal(f.pebble.subscriptions.length,initialSubscriptions*2);
+  f.runtime.message(native(f.pebble,protocol.op.ACTION,55,2,{DB_TOKEN:before.token,DB_VERSION:before.version,DB_ACTION:0,DB_CONFIRM:1}));await flush();
+  assert.equal(f.pebble.invocations.length,0);assert.equal(f.pebble.sent.at(-1)[protocol.keys.DB_RESULT],protocol.result.STALE);
+  f.runtime.message(native(f.pebble,protocol.op.ACTION,55,4,{DB_TOKEN:after.token,DB_VERSION:after.version,DB_ACTION:0}));
+  f.runtime.message(native(f.pebble,protocol.op.ACTION,55,4,{DB_TOKEN:after.token,DB_VERSION:after.version,DB_ACTION:0,DB_CONFIRM:1}));await flush();
+  assert.equal(f.pebble.invocations.length,1);assert.deepEqual(f.pebble.invocations[0].args,{id:'saved'});f.runtime.stop();
+});
+
+test('twenty unchanged source deliveries keep one exact expiry timer; expiry and permission withdrawal still clear it',async()=>{
+  const time=clock(),pebble=sdk([musicPlugin()]);let registrations=0,cancellations=0;
+  const source=sourcesModule({...time,pebble,activitiesHost:host(),
+    later(fn,delay){registrations++;return time.later(fn,delay);},
+    cancelLater(timer){cancellations++;time.cancelLater(timer);}});
+  source.start(settings.normalize(minimal()));await flush();
+  const value=envelope(MUSIC,[{instanceId:'track',properties:{title:prop('Finite track'),playing:bool(true)}}],T+5000);
+  pebble.emit('music','track',value);const before=[registrations,cancellations];
+  for(let n=0;n<20;n++)pebble.emit('music','track',value);
+  assert.deepEqual([registrations,cancellations],before,'unchanged absolute expiry needs no timer replacement');
+  time.advance(5000);assert.equal(source.snapshot().activities.length,0);assert.equal(source.snapshot().error,'SOURCE_EXPIRED');
+  pebble.emit('music','track',envelope(MUSIC,value.instances,time.now()+5000));const beforeWithdrawal=cancellations;
+  pebble.fail('music','track','PERMISSION_DENIED');assert.equal(cancellations,beforeWithdrawal+1);
+  assert.equal(source.snapshot().activities.length,0);time.advance(5000);assert.equal(source.snapshot().activities.length,0);
+  source.stop();assert.equal(time.count(),0);
+});
+
+test('post-stop settings save, reload and catalogue reads remain useful without restarting watch/source work',async()=>{
+  const f=runtimeFixture();await flush();f.time.advance(0);f.runtime.stop();
+  const subscriptions=f.pebble.subscriptions.length,messages=f.pebble.sent.length;
+  const defaults=settings.defaults();assert.deepEqual(f.runtime.configure(defaults),defaults);
+  assert.deepEqual(settings.load(f.storage),defaults,'explicit settings save still works after watch shutdown');
+  const changed={...defaults,dark:true};settings.save(f.storage,changed);
+  assert.deepEqual(f.runtime.reloadSettings(),changed);
+  const config=await f.runtime.configuration();assert.deepEqual(config.settings,changed);assert.ok(config.catalogue.activities.length);
+  f.runtime.message(native(f.pebble,protocol.op.HELLO,88,1));f.runtime.connectionChanged(false);f.runtime.connectionChanged(true);
+  f.time.advance(120000);await flush();
+  assert.equal(f.pebble.subscriptions.length,subscriptions);assert.ok(f.pebble.subscriptions.every(entry=>entry.closed));
+  assert.equal(f.pebble.sent.length,messages);assert.equal(f.time.count(),0);
 });

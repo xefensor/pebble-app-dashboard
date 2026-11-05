@@ -1,21 +1,23 @@
 # Dashboard
 
 A stock Pebble watchapp for current activities, the latest available notification
-and pinned readings/actions. **0.3.1 is an Emery development prerelease.**
+and pinned readings/actions. **0.3.2 is a local Emery development candidate.**
 
 The native app, phone runtime and bundled settings page are implemented in
 [xefensor/pebble-app-dashboard](https://github.com/xefensor/pebble-app-dashboard).
 Build and portable/emulator checks are recorded under
-[docs/qa/0.3.1](docs/qa/0.3.1). Real-phone permissions/provider integration and
+[docs/qa/0.3.2](docs/qa/0.3.2). Real-phone permissions/provider integration and
 physical-watch comfort/battery still need device testing. Synthetic SDK/emulator
 fixtures are not evidence of live phone operation.
 
 ## Try the build
 
-Download [Dashboard 0.3.1](https://github.com/xefensor/pebble-app-dashboard/releases/download/v0.3.1/Dashboard-0.3.1.pbw)
-from the [development release](https://github.com/xefensor/pebble-app-dashboard/releases/tag/v0.3.1).
-The release also includes source, debug files and checksums. Local builds create
-the same filenames under `dist/`. Install the PBW using the official Pebble phone app with plugins
+The current local candidate is `dist/Dashboard-0.3.2.pbw`; it has not been
+published. Build instructions are below. The previous published development
+build remains [Dashboard 0.3.1](https://github.com/xefensor/pebble-app-dashboard/releases/download/v0.3.1/Dashboard-0.3.1.pbw),
+with source, debug files and checksums in its
+[development release](https://github.com/xefensor/pebble-app-dashboard/releases/tag/v0.3.1).
+Install the PBW using the official Pebble phone app with plugins
 enabled. Allow permissions needed by your selected readings and controls. Open
 Dashboard normally or assign it to Quick Launch in Pebble settings.
 
@@ -128,6 +130,14 @@ ownership remain authoritative. Null-TTL live sources have a separate 60-second
 watch transport lease, renewed only while their subscription remains active.
 That lease never renews finite native-owner source validity.
 
+Reconnect refreshes source subscriptions and invalidates previous confirmations;
+duplicate connection events do not repeat that work. Late refresh reads cannot
+replace newer live readings or restore withdrawn permission. Static local/action
+views skip unchanged heartbeat frames; source leases and settings checks retain
+their normal schedule. Countdown display stops ticking at zero while waiting for
+the owner to report completion. Original validity and privacy deadlines still
+clear content and capabilities at their precise native deadline.
+
 The public connection service debounces disconnect reporting (25 seconds in the
 stock firmware used for emulator QA). Native private content clears when the SDK
 notification arrives or its lease expires; physical radio loss is not detected
@@ -185,4 +195,4 @@ native captures are in the versioned QA folder. Those browser studies predate
 the larger 0.3.0 Snapshot and its direct Music play/pause behavior.
 
 Licensed under the suite's PolyForm Noncommercial terms; see LICENSE and
-THIRD-PARTY-NOTICES.md. Activities 0.4.2 is vendored with checksum provenance.
+THIRD-PARTY-NOTICES.md. Activities 0.4.3 is vendored with checksum provenance.

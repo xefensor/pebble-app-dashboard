@@ -55,6 +55,37 @@ static void clocks(void){
   assert(!db_item_current(&item,1000)&&db_item_actionable(&item,1000)&&db_item_capability_current(&item,1000));
   db_item_value(&item,1000,text,sizeof(text));assert(!strcmp(text,"--"));
   item.valid_until=1000;assert(!db_item_actionable(&item,1000)&&!db_item_capability_current(&item,1000));
+  DbState state={0};state.ready=true;state.snapshot.count=1;
+  state.snapshot.items[0]=(DbItem){.token=1,.version=1,.valid_until=1200,.clock_mode=1,.anchor=1075,.flags=DB_COUNTDOWN};
+  assert(db_state_running_clock(&state,1000));assert(db_state_next_expiry(&state,1000)==1200);
+  assert(!db_state_running_clock(&state,1075));
+  assert(state.snapshot.items[0].clock_mode==1&&state.snapshot.items[0].anchor==1075);
+  state.snapshot.items[0].clock_mode=2;state.snapshot.items[0].anchor=1000;state.snapshot.items[0].flags=DB_ELAPSED;
+  assert(db_state_running_clock(&state,1075));
+  state.snapshot.count=2;state.snapshot.items[1]=(DbItem){.token=2,.version=1,.valid_until=1100,.role=DB_ROLE_PIN,.flags=DB_UNAVAILABLE|DB_ACTION|DB_APP};
+  assert(db_state_next_expiry(&state,1075)==1100);
+  assert(db_state_redact(&state,1100,false));
+  assert(!(state.snapshot.items[1].flags&(DB_ACTION|DB_APP)));
+  assert(db_state_next_expiry(&state,1100)==1200);
+  assert(db_state_next_expiry(&state,1200)==0);
+}
+static void reconnect_focus(void){
+  DbState state;db_state_init(&state,3);db_state_expect(&state,1,DB_OVERVIEW,0,7);
+  DbSnapshot snapshot={.session=3,.request=1,.sequence=1,.mode=DB_OVERVIEW,.status=DB_READY,.count=2,.total=2};
+  snapshot.items[0]=(DbItem){.token=7,.version=1,.role=DB_ROLE_ACTIVITY};
+  snapshot.items[1]=(DbItem){.token=8,.version=1,.role=DB_ROLE_PIN,.flags=DB_ACTION};
+  assert(db_state_apply(&state,&snapshot)&&db_selected(&state)->token==7);
+  DbSnapshot pending=snapshot;pending.request=2;pending.sequence=2;pending.status=DB_LOADING;pending.count=pending.total=1;pending.items[0]=snapshot.items[1];
+  db_state_expect(&state,2,DB_OVERVIEW,0,7);
+  assert(db_state_apply(&state,&pending)&&state.selected_token==7&&state.selection_lost&&!db_selected(&state));
+  pending.sequence++;assert(db_state_apply(&state,&pending)&&state.selected_token==7&&!db_selected(&state));
+  snapshot.request=2;snapshot.sequence=4;
+  assert(db_state_apply(&state,&snapshot)&&db_selected(&state)->token==7&&!state.selection_lost);
+  db_state_expect(&state,3,DB_OVERVIEW,0,7);pending.request=3;pending.sequence=5;
+  assert(db_state_apply(&state,&pending)&&!db_selected(&state));
+  pending.sequence=6;pending.status=DB_READY;
+  assert(db_state_apply(&state,&pending)&&!state.selected_token&&state.selection_lost&&!db_selected(&state));
+  uint16_t index=0;assert(db_state_move(&state,1,&index)&&db_selected(&state)->token==8);
 }
 static void direct_media_action(void){
   DbItem item={.token=2,.version=1,.valid_until=2000,.role=DB_ROLE_ACTIVITY,.kind=DB_MUSIC,.flags=DB_ACTION|DB_IS_MEDIA|DB_MEDIA_PREVIOUS|DB_MEDIA_TOGGLE|DB_MEDIA_NEXT};
@@ -180,5 +211,5 @@ int main(int argc,char **argv){
     free(frame);printf("C parser: %d actual runtime frames accepted\n",argc-2);return 0;
   }
   for(int i=1;i<argc;i++)fixture(argv[i]);
-  clocks();direct_media_action();control_slots();identity_and_privacy();static_placeholder();notification_shortcut();printf("native model: %u binary fixtures; malformed, stale, selection, privacy, sparse controls and clock checks passed\n",checked);return 0;
+  clocks();reconnect_focus();direct_media_action();control_slots();identity_and_privacy();static_placeholder();notification_shortcut();printf("native model: %u binary fixtures; malformed, stale, selection, privacy, sparse controls and clock checks passed\n",checked);return 0;
 }

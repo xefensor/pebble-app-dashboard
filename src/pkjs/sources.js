@@ -119,18 +119,25 @@ function fromActivity(card, plugins, seconds) {
 module.exports = function createSources(options) {
   var pebble = options.pebble, now = options.now || Date.now, later = options.later || setTimeout, cancel = options.cancelLater || clearTimeout;
   var changed = options.onChanged || function () {}, settings = null, groups = Object.create(null), plugins = [], activities = null;
-  var stopped = true, connected = true, generation = 0, discoveryTimer = null, expiryTimer = null, settleTimer = null, startedAt = 0, error = '', discovery = null;
+  var stopped = true, connected = true, generation = 0, discoveryTimer = null, expiryTimer = null, expiryAt = 0, settleTimer = null, startedAt = 0, error = '', discovery = null;
   function notify() { if (!stopped) { scheduleExpiry(); changed(); } }
-  function stopGroup(group) { group.generation++; if (group.handle && typeof group.handle.unsubscribe === 'function') { try { group.handle.unsubscribe(); } catch (ignored) {} } group.handle=null;group.envelope=null; }
+  function stopGroup(group) {
+    group.generation++;group.updates++;
+    if (group.read && group.read.timer !== null) cancel(group.read.timer);
+    group.read=null;
+    if (group.handle && typeof group.handle.unsubscribe === 'function') { try { group.handle.unsubscribe(); } catch (ignored) {} }
+    group.handle=null;group.envelope=null;
+  }
   function stop() {
     stopped=true;generation++;
-    [discoveryTimer,expiryTimer,settleTimer].forEach(function (timer) { if (timer !== null) cancel(timer); });discoveryTimer=expiryTimer=settleTimer=null;
+    [discoveryTimer,expiryTimer,settleTimer].forEach(function (timer) { if (timer !== null) cancel(timer); });discoveryTimer=expiryTimer=settleTimer=null;expiryAt=0;
     Object.keys(groups).forEach(function (key) { stopGroup(groups[key]); }); groups=Object.create(null);plugins=[];
     if (activities) activities.stop();activities=null;discovery=null;
   }
   function live(group) { return group && group.envelope && !group.error && (!group.expiresAt || group.expiresAt * 1000 > now()); }
   function receive(group, envelope, run) {
-    if (stopped || run !== group.generation) return;
+    if (stopped || !connected || run !== group.generation) return;
+    group.updates++;
     var valid = envelope && uuid(envelope.pluginUuid) && (!group.plugin || group.plugin === envelope.pluginUuid) &&
       Array.isArray(envelope.instances) && envelope.instances.length <= 256;
     var expiry = envelope && envelope.validUntilMs;
@@ -142,14 +149,14 @@ module.exports = function createSources(options) {
     var key=(plugin || '*')+'|'+category+'/'+item;
     if (groups[key]) return groups[key];
     var group=groups[key]={key:key,category:category,item:item,plugin:plugin || null,properties:properties,iconPixelSize:size,
-      envelope:null,expiresAt:null,error:'',ready:false,handle:null,generation:1};
+      envelope:null,expiresAt:null,error:'',ready:false,handle:null,generation:1,updates:0,read:null};
     // Reading Find My Phone starts ringing in the official plugin. It is an
     // explicit command-only default, never an automatic read or settings probe.
     if (category === 'phone' && item === 'find_my_phone') { group.error='ACTION_ONLY';group.ready=true;return group; }
     if (typeof pebble.subscribeToSource !== 'function') { group.error='PLUGINS_UNAVAILABLE';group.ready=true;return group; }
     var run=group.generation;
     var request={category:category,item:item,onData:function (envelope) { receive(group,envelope,run); },onError:function (failure) {
-      if (stopped || run !== group.generation) return;group.envelope=null;group.error=failure && failure.code || 'SOURCE_UNAVAILABLE';group.ready=true;notify();
+      if (stopped || !connected || run !== group.generation) return;group.updates++;group.envelope=null;group.error=failure && failure.code || 'SOURCE_UNAVAILABLE';group.ready=true;notify();
     }};
     if (plugin) request.plugin=plugin;if (properties) request.properties=properties;if (size) request.iconPixelSize=size;
     try {
@@ -161,16 +168,16 @@ module.exports = function createSources(options) {
   }
   function enumerate() {
     var run=generation;
-    if (stopped) return Promise.resolve([]);
+    if (stopped || !connected) return Promise.resolve([]);
     if (discovery) return discovery;
     try { discovery=Promise.resolve(typeof pebble.enumeratePlugins === 'function' ? pebble.enumeratePlugins() : []); }
     catch (failure) { discovery=Promise.reject(failure); }
     discovery=discovery.then(function (value) {
-      if (stopped || run !== generation) return [];
+      if (stopped || !connected || run !== generation) return [];
       if (!Array.isArray(value)) { plugins=[];error='INVALID_CATALOGUE';notify();return []; }
       plugins=value.filter(function (plugin) { return plugin && uuid(plugin.uuid); }).slice(0,128);metadata.save(options.storage,metadata.fromPlugins(plugins));error='';notify();return plugins;
-    },function (failure) { if (!stopped && run === generation) { plugins=[];error=failure && failure.code || 'PLUGINS_UNAVAILABLE';notify(); }return []; }).then(function (value) {
-      if (run === generation) {
+    },function (failure) { if (!stopped && connected && run === generation) { plugins=[];error=failure && failure.code || 'PLUGINS_UNAVAILABLE';notify(); }return []; }).then(function (value) {
+      if (!stopped && connected && run === generation) {
         discovery=null;if (discoveryTimer !== null) cancel(discoveryTimer);
         discoveryTimer=later(function () { discoveryTimer=null;enumerate(); },60000);
       }
@@ -179,11 +186,14 @@ module.exports = function createSources(options) {
     return discovery;
   }
   function scheduleExpiry() {
-    if (expiryTimer !== null) { cancel(expiryTimer);expiryTimer=null; }
     var ends=Object.keys(groups).map(function (key) { return live(groups[key]) && groups[key].expiresAt; }).filter(Boolean);
+    var next=ends.length?Math.min.apply(null,ends):0;
+    if(expiryTimer!==null&&next===expiryAt)return;
+    if(expiryTimer!==null){cancel(expiryTimer);expiryTimer=null;}
+    expiryAt=0;
     if (ends.length) expiryTimer=later(function () {
-      expiryTimer=null;Object.keys(groups).forEach(function (key) { var group=groups[key];if (group.expiresAt && group.expiresAt*1000<=now()) { group.envelope=null;group.error='SOURCE_EXPIRED'; } });notify();
-    },Math.max(1,Math.min.apply(null,ends)*1000-now()));
+      expiryTimer=null;expiryAt=0;Object.keys(groups).forEach(function (key) { var group=groups[key];if (group.expiresAt && group.expiresAt*1000<=now()) { group.updates++;group.envelope=null;group.error='SOURCE_EXPIRED'; } });notify();
+    },Math.min(2147483647,Math.max(1,(expiryAt=next)*1000-now())));
   }
   function findGroup(reading) { return groups[(reading.plugin || '*')+'|'+reading.category+'/'+reading.item]; }
   function selectInstance(group, reading) {
@@ -289,28 +299,57 @@ module.exports = function createSources(options) {
       error:error || activityStatus.error || errors[0] || (waiting&&now()-startedAt>=8000?'SOURCE_TIMEOUT':''),connected:connected,available:typeof pebble.subscribeToSource==='function'};
   }
   function start(next) {
-    stop();stopped=false;connected=true;settings=next;error='';generation++;startedAt=now();
+    stop();stopped=false;settings=next;error='';generation++;startedAt=now();
+    if (!connected) { notify();return; }
     settleTimer=later(function(){settleTimer=null;notify();},8000);
     var host=options.activitiesHost || require('pebble-activities/host');
     activities=host.createActivities({pebble:pebble,nativeFormat:3,now:now,later:later,cancelLater:cancel,
       send:function (payload,success) { if(success)success(); },getSettings:function () { return {enabled:true}; },onChanged:notify});
     activities.refresh(true,2);
-    bind('music','track',null,['title','artist','playing','artwork'],{w:40,h:40});
+    if(settings.disabledActivities.indexOf('builtin:music')<0)
+      bind('music','track',null,['title','artist','playing','artwork'],{w:40,h:40});
     if (settings.showNotifications) bind('notifications','notification',NOTIFICATIONS,['name','app','package','app_icon'].concat(settings.notificationPreview?['body']:[]),{w:24,h:24});
     settings.pins.forEach(function (pin) { if (pin.reading && pin.reading.category !== 'watch-local') bind(pin.reading.category,pin.reading.item,pin.reading.plugin,null,{w:16,h:16}); });
     enumerate();notify();
   }
+  function refreshGroup(group) {
+    if (group.read) { group.read.again=true;return; }
+    var flight={generation:group.generation,updates:group.updates,again:false,timer:null};
+    group.read=flight;
+    function complete(envelope, received) {
+      if (group.read !== flight) return;
+      group.read=null;if (flight.timer !== null) cancel(flight.timer);
+      if (stopped || !connected || group.generation !== flight.generation) return;
+      // A subscription update/error/expiry is newer than a read already in
+      // flight. That read must never resurrect an older value or permission.
+      if (received && group.updates === flight.updates) receive(group,envelope,flight.generation);
+      if (flight.again) refreshGroup(group);
+    }
+    var request={category:group.category,item:group.item};if(group.plugin)request.plugin=group.plugin;if(group.properties)request.properties=group.properties;if(group.iconPixelSize)request.iconPixelSize=group.iconPixelSize;
+    flight.timer=later(function(){complete(null,false);},8000);
+    try { Promise.resolve(pebble.readSource(request)).then(function(envelope){complete(envelope,true);},function(){complete(null,false);}); }
+    catch(ignored) { complete(null,false); }
+  }
   function refreshPaths(paths, binding) {
-    if (stopped || typeof pebble.readSource !== 'function') return;
+    if (stopped || !connected || typeof pebble.readSource !== 'function') return;
     var wanted=Array.isArray(paths)?paths:binding && binding.path?[binding.path]:[];
     Object.keys(groups).forEach(function (key) {
-      var group=groups[key],run=group.generation;if (wanted.indexOf(group.category+'/'+group.item)<0 || group.error==='ACTION_ONLY')return;
-      var request={category:group.category,item:group.item};if(group.plugin)request.plugin=group.plugin;if(group.properties)request.properties=group.properties;if(group.iconPixelSize)request.iconPixelSize=group.iconPixelSize;
-      try { Promise.resolve(pebble.readSource(request)).then(function(envelope){receive(group,envelope,run);},function(){/* Subscription remains authoritative; no optimistic replacement. */}); } catch(ignored) {}
+      var group=groups[key];if (wanted.indexOf(group.category+'/'+group.item)<0 || group.error==='ACTION_ONLY')return;
+      refreshGroup(group);
     });
   }
   return {start:start,stop:stop,snapshot:snapshot,refreshPaths:refreshPaths,
-    connectionChanged:function(value){connected=!!value;if(!connected){Object.keys(groups).forEach(function(key){stopGroup(groups[key]);});if(activities)activities.connectionChanged(false);notify();}else if(settings)start(settings);},
+    connectionChanged:function(value){
+      value=!!value;if(value===connected)return;connected=value;
+      if(stopped)return;
+      if(!connected){
+        generation++;
+        [discoveryTimer,expiryTimer,settleTimer].forEach(function(timer){if(timer!==null)cancel(timer);});
+        discoveryTimer=expiryTimer=settleTimer=null;expiryAt=0;discovery=null;
+        Object.keys(groups).forEach(function(key){stopGroup(groups[key]);groups[key].ready=true;});
+        if(activities)activities.connectionChanged(false);notify();
+      }else if(settings)start(settings);
+    },
     configuration:function(){return metadata.discover(pebble);}
   };
 };

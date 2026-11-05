@@ -16,7 +16,7 @@ module.exports = function createRuntime(options) {
   var pebble=options.pebble, now=options.now || Date.now, later=options.later || setTimeout, cancel=options.cancelLater || clearTimeout;
   var prefs=settingsModel.load(options.storage), settingsError=!prefs;
   if (!prefs) prefs=settingsModel.defaults(); // Rendering fallback only; never a repair write.
-  var session=0,sequence=0,nextToken=1,view=null,stopped=false,started=false,heartbeat=null,publishTimer=null;
+  var session=0,sequence=0,nextToken=1,view=null,stopped=false,started=false,heartbeat=null,publishTimer=null,connected=true,bindingEpoch=0;
   var identities=Object.create(null),bindings=Object.create(null),feedback=Object.create(null),lastFrameSignature='';
   var queue=createQueue(function(message,success,failure){pebble.sendAppMessage(message,success,failure);});
   var sources=(options.createSources || createSources)({pebble:pebble,storage:options.storage,now:now,later:later,cancelLater:cancel,
@@ -41,7 +41,7 @@ module.exports = function createRuntime(options) {
     // Transport leases and command progress are not source revisions. Excluding
     // them preserves the identity of a still-current item while time advances.
     var stable=copy(entry);delete stable.validUntil;delete stable.token;delete stable.version;
-    stable.flags &= ~(F.PENDING|F.FAILED);return JSON.stringify(stable);
+    stable.flags &= ~(F.PENDING|F.FAILED);return JSON.stringify([bindingEpoch,stable]);
   }
   function display(raw) {
     var entry=copy(raw), signature=sourceSignature(raw), identity=identities[raw._identity];
@@ -129,9 +129,9 @@ module.exports = function createRuntime(options) {
   function armHeartbeat(){
     if(heartbeat!==null)cancel(heartbeat);
     if(!session||stopped)return;
-    heartbeat=later(function(){heartbeat=null;syncSettings();publish(true);armHeartbeat();},30000);
+    heartbeat=later(function(){heartbeat=null;syncSettings();publish(false);armHeartbeat();},30000);
   }
-  function startSources(){if(settingsError)return;started=true;sources.start(prefs);}
+  function startSources(){if(stopped||settingsError)return;started=true;sources.start(prefs);}
   function syncSettings(){
     var saved=settingsModel.load(options.storage);
     if(!saved){settingsError=true;if(started){sources.stop();started=false;}return;}
@@ -148,10 +148,16 @@ module.exports = function createRuntime(options) {
       if(!positive(incoming)||!positive(request))return;
       if(incoming!==session){
         queue.clear();commands.start(incoming);session=incoming;view=null;sequence=0;identities=Object.create(null);bindings=Object.create(null);feedback=Object.create(null);
-        nextToken=options.tokenSeed || Math.floor(Math.random()*1073741823)+1;lastFrameSignature='';
-        if(started)sources.stop();startSources();
+        nextToken=options.tokenSeed || Math.floor(Math.random()*1073741823)+1;lastFrameSignature='';bindingEpoch=0;connected=true;
+        if(started)sources.stop();sources.connectionChanged(true);startSources();
       }
       if(view&&view.request>request&&incoming===session)return;
+      if(view&&request>view.request){
+        // A new HELLO in this native session is its reconnect handshake.
+        // Replace potentially dead SDK handles once, and invalidate previous
+        // confirmations even when the freshly read value is identical.
+        bindingEpoch++;connected=true;sources.connectionChanged(false);sources.connectionChanged(true);
+      }
       var helloMode=protocol.get(payload,'DB_MODE'),helloOffset=protocol.get(payload,'DB_OFFSET'),helloIndex=protocol.get(payload,'DB_INDEX'),helloToken=protocol.get(payload,'DB_TOKEN');
       view={mode:bounded(helloMode,3)?helloMode:view?view.mode:M.OVERVIEW,
         offset:bounded(helloOffset,65535)?helloOffset:view?view.offset:0,index:bounded(helloIndex,65535)?helloIndex:view?view.index:0,
@@ -203,9 +209,9 @@ module.exports = function createRuntime(options) {
     },
     catalogue:function(){return metadata.discover(pebble,options.storage);},
     reloadSettings:function(){syncSettings();schedulePublish();return copy(prefs);},
-    connectionChanged:function(value){sources.connectionChanged(value);schedulePublish();},
+    connectionChanged:function(value){if(stopped||!!value===connected)return;connected=!!value;if(connected)bindingEpoch++;sources.connectionChanged(connected);schedulePublish();},
     stop:function(){
-      stopped=true;commands.stop();sources.stop();queue.clear();session=0;view=null;bindings=Object.create(null);identities=Object.create(null);
+      stopped=true;commands.stop();sources.stop();started=false;queue.clear();session=0;view=null;bindings=Object.create(null);identities=Object.create(null);
       [heartbeat,publishTimer].forEach(function(timer){if(timer!==null)cancel(timer);});heartbeat=publishTimer=null;
     }
   };

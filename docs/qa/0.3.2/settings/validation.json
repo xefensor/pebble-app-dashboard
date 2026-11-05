@@ -1,0 +1,46 @@
+{
+  "result": "PASS",
+  "scope": "Generated settings in Chromium: UI bridge fixtures plus actual Dashboard plugin/PKJS config handlers with separate official SDK API surfaces and synthetic public metadata; no live phone or source/action invocation.",
+  "checks": [
+    "mixed pin typed action+reading",
+    "exact instance binding",
+    "automatic toggle target/state arguments without duplicate entry",
+    "ordinary action fields remain required",
+    "on/off toggle property",
+    "pin reorder",
+    "confirmed save notifies running PKJS",
+    "late catalogue preserves draft",
+    "uncertain save readback",
+    "load failure disables editing",
+    "retry",
+    "short dark viewport no overflow",
+    "Find phone never probed",
+    "closed first install explains discovery with Music visible",
+    "closed settings save through actual plugin handler without PKJS",
+    "closed settings read actual public metadata cache without enumeration",
+    "PKJS target discovers inactive installed providers",
+    "late PKJS readiness preserves unsaved settings",
+    "discovery failure preserves provider choices and shows retry",
+    "current SDK targets detect watchapp closure without a shutdown event",
+    "older SDK missing targets and PKJS rejection use one bounded cache fallback",
+    "stale cached reply cannot replace newer live discovery",
+    "both settings/catalogue reply orders preserve priority and visibility",
+    "no source reads, subscriptions, actions or native messages"
+  ],
+  "contextCalls": {
+    "enumerations": 5,
+    "reads": 0,
+    "subscriptions": 0,
+    "actions": 0,
+    "appMessages": 0
+  },
+  "screens": [
+    "overview-light.png",
+    "pin-editor.png",
+    "overview-dark-small.png",
+    "activities-watch-closed-first-install.png",
+    "activities-live-discovery.png",
+    "activities-watch-closed-cache.png",
+    "activities-discovery-error.png"
+  ]
+}

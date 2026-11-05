@@ -1,0 +1,38 @@
+{
+  "version": "0.3.2",
+  "candidatePbwSha256": "aad06d496935d05e5a7139a1ba1e8123fe4e3c155fb436d0029356bc97a18266",
+  "baselineCommit": "6d75d9e",
+  "scope": "Portable simulated-work counters and inspected baseline behavior; not hardware battery consumption.",
+  "cases": [
+    {
+      "test": "static local/action Snapshot sends no heartbeat frames while live transport leases still use the heartbeat",
+      "durationSeconds": 300,
+      "heartbeatChecks": 10,
+      "previousForcedFrames": 10,
+      "currentReplacementFrames": 0
+    },
+    {
+      "test": "twenty unchanged source deliveries keep one exact expiry timer; expiry and permission withdrawal still clear it",
+      "deliveries": 20,
+      "currentExpiryReschedules": 0,
+      "trueExpiryAndWithdrawalPreserved": true
+    },
+    {
+      "test": "refresh bursts coalesce and an older read cannot overwrite a subscription update or permission loss",
+      "requests": 8,
+      "currentInitialReads": 1,
+      "currentFollowUpReads": 1,
+      "oldSubscriptionOverwritePrevented": true
+    },
+    {
+      "test": "native deadline scheduler",
+      "unchangedUpdates": 59,
+      "currentTimerRegisters": 1,
+      "currentTimerCancels": 0,
+      "previousAdditionalCancelRegisterPairs": 59,
+      "clockCorrectionExpiryAndAllocationFailurePreserved": true
+    }
+  ],
+  "hardwareBatteryMeasured": false,
+  "physicalPhoneOrWatchTested": false
+}

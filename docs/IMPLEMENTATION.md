@@ -32,10 +32,27 @@ to that page so it requires explicit repair instead of presenting saved defaults
 `configure(settings)` validates and saves preferences then rebinds sources.
 `reloadSettings()` adopts already-saved settings without writing them again;
 `connectionChanged(connected)` updates live connection state.
+`stop()` is terminal for watch/source work. Later explicit settings saves,
+reloads and public catalogue reads can remain useful, but cannot restart
+subscriptions, timers or native messages on that stopped runtime.
 `ready()` announces the runtime; source subscriptions start only after native
 HELLO. Both `configuration()` and `catalogue()` discover public metadata without
 starting source subscriptions. Installed compatible providers appear even when
 they have no active cards.
+An increasing same-session HELLO is a reconnect baseline: replace source handles
+once, retain token identities and command receipt history, and advance binding
+versions so an earlier confirmation cannot authorize a new binding. Duplicate
+HELLO requests and unchanged connection notifications do not rebind. Stopped or
+cancelled sources stay stopped on later connection events. Disconnect invalidates
+in-flight discovery/read callbacks and cancels polling timers; settings reloads
+must not restart subscriptions while disconnected.
+
+The 30-second heartbeat still checks saved settings and renews required live
+transport leases, but sends no unchanged static snapshot. Refresh reads after
+confirmed actions are serialized per source: one in flight and at most one
+follow-up for later requests. An 8-second local timeout releases that read slot;
+its late response is ignored. Subscription updates, errors and expiry invalidate
+older read responses. No command is retried or optimistically reflected.
 `src/pkjs/index.js` is root-owned thin event wiring.
 
 `settings.js` exports `defaults()`, `normalize(value)`, `load(storage)`,
@@ -197,6 +214,15 @@ with the action glyph aligned to Select in the sidebar; preserve exact binding
 checks and Back cancellation. Idle activity content uses a neutral placeholder.
 No automatic text scrolling or repeating idle redraw; tick only visible running
 clocks/minute header. One native AppMessage dispatcher and bounded pending view.
+Countdown clocks stop second redraws at zero without changing source state.
+The zero-unit first SDK tick still paints once while the previous subscription
+was SECOND, so a one-second clock cannot remain frozen at 00:01.
+`dashboard_deadline.c` retains a single AppTimer for an unchanged absolute source
+expiry; replacement, clearing and allocation failure remain explicit. Tick-clock
+discontinuities clear/rebase the relative timer. Include unavailable readings in
+the expiry plan because their independent action/app capabilities can remain
+available until that deadline. The expiry callback still redacts private content
+and bindings before scheduling the next deadline.
 Retain selection by token, never auto-run new items when a source disappears.
 Group Back restores overview selection; controls Back restores the originating item.
 Native loading/offline/permission failures stay navigable. New view requests

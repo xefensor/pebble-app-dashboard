@@ -52,7 +52,7 @@ function action(input){
   return out;
 }
 function activitySource(value){
-  // Matches pebble-activities 0.4.2 consumer.sourceItem(plugin, 3), without
+  // Matches pebble-activities 0.4.3 consumer.sourceItem(plugin, 3), without
   // starting that consumer or requiring npm modules in the config-only bundle.
   return value.category==='activity'&&Array.isArray(value.properties.schema_version)&&value.properties.schema_version.indexOf('numericValue')>=0&&
     value.items.some(function(item){return ['summary','live','card','session'].indexOf(item)>=0;});

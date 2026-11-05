@@ -73,4 +73,5 @@ void db_state_remember(DbState *state);
 bool db_state_back(DbState *state,DbReturn *value);
 bool db_state_redact(DbState *state,uint32_t now,bool disconnected);
 bool db_state_running_clock(const DbState *state,uint32_t now);
+uint32_t db_state_next_expiry(const DbState *state,uint32_t now);
 #endif

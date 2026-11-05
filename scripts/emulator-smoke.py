@@ -28,7 +28,7 @@ sys.path.insert(0,str(ROOT.parent/'recovery-validation'))
 def digest(data):return hashlib.sha256(data).hexdigest()
 
 
-def run(pbw,output,expected_sha256=None,notifications_only=False,ux_only=False):
+def run(pbw,output,expected_sha256=None,notifications_only=False,ux_only=False,reliability_only=False):
     from pipe_emulator import connect
     from libpebble2.services.appmessage import AppMessageService,Uint32,ByteArray,CString
     from libpebble2.services.screenshot import Screenshot
@@ -313,7 +313,7 @@ def run(pbw,output,expected_sha256=None,notifications_only=False,ux_only=False):
     def write_report():
         report={'result':'PASS','version':json.loads((ROOT/'package.json').read_text())['version'],
             'scope':'Real native Emery QEMU UI and AppMessage requests with an explicit fictional protocol peer; no phone JavaScript, live plugins, real app launches or physical watch.',
-            'focusedNotificationsOnly':notifications_only,'focusedUxOnly':ux_only,'candidatePbwSha256':digest(pbw.read_bytes()),'nativeOnlyPbwSha256':digest(native.read_bytes()),
+            'focusedNotificationsOnly':notifications_only,'focusedUxOnly':ux_only,'focusedReliabilityOnly':reliability_only,'candidatePbwSha256':digest(pbw.read_bytes()),'nativeOnlyPbwSha256':digest(native.read_bytes()),
             'nativePayloadSha256':{name:digest(data) for name,data in payload.items()},'phoneJavascriptExecuted':False,
             'stateDirectory':str(state_dir),'session':peer.session,'checks':proofs,'captures':captures,
             'requests':[{str(k):v for k,v in request.items()} for request in requests],
@@ -337,6 +337,76 @@ def run(pbw,output,expected_sha256=None,notifications_only=False,ux_only=False):
         assert guide_pixels!=dismissed
         proofs.append({'check':'First-use native button guide explains controls; dismissal consumes Select without dispatching an action or app launch','passed':True})
         restart_without_guide()
+        if reliability_only:
+            def inject(frame):
+                send({key('DB_DATA'):ByteArray(encode(frame))})
+                with peer.lock:peer.frames.append({'request':frame['request'],'sequence':frame['sequence'],'mode':frame['mode'],'offset':frame['offset'],'tokens':[x['token'] for x in frame['items']]})
+            snapshot_home()
+            with peer.lock:
+                original_activities=copy.deepcopy(peer.activities);original_pins=copy.deepcopy(peer.pins);original_notice=copy.deepcopy(peer.notice)
+            frame=peer.frame();timer=frame['items'][0]
+            timer.update(clockMode=1,anchor=frame['now']+3,baseSeconds=0,validUntil=frame['now']+90)
+            inject(frame)
+            before=capture('countdown-before-zero',.1);time.sleep(3.2)
+            zero=capture('countdown-final-zero',.1);still=capture('countdown-zero-still',1.2)
+            reference=copy.deepcopy(frame)
+            with peer.lock:peer.sequence+=1;reference['sequence']=peer.sequence
+            reference['items'][0]['anchor']=0
+            inject(reference);expected=capture('countdown-zero-reference',.1)
+            def crop(pixels,bounds):return Image.frombytes('RGB',(200,228),pixels).crop(bounds).tobytes()
+            assert crop(before,primary_roi)!=crop(zero,primary_roi)
+            assert crop(zero,primary_roi)==crop(still,primary_roi)==crop(expected,primary_roi)
+            proofs.append({'check':'A running countdown paints exact00:00 before stopping second redraws; final pixels match an explicit zero-clock reference without inferring owner completion','passed':True})
+
+            # Static zero above leaves a MINUTE subscription. The next one-
+            # second clock therefore finishes on the SDK's first SECOND tick,
+            # whose units_changed is zero. Set only this isolated fixture RTC
+            # to establish an exact one-second window; no native alarms exist.
+            first_tick=copy.deepcopy(reference);first_tick['now']=int(time.time())
+            p.send_packet(TimeMessage(message=SetUTC(unix_time=first_tick['now'],utc_offset=0,tz_name='UTC')))
+            with peer.lock:peer.sequence+=1;first_tick['sequence']=peer.sequence
+            first_tick['items'][0].update(anchor=first_tick['now']+1,validUntil=first_tick['now']+90)
+            inject(first_tick);one=capture('first-second-callback-before-zero',0)
+            completed=capture('first-second-callback-final-zero',1.2)
+            first_reference=copy.deepcopy(first_tick)
+            with peer.lock:peer.sequence+=1;first_reference['sequence']=peer.sequence
+            first_reference['items'][0]['anchor']=0;inject(first_reference)
+            expected=capture('first-second-callback-zero-reference',.1)
+            assert crop(one,primary_roi)!=crop(completed,primary_roi)
+            assert crop(completed,primary_roi)==crop(expected,primary_roi)
+            proofs.append({'check':'A new one-second clock from a static view paints00:00 on the SDK zero-unit first tick; pixels match an explicit zero reference','passed':True,'isolatedFixtureClockSet':True})
+
+            # With no running clock, an unavailable reading's independent
+            # capability still needs the absolute expiry callback, not the
+            # next minute tick. All fields below are fictional peer data.
+            with peer.lock:
+                peer.activities=[];peer.notice=None
+                pin=copy.deepcopy(next(x for x in original_pins if x['token']==5))
+                pin['flags']=1|2|8|16;pin['value']='—';pin['subtitle']='No data';pin['appLabel']='Home'
+                peer.pins=[pin]
+            frame=peer.frame();frame['items'][0]['validUntil']=frame['now']+5
+            inject(frame);select_snapshot(5)
+            before=capture('unavailable-capability-before-expiry',.1);time.sleep(5.2)
+            expired=capture('unavailable-capability-expired',.1)
+            assert crop(before,(4,154,162,225))!=crop(expired,(4,154,162,225))
+            before_actions=counts();button('Select');button('Select',.75);assert counts()==before_actions
+            proofs.append({'check':'Without running clocks, a short private unavailable-pin lease clears its identity and independent action/app binding; expired tap/hold cannot dispatch','passed':True})
+
+            with peer.lock:
+                generic=next(x for x in original_activities if x.get('controls') and x.get('kind')!=2)
+                peer.activities=[generic]+[x for x in original_activities if x['token']!=generic['token']]
+                peer.pins=original_pins;peer.notice=original_notice
+            peer.publish();select_snapshot(generic['token']);button('Select')
+            await_condition(lambda:active_mode()==3,'Generic controls did not open')
+            peer.respond=False;button('Back');await_condition(lambda:active_mode()==0,'Back did not request Snapshot')
+            bootstrap=peer.frame();bootstrap['status']=0;bootstrap['items']=[x for x in bootstrap['items'] if x['token']!=generic['token']];bootstrap['total']=len(bootstrap['items'])
+            inject(bootstrap);capture('requested-target-bootstrap-inert',.1)
+            before_actions=counts();button('Select');button('Select',.75);assert counts()==before_actions
+            peer.respond=True;peer.publish();capture('requested-target-restored',.1);button('Select')
+            await_condition(lambda:active_mode()==3 and peer.view.get(key('DB_TOKEN'))==generic['token'],'Exact requested target was not restored after bootstrap')
+            proofs.append({'check':'A requested identity omitted during LOADING stays inert instead of retargeting another action; exact identity returns after bootstrap','passed':True})
+            assert not errors
+            return write_report()
         if ux_only:
             ux_checks();assert not errors;return write_report()
         if notifications_only:
@@ -570,6 +640,7 @@ if __name__=='__main__':
     parser.add_argument('--expected-sha256',help='Require these exact candidate bytes before installing')
     parser.add_argument('--notifications-only',action='store_true',help='Focused empty Notifications navigation, expiry and app-open checks')
     parser.add_argument('--ux-only',action='store_true',help='Focused guide, feedback, hold preview, confirmation, sparse controls and idle UX checks')
+    parser.add_argument('--reliability-only',action='store_true',help='Focused final-zero paint, exact unavailable capability expiry and inert bootstrap identity checks')
     args=parser.parse_args()
-    if args.notifications_only and args.ux_only:parser.error('Choose at most one focused suite')
-    run(args.pbw,args.output,args.expected_sha256,args.notifications_only,args.ux_only)
+    if sum((args.notifications_only,args.ux_only,args.reliability_only))>1:parser.error('Choose at most one focused suite')
+    run(args.pbw,args.output,args.expected_sha256,args.notifications_only,args.ux_only,args.reliability_only)

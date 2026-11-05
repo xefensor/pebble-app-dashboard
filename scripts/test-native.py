@@ -18,6 +18,13 @@ if '--sanitize' in sys.argv:
     command += ['-fsanitize=address,undefined', '-fno-omit-frame-pointer']
 subprocess.run(command, cwd=root, check=True)
 subprocess.run([str(build / 'test_dashboard'), *map(str, fixtures)], cwd=root, check=True)
+deadline = [compiler, '-std=c99', '-Wall', '-Wextra', '-Werror', '-g', '-O1',
+            '-Itests/fake-sdk', '-Isrc/c', 'src/c/dashboard_deadline.c',
+            'tests/native/test_deadline.c', '-o', str(build / 'test_deadline')]
+if '--sanitize' in sys.argv:
+    deadline += ['-fsanitize=address,undefined', '-fno-omit-frame-pointer']
+subprocess.run(deadline, cwd=root, check=True)
+subprocess.run([str(build / 'test_deadline')], cwd=root, check=True)
 if '--frames-dir' in sys.argv:
     at = sys.argv.index('--frames-dir')
     if at + 1 >= len(sys.argv):

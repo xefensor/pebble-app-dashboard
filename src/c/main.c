@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <limits.h>
 #include "dashboard.h"
+#include "dashboard_deadline.h"
 
 #define SCREEN_W 200
 #define SCREEN_H 228
@@ -25,7 +26,8 @@ static Outbound s_queue[OUTBOX_CAPACITY];
 static uint8_t s_queue_count;
 static bool s_sending,s_focused=true,s_has_connection=true;
 static Command s_command;
-static AppTimer *s_view_timeout,*s_action_timeout,*s_expiry_timer,*s_repeat,*s_hold_timer;
+static AppTimer *s_view_timeout,*s_action_timeout,*s_repeat,*s_hold_timer;
+static DbDeadline s_expiry;
 static bool s_guide,s_select_down,s_hold_preview,s_hold_intent;
 static int s_repeat_delta;
 static bool s_repeat_held;
@@ -34,6 +36,7 @@ static uint8_t s_press_mode;
 static GFont s_fonts[FONT_COUNT];
 static uint8_t s_tick_seconds;
 static unsigned s_last_minute;
+static uint32_t s_last_tick;
 static const uint8_t s_font_points[]={11,12,14,16,20,24,20,24,26,28,32,40};
 static const uint32_t s_font_ids[]={RESOURCE_ID_FONT_BODY_11,RESOURCE_ID_FONT_BODY_12,RESOURCE_ID_FONT_BODY_14,
   RESOURCE_ID_FONT_BODY_16,RESOURCE_ID_FONT_BODY_20,RESOURCE_ID_FONT_BODY_24,
@@ -415,7 +418,7 @@ static void inbox(DictionaryIterator *dict,void *context){
     stop_repeat();cancel_hold_preview();s_select_down=false;s_hold_intent=false;
     if(s_view_timeout){app_timer_cancel(s_view_timeout);s_view_timeout=NULL;}
     if(s_action_timeout){app_timer_cancel(s_action_timeout);s_action_timeout=NULL;}
-    if(s_expiry_timer){app_timer_cancel(s_expiry_timer);s_expiry_timer=NULL;}
+    db_deadline_clear(&s_expiry);
     memset(&s_command,0,sizeof(s_command));s_press_token=s_press_version=0;s_press_mode=DB_OVERVIEW;
     // The SDK still owns an already-sent dictionary. Keep that queue slot until
     // its ACK/NACK arrives; only unsent messages from the old epoch are dropped.
@@ -465,32 +468,30 @@ static void outbox_failed(DictionaryIterator *dict,AppMessageResult reason,void 
 }
 static void inbox_dropped(AppMessageResult reason,void *context){(void)reason;(void)context;if(s_state.loading)view_failed(NULL);}
 static void tick(struct tm *now,TimeUnits units){
-  bool dirty=db_state_redact(&s_state,utc_now(),!s_has_connection);unsigned minute=(unsigned)now->tm_hour*60+(unsigned)now->tm_min;
+  uint32_t timestamp=utc_now();
+  // AppTimers are relative. Rebase after a wall-clock correction or a missed
+  // tick, while leaving regular second/minute ticks allocation-free.
+  if(!s_last_tick||timestamp-s_last_tick!=(s_tick_seconds==2?1u:60u))db_deadline_clear(&s_expiry);
+  s_last_tick=timestamp;
+  bool dirty=db_state_redact(&s_state,timestamp,!s_has_connection);unsigned minute=(unsigned)now->tm_hour*60+(unsigned)now->tm_min;
   if(minute!=s_last_minute){s_last_minute=minute;if(!s_guide)dirty=true;}
-  if((units&SECOND_UNIT)&&db_state_running_clock(&s_state,utc_now()))dirty=true;
+  // Paint the final00:00 once before update_ticks drops the second subscription.
+  if(((units&SECOND_UNIT)||!units)&&s_tick_seconds==2)dirty=true;
   if(dirty)repaint();
   update_ticks();
 }
 static void expire_sources(void *context){
-  (void)context;s_expiry_timer=NULL;
+  (void)context;s_expiry.timer=NULL;s_expiry.at=0;
   if(db_state_redact(&s_state,utc_now(),!s_has_connection))repaint();
   update_ticks();
 }
 static void update_ticks(void){
   if(s_hold_preview&&!preview_item())cancel_hold_preview();
   uint8_t seconds=s_focused&&!s_guide&&db_state_running_clock(&s_state,utc_now())?1:0;
-  if(s_tick_seconds!=seconds+1){s_tick_seconds=seconds+1;tick_timer_service_unsubscribe();tick_timer_service_subscribe(seconds?SECOND_UNIT:MINUTE_UNIT,tick);}
-  if(s_expiry_timer){app_timer_cancel(s_expiry_timer);s_expiry_timer=NULL;}
-  uint32_t now=utc_now(),next=0;
-  for(unsigned i=0;i<s_state.snapshot.count;i++){
-    const DbItem *item=&s_state.snapshot.items[i];
-    if(!(item->flags&DB_UNAVAILABLE)&&item->valid_until>now&&(!next||item->valid_until<next))next=item->valid_until;
-  }
-  if(next){time_t seconds_now;uint16_t milliseconds;time_ms(&seconds_now,&milliseconds);int64_t delay=(int64_t)next*1000-(int64_t)seconds_now*1000-milliseconds;
-    if(delay<1)delay=1;
-    if(delay>UINT32_MAX)delay=UINT32_MAX;
-    s_expiry_timer=app_timer_register((uint32_t)delay,expire_sources,NULL);
-  }
+  if(s_tick_seconds!=seconds+1){s_tick_seconds=seconds+1;s_last_tick=0;tick_timer_service_unsubscribe();tick_timer_service_subscribe(seconds?SECOND_UNIT:MINUTE_UNIT,tick);}
+  uint32_t now=utc_now(),next=db_state_next_expiry(&s_state,now);
+  time_t seconds_now;uint16_t milliseconds;time_ms(&seconds_now,&milliseconds);
+  db_deadline_update(&s_expiry,next,(uint64_t)seconds_now*1000u+milliseconds,expire_sources,NULL);
   if(s_command.confirmation){const DbItem *item=db_selected(&s_state);if(!db_item_actionable(item,now)||item->token!=s_command.token||item->version!=s_command.version){s_command.confirmation=false;s_command.result=DB_STALE;s_command.ended=true;s_command.text[0]=0;finish_feedback();repaint();}}
 }
 static void stop_repeat(void){s_repeat_held=false;if(s_repeat){app_timer_cancel(s_repeat);s_repeat=NULL;}}
@@ -608,7 +609,7 @@ static void init(void){
 #endif
 }
 static void deinit(void){
-  stop_repeat();cancel_hold_preview();if(s_view_timeout)app_timer_cancel(s_view_timeout);if(s_action_timeout)app_timer_cancel(s_action_timeout);if(s_expiry_timer)app_timer_cancel(s_expiry_timer);tick_timer_service_unsubscribe();battery_state_service_unsubscribe();connection_service_unsubscribe();app_focus_service_unsubscribe();app_message_deregister_callbacks();
+  stop_repeat();cancel_hold_preview();if(s_view_timeout)app_timer_cancel(s_view_timeout);if(s_action_timeout)app_timer_cancel(s_action_timeout);db_deadline_clear(&s_expiry);tick_timer_service_unsubscribe();battery_state_service_unsubscribe();connection_service_unsubscribe();app_focus_service_unsubscribe();app_message_deregister_callbacks();
   if(s_canvas)layer_destroy(s_canvas);
   if(s_window)window_destroy(s_window);
   for(unsigned i=0;i<FONT_COUNT;i++)if(s_fonts[i])fonts_unload_custom_font(s_fonts[i]);

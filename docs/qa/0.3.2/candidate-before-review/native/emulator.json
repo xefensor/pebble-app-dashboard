@@ -1,0 +1,306 @@
+{
+  "result": "PASS",
+  "version": "0.3.2",
+  "scope": "Real native Emery QEMU UI and AppMessage requests with an explicit fictional protocol peer; no phone JavaScript, live plugins, real app launches or physical watch.",
+  "focusedNotificationsOnly": false,
+  "focusedUxOnly": false,
+  "focusedReliabilityOnly": true,
+  "candidatePbwSha256": "4f277fc435f96015976973b1babb92d938c093f4cae059844e389b87a7c37a6d",
+  "nativeOnlyPbwSha256": "6d95e2edb79c49a0d41fc5ecbe5d516d215745f5e73ea58f1b07e896ce73ddea",
+  "nativePayloadSha256": {
+    "emery/app_resources.pbpack": "94511ccd37e0309987f80c3b1f9b9a2ce4cb3cea9453d2f56470e1d35b93fe3c",
+    "emery/manifest.json": "6b3e6a87884a1de16f07c59c587d985cb6688bf1e67b2701e76199e79e9b0fc8",
+    "emery/pebble-app.bin": "141835e47f506c354bc8d5e3096ed341ff54acd7262f771765c441bb32ac0b1b"
+  },
+  "phoneJavascriptExecuted": false,
+  "stateDirectory": "/tmp/dashboard-032-reliability-3",
+  "session": 771269182,
+  "checks": [
+    {
+      "check": "First-use native button guide explains controls; dismissal consumes Select without dispatching an action or app launch",
+      "passed": true
+    },
+    {
+      "check": "First-use guide dismissal persists across a native app restart; ordinary navigation works immediately and dispatches no action",
+      "passed": true
+    },
+    {
+      "check": "A running countdown paints exact00:00 before stopping second redraws; final pixels match an explicit zero-clock reference without inferring owner completion",
+      "passed": true
+    },
+    {
+      "check": "Without running clocks, a short private unavailable-pin lease clears its identity and independent action/app binding; expired tap/hold cannot dispatch",
+      "passed": true
+    },
+    {
+      "check": "A requested identity omitted during LOADING stays inert instead of retargeting another action; exact identity returns after bootstrap",
+      "passed": true
+    }
+  ],
+  "captures": [
+    {
+      "name": "first-use-button-guide",
+      "file": "first-use-button-guide.png",
+      "sha256": "090c51cd9f887128b03312f91f1b254b0829f7e12814ae04ba4b012b622747a2",
+      "rgbSha256": "92fd1ec24bc212d6ab14cf76a9e92ef5c0776b530b408cfff539f0d1cb7b62ed",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "first-use-guide-dismissed",
+      "file": "first-use-guide-dismissed.png",
+      "sha256": "170ad57205a92e154261d60fa02e8ef1f180d3fea9bffb895a8762b62023eb77",
+      "rgbSha256": "a0a81c8b936e257c01278d159863b73284e6a0e6c850452f5e93e9366b6e2cc8",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "guide-dismissed-after-restart",
+      "file": "guide-dismissed-after-restart.png",
+      "sha256": "c83c6e449078af1742fea0c337773e1da226c182fca8d98a0e1e775fafad525b",
+      "rgbSha256": "dc50d291af72b68ee9f9f1d4a8bcf21acb683d70fa3406030ce0e2ea69bceeb1",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "countdown-before-zero",
+      "file": "countdown-before-zero.png",
+      "sha256": "fc05704b5b2af2e2db74327f1051a4fa4f51edd1afa31ae42c4e684aa94bd71b",
+      "rgbSha256": "912e35718853d50e030c6d4c1e2dc1ad185ceabbb19c4b684d5dfe4743dc183c",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "countdown-final-zero",
+      "file": "countdown-final-zero.png",
+      "sha256": "e84e185c18058461b58e83a3cfdea126c5b8605d3560429ef6cc93d1f667beec",
+      "rgbSha256": "8f6bcbc5d96242d5af006ade08a799d1672a350d5d758d4fe28af7e1f2a74f3d",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "countdown-zero-still",
+      "file": "countdown-zero-still.png",
+      "sha256": "e84e185c18058461b58e83a3cfdea126c5b8605d3560429ef6cc93d1f667beec",
+      "rgbSha256": "8f6bcbc5d96242d5af006ade08a799d1672a350d5d758d4fe28af7e1f2a74f3d",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "countdown-zero-reference",
+      "file": "countdown-zero-reference.png",
+      "sha256": "e84e185c18058461b58e83a3cfdea126c5b8605d3560429ef6cc93d1f667beec",
+      "rgbSha256": "8f6bcbc5d96242d5af006ade08a799d1672a350d5d758d4fe28af7e1f2a74f3d",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "unavailable-capability-before-expiry",
+      "file": "unavailable-capability-before-expiry.png",
+      "sha256": "75b30cdf67a7d6b30868e0914e62ade9a92e6d6c45e5257d822eeb360e71d2bb",
+      "rgbSha256": "6824fa5bc35e3df093f86389a1e7f6358f772a422c75b9091a4f2612fd4557bc",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "unavailable-capability-expired",
+      "file": "unavailable-capability-expired.png",
+      "sha256": "e284bd05495ecb8994af1bbe24bc45d87f4ccd79c0e2a542866abc056a48e294",
+      "rgbSha256": "41db59b11d40a53726c0fbf59352cd134da4802cacfc50de5556ac4db7c0b093",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "requested-target-bootstrap-inert",
+      "file": "requested-target-bootstrap-inert.png",
+      "sha256": "2fc7384948b59703c4d31a1b7684f0bb9aeb6a90734630ac9584fc9b695402f0",
+      "rgbSha256": "e68bd85b03930d2b58949446ba81f6b8f2221773580139be3df955f4650f0957",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "requested-target-restored",
+      "file": "requested-target-restored.png",
+      "sha256": "517901b575a37ba0682fc878b90101978656c7cdead9181908d913015491cbd5",
+      "rgbSha256": "f854ba7cc13a7775b3dab31d918cde7c713c9d0ea8cd91c7f5154f00810c0d2c",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    }
+  ],
+  "requests": [
+    {
+      "4000": 1,
+      "4001": 747807292,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0
+    },
+    {
+      "4000": 7,
+      "4001": 747807292,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 1,
+      "4006": 1
+    },
+    {
+      "4000": 1,
+      "4001": 771269182,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0
+    },
+    {
+      "4000": 7,
+      "4001": 771269182,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 1,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 771269182,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 1,
+      "4005": 3,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 771269182,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 1,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 771269182,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 5,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 771269182,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 3,
+      "4005": 6,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 771269182,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 2,
+      "4005": 4,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 771269182,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 1,
+      "4005": 3,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 771269182,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 12,
+      "4006": 1
+    },
+    {
+      "4000": 2,
+      "4001": 771269182,
+      "4002": 2,
+      "4003": 3,
+      "4004": 0,
+      "4012": 0,
+      "4005": 12,
+      "4006": 0
+    },
+    {
+      "4000": 2,
+      "4001": 771269182,
+      "4002": 3,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 12,
+      "4006": 0
+    },
+    {
+      "4000": 2,
+      "4001": 771269182,
+      "4002": 4,
+      "4003": 3,
+      "4004": 0,
+      "4012": 0,
+      "4005": 12,
+      "4006": 0
+    }
+  ],
+  "mockActions": [],
+  "mockAppOpens": [],
+  "visualReview": {
+    "reviewed": false
+  }
+}

@@ -1,6 +1,6 @@
 # Dashboard maintainer notes
 
-This repository contains the native Dashboard development prerelease (0.3.1),
+This repository contains the native Dashboard development candidate (0.3.2),
 its phone runtime/settings, and earlier browser design studies. Read README.md
 and docs/IMPLEMENTATION.md. Preserve UUID f76f9fc1-2944-4248-bcc5-3eea2af0183b,
 DSH1 message keys and existing published sibling apps.
@@ -84,3 +84,17 @@ do not claim immediate physical radio-loss detection. App launches currently
 affect connected watches, so the supported launch setup has one connected watch.
 Do not describe browser previews as native captures or synthetic emulator/SDK
 fixtures as physical-watch/live-phone evidence. No publication is implied.
+
+Version 0.3.2 keeps the UI and DSH1 protocol. Reconnect HELLO rebinds sources
+once per new request and advances binding versions without resetting command
+receipts. Duplicate connection notifications and stopped runtimes must not
+subscribe again. A delayed refresh read cannot overwrite a newer subscription
+update, error or expiry; coalesce reads per source with a bounded follow-up.
+Static snapshots need no heartbeat frame, while live transport leases still
+renew normally. Keep the native expiry timer when its absolute deadline is
+unchanged; rebase relative timers after clock discontinuities. Unavailable
+readings can retain independent capabilities, whose deadlines still apply.
+At 00:00 stop countdown redraws without inferring owner completion.
+The SDK's first tick can have zero changed units: paint the final zero before
+dropping a previous SECOND subscription. Terminal runtime.stop must remain
+terminal for source/watch work even if settings are saved or reloaded afterward.
