@@ -4,26 +4,28 @@
 *{box-sizing:border-box}html{scroll-padding-bottom:calc(var(--footer-space) + 20px)}body{margin:0;background:var(--page);color:var(--ink);font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}main{max-width:600px;margin:auto;padding:24px 16px calc(var(--footer-space) + 28px)}h1{font-size:29px;line-height:1.2;margin:0 0 10px;letter-spacing:-.5px}h2{font-size:20px;margin:0 0 12px}h3{font-size:17px;margin:16px 0 8px}p{margin:8px 0 16px}header p,.hint{color:var(--muted)}.hint{font-size:14px;overflow-wrap:anywhere}.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 16px;margin:18px 0}.card>p:last-child{margin-bottom:0}
 button,input,select,textarea{font:inherit}button,select,input:not([type=checkbox]),textarea{min-height:44px;border:1px solid var(--line);border-radius:8px;background:var(--field);color:var(--ink);padding:10px}button{font-weight:650;cursor:pointer}button:disabled{opacity:.45;cursor:default}input,select,textarea{width:100%;min-width:0}input[type=checkbox]{width:22px;height:22px;flex:0 0 22px;accent-color:var(--accent)}label{display:block;font-weight:650;margin:16px 0 8px}label input,label select,label textarea{display:block;margin-top:7px}.inline{display:flex;align-items:center;gap:12px;min-height:44px}.inline input{margin:0}.inline span{min-width:0;overflow-wrap:anywhere}.item-title{display:flex;align-items:start;justify-content:space-between;gap:16px}.item-title strong{overflow-wrap:anywhere}.position{color:var(--muted);font-size:14px}.items{list-style:none;margin:0;padding:0}.item{padding:16px 0;border-top:1px solid var(--line)}.item:first-child{border-top:0;padding-top:0}.row-buttons{display:flex;gap:8px;flex-wrap:wrap}.row-buttons button{flex:1;min-width:44px}.item .hint{margin-bottom:12px}summary{min-height:44px;cursor:pointer;font-weight:650;align-content:center}.error{color:var(--error)}#editor{scroll-margin-top:16px}#editor .card{margin:12px 0}fieldset{border:0;padding:0;margin:0}legend{font-size:16px;font-weight:650;padding:0}button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,summary:focus-visible{outline:3px solid var(--accent);outline-offset:3px}[hidden]{display:none!important}
 footer{position:fixed;bottom:0;left:0;right:0;padding:12px 16px max(16px,env(safe-area-inset-bottom));background:var(--page);border-top:1px solid var(--line)}footer[data-flow=true]{position:static}.footer-inner{max-width:568px;margin:auto}.status{font-size:14px;min-height:21px;margin:0 0 10px}.actions{display:flex;gap:8px}.actions button{flex:1;min-width:0;overflow-wrap:anywhere}#save,#editor-save{background:#145ca3;color:#fff;border-color:#145ca3}.editor-actions{display:flex;gap:10px;margin-top:20px}.editor-actions button{flex:1}@media(max-width:340px){main{padding-left:12px;padding-right:12px}.card{padding:16px 12px}.row-buttons{gap:6px}.row-buttons button{padding-left:8px;padding-right:8px}.actions{flex-wrap:wrap}.actions button{min-width:90px}}
+.pin-section{border-top:1px solid var(--line);margin-top:24px;padding-top:20px}.pin-section legend{padding-top:18px;font-size:18px}.pin-section>label:first-of-type{margin-top:8px}.quick-setup{display:flex;gap:8px;flex-wrap:wrap}.quick-setup button{flex:1;min-width:110px}.search-row{display:flex;gap:8px;align-items:end}.search-row label{flex:1;min-width:0}.search-row button{flex:0 0 auto;margin-bottom:8px}.pin-section details{margin-top:12px}#app-selection{margin-bottom:8px}#app-results button{display:block;width:100%;margin:8px 0;text-align:left;overflow-wrap:anywhere}#app-results strong,#app-results span{display:block}@media(max-width:340px){.search-row{display:block}.search-row button{width:100%}}
 </style></head><body><main><header><h1>Dashboard</h1><p>Choose your pinned items and activity priority. These settings belong to Dashboard.</p></header>
 <section class="card"><h2>On the watch</h2><label class="inline"><input id="dark" type="checkbox" data-edit><span>Dark background</span></label><label class="inline"><input id="notifications" type="checkbox" data-edit><span>Show latest notification</span></label><label class="inline"><input id="preview" type="checkbox" data-edit><span>Show notification message text</span></label><p class="hint">Message text stays private and is cleared when its source withdraws it. The notification row always opens native Notifications, even without a preview.</p></section>
 <section class="card"><h2>Pinned items</h2><p class="hint">The first two appear on Snapshot. Hold Down there to browse all pins. A pin can show a reading, perform a tap action, or do both.</p><ol id="pins" class="items"></ol><p id="pins-empty" class="hint" hidden>No pinned items yet.</p><button id="add-pin" type="button" data-edit>Add pinned item</button></section>
-<section id="editor" class="card" hidden><h2 id="editor-heading">Pinned item</h2><form id="editor-form"><label>Name<input id="pin-label" type="text" maxlength="32" autocomplete="off" data-edit></label><label>Icon<select id="icon" data-edit></select></label>
-<label class="inline"><input id="has-reading" type="checkbox" data-edit><span>Show a reading</span></label><div id="reading-fields"><label>Source<select id="source" data-edit></select></label><label>Reading<select id="property" data-edit></select></label><label>Instance<select id="instance" data-edit></select></label><button id="inspect-source" type="button" data-edit>Refresh instances</button><p id="inspect-status" class="hint" role="status"></p></div>
-<label>Tap Select<select id="action" data-edit></select></label><div id="action-fields"><label>Action label<input id="action-label" type="text" maxlength="32" data-edit></label><p id="arguments-note" class="hint"></p><p id="automatic-args" class="hint" hidden>The selected item and its next on/off state are filled automatically from this reading when you press Select.</p><div id="arguments"></div><details id="args-json-wrap"><summary>Advanced arguments</summary><p class="hint">Optional extra arguments, as a JSON object. Declared fields above take precedence; automatic toggle fields always come from the selected reading.</p><label>Arguments<textarea id="args-json" rows="4" spellcheck="false" data-edit>{}</textarea></label></details><label>Toggle an on/off reading<select id="toggle" data-edit></select></label><p class="hint">A toggle uses the source’s actual on/off state. Brightness is never treated as an on/off state.</p><label class="inline"><input id="confirm-action" type="checkbox" data-edit><span>Confirm before running this action</span></label></div>
-<details><summary>Associated watch app</summary><label class="inline"><input id="has-app" type="checkbox" data-edit><span>Hold Select to open an app</span></label><div id="app-fields"><label>App name<input id="app-label" type="text" maxlength="32" data-edit></label><label>Watchapp UUID<input id="app-uuid" type="text" autocomplete="off" spellcheck="false" placeholder="00000000-0000-0000-0000-000000000000" data-edit></label><p class="hint">Use the installed watch app’s UUID. This opens the app itself; the plugin’s phone settings are a separate destination.</p></div></details>
-<p id="editor-error" class="error" role="alert"></p><div class="editor-actions"><button id="editor-cancel" type="button">Cancel item</button><button id="editor-save" type="submit" data-edit>Use item</button></div></form></section>
+<section id="editor" class="card" hidden><h2 id="editor-heading">Pinned item</h2><form id="editor-form"><div id="pin-quick-setup"><p class="hint">Start with what you need. You can combine a reading, a tap action and an app in the same pin.</p><div class="quick-setup"><button id="pin-reading" type="button" data-edit>Show a reading</button><button id="pin-action" type="button" data-edit>Add an action</button><button id="pin-app" type="button" data-edit>Open an app</button></div></div><label>Name on the watch<input id="pin-label" type="text" maxlength="32" autocomplete="off" data-edit></label><details><summary>Change icon</summary><label>Icon<select id="icon" data-edit></select></label></details>
+<fieldset class="pin-section"><legend>Show a reading</legend><label class="inline"><input id="has-reading" type="checkbox" data-edit><span>Show a value on this pin</span></label><div id="reading-fields"><label>From<select id="source" data-edit></select></label><label>Value<select id="property" data-edit></select></label><label>Which item<select id="instance" data-edit></select></label><button id="inspect-source" type="button" data-edit>Refresh items</button><p id="inspect-status" class="hint" role="status"></p></div></fieldset>
+<fieldset class="pin-section"><legend>Tap Select</legend><label>Action<select id="action" data-edit></select></label><div id="action-fields"><p id="arguments-note" class="hint"></p><p id="automatic-args" class="hint" hidden>The selected item and its next on/off state are filled automatically from this reading when you press Select.</p><div id="arguments"></div><label>Use this reading’s on/off state<select id="toggle" data-edit></select></label><p class="hint">Optional: toggle using a real on/off value. Brightness is a separate reading.</p><details><summary>Action options</summary><label>Name on the watch<input id="action-label" type="text" maxlength="32" data-edit></label><label class="inline"><input id="confirm-action" type="checkbox" data-edit><span>Ask before running</span></label><details id="args-json-wrap"><summary>Advanced arguments</summary><p class="hint">Optional extra arguments as a JSON object. The fields above take precedence.</p><label>Arguments<textarea id="args-json" rows="4" spellcheck="false" data-edit>{}</textarea></label></details></details></div></fieldset>
+<fieldset class="pin-section"><legend>Hold Select</legend><label>Open app<select id="app-target" data-edit><option value="">Do nothing</option></select></label><p id="app-selection" class="hint">Hold Select will do nothing.</p><details id="app-search-panel"><summary>Find another app by name</summary><p class="hint">Search the Pebble app store for an app already installed on your watch. Store results do not show what you have installed. Search needs Dashboard’s app-store Internet access in Pebble.</p><div class="search-row"><label>App name<input id="app-search-query" type="search" maxlength="80" autocomplete="off" data-edit></label><button id="app-search" type="button" data-edit>Search</button></div><p id="app-status" class="hint" role="status" aria-live="polite"></p><div id="app-results"></div></details><div id="app-fields" hidden><details id="app-advanced"><summary>App details</summary><label>Name on the watch<input id="app-label" type="text" maxlength="32" data-edit></label><div id="custom-app-fields" hidden><label>Watchapp UUID<input id="app-uuid" type="text" autocomplete="off" spellcheck="false" placeholder="00000000-0000-0000-0000-000000000000" data-edit></label><p class="hint">Only needed for an unlisted custom app. Existing destinations stay saved when offline or unavailable.</p></div></details></div></fieldset>
+<p id="editor-error" class="error" role="alert"></p><div class="editor-actions"><button id="editor-cancel" type="button">Cancel</button><button id="editor-save" type="submit" data-edit>Add pin</button></div></form></section>
 <section class="card"><h2>Activity priority</h2><p class="hint">The highest-priority available activity appears on Snapshot. Hold Up there to browse all activities. Hide a provider to keep its activities out of Dashboard. Dynamic keeps its own order.</p><p id="activities-status" class="hint" role="status" aria-live="polite">Connecting to Pebble…</p><button id="retry-activities" type="button" hidden>Retry activity discovery</button><ol id="activities" class="items"></ol><p id="activities-empty" class="hint">Compatible activity providers appear here after discovery.</p></section>
 <details class="card"><summary>Available plugins &amp; help</summary><p id="catalogue-status" class="hint">Waiting for plugin discovery…</p><button id="refresh-catalogue" type="button">Retry discovery</button><p class="hint">Allow the selected source/action permissions in Pebble. Missing providers keep their saved bindings and appear unavailable; they never switch to a different plugin.</p><p class="hint">The watch shows a button guide once on first use. Tap Select on Music to play or pause; hold Select to open the Music app. Other items use their available action on tap or associated app on hold. On Snapshot, hold Up for Activities or Down for Pinned. Within a list, hold Up/Down to scroll. Timer controls are planned separately.</p></details>
 </main><footer id="actions"><div class="footer-inner"><p id="status" class="status" role="status" aria-live="polite">Loading settings…</p><div class="actions"><button id="retry" type="button" hidden>Retry loading</button><button id="discard" type="button" disabled>Discard</button><button id="save" type="button" disabled>Save</button></div></div></footer><script>(
-function behavior(initial, makeModel) {
+function behavior(initial, makeModel, makeApps) {
   'use strict';
-  var model = makeModel(), $ = function(id) { return document.getElementById(id); };
+  var model = makeModel(), apps = makeApps(), $ = function(id) { return document.getElementById(id); };
   var draft, confirmed = '', loaded = false, phase = 'loading', uncertain = false, repairing = false;
   var catalogue = initial.catalogue || {plugins:[], instances:[], activities:[]}, bridgeReady = false, pkjsReady = false;
   var channels = {}, editing = null, inspectVersion = 0, sourceEntries = [], actionEntries = [], argumentFields = [];
   var legacy = initial.mode === 'legacy';
   var cataloguePhase = legacy ? catalogue.error ? 'error' : 'ready' : 'waiting';
   var catalogueMessage = '', bridgeTimer = null, catalogueRefresh = 0, catalogueTargetTimer = null;
+  var appEntries = [], appResults = [], appRequest = null, appSearchVersion = 0;
   function clone(value) { return JSON.parse(JSON.stringify(value)); }
   function say(value, error) { $('status').textContent = value; $('status').className = error ? 'status error' : 'status'; }
   function meta(value, fallback) { return typeof value === 'string' && value ? value : fallback || ''; }
@@ -32,16 +34,20 @@ function behavior(initial, makeModel) {
   function pending() { return phase === 'saving'; }
   function dirty() { return loaded && (repairing || uncertain || JSON.stringify(draft) !== confirmed); }
   function controls() {
-    document.querySelectorAll('[data-edit]').forEach(function(field) { field.disabled = !loaded || pending() || field.getAttribute('data-boundary') === 'true' || field.getAttribute('data-automatic') === 'true'; });
+    document.querySelectorAll('[data-edit]').forEach(function(field) { field.disabled = !loaded || pending() || editing !== null && !!field.closest('#pins') || field.getAttribute('data-boundary') === 'true' || field.getAttribute('data-automatic') === 'true'; });
     $('save').disabled = !loaded || pending() || editing !== null || !dirty();
     $('discard').disabled = pending() || !loaded || !dirty() && editing === null;
     $('discard').textContent = legacy ? 'Cancel' : uncertain ? 'Reload saved' : 'Discard';
     $('save').textContent = pending() ? 'Saving…' : 'Save';
     $('retry').hidden = phase !== 'load-error';
-    $('add-pin').disabled = !loaded || pending() || draft.pins.length >= 64;
+    $('add-pin').disabled = !loaded || pending() || editing !== null || draft.pins.length >= 64;
     $('preview').disabled = !loaded || pending() || !draft.showNotifications;
     $('editor').hidden = editing === null;
-    if (editing !== null) $('editor-heading').textContent = editing.index < draft.pins.length ? 'Edit pinned item' : 'Add pinned item';
+    if (editing !== null) {
+      $('editor-heading').textContent = editing.index < draft.pins.length ? 'Edit pinned item' : 'Add pinned item';
+      $('editor-save').textContent = editing.index < draft.pins.length ? 'Done' : 'Add pin';
+      $('pin-quick-setup').hidden = editing.index < draft.pins.length;
+    }
   }
   function changed() {
     if (!loaded || pending()) return;
@@ -49,6 +55,7 @@ function behavior(initial, makeModel) {
     controls(); say(uncertain ? 'Save not confirmed. Reload saved settings or save again.' : dirty() ? 'Unsaved changes.' : 'No changes to save.', uncertain);
   }
   function apply(value, needsRepair) {
+    cancelAppSearch();
     draft = model.normalize(value); confirmed = JSON.stringify(draft); loaded = true; phase = 'ready'; uncertain = false; repairing = !!needsRepair; editing = null;
     $('dark').checked = draft.dark; $('notifications').checked = draft.showNotifications; $('preview').checked = draft.notificationPreview;
     renderPins(); renderActivities(); controls();
@@ -84,7 +91,7 @@ function behavior(initial, makeModel) {
   function actionKey(action) { return action.plugin + '|' + action.action; }
   function collectSources() {
     var entries = [
-      {key:'|weather|location', category:'weather', item:'location', name:'Preferred weather', properties:{temperature:['numericValue'], humidity:['numericValue'], high:['numericValue'], low:['numericValue'], condition:['shortText'], sunrise:['timestamp'], sunset:['timestamp']}},
+      {key:'|weather|location', category:'weather', item:'location', name:'Weather', properties:{temperature:['numericValue'], humidity:['numericValue'], high:['numericValue'], low:['numericValue'], condition:['shortText'], sunrise:['timestamp'], sunset:['timestamp']}},
       {key:'|phone|phone_state', category:'phone', item:'phone_state', name:'Phone', properties:{battery_level:['numericValue'], charging:['boolean']}},
       {key:'|watch-local|battery', category:'watch-local', item:'battery', name:'Watch battery', properties:{level:['numericValue']}}
     ];
@@ -93,7 +100,7 @@ function behavior(initial, makeModel) {
         if (!source || typeof source.category !== 'string' || source.category === 'activity') return;
         (source.items || []).forEach(function(item) {
           if (typeof item !== 'string' || source.category === 'phone' && item === 'find_my_phone') return;
-          var entry = {plugin:plugin.uuid, category:source.category, item:item, properties:source.properties || {}, name:meta(plugin.name, plugin.uuid) + ' · ' + source.category + '/' + item};
+          var entry = {plugin:plugin.uuid, category:source.category, item:item, properties:source.properties || {}, name:meta(plugin.name, 'Plugin') + ' · ' + friendly(item)};
           entry.key = sourceKey(entry); entries.push(entry);
         });
       });
@@ -105,7 +112,7 @@ function behavior(initial, makeModel) {
     (catalogue.plugins || []).forEach(function(plugin) {
       (plugin.actions || []).forEach(function(action) {
         if (!action || typeof action.name !== 'string') return;
-        entries.push({key:plugin.uuid + '|' + action.name, plugin:plugin.uuid, action:action.name, name:meta(plugin.name, plugin.uuid) + ' · ' + meta(action.label || action.title, action.name), metadata:action});
+        entries.push({key:plugin.uuid + '|' + action.name, plugin:plugin.uuid, action:action.name, name:meta(plugin.name, 'Plugin') + ' · ' + meta(action.label || action.title, friendly(action.name)), metadata:action});
       });
     });
     return entries;
@@ -155,7 +162,7 @@ function behavior(initial, makeModel) {
   }
   function summary(pin) {
     var parts = [];
-    if (pin.reading) parts.push(pin.reading.category === 'watch-local' ? 'Watch battery' : pin.reading.category + '/' + pin.reading.item + ' · ' + pin.reading.property);
+    if (pin.reading) parts.push(readingTitle(pin.reading));
     if (pin.builtin) parts.push('Tap: Ring phone');
     else if (pin.action) parts.push('Tap: ' + pin.action.label);
     if (pin.openApp) parts.push('Hold: ' + pin.openApp.label);
@@ -223,6 +230,104 @@ function behavior(initial, makeModel) {
   }
   function currentSource() { return sourceEntries.filter(function(entry) { return entry.key === $('source').value; })[0]; }
   function currentAction() { return actionEntries.filter(function(entry) { return entry.key === $('action').value; })[0]; }
+  function friendly(value) {
+    if (typeof value !== 'string' || !value) return 'Reading';
+    var labels = {temperature:'Temperature',humidity:'Humidity',high:'High',low:'Low',condition:'Conditions',sunrise:'Sunrise',sunset:'Sunset',
+      battery_level:'Battery',level:'Level',charging:'Charging',brightness:'Brightness',on:'On / off',name:'Name'};
+    return labels[value] || value.replace(/[_-]+/g, ' ').replace(/^./, function(c) { return c.toUpperCase(); });
+  }
+  function readingTitle(reading) {
+    if (reading.category === 'watch-local') return 'Watch battery';
+    if (reading.category === 'phone') return 'Phone · ' + friendly(reading.property);
+    if (reading.category === 'weather') return 'Weather · ' + friendly(reading.property);
+    var plugin = (catalogue.plugins || []).filter(function(item) { return item.uuid === reading.plugin; })[0];
+    return (plugin ? meta(plugin.name, 'Plugin') + ' · ' : '') + friendly(reading.property);
+  }
+  function suggestName(name, icon) {
+    if (!editing || editing.index < draft.pins.length) return;
+    if (!editing.nameChanged) $('pin-label').value = apps.label(name) || 'New item';
+    if (!editing.iconChanged && icon) $('icon').value = icon;
+  }
+  function cancelAppSearch() {
+    appSearchVersion++;
+    var current = appRequest; appRequest = null;
+    if (current) try { current.abort(); } catch (ignored) {}
+    if ($('app-search')) $('app-search').textContent = 'Search';
+  }
+  function currentApp() { return appEntries.filter(function(entry) { return entry.uuid === $('app-target').value; })[0]; }
+  function renderAppChoices(selected) {
+    if (!editing) return;
+    var chosen = selected === undefined ? $('app-target').value : selected, seen = Object.create(null), entries = [];
+    function add(entry) {
+      if (!entry || !entry.uuid || seen[entry.uuid.toLowerCase()]) return;
+      var copy = clone(entry); copy.uuid = copy.uuid.toLowerCase(); seen[copy.uuid] = true; entries.push(copy);
+    }
+    apps.common().forEach(add);
+    draft.pins.forEach(function(pin) { if (pin.openApp) add({uuid:pin.openApp.watchAppUuid,name:pin.openApp.label,origin:'saved',icon:pin.icon || 'generic'}); });
+    if (editing.pin.openApp) add({uuid:editing.pin.openApp.watchAppUuid,name:editing.pin.openApp.label,origin:'saved',icon:editing.pin.icon || 'generic'});
+    add(editing.app); appResults.forEach(add);
+    if (chosen && chosen !== '__custom__' && !seen[chosen]) add({uuid:chosen,name:$('app-label').value || 'Saved app',origin:'saved',icon:'generic'});
+    appEntries = entries; var target = $('app-target'); target.textContent = ''; option(target, '', 'Do nothing');
+    [['common','Common apps'],['saved','Your saved apps'],['store','Store search results']].forEach(function(group) {
+      var items = entries.filter(function(entry) { return entry.origin === group[0]; }); if (!items.length) return;
+      var list = node('optgroup'); list.label = group[1];
+      items.forEach(function(entry) { option(list, entry.uuid, entry.name + (entry.author ? ' · ' + entry.author : '')); }); target.appendChild(list);
+    });
+    option(target, '__custom__', 'Custom app…'); target.value = chosen || '';
+    renderAppState(); renderAppResults();
+  }
+  function renderAppResults() {
+    var list = $('app-results'); list.textContent = '';
+    appResults.forEach(function(entry) {
+      var button = node('button'); button.type = 'button'; button.setAttribute('data-edit', ''); button.setAttribute('data-app-uuid', entry.uuid);
+      button.setAttribute('aria-label', 'Choose ' + entry.name + (entry.author ? ' by ' + entry.author : ''));
+      button.appendChild(node('strong', entry.name)); if (entry.author) button.appendChild(node('span', entry.author, 'hint'));
+      button.onclick = function() { $('app-target').value = entry.uuid; selectApp(); $('app-search-panel').open = false; $('app-target').focus(); };
+      list.appendChild(button);
+    });
+  }
+  function renderAppState() {
+    var selected = $('app-target').value, custom = selected === '__custom__';
+    $('app-fields').hidden = !selected; $('custom-app-fields').hidden = !custom;
+    if (custom) $('app-advanced').open = true;
+    $('app-selection').textContent = !selected ? 'Hold Select will do nothing.' : custom ? 'Enter the details for an unlisted app below.' :
+      'Hold Select opens ' + ($('app-label').value || (currentApp() && currentApp().name) || 'the selected app') + '.';
+  }
+  function selectApp() {
+    if (!editing) return;
+    cancelAppSearch();
+    var selected = currentApp();
+    if (selected) {
+      var previous = $('app-uuid').value.trim().toLowerCase(); editing.app = clone(selected); $('app-uuid').value = selected.uuid;
+      if (selected.uuid !== previous || !$('app-label').value.trim()) $('app-label').value = apps.label(selected.name);
+      suggestName(selected.name, selected.icon || 'generic');
+    }
+    renderAppState();
+  }
+  function searchApps() {
+    if (!editing || !loaded || pending()) return;
+    cancelAppSearch(); var editor = editing, version = appSearchVersion, query = $('app-search-query').value.trim(), url;
+    try { url = apps.searchUrl(query); } catch (error) { $('app-status').textContent = error.message || 'Enter an app name.'; return; }
+    appResults = []; renderAppChoices();
+    $('app-status').textContent = 'Searching the Pebble app store…'; $('app-search').textContent = 'Search again';
+    function active() { return editing === editor && version === appSearchVersion; }
+    function failed() { if (active()) { appRequest = null; $('app-search').textContent = 'Search'; $('app-status').textContent = 'Could not search the app store. Check your connection and Dashboard’s app-store Internet access in Pebble. After changing access, finish and save any edits, then reopen these settings. Your selected app is kept.'; } }
+    try {
+      var request = new XMLHttpRequest(); appRequest = request; request.open('GET', url, true); request.timeout = 7000; request.withCredentials = false;
+      request.onerror = request.ontimeout = failed;
+      request.onload = function() {
+        if (!active()) return;
+        appRequest = null; $('app-search').textContent = 'Search';
+        try {
+          if (request.status !== 200 || typeof request.responseText !== 'string' || request.responseText.length > 524288) throw Error('Invalid app store response');
+          var body = JSON.parse(request.responseText); if (!body || !Array.isArray(body.hits)) throw Error('Invalid app store response');
+          appResults = apps.parseResults(body); renderAppChoices();
+          $('app-status').textContent = appResults.length ? 'Choose an app below. It must already be installed on your watch.' : 'No compatible apps found. Try another name, or use Custom app for an unlisted app.';
+        } catch (error) { failed(); }
+      };
+      request.send();
+    } catch (error) { failed(); }
+  }
   function refreshEditorChoices() {
     if (editing === null) return;
     var current = editing.pin, sourceValue = $('source').value || current.reading && sourceKey(current.reading), actionValue = $('action').value || (current.builtin ? 'builtin:find-phone' : current.action && actionKey(current.action)) || 'none';
@@ -241,7 +346,7 @@ function behavior(initial, makeModel) {
   function refreshProperties(reading) {
     var source = currentSource(), selectedProperty = reading && reading.property || $('property').value, props = source && source.properties || {};
     $('property').textContent = '';
-    Object.keys(props).filter(function(name) { return (props[name] || []).some(function(shape) { return ['shortText','longText','numericValue','timestamp','boolean'].indexOf(shape) >= 0; }); }).forEach(function(name) { option($('property'), name, name); });
+    Object.keys(props).filter(function(name) { return (props[name] || []).some(function(shape) { return ['shortText','longText','numericValue','timestamp','boolean'].indexOf(shape) >= 0; }); }).forEach(function(name) { option($('property'), name, friendly(name)); });
     if (selectedProperty && !Array.from($('property').options).some(function(item) { return item.value === selectedProperty; })) option($('property'), selectedProperty, selectedProperty + ' (saved)');
     if (selectedProperty) $('property').value = selectedProperty;
     $('toggle').textContent = ''; option($('toggle'), '', 'Use the entered action arguments');
@@ -267,7 +372,7 @@ function behavior(initial, makeModel) {
   function renderEditorState() {
     $('reading-fields').hidden = !$('has-reading').checked;
     var hasAction = $('action').value !== 'none'; $('action-fields').hidden = !hasAction || $('action').value === 'builtin:find-phone';
-    $('app-fields').hidden = !$('has-app').checked;
+    renderAppState();
     automaticArguments();
   }
   function automaticArguments() {
@@ -305,14 +410,17 @@ function behavior(initial, makeModel) {
   }
   function openEditor(index) {
     if (!loaded || pending()) return;
+    cancelAppSearch(); appResults = [];
     var pin = draft.pins[index] || {id:'pin-' + Date.now().toString(36), label:'New item', icon:'generic'};
-    editing = {index:index, pin:clone(pin)}; inspectVersion++;
+    editing = {index:index, pin:clone(pin), nameChanged:false, iconChanged:false, app:null}; inspectVersion++;
     $('pin-label').value = pin.label; $('icon').value = pin.icon || 'generic'; $('has-reading').checked = !!pin.reading;
     $('source').textContent = ''; $('action').textContent = ''; $('property').textContent = ''; $('instance').textContent = '';
     $('action-label').value = pin.action && pin.action.label || 'Run'; $('confirm-action').checked = !!(pin.action && pin.action.confirm);
-    $('has-app').checked = !!pin.openApp; $('app-uuid').value = pin.openApp && pin.openApp.watchAppUuid || ''; $('app-label').value = pin.openApp && pin.openApp.label || '';
+    $('app-uuid').value = pin.openApp && pin.openApp.watchAppUuid || ''; $('app-label').value = pin.openApp && pin.openApp.label || '';
+    $('app-search-query').value = ''; $('app-status').textContent = ''; $('app-search-panel').open = false; $('app-advanced').open = false;
+    renderAppChoices(pin.openApp ? pin.openApp.watchAppUuid : '');
     $('editor-error').textContent = ''; $('inspect-status').textContent = '';
-    refreshEditorChoices(); controls(); say('Editing an item. Choose Use item, then Save to apply it.'); $('pin-label').focus(); $('editor').scrollIntoView({block:'start', behavior:'auto'});
+    refreshEditorChoices(); controls(); say('Choose what this pin shows or does, then finish the item and Save.'); $('pin-label').focus(); $('editor').scrollIntoView({block:'start', behavior:'auto'});
   }
   function gatherArguments() {
     var args;
@@ -346,19 +454,27 @@ function behavior(initial, makeModel) {
         pin.action = {plugin:action.plugin, action:action.action, args:gatherArguments(), label:$('action-label').value.trim(), confirm:$('confirm-action').checked};
         if ($('toggle').value) { if (!pin.reading) throw Error('Choose a reading before binding its on/off state.'); pin.action.toggleProperty = $('toggle').value; }
       }
-      if ($('has-app').checked) pin.openApp = {watchAppUuid:$('app-uuid').value.trim(), label:$('app-label').value.trim()};
+      if ($('app-target').value) pin.openApp = {watchAppUuid:$('app-target').value === '__custom__' ? $('app-uuid').value.trim() : $('app-target').value, label:$('app-label').value.trim()};
       var next = clone(draft); if (editing.index < next.pins.length) next.pins[editing.index] = pin; else next.pins.push(pin);
-      draft = model.normalize(next); editing = null; inspectVersion++; renderPins(); controls(); say('Pinned item updated. Save to apply your changes.');
+      draft = model.normalize(next); cancelAppSearch(); editing = null; inspectVersion++; renderPins(); controls(); say('Pinned item updated. Save to apply your changes.');
     } catch (error) { $('editor-error').textContent = error.message || 'Check this pinned item.'; }
   }
   $('editor-form').onsubmit = acceptEditor;
-  $('editor-cancel').onclick = function() { editing = null; inspectVersion++; controls(); };
+  $('editor-cancel').onclick = function() { cancelAppSearch(); editing = null; inspectVersion++; controls(); };
   $('add-pin').onclick = function() { openEditor(draft.pins.length); };
   ['dark','notifications','preview'].forEach(function(id) { $(id).onchange = changed; });
-  $('has-reading').onchange = renderEditorState; $('has-app').onchange = renderEditorState;
+  $('has-reading').onchange = renderEditorState;
+  $('pin-label').oninput = function() { if (editing) editing.nameChanged = true; };
+  $('icon').onchange = function() { if (editing) editing.iconChanged = true; };
+  $('app-target').onchange = selectApp; $('app-search').onclick = searchApps; $('app-label').oninput = renderAppState;
+  $('app-search-query').onkeydown = function(event) { if (event.key === 'Enter') { event.preventDefault(); searchApps(); } };
+  $('pin-reading').onclick = function() { $('has-reading').checked = true; renderEditorState(); $('source').onchange(); $('source').focus(); };
+  $('pin-action').onclick = function() { $('action').focus(); };
+  $('pin-app').onclick = function() { $('app-target').focus(); };
   $('instance').onchange = automaticArguments; $('toggle').onchange = automaticArguments;
-  $('source').onchange = function() { inspectVersion++; $('instance').value = 'index:0'; refreshProperties(); $('inspect-status').textContent = ''; };
-  $('action').onchange = function() { var entry = currentAction(); if (entry) $('action-label').value = meta(entry.metadata.label || entry.metadata.title, 'Run'); $('toggle').value = ''; renderArguments({}); renderEditorState(); };
+  $('source').onchange = function() { inspectVersion++; $('instance').value = 'index:0'; refreshProperties(); $('inspect-status').textContent = ''; var source = currentSource(); if (source) suggestName(readingTitle({category:source.category,property:$('property').value,plugin:source.plugin}), source.category === 'weather' ? 'weather' : source.category === 'phone' ? 'phone' : source.category === 'watch-local' ? 'battery' : 'generic'); };
+  $('property').onchange = function() { var source = currentSource(); if (source) suggestName(readingTitle({category:source.category,property:$('property').value,plugin:source.plugin})); };
+  $('action').onchange = function() { var entry = currentAction(); if (entry) { $('action-label').value = apps.label(meta(entry.metadata.label || entry.metadata.title, friendly(entry.action))); suggestName(meta(entry.metadata.label || entry.metadata.title, friendly(entry.action))); } else if ($('action').value === 'builtin:find-phone') suggestName('Find phone', 'find'); $('toggle').value = ''; renderArguments({}); renderEditorState(); };
   $('inspect-source').onclick = function() {
     if (legacy || !bridgeReady) { $('inspect-status').textContent = 'Reopen Dashboard settings from the Pebble app to refresh instances.'; return; }
     var source = currentSource(), version = ++inspectVersion; if (!source || source.category === 'watch-local') return;
@@ -557,5 +673,71 @@ function save(storage, value) {
   return out;
 }
 return {key:KEY, icons:ICONS, defaults:defaults, normalize:normalize, load:load, save:save};
+}
+),(
+function createAppPickerModel() {
+  var SEARCH_HOST = 'https://gm3s9tryo4-dsn.algolia.net';
+  var SEARCH_APP = 'GM3S9TRYO4';
+  // Public client-search credential shipped by the official Pebble phone app.
+  var SEARCH_KEY = '0b83b4f8e4e8e9793d2f1f93c21894aa';
+  var UUID = /^[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}$/i;
+
+  function object(value) { return !!value && typeof value === 'object' && !Array.isArray(value); }
+  function uuid(value) {
+    return typeof value === 'string' && UUID.test(value) &&
+      value !== '00000000-0000-0000-0000-000000000000' ? value.toLowerCase() : '';
+  }
+  function text(value, maxBytes, maxCharacters) {
+    if (typeof value !== 'string') return '';
+    value = value.replace(/[\u0000-\u001f\u007f]/g, ' ').replace(/\s+/g, ' ').trim();
+    var out = '', used = 0, characters = 0;
+    for (var i = 0; i < value.length; i++) {
+      var first = value.charCodeAt(i), part = value.charAt(i), size;
+      if (first >= 0xd800 && first <= 0xdbff) {
+        var second = value.charCodeAt(i + 1);
+        if (!(second >= 0xdc00 && second <= 0xdfff)) continue;
+        part += value.charAt(++i); size = 4;
+      } else if (first >= 0xdc00 && first <= 0xdfff) continue;
+      else size = first < 0x80 ? 1 : first < 0x800 ? 2 : 3;
+      if (used + size > maxBytes || characters >= maxCharacters) break;
+      out += part; used += size; characters++;
+    }
+    return out.trim();
+  }
+  function label(value) { return text(value, 32, 32); }
+  function common() {
+    return [
+      {uuid:'1f03293d-47af-4f28-b960-f2b02a6dd757', name:'Music', author:'Pebble', icon:'media', origin:'common'},
+      {uuid:'b2cae818-10f8-46df-ad2b-98ad2254a3c1', name:'Notifications', author:'Pebble', icon:'notification', origin:'common'},
+      {uuid:'50e9ef12-a5ab-4369-a3b5-3447bfba5151', name:'Timer', author:'Xef', icon:'timer', origin:'common'}
+    ];
+  }
+  function searchUrl(query) {
+    query = text(query, 320, 80);
+    if (!query) throw new Error('Enter an app name to search the store.');
+    return SEARCH_HOST + '/1/indexes/apps?query=' + encodeURIComponent(query) +
+      '&hitsPerPage=15&page=0&tagFilters=' + encodeURIComponent('[["watchapp","companion-app"]]') +
+      '&attributesToRetrieve=' + encodeURIComponent('["id","uuid","title","author","type","compatibility"]') +
+      '&attributesToHighlight=' + encodeURIComponent('[]') + '&attributesToSnippet=' + encodeURIComponent('[]') +
+      '&x-algolia-application-id=' + SEARCH_APP + '&x-algolia-api-key=' + SEARCH_KEY;
+  }
+  function parseResults(body) {
+    if (!object(body) || !Array.isArray(body.hits)) return [];
+    var out = [], seen = Object.create(null);
+    // Requests return at most 15 hits; also bound work for malformed input.
+    var hits = body.hits.slice(0, 100);
+    for (var i = 0; i < hits.length && out.length < 15; i++) {
+      var hit = hits[i];
+      if (!object(hit) || (hit.type !== 'watchapp' && hit.type !== 'companion-app')) continue;
+      var id = uuid(hit.uuid), name = text(hit.title, 128, 128);
+      if (!id || !name || seen[id] || !object(hit.compatibility) ||
+          !object(hit.compatibility.emery) || hit.compatibility.emery.supported !== true) continue;
+      // has_binary:false can mean a compatible scaled Basalt binary, not a plugin.
+      seen[id] = true;
+      out.push({uuid:id, name:name, author:text(hit.author, 96, 96), origin:'store', icon:'generic'});
+    }
+    return out;
+  }
+  return {common:common, label:label, searchUrl:searchUrl, parseResults:parseResults};
 }
 ));</script></body></html>

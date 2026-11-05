@@ -16,6 +16,29 @@ No sibling app, firmware or mobile-app changes are required.
 
 ## Phone module contracts
 
+Settings 0.4.0 retains the saved v1 pin shape. The editor offers independent
+reading, tap action and hold-app sections, with quick setup and local Done/Cancel
+before the global confirmed Save. Other pin edits/reordering are disabled while
+an item is open to protect its index and unfinished draft.
+
+`app-picker.js` exports `common`, `label`, `searchUrl`, `parseResults` and a
+self-contained `browserFactory` embedded beside the settings model in both
+bundled/legacy pages. The named picker merges verified common destinations,
+saved app targets and ephemeral public-store hits. Values are exact lowercase
+watchapp UUIDs; labels are presentation only. Explicit Custom app retains the
+manual route for unlisted targets. Selecting None removes only openApp. Existing
+custom labels and touched names/icons survive metadata/network changes.
+
+The settings page makes a public store XHR only on Search or
+Enter in its search field. It requests at most 15 minimal compatible Emery
+watchapp records from the single declared host. The credential in searchUrl is
+the official app's published client search credential, not an account token.
+The page has a seven-second timeout/response-size cap, aborts superseded queries,
+and validates editor/search generations before changing its choice list. It
+never selects a result automatically, fetches icons, installs/opens an app or
+persists the result list. Results use textContent. See [verified current API and
+permission boundary](APP-PICKER.md). No future ReadApps source is assumed.
+
 `protocol.js` exports `keys`, `op`, `mode`, `status`, `flag`, `kind`,
 `result`, `encode(snapshot)` returning a byte array, and `get(dict,name)`.
 Snapshot: `{session,request,sequence,now,mode,status,dark,total,offset,

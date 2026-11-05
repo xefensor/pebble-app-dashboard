@@ -1,18 +1,18 @@
 # Dashboard
 
 A stock Pebble watchapp for current activities, the latest available notification
-and pinned readings/actions. **0.3.3 is a local Emery development candidate.**
+and pinned readings/actions. **0.4.0 is a local Emery development candidate.**
 
 The native app, phone runtime and bundled settings page are implemented in
 [xefensor/pebble-app-dashboard](https://github.com/xefensor/pebble-app-dashboard).
 Build and portable/emulator checks are recorded under
-[docs/qa/0.3.3](docs/qa/0.3.3). Real-phone permissions/provider integration and
+[docs/qa/0.4.0](docs/qa/0.4.0). Real-phone permissions/provider integration and
 physical-watch comfort/battery still need device testing. Synthetic SDK/emulator
 fixtures are not evidence of live phone operation.
 
 ## Try the build
 
-The current local candidate is `dist/Dashboard-0.3.3.pbw`; it has not been
+The current local candidate is `dist/Dashboard-0.4.0.pbw`; it has not been
 published. Build instructions are below. The previous published development
 build remains [Dashboard 0.3.1](https://github.com/xefensor/pebble-app-dashboard/releases/download/v0.3.1/Dashboard-0.3.1.pbw),
 with source, debug files and checksums in its
@@ -84,6 +84,29 @@ honored. A command acknowledgment does not fabricate a new reading: refreshed
 device/source data supplies the value.
 
 ## Settings and sources
+
+Pins have separate **Show a reading**, **Tap Select** and **Hold Select** choices.
+Quick setup buttons take you to the right part of the editor; these capabilities
+can still be combined in one pin. App selection fills a new pin's name and icon,
+and preserves any name or icon you have edited. Finish with **Add pin** or **Done**,
+then use the page's **Save** to apply your changes. Other pins stay locked while
+you finish or cancel the current item.
+
+For **Hold Select**, choose an app by name. Music, Notifications and this suite's
+Timer are available as common choices. **Find another app by name** searches the
+official public Pebble store and shows name/author choices; selecting one fills
+its actual watchapp destination. Choose an app already installed on your watch.
+The current phone SDK cannot supply an installed-watchapp list, and store search
+does not verify installation. Sideloaded/private apps can use **Custom app**;
+manual UUID entry is kept there rather than required for normal setup. Saved
+destinations and custom names survive empty results, errors and offline use.
+
+Store search is explicit and needs Dashboard's scoped app-store Internet access
+in Pebble. After changing that permission, save any edits and reopen Dashboard
+settings before searching again. Common/saved choices need no store request.
+The phone's permission policy may also ask you to approve reading access after
+this update; existing explicit grants remain valid. See [app-picker API and
+permission notes](docs/APP-PICKER.md) for the current stock SDK limits.
 
 The bundled phone page works independently of Dashboard's native lifetime.
 Open Dashboard on the watch once to discover installed providers. Live discovery

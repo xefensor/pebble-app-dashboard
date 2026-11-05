@@ -1,6 +1,6 @@
 {
   "name": "pebble-app-dashboard",
-  "version": "0.3.3",
+  "version": "0.4.0",
   "author": "Xef",
   "private": true,
   "license": "SEE LICENSE IN LICENSE",
@@ -36,7 +36,15 @@
       "Notifications",
       "FindMyPhone",
       "LaunchApps",
-      "ReadWatchSettings"
+      "ReadWatchSettings",
+      {
+        "name": "Internet",
+        "parameters": {
+          "domains": [
+            "gm3s9tryo4-dsn.algolia.net"
+          ]
+        }
+      }
     ],
     "plugin": {
       "description": "Dashboard preferences and plugin catalogue settings. No activity source or action proxy.",

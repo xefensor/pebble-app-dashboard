@@ -1,0 +1,3 @@
+native model: 16 binary fixtures; malformed, stale, selection, privacy, sparse controls and clock checks passed
+native deadline: 59 unchanged updates retain one timer; expiry, correction, replacement, cancellation and registration retry passed
+C parser: 30 actual runtime frames accepted

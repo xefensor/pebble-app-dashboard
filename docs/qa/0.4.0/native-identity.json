@@ -1,0 +1,77 @@
+{
+  "result": "PASS",
+  "baselineVersion": "0.3.3",
+  "finalVersion": "0.4.0",
+  "baselinePbwSha256": "fd3a1c758bc1bd045fdd00f94fe32b6d65e5caef5186a3e164de0549f2b80bc9",
+  "finalPbwSha256": "ffc514ad8a0095fdc18fdfd049be294f21fe8e3e8eb365a75cdf23e121eb982a",
+  "nativeSourcesAndResourceInputsUnchanged": true,
+  "nativeByteDifferences": [
+    13,
+    20,
+    21,
+    22,
+    23,
+    124,
+    125,
+    126,
+    148,
+    149,
+    150,
+    151,
+    152,
+    153,
+    154,
+    155,
+    156,
+    157,
+    158,
+    159,
+    160,
+    161,
+    162,
+    163,
+    164,
+    165,
+    166,
+    167
+  ],
+  "explainedMetadataFields": [
+    {
+      "name": "process_version",
+      "offset": 12,
+      "bytes": 2,
+      "before": "0003",
+      "after": "0004"
+    },
+    {
+      "name": "application CRC",
+      "offset": 20,
+      "bytes": 4,
+      "before": "dcfbe296",
+      "after": "f22f227a"
+    },
+    {
+      "name": "resource timestamp",
+      "offset": 124,
+      "bytes": 4,
+      "before": "74f7eb6a",
+      "after": "8a1aec6a"
+    },
+    {
+      "name": "GNU build-ID descriptor",
+      "offset": 148,
+      "bytes": 20,
+      "before": "54db6582a4b88c20a2b8f209c3985bb95d47e950",
+      "after": "33ffee4db3107ad6fefe8360df968a2cd988dd4e"
+    }
+  ],
+  "allOtherNativeCodeDataAndRelocationBytesIdentical": true,
+  "resourcesSha256": "94511ccd37e0309987f80c3b1f9b9a2ce4cb3cea9453d2f56470e1d35b93fe3c",
+  "nativePayloadSha256": {
+    "emery/pebble-app.bin": "b88348bb31ba387f4ac97c07f2af9e8cdfdae04a2170bcb09412647deedb90d2",
+    "emery/app_resources.pbpack": "94511ccd37e0309987f80c3b1f9b9a2ce4cb3cea9453d2f56470e1d35b93fe3c",
+    "emery/manifest.json": "ebb3e48cb9a096c0e938af9a11403d19aeb16c02576fa185ebfb18775c605110"
+  },
+  "sdkMetadataDefinition": "Pebble SDK4.33.1 emery/include/pebble_process_info.h and common/tools/inject_metadata.py; GNU note validated as namesz4/descsz20/type3/GNU",
+  "scope": "No new native rendering claim; settings-only change. Existing0.3.3 native captures retain historical candidate label."
+}

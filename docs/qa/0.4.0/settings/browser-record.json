@@ -1,0 +1,81 @@
+{
+  "result": "PASS",
+  "artifactBinding": {
+    "configOrigin": "actual archived PBW config.html",
+    "pbw": "Dashboard-0.4.0.pbw",
+    "pbwSha256": "ffc514ad8a0095fdc18fdfd049be294f21fe8e3e8eb365a75cdf23e121eb982a",
+    "configSha256": "86022c0867ccc67d709558f3d8310097f2899bbb4c033a0e8f872aba961658ba"
+  },
+  "checks": 31,
+  "screens": [
+    {
+      "file": "overview-light.png",
+      "sha256": "291c657bfb33b6b57779e0859b7cd0bce68b4123f174fd1f2c5b062a09a75c43",
+      "scope": "Chromium browser capture; synthetic fixtures, not native watch UI"
+    },
+    {
+      "file": "pin-editor.png",
+      "sha256": "8b12d57a4ed75349aaf44e7d3ab5dd6280eb34ce5f846996d415ce1284fb1a7f",
+      "scope": "Chromium browser capture; synthetic fixtures, not native watch UI"
+    },
+    {
+      "file": "overview-dark-small.png",
+      "sha256": "4df42a7024657d76107646646ebf38e968d9109598600deddf4d920f1ee9064d",
+      "scope": "Chromium browser capture; synthetic fixtures, not native watch UI"
+    },
+    {
+      "file": "activities-watch-closed-first-install.png",
+      "sha256": "d649e407000c6e492c1d559184e014bc6bc6dc17eca657c9383abd45b04ddc60",
+      "scope": "Chromium browser capture; synthetic fixtures, not native watch UI"
+    },
+    {
+      "file": "activities-live-discovery.png",
+      "sha256": "ae3caca1df1237c9774a003eed7bd0beb5ce1e034a58a2bbfac2ddf17e8f9516",
+      "scope": "Chromium browser capture; synthetic fixtures, not native watch UI"
+    },
+    {
+      "file": "activities-watch-closed-cache.png",
+      "sha256": "938db266bf5c7ce7563f316769b4da2a6fb29a1d3787d5077e112338518fcb1a",
+      "scope": "Chromium browser capture; synthetic fixtures, not native watch UI"
+    },
+    {
+      "file": "activities-discovery-error.png",
+      "sha256": "8526edf3851c6d4188203f85c6acea1074cdcc0dcf666dfdb93a321331adbd19",
+      "scope": "Chromium browser capture; synthetic fixtures, not native watch UI"
+    },
+    {
+      "file": "pin-app-saved-search.png",
+      "sha256": "f2aa09962b36f64cad3c6a33b36409e280a33915be5d489fa35c8ad8266db108",
+      "scope": "Chromium browser capture; synthetic fixtures, not native watch UI"
+    },
+    {
+      "file": "pin-app-store-results.png",
+      "sha256": "eb1e4a179e214290193eac31586d33a63ae8e5d61b223db24850ffa57121a637",
+      "scope": "Chromium browser capture; synthetic fixtures, not native watch UI"
+    },
+    {
+      "file": "pin-app-store-choice.png",
+      "sha256": "79ee77a945582bade3ee97d7ce805dcea21d44220f601b8ec1f8edba339af0ea",
+      "scope": "Chromium browser capture; synthetic fixtures, not native watch UI"
+    }
+  ],
+  "visualReview": {
+    "reviewed": true,
+    "result": "PASS",
+    "scope": "Readable store result cards, chosen Hold destination, bounded Czech titles, reading/action editor and mobile/dark layout; no native or physical watch claim."
+  },
+  "editorDraftGuard": {
+    "otherPinButtonsAndAddDisabledDuringEdit": true,
+    "restoredAfterDone": true,
+    "restoredAfterCancel": true
+  },
+  "testNetwork": {
+    "storeRequestsIntercepted": 6,
+    "realStoreRequests": 0,
+    "sourceReads": 0,
+    "sourceSubscriptions": 0,
+    "actions": 0,
+    "nativeMessages": 0
+  },
+  "independentHarnessReview": "PASS; source handler contexts and archived-HTML scope accurately disclosed; explicit XHR timeout not injected."
+}

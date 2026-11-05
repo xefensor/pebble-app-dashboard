@@ -1,0 +1,38 @@
+{
+  "result": "PASS",
+  "version": "0.4.0",
+  "baseline": "be58d4599ebd2c74ea374c1c16fa5ebff5f2199d",
+  "pbwSha256": "ffc514ad8a0095fdc18fdfd049be294f21fe8e3e8eb365a75cdf23e121eb982a",
+  "configSha256": "86022c0867ccc67d709558f3d8310097f2899bbb4c033a0e8f872aba961658ba",
+  "usesPermissions": [
+    "Location",
+    "ReadMusic",
+    "ControlMusic",
+    "Notifications",
+    "FindMyPhone",
+    "LaunchApps",
+    "ReadWatchSettings",
+    {
+      "name": "Internet",
+      "parameters": {
+        "domains": [
+          "gm3s9tryo4-dsn.algolia.net"
+        ]
+      }
+    }
+  ],
+  "browserChecks": 31,
+  "javascript": 88,
+  "nativeSuites": 2,
+  "packagedRuntime": true,
+  "nativeImplementationUnchanged": true,
+  "priorArtifactsPreserved": 18,
+  "unchangedSiblingRepositories": {
+    "pebble-activities": "df4f30f4a66419ce835959eeeec6de7999704fa0",
+    "dynamic-watchface": "48a5aaec1aac4e2805bad2bb7e793b5da58b5165",
+    "pebble-app-timer": "2c5a9ef2b2f8b0da3e6643abe87ec07f149442b8",
+    "pebble-app-open-activity": "1d963c7a1adee58c1ceefedc96e27a00e20f383b",
+    "pebble-watchface-core": "466062f0514d82eb1567135c3483fb3bb67c7842"
+  },
+  "scope": "Packaged browser with mocked store and SDK contexts, actual packaged runtime and source/native identity; real phone permission/CORS/app launch not tested."
+}

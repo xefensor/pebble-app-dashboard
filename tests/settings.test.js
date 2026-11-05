@@ -78,7 +78,7 @@ test('settings HTML escapes source data and includes independent pinned/activity
   const settings = model.defaults(); settings.pins[0].label = '</script><script>bad()';
   const html = page(settings, {plugins:[], instances:[], activities:[]});
   assert.ok(!html.includes('</script><script>bad()')); assert.ok(html.includes('\\u003c/script>'));
-  for (const id of ['pins','activities','arguments','source','property','instance','action','toggle','has-app','save']) assert.ok(html.includes('id="' + id + '"'));
+  for (const id of ['pins','activities','arguments','source','property','instance','action','toggle','app-target','app-search-query','app-search','app-status','app-uuid','app-label','pin-reading','pin-action','pin-app','save']) assert.ok(html.includes('id="' + id + '"'));
   assert.ok(page.config().includes('registerConfigHandler') === false);
   assert.ok(page({version:99,pins:[]}).includes('"needsRepair":true'));
 });

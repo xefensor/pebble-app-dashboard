@@ -1,6 +1,6 @@
 # Dashboard maintainer notes
 
-This repository contains the native Dashboard development candidate (0.3.3),
+This repository contains the native Dashboard development candidate (0.4.0),
 its phone runtime/settings, and earlier browser design studies. Read README.md
 and docs/IMPLEMENTATION.md. Preserve UUID f76f9fc1-2944-4248-bcc5-3eea2af0183b,
 DSH1 message keys and existing published sibling apps.
@@ -113,3 +113,22 @@ target timeout/reconnect. Only an exact restored token or deliberate navigation
 can restore actionable focus. Never carry private snapshot content through a
 failed view. Malformed unrelated source/action declaration entries must not
 prevent a valid activity/control or Music source from being displayed.
+
+Version 0.4.0 simplifies pin configuration without changing settings v1 or native
+DSH1. Hold Select uses named app choices and an explicit public-store search;
+the stock mobile SDK does not currently enumerate installed watchapps. Never
+use arbitrary plugin UUIDs as watchapp destinations or label store hits installed.
+`app-picker.js` owns verified common IDs, bounded compatible store hits and
+32-byte UTF8 default labels; its browserFactory is serialized into both settings
+paths. Only explicit Search performs an XHR, scoped to the one declared Internet
+domain. Cancel/close/selection/new search invalidate stale replies; no search
+response may choose a destination or replace editor fields. Keep saved unknown
+UUIDs/custom labels, offline choices and explicit None removal independent of
+reading/action bindings. Advanced Custom app preserves private/sideloaded targets.
+New untouched names/icons may be suggested; existing or manually edited ones
+must stay intact. Lock other pin edits/reordering until local Done/Cancel.
+The app-level network grant is checked when the config page opens; users may
+need to allow it in Pebble and reopen settings. Do not promise an inline prompt.
+Internet can affect the stock default read-permission policy; document this
+without silently changing grants or starting sources from settings. Native UI,
+control dispatch, activity policy and Timer control support stay independent.

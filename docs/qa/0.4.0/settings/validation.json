@@ -1,0 +1,106 @@
+{
+  "result": "PASS",
+  "scope": "Chromium settings with an intercepted app-store XHR model, UI bridge fixtures and actual Dashboard source plugin/PKJS config handlers on separate official SDK API surfaces; no real network, live phone, source/action invocation or app launch.",
+  "artifactBinding": {
+    "configOrigin": "actual archived PBW config.html",
+    "pbw": "Dashboard-0.4.0.pbw",
+    "pbwSha256": "ffc514ad8a0095fdc18fdfd049be294f21fe8e3e8eb365a75cdf23e121eb982a",
+    "configSha256": "86022c0867ccc67d709558f3d8310097f2899bbb4c033a0e8f872aba961658ba"
+  },
+  "checks": [
+    "mixed pin typed action+reading",
+    "exact instance binding",
+    "automatic toggle target/state arguments without duplicate entry",
+    "ordinary action fields remain required",
+    "on/off toggle property",
+    "pin reorder",
+    "confirmed save notifies running PKJS",
+    "late catalogue preserves draft",
+    "uncertain save readback",
+    "load failure disables editing",
+    "retry",
+    "short dark viewport no overflow",
+    "Find phone never probed",
+    "closed first install explains discovery with Music visible",
+    "closed settings save through actual plugin handler without PKJS",
+    "closed settings read actual public metadata cache without enumeration",
+    "PKJS target discovers inactive installed providers",
+    "late PKJS readiness preserves unsaved settings",
+    "discovery failure preserves provider choices and shows retry",
+    "current SDK targets detect watchapp closure without a shutdown event",
+    "older SDK missing targets and PKJS rejection use one bounded cache fallback",
+    "stale cached reply cannot replace newer live discovery",
+    "both settings/catalogue reply orders preserve priority and visibility",
+    "no source reads, subscriptions, actions or native messages",
+    "common app picker saves an app-only pin without UUID entry and suggests an untouched name/icon",
+    "saved unknown UUID and custom Czech label survive reopen; capability edits and Cancel cannot retarget or persist it",
+    "store search is explicit; offline, empty, delayed plugin metadata and stale search replies preserve the selected app and draft label",
+    "late search from a cancelled editor cannot populate or select an app in a new pin",
+    "explicit Do nothing removes only openApp; exact reading, toggle, confirmation and advanced action arguments survive",
+    "compatible store results are bounded to 15, duplicate app names bind exact UUIDs and Czech default labels stay within 32 UTF8 bytes",
+    "all browser app searches use intercepted official public-store requests; no real network, credentials validation or app launch occurs"
+  ],
+  "appSearchRequests": [
+    {
+      "method": "GET",
+      "host": "gm3s9tryo4-dsn.algolia.net",
+      "path": "/1/indexes/apps",
+      "query": "lights",
+      "limit": "15"
+    },
+    {
+      "method": "GET",
+      "host": "gm3s9tryo4-dsn.algolia.net",
+      "path": "/1/indexes/apps",
+      "query": "lights",
+      "limit": "15"
+    },
+    {
+      "method": "GET",
+      "host": "gm3s9tryo4-dsn.algolia.net",
+      "path": "/1/indexes/apps",
+      "query": "lights",
+      "limit": "15"
+    },
+    {
+      "method": "GET",
+      "host": "gm3s9tryo4-dsn.algolia.net",
+      "path": "/1/indexes/apps",
+      "query": "timer",
+      "limit": "15"
+    },
+    {
+      "method": "GET",
+      "host": "gm3s9tryo4-dsn.algolia.net",
+      "path": "/1/indexes/apps",
+      "query": "timer",
+      "limit": "15"
+    },
+    {
+      "method": "GET",
+      "host": "gm3s9tryo4-dsn.algolia.net",
+      "path": "/1/indexes/apps",
+      "query": "Český časovač",
+      "limit": "15"
+    }
+  ],
+  "contextCalls": {
+    "enumerations": 5,
+    "reads": 0,
+    "subscriptions": 0,
+    "actions": 0,
+    "appMessages": 0
+  },
+  "screens": [
+    "overview-light.png",
+    "pin-editor.png",
+    "overview-dark-small.png",
+    "activities-watch-closed-first-install.png",
+    "activities-live-discovery.png",
+    "activities-watch-closed-cache.png",
+    "activities-discovery-error.png",
+    "pin-app-saved-search.png",
+    "pin-app-store-results.png",
+    "pin-app-store-choice.png"
+  ]
+}
