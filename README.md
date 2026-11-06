@@ -1,30 +1,39 @@
 # Dashboard
 
 A stock Pebble watchapp for current activities, the latest available notification
-and pinned readings/actions. **0.4.3 is a local Emery development candidate;
-0.4.0 remains the published prerelease.**
+and pinned readings/actions. **0.4.3 is prepared for publication as an Emery
+development prerelease; 0.4.0 remains the published prerelease until the new
+release is available.**
+
+Part of **XOCE — Xef's Open Computing Ecosystem**. The shared Activities
+library now lives in
+[xefensor/pebble-lib-activities](https://github.com/xefensor/pebble-lib-activities);
+its package and import name remains `pebble-activities`.
 
 The native app, phone runtime and bundled settings page are implemented in
 [xefensor/pebble-app-dashboard](https://github.com/xefensor/pebble-app-dashboard).
 Build and portable/emulator checks are recorded under
-[docs/qa/0.4.0](docs/qa/0.4.0). Real-phone permissions/provider integration and
+[docs/qa/0.4.3](docs/qa/0.4.3). Real-phone permissions/provider integration and
 physical-watch comfort/battery still need device testing. Synthetic SDK/emulator
 fixtures are not evidence of live phone operation.
 
 ## Try the build
 
-Download [Dashboard 0.4.0](https://github.com/xefensor/pebble-app-dashboard/releases/download/v0.4.0/Dashboard-0.4.0.pbw),
-[source](https://github.com/xefensor/pebble-app-dashboard/releases/download/v0.4.0/Dashboard-0.4.0-source.zip),
-[debugging files](https://github.com/xefensor/pebble-app-dashboard/releases/download/v0.4.0/Dashboard-0.4.0-debug.zip)
-and [checksums](https://github.com/xefensor/pebble-app-dashboard/releases/download/v0.4.0/SHA256SUMS.txt).
-The release is pinned to tested source
+The prepared **Dashboard 0.4.3** release has links for the
+[PBW](https://github.com/xefensor/pebble-app-dashboard/releases/download/v0.4.3/Dashboard-0.4.3.pbw),
+[source](https://github.com/xefensor/pebble-app-dashboard/releases/download/v0.4.3/Dashboard-0.4.3-source.zip),
+[debugging files](https://github.com/xefensor/pebble-app-dashboard/releases/download/v0.4.3/Dashboard-0.4.3-debug.zip)
+and [checksums](https://github.com/xefensor/pebble-app-dashboard/releases/download/v0.4.3/SHA256SUMS.txt).
+These links become available when the prerelease is published. The local
+candidate is `dist/Dashboard-0.4.3.pbw`; its settings save/reopen checks are
+recorded in [docs/qa/0.4.3](docs/qa/0.4.3). Native-app picker checks remain in
+[docs/qa/0.4.2](docs/qa/0.4.2), and startup-theme checks remain in
+[docs/qa/0.4.1](docs/qa/0.4.1).
+
+The previous [Dashboard 0.4.0 prerelease](https://github.com/xefensor/pebble-app-dashboard/releases/tag/v0.4.0)
+retains its original PBW, source, debug files and checksums. It is pinned to
+tested source
 [`dc3bbd5`](https://github.com/xefensor/pebble-app-dashboard/tree/dc3bbd53c79d70daf188cbcd8a0d1074c00d8819).
-Later documentation commits preserve those package/source/debug bytes. The local
-copy remains `dist/Dashboard-0.4.0.pbw`; build instructions are below.
-The local 0.4.3 candidate is `dist/Dashboard-0.4.3.pbw`; its settings save/reopen
-checks are recorded in [docs/qa/0.4.3](docs/qa/0.4.3). The native-app picker checks
-remain in [docs/qa/0.4.2](docs/qa/0.4.2). The startup-theme checks
-remain in [docs/qa/0.4.1](docs/qa/0.4.1).
 The previous [Dashboard 0.3.1](https://github.com/xefensor/pebble-app-dashboard/releases/download/v0.3.1/Dashboard-0.3.1.pbw) remains available,
 with source, debug files and checksums in its
 [development release](https://github.com/xefensor/pebble-app-dashboard/releases/tag/v0.3.1).
