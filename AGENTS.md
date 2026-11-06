@@ -175,3 +175,13 @@ Bound topology handoffs to three writes, require the exact normalized settings
 in the acknowledgment, and preserve terminal runtime.stop behavior. Keep both
 the real closed-page browser regressions and separate DOM/native storage model;
 a shared Map cannot reproduce the SDK overwrite. See docs/APP-PICKER.md sources.
+
+## Approved UI/UX alignment (implementation pending)
+
+Read [the UI/UX alignment handoff](docs/UX-ALIGNMENT.md) before the next
+interface implementation. It links the canonical local XOCE design standard
+and records this app's remaining work, including applicable stay-open phone
+settings with confirmed inline Save feedback. This is an approved future target,
+not a claim that the released app already implements it. Current lifecycle,
+storage, privacy, native ownership and release rules above still apply. The
+documentation update does not change runtime code or frozen release artifacts.
