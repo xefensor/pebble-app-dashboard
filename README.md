@@ -1,9 +1,8 @@
 # Dashboard
 
 A stock Pebble watchapp for current activities, the latest available notification
-and pinned readings/actions. **0.4.3 is prepared for publication as an Emery
-development prerelease; 0.4.0 remains the published prerelease until the new
-release is available.**
+and pinned readings/actions. **Dashboard 0.4.3 is published as an Emery
+development prerelease.**
 
 Part of **XOCE — Xef's Open Computing Ecosystem**. The shared Activities
 library now lives in
@@ -19,16 +18,21 @@ fixtures are not evidence of live phone operation.
 
 ## Try the build
 
-The prepared **Dashboard 0.4.3** release has links for the
+Download **Dashboard 0.4.3**:
 [PBW](https://github.com/xefensor/pebble-app-dashboard/releases/download/v0.4.3/Dashboard-0.4.3.pbw),
 [source](https://github.com/xefensor/pebble-app-dashboard/releases/download/v0.4.3/Dashboard-0.4.3-source.zip),
 [debugging files](https://github.com/xefensor/pebble-app-dashboard/releases/download/v0.4.3/Dashboard-0.4.3-debug.zip)
 and [checksums](https://github.com/xefensor/pebble-app-dashboard/releases/download/v0.4.3/SHA256SUMS.txt).
-These links become available when the prerelease is published. The local
-candidate is `dist/Dashboard-0.4.3.pbw`; its settings save/reopen checks are
+The published PBW is also available locally as `dist/Dashboard-0.4.3.pbw`;
+its settings save/reopen checks are
 recorded in [docs/qa/0.4.3](docs/qa/0.4.3). Native-app picker checks remain in
 [docs/qa/0.4.2](docs/qa/0.4.2), and startup-theme checks remain in
 [docs/qa/0.4.1](docs/qa/0.4.1).
+
+The 0.4.3 release is frozen at tested source
+[`61e4bab`](https://github.com/xefensor/pebble-app-dashboard/tree/61e4babc91bef0409c14f8c8699053d047baa2be).
+Its source ZIP identifies that commit; later documentation on `main` does not
+replace the published archives or tag.
 
 The previous [Dashboard 0.4.0 prerelease](https://github.com/xefensor/pebble-app-dashboard/releases/tag/v0.4.0)
 retains its original PBW, source, debug files and checksums. It is pinned to
