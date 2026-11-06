@@ -134,6 +134,7 @@ async function run() {
   }};
   await send('Page.enable');await send('Runtime.enable');await send('Runtime.addBinding',{name:'__dashboardConfigCall'});
   await send('Page.addScriptToEvaluateOnNewDocument',{source:'('+mockAppSearch.toString()+')();'});
+  await send('Page.addScriptToEvaluateOnNewDocument',{source:"Object.defineProperty(navigator,'languages',{configurable:true,get:()=>['en-US']});Object.defineProperty(navigator,'language',{configurable:true,get:()=>'en-US'});"});
   let bridgeScript=(await send('Page.addScriptToEvaluateOnNewDocument',{source:'('+fakeBridge.toString()+')('+JSON.stringify(model.defaults())+');'})).identifier;
   await send('Emulation.setDeviceMetricsOverride',{width:360,height:800,deviceScaleFactor:1,mobile:true});
   await send('Page.navigate',{url:pathToFileURL(htmlPath).href});
@@ -153,7 +154,7 @@ async function run() {
     const savedBeforeReopen=model.load(contextBridge.storage).pins[0];
     await reopen();await click('#pins>li:first-child button');const afterGlobalSave=await editorState();
     await field('app-target',WEATHER_APP);await click('#editor-save');await click('#save');
-    await until(`document.getElementById('status').textContent==='Settings saved.'`,'documented localDone then globalSave');
+    await until(`['✓ Saved','Settings saved.'].includes(document.getElementById('status').textContent)`,'documented localDone then globalSave');
     const savedWithDone=model.load(contextBridge.storage).pins[0];
     await reopen();await click('#pins>li:first-child button');const afterDoneSave=await editorState();
     const report={result:afterGlobalSave.target===WEATHER_APP?'NOT_REPRODUCED':'REPRODUCED',scope:'Actual archived settings HTML, full Page.reload and real source config-plugin settings storage; fictional SDK metadata and no app launch.',artifactBinding,selectedBeforeGlobalSave:selected,savedBeforeReopen,reopenedAfterGlobalSave:afterGlobalSave,savedAfterDoneAndSave:savedWithDone,reopenedAfterDoneAndSave:afterDoneSave,sourceCalls:contextBridge.calls};
@@ -172,11 +173,11 @@ async function run() {
   assert.equal(await evaluate(`['item','instanceId','on'].every(name=>document.querySelector('[aria-label="'+name+'"]').parentNode.hidden)`),true,'derived toggle arguments must not need duplicate entry');
   await click('#editor-save');assert.equal(await evaluate(`document.querySelectorAll('#pins>li').length`),5);
   assert.equal(await evaluate(`document.getElementById('add-pin').disabled||document.querySelector('#pins>li button').disabled`),false,'Done restores pin editing controls');
-  await click('#save');await until(`document.getElementById('status').textContent==='Settings saved.'`,'confirmed save');
+  await click('#save');await until(`document.getElementById('status').textContent==='✓ Saved'`,'confirmed save');
   let saved=await evaluate('window.__settingsTest.store');assert.equal(saved.dark,true);assert.equal(saved.pins[4].reading.instanceId,'3');assert.equal(saved.pins[4].action.toggleProperty,'on');assert.deepEqual(saved.pins[4].action.args,{});
   assert.ok(await evaluate(`window.__settingsTest.calls.some(call=>call.target==='pkjs'&&call.type==='save_settings')`),'a running PKJS host must write the exact saved preferences into its own cache');
   // Reordering is explicit and the pin remains a value+action pair.
-  await click('#pins>li:last-child button[aria-label^="Move"][aria-label$="up"]');await click('#save');await until(`document.getElementById('status').textContent==='Settings saved.'`,'reorder save');saved=await evaluate('window.__settingsTest.store');assert.equal(saved.pins[3].id,saved.pins.filter(pin=>pin.label==='Kitchen light')[0].id);
+  await click('#pins>li:last-child button[aria-label^="Move"][aria-label$="up"]');await click('#save');await until(`document.getElementById('status').textContent==='✓ Saved'`,'reorder save');saved=await evaluate('window.__settingsTest.store');assert.equal(saved.pins[3].id,saved.pins.filter(pin=>pin.label==='Kitchen light')[0].id);
   // Late discovery cannot overwrite the editor's in-progress source or label.
   await click('#pins>li:nth-child(4) button');await noAutomaticTextFocus('Edit pin');await field('pin-label','Kitchen draft','input');
   await evaluate('window.__settingsTest.catalogueDelay=80');await click('#refresh-catalogue');await sleep(150);
@@ -196,7 +197,7 @@ async function run() {
   await field('app-target',WEATHER_APP);
   assert.equal(await evaluate(`document.getElementById('pin-label').value`),'Weather');
   assert.equal(await evaluate(`document.getElementById('icon').value`),'weather');
-  await click('#editor-save');await click('#save');await until(`document.getElementById('status').textContent==='Settings saved.'`,'app-only save');
+  await click('#editor-save');await click('#save');await until(`document.getElementById('status').textContent==='✓ Saved'`,'app-only save');
   saved=await evaluate('window.__settingsTest.store');
   assert.deepEqual(saved.pins.at(-1).openApp,{watchAppUuid:WEATHER_APP,label:'Weather'});
   assert.equal(saved.pins.at(-1).reading,undefined);assert.equal(saved.pins.at(-1).action,undefined);
@@ -206,17 +207,17 @@ async function run() {
   await click('#pins>li:first-child button');await field('action',PLUGIN+'|set_label');await field('action-label','Send label','input');await field('confirm-action',true);
   await evaluate(`(()=>{const field=document.querySelector('#arguments [aria-label="label"]');field.value='Weather marker';field.dispatchEvent(new Event('input',{bubbles:true}));})()`);
   await field('app-target',WEATHER_APP);await click('#editor-save');await click('#save');
-  await until(`document.getElementById('status').textContent==='Settings saved.'`,'Weather reading plus native Weather destination');
+  await until(`document.getElementById('status').textContent==='✓ Saved'`,'Weather reading plus native Weather destination');
   const weatherLinked=(await evaluate('window.__settingsTest.store')).pins[0];
   assert.deepEqual(weatherLinked.reading,weatherBefore.reading);assert.equal(weatherLinked.label,weatherBefore.label);assert.equal(weatherLinked.icon,weatherBefore.icon);
   assert.deepEqual(weatherLinked.action,{plugin:PLUGIN,action:'set_label',args:{label:'Weather marker'},label:'Send label',confirm:true});
   assert.deepEqual(weatherLinked.openApp,{watchAppUuid:WEATHER_APP,label:'Weather'});
   await click('#pins>li:first-child button');await field('app-target','');await click('#editor-save');await click('#save');
-  await until(`document.getElementById('status').textContent==='Settings saved.'`,'Weather destination explicit removal');
+  await until(`document.getElementById('status').textContent==='✓ Saved'`,'Weather destination explicit removal');
   const weatherWithoutApp=JSON.parse(JSON.stringify(weatherLinked));delete weatherWithoutApp.openApp;
   assert.deepEqual((await evaluate('window.__settingsTest.store')).pins[0],weatherWithoutApp);
   await click('#pins>li:first-child button');await field('action','none');await click('#editor-save');await click('#save');
-  await until(`document.getElementById('status').textContent==='Settings saved.'`,'restore original Weather pin');
+  await until(`document.getElementById('status').textContent==='✓ Saved'`,'restore original Weather pin');
   assert.deepEqual((await evaluate('window.__settingsTest.store')).pins[0],weatherBefore);
   assert.equal(await evaluate('window.__appSearchTest.calls.length'),0);
   appChecks.push('PebbleOS Weather destination uses its verified UUID offline; adding or clearing Hold preserves the existing Weather reading, tap action and label');
@@ -228,7 +229,7 @@ async function run() {
   await click('#pins>li:last-child button');await field('app-target','__custom__');
   await field('app-uuid',CUSTOM_APP,'input');await field('app-label','Český časovač','input');
   await field('pin-label','Moje zkratka','input');await field('icon','scene');
-  await click('#editor-save');await click('#save');await until(`document.getElementById('status').textContent==='Settings saved.'`,'custom app save');
+  await click('#editor-save');await click('#save');await until(`document.getElementById('status').textContent==='✓ Saved'`,'custom app save');
   saved=await evaluate('window.__settingsTest.store');const customPin=JSON.parse(JSON.stringify(saved.pins.at(-1)));
   async function reloadFake() {
     const stored=await evaluate('window.__settingsTest.store');
@@ -259,7 +260,7 @@ async function run() {
   assert.equal(await evaluate(`document.getElementById('editor').hidden`),false,'Enter searches instead of submitting the pin editor');
   assert.equal(await evaluate(`document.getElementById('app-target').value`),CUSTOM_APP);
   await click('#editor-save');await field('preview',true);await click('#save');
-  await until(`document.getElementById('status').textContent==='Settings saved.'`,'unknown app save after failed and empty discovery');
+  await until(`document.getElementById('status').textContent==='✓ Saved'`,'unknown app save after failed and empty discovery');
   assert.deepEqual((await evaluate('window.__settingsTest.store')).pins.at(-1),customPin);
   await click('#pins>li:last-child button');await reveal('app-search-query');await field('app-search-query','lights','input');
   await reveal('app-label');await field('app-label','Můj rozepsaný název','input');
@@ -285,12 +286,12 @@ async function run() {
 
   await click('#pins>li:nth-child(4) button');const mixedBefore=JSON.parse(JSON.stringify((await evaluate('window.__settingsTest.store')).pins[3]));
   await field('app-target',MUSIC_APP);await field('confirm-action',true);await reveal('args-json');await field('args-json','{"extra":"preserved"}','input');
-  await click('#editor-save');await click('#save');await until(`document.getElementById('status').textContent==='Settings saved.'`,'mixed hold app save');
+  await click('#editor-save');await click('#save');await until(`document.getElementById('status').textContent==='✓ Saved'`,'mixed hold app save');
   const mixedApp=(await evaluate('window.__settingsTest.store')).pins[3];
   assert.equal(mixedApp.label,mixedBefore.label);assert.equal(mixedApp.icon,mixedBefore.icon);
   assert.deepEqual(mixedApp.reading,mixedBefore.reading);assert.equal(mixedApp.action.confirm,true);assert.deepEqual(mixedApp.action.args,{extra:'preserved'});
   await click('#pins>li:nth-child(4) button');await field('app-target','');await click('#editor-save');await click('#save');
-  await until(`document.getElementById('status').textContent==='Settings saved.'`,'explicit hold removal');
+  await until(`document.getElementById('status').textContent==='✓ Saved'`,'explicit hold removal');
   const withoutApp=JSON.parse(JSON.stringify(mixedApp));delete withoutApp.openApp;
   assert.deepEqual((await evaluate('window.__settingsTest.store')).pins[3],withoutApp);
   appChecks.push('explicit Do nothing removes only openApp; exact reading, toggle, confirmation and advanced action arguments survive');
@@ -309,7 +310,7 @@ async function run() {
   assert.equal(await evaluate(`document.getElementById('app-search-panel').open`),false,'direct result selection returns to the chosen destination');
   await click('#editor-save');
   assert.equal(await evaluate(`document.getElementById('editor').hidden`),true,'long Czech app title must form a valid bounded default label');
-  await click('#save');await until(`document.getElementById('status').textContent==='Settings saved.'`,'Czech store app save');
+  await click('#save');await until(`document.getElementById('status').textContent==='✓ Saved'`,'Czech store app save');
   const czech=(await evaluate('window.__settingsTest.store')).pins.at(-1);
   assert.equal(czech.openApp.watchAppUuid,czechId);assert.ok(Buffer.byteLength(czech.openApp.label)<=32);assert.ok(Buffer.byteLength(czech.label)<=32);
   assert.ok(czech.openApp.label.startsWith('Český'));assert.equal(czech.openApp.label.includes('\ufffd'),false);
@@ -345,7 +346,7 @@ async function run() {
   assert.equal(contextBridge.calls.enumerations,0,'closed plugin settings cannot enumerate');
   assert.equal(await evaluate(`window.__settingsTest.calls.some(call=>call.target==='pkjs')`),false);
   await activitiesImage('activities-watch-closed-first-install');
-  await field('dark',true);await click('#save');await until(`document.getElementById('status').textContent==='Settings saved.'`,'closed plugin save');
+  await field('dark',true);await click('#save');await until(`document.getElementById('status').textContent==='✓ Saved'`,'closed plugin save');
   assert.equal(model.load(contextBridge.storage).dark,true,'settings save must work without a running watchapp');
   assert.equal(await evaluate(`window.__settingsTest.calls.some(call=>call.target==='pkjs')`),false,'closed save cannot require PKJS');
   await field('dark',false);await evaluate(`window.__settingsTest.emitReady('pkjs')`);
@@ -423,7 +424,7 @@ async function run() {
       assert.equal(await evaluate(`document.getElementById('editor').hidden`),false,'editor stays until the backend acknowledgement');
       assert.equal(await evaluate(`document.getElementById('editor-cancel').disabled`),true,'saving editor cannot be discarded before acknowledgement');
     }
-    await until(`document.getElementById('status').textContent==='Settings saved.'`,'one-click real-backend Weather save '+route);
+    await until(`document.getElementById('status').textContent==='✓ Saved'`,'one-click real-backend Weather save '+route);
     assert.equal(await evaluate(`window.__settingsTest.calls.filter(call=>call.type==='save_settings').at(-1).target`),route);
     const saved=model.load(contextBridge.storage).pins[0];assert.deepEqual(saved.openApp,{watchAppUuid:WEATHER_APP,label:'Weather'});
     assert.deepEqual(saved.reading,before.pins[0].reading);
@@ -446,6 +447,42 @@ async function run() {
   appChecks.push('one footer Save accepts the active Weather editor and survives full-page reload through closed-plugin and live-PKJS backends, separate Android stores and PKJS teardown');
   appChecks.push('active-editor validation and live-target save failure preserve inputs without writes or unsafe plugin fallback; retry waits for acknowledgement and Add/Edit never focus text automatically');
   assert.deepEqual({...contextTotals,enumerations:0},{enumerations:0,reads:0,subscriptions:0,actions:0,appMessages:0},'configuration must remain metadata-only without native HELLO');
+  // The actual archived page uses the phone locale. User labels and binding
+  // values stay untouched while the common Save lifecycle is translated.
+  await send('Page.addScriptToEvaluateOnNewDocument',{source:"Object.defineProperty(navigator,'languages',{get:()=>['cs-CZ']});Object.defineProperty(navigator,'language',{get:()=>'cs-CZ'});"});
+  await reopen({waitCatalogue:false});
+  await until(`document.documentElement.lang==='cs'&&!document.getElementById('dark').disabled`,'Czech page loaded');
+  assert.equal(await evaluate(`document.getElementById('save').textContent`),'Uložit');
+  assert.equal(await evaluate(`document.getElementById('status').textContent`),'Žádné změny k uložení.');
+  await send('Emulation.setDeviceMetricsOverride',{width:360,height:800,deviceScaleFactor:1,mobile:true});
+  await send('Emulation.setEmulatedMedia',{features:[{name:'prefers-color-scheme',value:'light'}]});
+  await evaluate('window.scrollTo(0,280)');
+  await image('overview-czech');appScreens.push('overview-czech.png');
+  await field('dark',!model.load(contextBridge.storage).dark);
+  assert.equal(await evaluate(`document.getElementById('status').textContent`),'Neuložené změny.');
+  await click('#save');await until(`document.getElementById('status').textContent==='✓ Uloženo'`,'Czech confirmed Save');
+  assert.equal(await evaluate(`document.getElementById('save').disabled`),true);
+  assert.equal(await evaluate('location.protocol'),'file:','Save keeps the actual settings page open');
+  await sleep(160);assert.equal(await evaluate(`document.getElementById('status').textContent`),'✓ Uloženo','confirmed indicator stays visible');
+  assert.ok(await evaluate('window.scrollY>0'),'Save cannot jump to the page top');
+  await image('saved-czech');appScreens.push('saved-czech.png');
+  const czechSaved=JSON.stringify(model.load(contextBridge.storage));await reopen({waitCatalogue:false});
+  assert.equal(JSON.stringify(model.load(contextBridge.storage)),czechSaved);
+  assert.equal(await evaluate(`document.getElementById('status').textContent`),'Žádné změny k uložení.');
+  await click('#pins>li:first-child button');await noAutomaticTextFocus('Czech reopened editor');
+  assert.equal(await evaluate(`document.getElementById('pin-label').value`),model.load(contextBridge.storage).pins[0].label,'locale cannot translate a saved user label');
+  await field('pin-label','','input');await click('#save');
+  assert.equal(await evaluate(`document.getElementById('status').textContent`),'Nepodařilo se uložit. Zkus to znovu.');
+  assert.ok(await evaluate(`document.getElementById('editor-error').textContent.includes('název položky')`),'owned validation feedback is translated');
+  await click('#editor-cancel');
+  assert.equal(await evaluate(`document.getElementById('status').textContent`),'Žádné změny k uložení.','Cancel removes dirty status with the discarded draft');
+  await send('Emulation.setDeviceMetricsOverride',{width:320,height:400,deviceScaleFactor:1,mobile:true});
+  await evaluate(`document.body.style.fontSize='32px';window.dispatchEvent(new Event('resize'));window.scrollTo(0,0)`);
+  await until(`document.getElementById('actions').getAttribute('data-flow')==='true'`,'large text Save controls use document flow');
+  assert.ok(await evaluate(`document.documentElement.scrollWidth<=innerWidth`),'large Czech text must not overflow the page');
+  await image('czech-large-text-small-viewport');appScreens.push('czech-large-text-small-viewport.png');
+  appChecks.push('English and Czech owned settings UI; persistent confirmed Save remains open without jumping to top; full reload reads exact choices and preserves user labels');
+  appChecks.push('Czech validation keeps the draft; Cancel clears its dirty state; doubled text at320px keeps the page bounded and Save actions in flow');
   assert.deepEqual(exceptions,[]);
   const result={result:'PASS',scope:'Chromium settings with an intercepted app-store XHR model, UI bridge fixtures and actual Dashboard source plugin/PKJS config handlers on separate official SDK API surfaces; focused saves also model separate Android native preferences and PKJS DOM storage/teardown. No real network, live phone, source/action invocation or app launch.',artifactBinding,checks:['mixed pin typed action+reading','exact instance binding','automatic toggle target/state arguments without duplicate entry','ordinary action fields remain required','on/off toggle property','pin reorder','confirmed save writes through running PKJS','late catalogue preserves draft','uncertain save readback','load failure disables editing','retry','short dark viewport no overflow','Find phone never probed','closed first install explains discovery with Music visible','closed settings save through actual plugin handler without PKJS','closed settings read actual public metadata cache without enumeration','PKJS target discovers inactive installed providers','late PKJS readiness preserves unsaved settings','discovery failure preserves provider choices and shows retry','current SDK targets detect watchapp closure without a shutdown event','older SDK missing targets and PKJS rejection use one bounded cache fallback','stale cached reply cannot replace newer live discovery','both settings/catalogue reply orders preserve priority and visibility','no source reads, subscriptions, actions or native messages',...appChecks],reopenedWeather,appSearchRequests:searched,contextCalls:contextTotals,screens:['overview-light.png','pin-editor.png','overview-dark-small.png','activities-watch-closed-first-install.png','activities-live-discovery.png','activities-watch-closed-cache.png','activities-discovery-error.png',...appScreens]};fs.writeFileSync(path.join(output,'validation.json'),JSON.stringify(result,null,2)+'\n');console.log(JSON.stringify(result,null,2));
 }

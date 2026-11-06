@@ -1,0 +1,801 @@
+{
+  "result": "PASS",
+  "version": "0.5.0",
+  "scope": "Real native Emery QEMU UI and AppMessage requests with an explicit fictional protocol peer; no phone JavaScript, live plugins, real app launches or physical watch.",
+  "focusedNotificationsOnly": false,
+  "focusedUxOnly": false,
+  "focusedReliabilityOnly": false,
+  "pausedMediaReproduction": false,
+  "focusedActivitiesOnly": false,
+  "focusedStartupThemeOnly": true,
+  "candidatePbwSha256": "da75050600397164144ec652da583e0bcb8724a1ea0a7585c2a45c329160e9f3",
+  "nativeOnlyPbwSha256": "8abf19f5930d263b45a172c649349f920da6bb23e6be79b3fbf38cdb6cb17576",
+  "nativePayloadSha256": {
+    "emery/app_resources.pbpack": "e44eec0d4a2014781f4fd379e61a9f5b13fb6d0e8e80379113cd818aec807d29",
+    "emery/manifest.json": "d980a7a03a3a877e135c29823045a154d07daaf209da57a9de6f11432d0e3dd8",
+    "emery/pebble-app.bin": "35c730b787bebd4dadf7ad606363af31d212605022ad6ce8c972b898c7dc5388"
+  },
+  "phoneJavascriptExecuted": false,
+  "stateDirectory": "/tmp/dashboard-theme-050-final-K3HgKS",
+  "freshIsolatedFlash": true,
+  "session": 771863490,
+  "checks": [
+    {
+      "check": "Fresh isolated first launch defaults to light before receiving any phone frame, retaining the first-use guide",
+      "passed": true
+    },
+    {
+      "check": "First-use native button guide explains controls; dismissal consumes Select without dispatching an action or app launch",
+      "passed": true
+    },
+    {
+      "check": "First-use guide dismissal persists across a native app restart; ordinary navigation works immediately and dispatches no action",
+      "passed": true
+    },
+    {
+      "check": "Confirmed dark and light themes survive process relaunch with all phone frames withheld, six-second loading timeout and actual stock-debounced offline startup",
+      "passed": true,
+      "darkRestart": {
+        "previousConnectedSession": 761639837,
+        "newConnectedSession": 762491777,
+        "online": true,
+        "phoneFramesSent": 0
+      },
+      "lightRestart": {
+        "previousConnectedSession": 762491777,
+        "newConnectedSession": 777106310,
+        "online": true,
+        "phoneFramesSent": 0
+      },
+      "lightOffline": {
+        "previousConnectedSession": 777106310,
+        "newConnectedSession": null,
+        "online": false,
+        "phoneFramesSent": 0
+      },
+      "darkOffline": {
+        "previousConnectedSession": 775926761,
+        "newConnectedSession": null,
+        "online": false,
+        "phoneFramesSent": 0
+      },
+      "disconnectWaitSecondsEach": 26
+    },
+    {
+      "check": "A wrong-request frame cannot change theme; first accepted snapshots switch dark to light and light to dark, and the new confirmed theme persists",
+      "passed": true
+    },
+    {
+      "check": "Guide dismissal remains saved, connected restarts use fresh native sessions and no restored selected token; no action or app-open replay occurs",
+      "passed": true
+    }
+  ],
+  "captures": [
+    {
+      "name": "startup-first-ever-default-light-guide",
+      "file": "startup-first-ever-default-light-guide.png",
+      "sha256": "e94e61195a424f0a9175f9fe9bd65f792ce77f70dcb5633020a4c1ede2025ee7",
+      "rgbSha256": "971007a780638005b11025e0c6c820dd52eb4c061eeae80a1749695bcc0e6769",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "first-use-button-guide",
+      "file": "first-use-button-guide.png",
+      "sha256": "c90b5176e477a3ad2e44fbbb0db0722cb0cd3b17e971c3880775cf6d235f7a43",
+      "rgbSha256": "7fa6f9add4e109449f96bfcef3969a96f57f43d5d408b5e1a135e4c9fdf11d83",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "first-use-guide-dismissed",
+      "file": "first-use-guide-dismissed.png",
+      "sha256": "dc0b15f36cbcb1e21b48c8e90daa0d46c51575b542cabb26581a7b819b77b736",
+      "rgbSha256": "4dca4633b1b331e4aace8a2161744d9dde02877462cabbab04cb3fda477230f7",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "guide-dismissed-after-restart",
+      "file": "guide-dismissed-after-restart.png",
+      "sha256": "36041b8437ee5821b6697266fce0aa85030b400a972b6f72fbe59098bbb7be1d",
+      "rgbSha256": "9819e8f091d8054f0bf0aa3cbfe0cfa815bdc21358efade9ba78b09eafd1aa7a",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "activities-title-count-clock",
+      "file": "activities-title-count-clock.png",
+      "sha256": "b5418a8b8f6d1d1b417cad6e2a212351f2700fc9aaec02d6d6853c5e7f30d47d",
+      "rgbSha256": "e0fe22aecbde755df9c20877ce2214cc78e82fe74b97903db6c2a308de7136da",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "pinned-title-count-clock",
+      "file": "pinned-title-count-clock.png",
+      "sha256": "757e92d308e8d45d12fb58acd773d3590cc704f00706e900e9835f2d90d9091a",
+      "rgbSha256": "a08e3035a7652d3c2eadcb686469ede5c638752dfe46f673edd5191ea3549e0b",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "startup-dark-loading-without-phone-frame",
+      "file": "startup-dark-loading-without-phone-frame.png",
+      "sha256": "fa60707e1ef0fdb68d1c1efe98653d08e6b8ba45b27999a40fb5b7848418db4c",
+      "rgbSha256": "e759df81319400cbc681ebfbfee06364dbee07b2f932440f62b250a4d0d84a92",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "startup-dark-rejects-wrong-request-light",
+      "file": "startup-dark-rejects-wrong-request-light.png",
+      "sha256": "fa60707e1ef0fdb68d1c1efe98653d08e6b8ba45b27999a40fb5b7848418db4c",
+      "rgbSha256": "e759df81319400cbc681ebfbfee06364dbee07b2f932440f62b250a4d0d84a92",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "startup-dark-loading-timeout",
+      "file": "startup-dark-loading-timeout.png",
+      "sha256": "5d72bfca6fe7c3ba9aba4fc2c2a590af2711dbe977fc267d3495fe68948c1aff",
+      "rgbSha256": "3017b5a4e1ef7cfd8a075534abba48b5e1a1876afdc3ae1326e8524051d2a885",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "startup-first-valid-light-snapshot",
+      "file": "startup-first-valid-light-snapshot.png",
+      "sha256": "befab0631067cb6fa8334b2709664b237b9e1ffcc55b619c118fa9a084be25f9",
+      "rgbSha256": "76c92ece71f369213276156d253f0fed95af91993eda5c1261c02554d654aeff",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "startup-light-loading-without-phone-frame",
+      "file": "startup-light-loading-without-phone-frame.png",
+      "sha256": "2d179462c0c51e552e30f56d683baab71039fb6563a49f6898868c64314e29c0",
+      "rgbSha256": "07ea3edf16193c468f55633cf117f438b09c502b97b8d5f39cff4261d11d208b",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "startup-light-loading-timeout",
+      "file": "startup-light-loading-timeout.png",
+      "sha256": "80d3ae79a2598887b3f940101af2c36c81676ec3cb9e07543df5805dfe04e604",
+      "rgbSha256": "3df8ff4cd633a9fc1d3184aa99cf613ca3bd982a1d6d994994bbb85ab8f328b3",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "startup-light-offline-relaunch",
+      "file": "startup-light-offline-relaunch.png",
+      "sha256": "cbeb3b727569fe4d868efed8e1a4e66b907546a38ba16e61a3c2c3777583b142",
+      "rgbSha256": "4208e157965fbb2497193e397b69a177cd23ccc20393b77e236864195f3814b8",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "startup-first-valid-dark-after-reconnect",
+      "file": "startup-first-valid-dark-after-reconnect.png",
+      "sha256": "a0836efe823429144d62385d98b3791d25d491cf343652ff536311f116bada18",
+      "rgbSha256": "925d5eca585c702f76f3263c31d63a13bd13adb82330234bde555492cf03749d",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "startup-dark-offline-relaunch",
+      "file": "startup-dark-offline-relaunch.png",
+      "sha256": "750e58b77620fa9bfe179e8d9996ca5085cb5ac27f50fafd77a7312d95725639",
+      "rgbSha256": "72f7d13ca08d0acb2a5ba04707bd8a800839d493f61da2bc9d080fcef31cb148",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    }
+  ],
+  "themePixelChecks": [
+    {
+      "capture": "startup-first-ever-default-light-guide.png",
+      "dark": false,
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "backgroundPoints": [
+        [
+          1,
+          10
+        ],
+        [
+          1,
+          80
+        ],
+        [
+          1,
+          225
+        ],
+        [
+          164,
+          225
+        ]
+      ],
+      "sidebarPoint": [
+        190,
+        10
+      ],
+      "sidebarColor": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "capture": "startup-dark-loading-without-phone-frame.png",
+      "dark": true,
+      "background": [
+        0,
+        0,
+        0
+      ],
+      "backgroundPoints": [
+        [
+          1,
+          10
+        ],
+        [
+          1,
+          80
+        ],
+        [
+          1,
+          225
+        ],
+        [
+          164,
+          225
+        ]
+      ],
+      "sidebarPoint": [
+        190,
+        10
+      ],
+      "sidebarColor": [
+        255,
+        255,
+        255
+      ]
+    },
+    {
+      "capture": "startup-dark-rejects-wrong-request-light.png",
+      "dark": true,
+      "background": [
+        0,
+        0,
+        0
+      ],
+      "backgroundPoints": [
+        [
+          1,
+          10
+        ],
+        [
+          1,
+          80
+        ],
+        [
+          1,
+          225
+        ],
+        [
+          164,
+          225
+        ]
+      ],
+      "sidebarPoint": [
+        190,
+        10
+      ],
+      "sidebarColor": [
+        255,
+        255,
+        255
+      ]
+    },
+    {
+      "capture": "startup-dark-loading-timeout.png",
+      "dark": true,
+      "background": [
+        0,
+        0,
+        0
+      ],
+      "backgroundPoints": [
+        [
+          1,
+          10
+        ],
+        [
+          1,
+          80
+        ],
+        [
+          1,
+          225
+        ],
+        [
+          164,
+          225
+        ]
+      ],
+      "sidebarPoint": [
+        190,
+        10
+      ],
+      "sidebarColor": [
+        255,
+        255,
+        255
+      ]
+    },
+    {
+      "capture": "startup-first-valid-light-snapshot.png",
+      "dark": false,
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "backgroundPoints": [
+        [
+          1,
+          10
+        ],
+        [
+          1,
+          80
+        ],
+        [
+          1,
+          225
+        ],
+        [
+          164,
+          225
+        ]
+      ],
+      "sidebarPoint": [
+        190,
+        10
+      ],
+      "sidebarColor": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "capture": "startup-light-loading-without-phone-frame.png",
+      "dark": false,
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "backgroundPoints": [
+        [
+          1,
+          10
+        ],
+        [
+          1,
+          80
+        ],
+        [
+          1,
+          225
+        ],
+        [
+          164,
+          225
+        ]
+      ],
+      "sidebarPoint": [
+        190,
+        10
+      ],
+      "sidebarColor": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "capture": "startup-light-loading-timeout.png",
+      "dark": false,
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "backgroundPoints": [
+        [
+          1,
+          10
+        ],
+        [
+          1,
+          80
+        ],
+        [
+          1,
+          225
+        ],
+        [
+          164,
+          225
+        ]
+      ],
+      "sidebarPoint": [
+        190,
+        10
+      ],
+      "sidebarColor": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "capture": "startup-light-offline-relaunch.png",
+      "dark": false,
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "backgroundPoints": [
+        [
+          1,
+          10
+        ],
+        [
+          1,
+          80
+        ],
+        [
+          1,
+          225
+        ],
+        [
+          164,
+          225
+        ]
+      ],
+      "sidebarPoint": [
+        190,
+        10
+      ],
+      "sidebarColor": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "capture": "startup-first-valid-dark-after-reconnect.png",
+      "dark": true,
+      "background": [
+        0,
+        0,
+        0
+      ],
+      "backgroundPoints": [
+        [
+          1,
+          10
+        ],
+        [
+          1,
+          80
+        ],
+        [
+          1,
+          225
+        ],
+        [
+          164,
+          225
+        ]
+      ],
+      "sidebarPoint": [
+        190,
+        10
+      ],
+      "sidebarColor": [
+        255,
+        255,
+        255
+      ]
+    },
+    {
+      "capture": "startup-dark-offline-relaunch.png",
+      "dark": true,
+      "background": [
+        0,
+        0,
+        0
+      ],
+      "backgroundPoints": [
+        [
+          1,
+          10
+        ],
+        [
+          1,
+          80
+        ],
+        [
+          1,
+          225
+        ],
+        [
+          164,
+          225
+        ]
+      ],
+      "sidebarPoint": [
+        190,
+        10
+      ],
+      "sidebarColor": [
+        255,
+        255,
+        255
+      ]
+    }
+  ],
+  "requests": [
+    {
+      "4000": 1,
+      "4001": 747484059,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0
+    },
+    {
+      "4000": 7,
+      "4001": 747484059,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 1,
+      "4006": 1
+    },
+    {
+      "4000": 1,
+      "4001": 761639837,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0
+    },
+    {
+      "4000": 7,
+      "4001": 761639837,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 1,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 761639837,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 1,
+      "4005": 3,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 761639837,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 1,
+      "4006": 1
+    },
+    {
+      "4000": 2,
+      "4001": 761639837,
+      "4002": 2,
+      "4003": 1,
+      "4004": 0,
+      "4012": 0
+    },
+    {
+      "4000": 7,
+      "4001": 761639837,
+      "4002": 2,
+      "4003": 1,
+      "4004": 0,
+      "4012": 0,
+      "4005": 1,
+      "4006": 1
+    },
+    {
+      "4000": 2,
+      "4001": 761639837,
+      "4002": 3,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 1,
+      "4006": 0
+    },
+    {
+      "4000": 7,
+      "4001": 761639837,
+      "4002": 3,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 1,
+      "4006": 1
+    },
+    {
+      "4000": 2,
+      "4001": 761639837,
+      "4002": 4,
+      "4003": 2,
+      "4004": 0,
+      "4012": 0
+    },
+    {
+      "4000": 7,
+      "4001": 761639837,
+      "4002": 4,
+      "4003": 2,
+      "4004": 0,
+      "4012": 0,
+      "4005": 4,
+      "4006": 1
+    },
+    {
+      "4000": 2,
+      "4001": 761639837,
+      "4002": 5,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 1,
+      "4006": 0
+    },
+    {
+      "4000": 7,
+      "4001": 761639837,
+      "4002": 5,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 1,
+      "4006": 1
+    },
+    {
+      "4000": 1,
+      "4001": 762491777,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0
+    },
+    {
+      "4000": 7,
+      "4001": 762491777,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 1,
+      "4006": 1
+    },
+    {
+      "4000": 1,
+      "4001": 777106310,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0
+    },
+    {
+      "4000": 1,
+      "4001": 775926761,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0
+    },
+    {
+      "4000": 1,
+      "4001": 775926761,
+      "4002": 2,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0
+    },
+    {
+      "4000": 7,
+      "4001": 775926761,
+      "4002": 2,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 1,
+      "4006": 1
+    },
+    {
+      "4000": 1,
+      "4001": 771863490,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0
+    }
+  ],
+  "mockActions": [],
+  "mockAppOpens": [],
+  "visualReview": {
+    "reviewed": false
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "version": "0.5.0",
+  "status": "local candidate; not pushed or published",
+  "checkedAt": "2026-11-06T16:14:16.576051+00:00",
+  "pbwSha256": "da75050600397164144ec652da583e0bcb8724a1ea0a7585c2a45c329160e9f3",
+  "deviceEvidence": "Automated portable JS/C, actual archived PBW execution and settings in Chromium, native Emery QEMU with a fictional phone peer. No physical watch or live-phone verification.",
+  "preserved": [
+    "app UUID",
+    "DSH1 message keys/wire",
+    "settings v1 and existing preferences",
+    "native theme keys",
+    "Snapshot activity/notification/two-pin composition",
+    "activity source identity and validity",
+    "Timer control remains deferred"
+  ],
+  "checks": {
+    "portable": "npm test passed",
+    "generatedConfig": "node scripts/generate-config.cjs --check passed",
+    "artifact": "npm run check:artifact passed",
+    "packagedRuntime": "packaged-runtime.json",
+    "settings": "settings/validation.json",
+    "settingsChecks": 36,
+    "settingsScreens": 14,
+    "nativeUx": "native-ux/emulator.json",
+    "nativeUxChecks": 9,
+    "nativeUxCaptures": 18,
+    "nativeTheme": "native-theme/emulator.json",
+    "nativeThemeChecks": 6,
+    "nativeThemeCaptures": 15
+  },
+  "footprint": {
+    "nativeRamBytes": 33147,
+    "freeHeapBytes": 97925,
+    "resourcesBytes": 71219
+  },
+  "phoneDesign": {
+    "languages": [
+      "en",
+      "cs"
+    ],
+    "otherLocaleFallback": "en",
+    "sourceAndUserLabels": "not translated",
+    "maxPageWidthCssPx": 512,
+    "lightAccent": "#076b65",
+    "darkAccent": "#83d7ca",
+    "lightPrimaryContrast": 6.36,
+    "darkPrimaryContrast": 9.57,
+    "knownValidationFailure": "draft retained",
+    "uncertainWrite": "Save not confirmed with explicit readback/retry",
+    "saveOutcome": "primary bundled page stays open; legacy return-URL fallback still closes"
+  },
+  "deviceChecksPending": [
+    "real-phone WebView/storage/permission behavior",
+    "hardware readability and button timing",
+    "physical vibration and battery"
+  ]
+}

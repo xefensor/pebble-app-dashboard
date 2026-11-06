@@ -1,79 +1,60 @@
-# Dashboard UI/UX alignment handoff
+# Dashboard UI/UX alignment
 
-Reviewed baseline: Dashboard 0.4.3; repository HEAD
-`61a38a981ba060b556feb7f71de41242a64eed67` on 2026-11-06.
+Dashboard **0.5.0 is a local implementation candidate**. It has not been pushed
+or published. The earlier reviewed baseline was 0.4.3 at
+`61a38a981ba060b556feb7f71de41242a64eed67`; published artifacts remain unchanged.
 
-## Canonical design and status
+## Shared reference
 
-The agreed standard is maintained in the local `xoce` website checkout at
-`src/pages/docs/design/pebble-ui-system.md`. When that checkout's preview is
-running, read [the unified Pebble UI/UX standard](http://127.0.0.1:4321/docs/design/pebble-ui-system/).
-The website has no public repository or deployment yet; this is a local reference.
+The canonical design lives in the sibling local XOCE checkout at
+`xoce/src/pages/docs/design/pebble-ui-system.md`, with a local preview at
+[the Pebble UI/UX standard](http://127.0.0.1:4321/docs/design/pebble-ui-system/).
+The website is not publicly deployed. Keep common design rules there and
+Dashboard-specific ownership and evidence here.
 
-This handoff records **approved design targets, with implementation pending**.
-It does not claim that a released app follows the complete standard. Shared
-visual roles use neutral light/dark surfaces and a restrained accent per app.
-Exact accent colours and final pixel metrics still need reviewed native and
-phone previews. Website colours and web fonts are a separate identity.
+## Implemented in the local candidate
 
-## Current implementation
+- The native title/context sits left and local 12/24-hour time stays right,
+  including collections, status, app-opening hints and the first-use guide.
+  A compact two-line left header fits inside the existing band. Snapshot's
+  activity, notification and two pins keep their original geometry.
+- Fredoka numbers and Roboto Condensed body roles retain strong inverted
+  selection. An 18px status/count font keeps essential context readable.
+- Confirmations name action and target, start on **Cancel**, and require Down
+  then Select for Run action. Back cancels. Exact token/version/request and
+  stale-selection safeguards remain unchanged.
+- The phone page uses a 512px neutral light/dark shell with teal
+  `#076b65` / `#83d7ca` accents, consistent cards and 44px targets/48px Save.
+- Owned interface copy supports English and Czech using the phone locale;
+  other locales fall back to English. Source names, saved labels, instances,
+  arguments and exact app destinations remain their original data.
+- Modern bundled settings stay open after a confirmed Save. The persistent
+  inline **✓ Saved** changes to **Unsaved changes** after editing. Save includes
+  an open pin editor and is disabled when the whole draft is unchanged.
+- Failed validation keeps the editor and draft. Uncertain writes keep explicit
+  Save not confirmed / Reload saved recovery; no false rollback or silent retry.
+  A confirmed phone write does not claim watch delivery.
+- Editor cancellation restores the correct draft status. A completed Save keeps
+  page scroll and returns focus only to an existing button if its editor closes.
+  Ordinary fields never receive automatic focus. Larger text/short viewports
+  move the action area into page flow and keep reorder controls bounded.
 
-- The native app already has light/dark appearance, Fredoka numeric identity,
-  Roboto Condensed interface text, inverted selection and a contextual
-  right-side action bar. The confirmed theme is restored before the first
-  frame, without retaining private activity content.
-- Snapshot contains one activity, one notification and two pins. Select
-  executes a supported action; hold Select opens the selected item's optional
-  app. Snapshot holds Up/Down open Activities/Pinned; Back restores context.
-- The header shows time on Snapshot, but collection position replaces it in
-  lists and status/app hints can replace the whole header.
-- The primary bundled phone settings page already remains open after a
-  confirmed Save. It gathers an open pin editor, preserves failed drafts, and
-  checks exact saved choices. The legacy return-URL path still closes.
+## Preserved behaviour and boundaries
 
-See [implementation contract](IMPLEMENTATION.md), `src/c/main.c`,
-`src/pkjs/settings-page.js`, and [app-picker/storage notes](APP-PICKER.md).
+Snapshot density, activity ordering/privacy, native notifications shortcut,
+commands and instance bindings retain their existing semantics. Timer
+Pause/Resume remains deferred. Activity source identity and validity are not
+renewed by UI changes. No Activities/Core API, firmware fork, global settings
+service, app UUID, DSH1 key or saved settings schema was changed.
 
-## Pending work
+The legacy return-URL settings fallback still closes to submit its result.
+Only the supported modern bundled page can provide the documented in-page
+persistence confirmation. Do not imply that the legacy path gained that bridge.
 
-- Align native type roles, baselines, margins, action icons and semantic
-  feedback with the common watch pattern. Keep title left/time right visible;
-  relocate collection count and relevant status/app hints without obscuring
-  either pin row or a critical action. Exact geometry needs native previews.
-- Preserve Snapshot density, selection by identity and the inert missing-target
-  state. Do not add enlarged copies of read-only items or make Timer
-  Pause/Resume available; that control remains deferred.
-- Use the shared confirmation composition: explicit action and exact target,
-  safe initial choice, and Back returning to the originating selection.
-- Align phone spacing, component vocabulary, visibility/order rows, named
-  app selection, disclosed advanced fields and translation structure. Keep
-  Dashboard's independent activity order, pin bindings and privacy.
-- Standardize the Save/status presentation on the supported stay-open path:
-  Saving… → ✓ Saved; edits → Unsaved changes; a known failed write → Couldn’t save. Try
-  again. Retain the existing confirmed-writer protocol and exact acknowledgements.
-  Saved stays visible until edited, and unchanged Save is disabled.
-- An uncertain write or timeout shows Save not confirmed with explicit Reload
-  saved or retry, not a known-failure or Saved state. Do not retry silently. A phone
-  persistence confirmation must not claim watch delivery or source-command
-  success. Document any remaining legacy path limitation explicitly instead
-  of pretending that styling makes it stay open.
+## Evidence and remaining device checks
 
-## Acceptance checks for the implementation
-
-- Exercise Snapshot, collections, controls, first-use guide, empty/offline
-  states, unavailable readings, app hints and failures in both themes. The
-  clock, selected target, pin values and recovery actions remain readable.
-- Reorder or remove the selected live item while a button is held. Preserve
-  identity and cancellation; a disappearing target cannot redirect a press.
-- Save with an open pin editor, remain on the page, edit/save again, close,
-  reopen and restart the runtime. Verify the exact pin app/read/action and
-  activity order, including a native Weather destination.
-- Retain the separate Android DOM/native-store model and runtime/plugin
-  topology-handoff checks. A shared in-memory store cannot prove this workflow.
-  Exercise load failure, validation, timeout and late responses without losing
-  a draft or falsely reporting success.
-- Check phone 320/360px widths, enlarged text and keyboard/short-viewport
-  layouts. No ordinary field receives automatic focus, and the Save area
-  never covers the editor or final help text.
-- Follow packaged/native/settings validation for changed code. Distinguish
-  browser, emulator and device evidence, and preserve published releases.
+See [0.5.0 validation](qa/0.5.0/VALIDATION.md) for actual packaged browser,
+portable/native and emulator results. Automated stock-SDK/isolated storage
+models are distinct from real-phone WebView permissions and physical-watch
+readability, button timing, vibration and battery measurements. Those device
+checks remain explicitly unverified.

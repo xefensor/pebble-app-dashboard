@@ -1,0 +1,18 @@
+
+> pebble-app-dashboard@0.5.0 test
+> node --test tests/*.test.js && python3 scripts/test-native.py
+
+✔ tests/app-picker.test.js (55.018352ms)
+✔ tests/phone.test.js (141.971693ms)
+✔ tests/protocol.test.js (48.042116ms)
+✔ tests/settings.test.js (53.827695ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 154.443972
+native model: 16 binary fixtures; malformed, stale, selection, privacy, sparse controls and clock checks passed
+native deadline: 59 unchanged updates retain one timer; expiry, correction, replacement, cancellation and registration retry passed

@@ -1,0 +1,178 @@
+{
+  "result": "PASS",
+  "scope": "Chromium settings with an intercepted app-store XHR model, UI bridge fixtures and actual Dashboard source plugin/PKJS config handlers on separate official SDK API surfaces; focused saves also model separate Android native preferences and PKJS DOM storage/teardown. No real network, live phone, source/action invocation or app launch.",
+  "artifactBinding": {
+    "configOrigin": "generated repository config.html"
+  },
+  "checks": [
+    "mixed pin typed action+reading",
+    "exact instance binding",
+    "automatic toggle target/state arguments without duplicate entry",
+    "ordinary action fields remain required",
+    "on/off toggle property",
+    "pin reorder",
+    "confirmed save writes through running PKJS",
+    "late catalogue preserves draft",
+    "uncertain save readback",
+    "load failure disables editing",
+    "retry",
+    "short dark viewport no overflow",
+    "Find phone never probed",
+    "closed first install explains discovery with Music visible",
+    "closed settings save through actual plugin handler without PKJS",
+    "closed settings read actual public metadata cache without enumeration",
+    "PKJS target discovers inactive installed providers",
+    "late PKJS readiness preserves unsaved settings",
+    "discovery failure preserves provider choices and shows retry",
+    "current SDK targets detect watchapp closure without a shutdown event",
+    "older SDK missing targets and PKJS rejection use one bounded cache fallback",
+    "stale cached reply cannot replace newer live discovery",
+    "both settings/catalogue reply orders preserve priority and visibility",
+    "no source reads, subscriptions, actions or native messages",
+    "PebbleOS Weather destination uses its verified UUID offline; adding or clearing Hold preserves the existing Weather reading, tap action and label",
+    "native app picker saves a Weather-only pin without UUID entry and suggests an untouched name/icon",
+    "saved unknown UUID and custom Czech label survive reopen; capability edits and Cancel cannot retarget or persist it",
+    "store search is explicit; offline, empty, delayed plugin metadata and stale search replies preserve the selected app and draft label",
+    "late search from a cancelled editor cannot populate or select an app in a new pin",
+    "explicit Do nothing removes only openApp; exact reading, toggle, confirmation and advanced action arguments survive",
+    "compatible store results are bounded to 15, duplicate app names bind exact UUIDs and Czech default labels stay within 32 UTF8 bytes",
+    "all browser app searches use intercepted official public-store requests; no real network, credentials validation or app launch occurs",
+    "one footer Save accepts the active Weather editor and survives full-page reload through closed-plugin and live-PKJS backends, separate Android stores and PKJS teardown",
+    "active-editor validation and live-target save failure preserve inputs without writes or unsafe plugin fallback; retry waits for acknowledgement and Add/Edit never focus text automatically",
+    "English and Czech owned settings UI; persistent confirmed Save remains open without jumping to top; full reload reads exact choices and preserves user labels",
+    "Czech validation keeps the draft; Cancel clears its dirty state; doubled text at320px keeps the page bounded and Save actions in flow"
+  ],
+  "reopenedWeather": [
+    {
+      "route": "plugin",
+      "fullPageReload": true,
+      "androidSeparatePrefsAndPkjsDom": true,
+      "pkjsTeardownTested": false,
+      "savedPin": {
+        "id": "weather",
+        "label": "Weather",
+        "icon": "weather",
+        "reading": {
+          "category": "weather",
+          "item": "location",
+          "property": "temperature",
+          "index": 0
+        },
+        "openApp": {
+          "watchAppUuid": "61b22bc8-1e29-460d-a236-3fe409a439ff",
+          "label": "Weather"
+        }
+      },
+      "reopenedEditor": {
+        "target": "61b22bc8-1e29-460d-a236-3fe409a439ff",
+        "label": "Weather",
+        "uuid": "61b22bc8-1e29-460d-a236-3fe409a439ff"
+      },
+      "lateMetadataPreserved": true,
+      "focusAfterReopen": {
+        "id": "",
+        "tag": "BODY",
+        "textFocused": false
+      }
+    },
+    {
+      "route": "pkjs",
+      "fullPageReload": true,
+      "androidSeparatePrefsAndPkjsDom": true,
+      "pkjsTeardownTested": true,
+      "savedPin": {
+        "id": "weather",
+        "label": "Weather draft",
+        "icon": "weather",
+        "reading": {
+          "category": "weather",
+          "item": "location",
+          "property": "temperature",
+          "index": 0
+        },
+        "openApp": {
+          "watchAppUuid": "61b22bc8-1e29-460d-a236-3fe409a439ff",
+          "label": "Weather"
+        }
+      },
+      "reopenedEditor": {
+        "target": "61b22bc8-1e29-460d-a236-3fe409a439ff",
+        "label": "Weather",
+        "uuid": "61b22bc8-1e29-460d-a236-3fe409a439ff"
+      },
+      "lateMetadataPreserved": true,
+      "focusAfterReopen": {
+        "id": "",
+        "tag": "BODY",
+        "textFocused": false
+      }
+    }
+  ],
+  "appSearchRequests": [
+    {
+      "method": "GET",
+      "host": "gm3s9tryo4-dsn.algolia.net",
+      "path": "/1/indexes/apps",
+      "query": "lights",
+      "limit": "15"
+    },
+    {
+      "method": "GET",
+      "host": "gm3s9tryo4-dsn.algolia.net",
+      "path": "/1/indexes/apps",
+      "query": "lights",
+      "limit": "15"
+    },
+    {
+      "method": "GET",
+      "host": "gm3s9tryo4-dsn.algolia.net",
+      "path": "/1/indexes/apps",
+      "query": "lights",
+      "limit": "15"
+    },
+    {
+      "method": "GET",
+      "host": "gm3s9tryo4-dsn.algolia.net",
+      "path": "/1/indexes/apps",
+      "query": "timer",
+      "limit": "15"
+    },
+    {
+      "method": "GET",
+      "host": "gm3s9tryo4-dsn.algolia.net",
+      "path": "/1/indexes/apps",
+      "query": "timer",
+      "limit": "15"
+    },
+    {
+      "method": "GET",
+      "host": "gm3s9tryo4-dsn.algolia.net",
+      "path": "/1/indexes/apps",
+      "query": "Český časovač",
+      "limit": "15"
+    }
+  ],
+  "contextCalls": {
+    "enumerations": 6,
+    "reads": 0,
+    "subscriptions": 0,
+    "actions": 0,
+    "appMessages": 0
+  },
+  "screens": [
+    "overview-light.png",
+    "pin-editor.png",
+    "overview-dark-small.png",
+    "activities-watch-closed-first-install.png",
+    "activities-live-discovery.png",
+    "activities-watch-closed-cache.png",
+    "activities-discovery-error.png",
+    "pin-app-saved-search.png",
+    "pin-app-store-results.png",
+    "pin-app-store-choice.png",
+    "weather-after-save-reopen.png",
+    "overview-czech.png",
+    "saved-czech.png",
+    "czech-large-text-small-viewport.png"
+  ]
+}

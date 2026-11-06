@@ -230,6 +230,9 @@ def run(pbw,output,expected_sha256=None,notifications_only=False,ux_only=False,r
         button('Down');await_condition(lambda:peer.view.get(key('DB_TOKEN'))==3,'First-use guide reappeared after dismissal/restart')
         assert counts()==before
         capture('guide-dismissed-after-restart',.1);button('Up')
+        button('Up',.75);await_condition(lambda:active_mode()==1,'Activities header view missing');capture('activities-title-count-clock',.1)
+        snapshot_home();button('Down',.75);await_condition(lambda:active_mode()==2,'Pinned header view missing');capture('pinned-title-count-clock',.1)
+        snapshot_home()
         proofs.append({'check':'First-use guide dismissal persists across a native app restart; ordinary navigation works immediately and dispatches no action','passed':True})
     def ux_checks():
         snapshot_home()
@@ -291,10 +294,12 @@ def run(pbw,output,expected_sha256=None,notifications_only=False,ux_only=False,r
         assert not peer.actions[-1].get(key('DB_CONFIRM'))
         button('Back');assert len(peer.actions)==before+1
         button('Select');await_condition(lambda:len(peer.actions)==before+2,'Confirmation retry missing')
-        request_id=peer.actions[-1][key('DB_REQUEST')];button('Select')
-        await_condition(lambda:len(peer.actions)==before+3,'Confirmation acceptance missing')
+        request_id=peer.actions[-1][key('DB_REQUEST')];button('Select');assert len(peer.actions)==before+2
+        button('Select');await_condition(lambda:len(peer.actions)==before+3,'Safe confirmation retry missing')
+        request_id=peer.actions[-1][key('DB_REQUEST')];button('Down');capture('confirmation-explicit-run-choice',.1);button('Select')
+        await_condition(lambda:len(peer.actions)==before+4,'Confirmation acceptance missing')
         assert peer.actions[-1][key('DB_CONFIRM')]==1 and peer.actions[-1][key('DB_REQUEST')]==request_id and peer.actions[-1][key('DB_TOKEN')]==7
-        proofs.append({'check':'Confirmation identifies Find phone and its action; Back cancels and Select confirms only the original bound request','passed':True})
+        proofs.append({'check':'Confirmation identifies Find phone and its action; safe Keep is initial, Back/Select cancel, and explicit Down then Select confirms only the original bound request','passed':True})
         peer.action_behavior='success';time.sleep(2.1)
         for fixture_name,expected in [('generic-controls',1),('generic-sparse-controls',2),('generic-single-control',1)]:
             snapshot_home()

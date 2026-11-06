@@ -5,13 +5,44 @@ The approved Snapshot and contextual input rules in README.md take precedence
 over older suite drafts. Timer commands remain deferred; Back stays ordinary.
 No sibling app, firmware or mobile-app changes are required.
 
+## Shared UI in local 0.5.0
+
+The DSH1 wire format, settings v1 and native persistence keys are unchanged.
+The native header retains a right-aligned local clock in every view, including
+the first-use guide. Its existing band can use a small context title and an
+18px count/status on the left; no new strip covers the activity or pin rows.
+The 18px body font is loaded lazily with the existing fonts. Minute ticks keep
+the guide clock current; no animation or high-frequency polling was added.
+
+A confirmation starts with Cancel selected. Up selects Cancel, Down selects
+Run action, and Select either cancels or confirms the original request/token/
+version. The existing stale-selection guards still withdraw an invalid target.
+
+The phone page keeps the shared 512px neutral shell and Dashboard teal accent.
+`settings-i18n.js` provides a self-contained English/Czech copy factory embedded
+in both generated page paths. Static interface copy is translated before saved
+content loads; controller-owned strings use explicit translations. Plugin names,
+provider arguments, store results and user labels are never rewritten by locale.
+Unsupported phone languages use English; no 17-language coverage is claimed.
+
+The modern bundled page keeps settings open, uses one inline Saving… / ✓ Saved /
+Unsaved changes status, and disables Save when the complete draft is unchanged.
+A known local validation failure keeps the editor and says Couldn’t save; a write
+with an uncertain outcome retains Save not confirmed / Reload saved recovery.
+Only an exact persistence acknowledgment produces ✓ Saved, separately from watch
+delivery. A confirmed Save closes only the nested editor and preserves the page
+scroll position. Discarding that editor clears its dirty status without a write.
+When an intentionally closed editor held focus, it returns to its existing Edit
+button without opening a keyboard. Routine opening and selection never focus
+inputs. The legacy close-URL path remains explicitly separate.
+
 ## Files and ownership
 
 - Root: package/build/resources, `src/pkjs/protocol.js`, integration/validation.
 - Phone runtime: `src/pkjs/runtime.js`, `sources.js`, `commands.js`, `queue.js`,
   corresponding tests. Runtime uses settings/protocol, Activities host library.
 - Native: all `src/c/*`, portable C tests and native fixture support.
-- Settings: `src/pkjs/settings.js`, `settings-page.js`, `src/plugin/index.js`,
+- Settings: `src/pkjs/settings.js`, `settings-page.js`, `settings-i18n.js`, `src/plugin/index.js`,
   generated `config.html`, settings tests and config generator.
 
 ## Phone module contracts

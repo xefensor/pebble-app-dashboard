@@ -9,7 +9,7 @@
 #define SCREEN_W 200
 #define SCREEN_H 228
 #define CONTENT_W (SCREEN_W - ACTION_BAR_WIDTH)
-#define FONT_COUNT 12
+#define FONT_COUNT 13
 #define VIEW_TIMEOUT_MS 6000
 #define ACTION_TIMEOUT_MS 12000
 #define OUTBOX_CAPACITY 4
@@ -29,7 +29,7 @@ static bool s_sending,s_focused=true,s_has_connection=true;
 static Command s_command;
 static AppTimer *s_view_timeout,*s_action_timeout,*s_repeat,*s_hold_timer;
 static DbDeadline s_expiry;
-static bool s_guide,s_select_down,s_hold_preview,s_hold_intent;
+static bool s_guide,s_select_down,s_hold_preview,s_hold_intent,s_confirm_accept;
 #ifndef DASHBOARD_FIXTURE
 static bool s_saved_dark;
 #endif
@@ -41,11 +41,11 @@ static GFont s_fonts[FONT_COUNT];
 static uint8_t s_tick_seconds;
 static unsigned s_last_minute;
 static uint32_t s_last_tick;
-static const uint8_t s_font_points[]={11,12,14,16,20,24,20,24,26,28,32,40};
+static const uint8_t s_font_points[]={11,12,14,16,20,24,20,24,26,28,32,40,18};
 static const uint32_t s_font_ids[]={RESOURCE_ID_FONT_BODY_11,RESOURCE_ID_FONT_BODY_12,RESOURCE_ID_FONT_BODY_14,
   RESOURCE_ID_FONT_BODY_16,RESOURCE_ID_FONT_BODY_20,RESOURCE_ID_FONT_BODY_24,
   RESOURCE_ID_FONT_CLOCK_20,RESOURCE_ID_FONT_CLOCK_24,RESOURCE_ID_FONT_CLOCK_26,
-  RESOURCE_ID_FONT_BODY_28,RESOURCE_ID_FONT_CLOCK_32,RESOURCE_ID_FONT_CLOCK_40};
+  RESOURCE_ID_FONT_BODY_28,RESOURCE_ID_FONT_CLOCK_32,RESOURCE_ID_FONT_CLOCK_40,RESOURCE_ID_FONT_BODY_18};
 
 static uint32_t utc_now(void){return (uint32_t)time(NULL);}
 static uint32_t next_request(void){s_counter=s_counter>=INT32_MAX?1:s_counter+1;return s_counter;}
@@ -70,13 +70,13 @@ static GColor background(void){return s_state.snapshot.dark?GColorBlack:GColorWh
 static GColor foreground(void){return s_state.snapshot.dark?GColorWhite:GColorBlack;}
 static GColor muted(void){return s_state.snapshot.dark?GColorLightGray:GColorDarkGray;}
 static GColor stroke(void){return s_state.snapshot.dark?GColorDarkGray:GColorLightGray;}
-static GColor accent(void){return GColorPictonBlue;}
+static GColor accent(void){return s_state.snapshot.dark?GColorTiffanyBlue:GColorJaegerGreen;}
 static GFont font_at(unsigned index){
   if(index>=FONT_COUNT)index=3;
   if(!s_fonts[index])s_fonts[index]=fonts_load_custom_font(resource_get_handle(s_font_ids[index]));
   return s_fonts[index]?s_fonts[index]:fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD);
 }
-static unsigned body_index(unsigned point){return point<=11?0:point<=12?1:point<=14?2:point<=16?3:point<=20?4:point<=24?5:9;}
+static unsigned body_index(unsigned point){return point<=11?0:point<=12?1:point<=14?2:point<=16?3:point<=18?12:point<=20?4:point<=24?5:9;}
 static int width_of(const char *value,unsigned index){
   return graphics_text_layout_get_content_size(value,font_at(index),GRect(0,0,2048,512),GTextOverflowModeFill,GTextAlignmentLeft).w;
 }
@@ -188,18 +188,22 @@ static const char *command_error(void){
 }
 static void header(GContext *ctx){
   const DbItem *preview=preview_item(),*item=db_selected(&s_state);const char *status=NULL;
+  char context[40];context[0]=0;
   if(preview)status=preview->app_label;
   else if(!s_has_connection||s_state.snapshot.status==DB_OFFLINE)status="Offline";
   else if(command_error())status=command_error();
   else if(item&&item->role==DB_ROLE_PIN&&!db_item_current(item,utc_now()))status=(item->flags&DB_UNAVAILABLE)&&item->subtitle[0]?item->subtitle:"No data";
   else if(item&&s_state.desired_mode==DB_MEDIA&&db_control_present(item,s_state.focus)&&!control_available(item,s_state.focus))status="Unavailable";
-  if(status){text(ctx,status,20,6,22,CONTENT_W-12,foreground());segment(ctx,5,25,CONTENT_W-5,25,stroke());return;}
-  const char *title=s_state.desired_mode==DB_ACTIVITIES?"Activities":s_state.desired_mode==DB_PINNED?"Pinned":s_state.desired_mode==DB_MEDIA?"Controls":"Dashboard";
-  text(ctx,title,20,6,22,100,foreground());
-  char right[24];
-  if(s_state.desired_mode==DB_ACTIVITIES||s_state.desired_mode==DB_PINNED){if(s_state.loading)snprintf(right,sizeof(right),"…");else snprintf(right,sizeof(right),"%u/%u",s_state.snapshot.total?s_state.selected_index+1:0,s_state.snapshot.total);}
-  else{time_t now=time(NULL);struct tm *local=localtime(&now);strftime(right,sizeof(right),clock_is_24h_style()?"%H:%M":"%I:%M",local);if(!clock_is_24h_style()&&right[0]=='0')memmove(right,right+1,strlen(right));}
-  draw_text(ctx,right,4,108,22,CONTENT_W-114,muted(),GTextAlignmentRight);segment(ctx,5,25,CONTENT_W-5,25,stroke());
+  const char *title=s_guide?"Buttons":s_command.confirmation?"Confirm":s_state.desired_mode==DB_ACTIVITIES?"Activities":s_state.desired_mode==DB_PINNED?"Pinned":s_state.desired_mode==DB_MEDIA?"Controls":"Dashboard";
+  if(!status&&(s_state.desired_mode==DB_ACTIVITIES||s_state.desired_mode==DB_PINNED)){
+    if(s_state.loading)snprintf(context,sizeof(context),"Loading…");else snprintf(context,sizeof(context),"%u / %u",s_state.snapshot.total?s_state.selected_index+1:0,s_state.snapshot.total);status=context;
+  }
+  if(status){text(ctx,title,12,6,11,98,muted());text(ctx,status,18,6,27,98,foreground());}
+  else text(ctx,title,20,6,22,98,foreground());
+  char right[16];time_t now=time(NULL);struct tm *local=localtime(&now);
+  strftime(right,sizeof(right),clock_is_24h_style()?"%H:%M":"%I:%M",local);
+  if(!clock_is_24h_style()&&right[0]=='0')memmove(right,right+1,strlen(right));
+  draw_text(ctx,right,4,108,22,CONTENT_W-114,muted(),GTextAlignmentRight);segment(ctx,5,28,CONTENT_W-5,28,stroke());
 }
 static bool control_available(const DbItem *item,unsigned index){const uint16_t bits[]={DB_MEDIA_PREVIOUS,DB_MEDIA_TOGGLE,DB_MEDIA_NEXT};return item&&index<3&&(item->flags&bits[index])&&db_item_actionable(item,utc_now());}
 static void item_value(const DbItem *item,char *value,size_t size){
@@ -318,7 +322,11 @@ static void action_bar(GContext *ctx){
   const DbItem *item=db_selected(&s_state);if(!s_has_connection||!db_item_capability_current(item,utc_now()))return;
   if(preview_item()){launch_icon(ctx,x,114,ink);return;}
   if(s_command.active&&s_command.result==DB_PENDING){for(int i=0;i<3;i++){graphics_context_set_fill_color(ctx,ink);graphics_fill_circle(ctx,GPoint(x-8+i*8,114),2);}return;}
-  if(s_command.confirmation){action_icon(ctx,item,s_command.action,x,114,ink);return;}
+  if(s_command.confirmation){
+    if(s_confirm_accept){segment(ctx,x-6,42,x,36,ink);segment(ctx,x,36,x+6,42,ink);action_icon(ctx,item,s_command.action,x,114,ink);}
+    else{check_icon(ctx,x,114,ink);segment(ctx,x-6,187,x,193,ink);segment(ctx,x,193,x+6,187,ink);}
+    return;
+  }
   if(s_command.active&&s_command.result==DB_SUCCESS){check_icon(ctx,x,114,ink);return;}
   if(s_state.desired_mode==DB_MEDIA){if(control_available(item,s_state.focus))action_icon(ctx,item,s_state.focus,x,114,ink);}
   else if(item->flags&DB_NOTIFICATION){if(item->flags&DB_APP)symbol(ctx,DB_NOTICE,x-11,103,22,ink);}
@@ -331,13 +339,17 @@ static void action_bar(GContext *ctx){
 }
 static void confirm_overlay(GContext *ctx){
   const DbItem *item=db_selected(&s_state);
-  fill(ctx,GRect(4,39,CONTENT_W-8,161),background(),6);edge(ctx,GRect(4,39,CONTENT_W-8,161),foreground(),6);
-  centered(ctx,"Confirm?",28,74,foreground());
-  text(ctx,item?(item->title[0]?item->title:item->name):"Selected item",24,12,109,CONTENT_W-24,foreground());
-  centered(ctx,"Select confirms",20,153,foreground());centered(ctx,"Back cancels",20,185,muted());
+  fill(ctx,GRect(4,35,CONTENT_W-8,188),background(),6);edge(ctx,GRect(4,35,CONTENT_W-8,188),foreground(),6);
+  text(ctx,item&&item->action_label[0]?item->action_label:"Run action?",24,12,66,CONTENT_W-24,foreground());
+  text(ctx,item?(item->title[0]?item->title:item->name):"Selected item",20,12,96,CONTENT_W-24,foreground());
+  text(ctx,"Back cancels",18,12,123,CONTENT_W-24,muted());
+  fill(ctx,GRect(10,140,CONTENT_W-20,33),s_confirm_accept?background():foreground(),4);
+  text(ctx,"Cancel",20,17,166,CONTENT_W-34,s_confirm_accept?foreground():background());
+  fill(ctx,GRect(10,179,CONTENT_W-20,33),s_confirm_accept?foreground():background(),4);
+  text(ctx,"Run action",20,17,205,CONTENT_W-34,s_confirm_accept?background():foreground());
 }
 static void guide_view(GContext *ctx){
-  text(ctx,"Buttons",24,6,28,CONTENT_W-12,foreground());segment(ctx,5,34,CONTENT_W-5,34,stroke());
+  header(ctx);
   const char *lines[]={"Up / Down: move","Hold Up: Activities","Hold Down: Pinned","Select: action","Hold Select: app","Back: return"};
   for(unsigned i=0;i<6;i++)text(ctx,lines[i],20,6,57+(int)i*26,CONTENT_W-12,foreground());
   fill(ctx,GRect(4,201,CONTENT_W-8,25),foreground(),4);text(ctx,"Select to start",20,10,222,CONTENT_W-20,background());
@@ -457,7 +469,7 @@ static void inbox(DictionaryIterator *dict,void *context){
   }
   uint32_t result,request;
   if(read_uint(dict,DB_KEY_RESULT,&result)&&read_uint(dict,DB_KEY_SESSION,&session)&&session==s_state.session&&read_uint(dict,DB_KEY_REQUEST,&request)&&s_command.active&&!s_command.ended&&request==s_command.request&&result>=DB_PENDING&&result<=DB_CONFIRM){
-    s_command.result=(uint8_t)result;s_command.confirmation=result==DB_CONFIRM;
+    s_command.result=(uint8_t)result;s_command.confirmation=result==DB_CONFIRM;if(s_command.confirmation)s_confirm_accept=false;
     Tuple *label=dict_find(dict,DB_KEY_TEXT);s_command.text[0]=0;
     if(label&&label->type==TUPLE_CSTRING&&label->length&&label->length<=sizeof(s_command.text)){
       memcpy(s_command.text,(const void *)label->value,label->length);
@@ -485,7 +497,7 @@ static void tick(struct tm *now,TimeUnits units){
   if(!s_last_tick||timestamp-s_last_tick!=(s_tick_seconds==2?1u:60u))db_deadline_clear(&s_expiry);
   s_last_tick=timestamp;
   bool dirty=db_state_redact(&s_state,timestamp,!s_has_connection);unsigned minute=(unsigned)now->tm_hour*60+(unsigned)now->tm_min;
-  if(minute!=s_last_minute){s_last_minute=minute;if(!s_guide)dirty=true;}
+  if(minute!=s_last_minute){s_last_minute=minute;dirty=true;}
   // Paint the final00:00 once before update_ticks drops the second subscription.
   if(((units&SECOND_UNIT)||!units)&&s_tick_seconds==2)dirty=true;
   if(dirty)repaint();
@@ -525,7 +537,11 @@ static void repeated(void *context){
   if(!s_state.loading&&before==s_state.selected_index&&focus==s_state.focus){s_repeat_held=false;return;}
   if(s_repeat_held)s_repeat=app_timer_register(140,repeated,NULL);
 }
-static void direction_click(ClickRecognizerRef recognizer,void *context){(void)context;if(s_guide)return;acknowledge_feedback();cancel_hold_preview();move_selection(click_recognizer_get_button_id(recognizer)==BUTTON_ID_UP?-1:1);}
+static void direction_click(ClickRecognizerRef recognizer,void *context){
+  (void)context;if(s_guide)return;
+  if(s_command.confirmation){s_confirm_accept=click_recognizer_get_button_id(recognizer)==BUTTON_ID_DOWN;repaint();return;}
+  acknowledge_feedback();cancel_hold_preview();move_selection(click_recognizer_get_button_id(recognizer)==BUTTON_ID_UP?-1:1);
+}
 static void direction_hold(ClickRecognizerRef recognizer,void *context){
   (void)context;if(s_guide||s_command.confirmation)return;acknowledge_feedback();cancel_hold_preview();int delta=click_recognizer_get_button_id(recognizer)==BUTTON_ID_UP?-1:1;
   if(s_state.desired_mode==DB_OVERVIEW){if(s_state.loading)return;db_state_remember(&s_state);request_view(delta<0?DB_ACTIVITIES:DB_PINNED,0,0,0,false);return;}
@@ -557,7 +573,7 @@ static void select_click(ClickRecognizerRef recognizer,void *context){
   (void)recognizer;(void)context;cancel_hold_preview();
   if(s_guide){s_guide=false;persist_write_bool(GUIDE_SEEN_KEY,true);s_press_token=s_press_version=0;s_hold_intent=false;update_ticks();repaint();return;}
   if(s_hold_intent){s_hold_intent=false;return;}
-  if(s_command.confirmation){const DbItem *item=db_selected(&s_state);if(item&&item->token==s_command.token&&item->version==s_command.version)run_command(item,DB_OP_ACTION,s_command.action,true);else{s_command.confirmation=false;s_command.result=DB_STALE;repaint();}return;}
+  if(s_command.confirmation){if(!s_confirm_accept){memset(&s_command,0,sizeof(s_command));repaint();return;}const DbItem *item=db_selected(&s_state);if(item&&item->token==s_command.token&&item->version==s_command.version)run_command(item,DB_OP_ACTION,s_command.action,true);else{s_command.confirmation=false;s_command.result=DB_STALE;repaint();}return;}
   const DbItem *item=pressed_item();if(!s_has_connection||!db_item_capability_current(item,utc_now()))return;
   if(s_state.desired_mode==DB_MEDIA){if(control_available(item,s_state.focus))run_command(item,DB_OP_ACTION,s_state.focus,false);}
   else if(item->flags&DB_NOTIFICATION){if(item->flags&DB_APP)run_command(item,DB_OP_OPEN,0,false);}

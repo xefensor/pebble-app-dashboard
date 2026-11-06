@@ -1,8 +1,9 @@
 # Dashboard
 
 A stock Pebble watchapp for current activities, the latest available notification
-and pinned readings/actions. **Dashboard 0.4.3 is published as an Emery
-development prerelease.**
+and pinned readings/actions. **Dashboard 0.5.0 is a local Emery candidate**
+with the shared watch/phone UI. The published 0.4.3 development prerelease
+remains available below.
 
 Part of **XOCE — Xef's Open Computing Ecosystem**. The shared Activities
 library now lives in
@@ -11,10 +12,36 @@ its package and import name remains `pebble-activities`.
 
 The native app, phone runtime and bundled settings page are implemented in
 [xefensor/pebble-app-dashboard](https://github.com/xefensor/pebble-app-dashboard).
-Build and portable/emulator checks are recorded under
-[docs/qa/0.4.3](docs/qa/0.4.3). Real-phone permissions/provider integration and
+Current build and portable/emulator checks are recorded under
+[docs/qa/0.5.0](docs/qa/0.5.0). Real-phone permissions/provider integration and
 physical-watch comfort/battery still need device testing. Synthetic SDK/emulator
 fixtures are not evidence of live phone operation.
+
+## Local 0.5.0 candidate
+
+The local package is `dist/Dashboard-0.5.0.pbw`, with its matching debug archive
+and checksums in `dist/`. It has not been pushed or published.
+
+- Every native screen keeps local time on the right. Collections show their
+  position in a compact left header; errors and app hints keep the clock and
+  both Snapshot pins visible.
+- Confirmations name the action and target. **Cancel** is selected initially;
+  Down chooses Run action, Select runs only the original bound request, and
+  Back cancels without changing the selected item.
+- Phone settings use the shared neutral light/dark shell with a teal accent.
+  English and Czech interface text follows the phone locale; provider names,
+  saved labels and binding values remain untouched.
+- The bundled page stays open after Save, shows **✓ Saved** until another edit,
+  and disables unchanged Save. Save includes an open pin editor. Validation and
+  uncertain writes keep the draft, and Cancel restores the correct clean state.
+- Large text and short viewports keep actions in normal page flow. Routine
+  editing never focuses a text field or opens the keyboard automatically.
+
+The legacy return-URL configuration fallback still closes to deliver its save;
+it cannot claim in-page persistence confirmation. The modern bundled page owns
+the confirmed stay-open workflow. Timer controls remain deferred.
+
+See the [implementation and validation record](docs/qa/0.5.0/VALIDATION.md).
 
 ## Try the build
 
@@ -102,11 +129,12 @@ clocks tick on the watch; text stays static and starts from its beginning.
 Native redraw follows visible changes rather than automatic text scrolling.
 
 Commands show static pending dots and a brief success check in the sidebar.
-Failures and connection status use the header, leaving both pins visible. A
+Failures and connection status use the compact left header, leaving the local
+clock and both pins visible. A
 selected missing reading shows a short reason such as No data or Allow access;
 its independent action/app capability remains separate. Confirmation identifies
-the target and uses the action icon in the sidebar rather than repeating an
-action sentence. The idle activity area uses a neutral Nothing active state.
+the action and target, starts on Cancel and uses the selected action icon in
+the sidebar. The idle activity area uses a neutral Nothing active state.
 
 Commands require exact current bindings and are
 never automatically replayed after timeout. Configured/provider confirmation is

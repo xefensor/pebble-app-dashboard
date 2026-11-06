@@ -1,6 +1,6 @@
 {
   "name": "pebble-app-dashboard",
-  "version": "0.4.3",
+  "version": "0.5.0",
   "author": "Xef",
   "private": true,
   "license": "SEE LICENSE IN LICENSE",
@@ -129,6 +129,12 @@
         {
           "type": "font",
           "name": "FONT_BODY_28",
+          "file": "fonts/RobotoCondensed-Bold.ttf",
+          "characterRegex": "[\\u0020-\\u017F\\u2013\\u2014\\u2019\\u2026]"
+        },
+        {
+          "type": "font",
+          "name": "FONT_BODY_18",
           "file": "fonts/RobotoCondensed-Bold.ttf",
           "characterRegex": "[\\u0020-\\u017F\\u2013\\u2014\\u2019\\u2026]"
         }

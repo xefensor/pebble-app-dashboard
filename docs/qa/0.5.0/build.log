@@ -1,0 +1,81 @@
+
+> pebble-app-dashboard@0.5.0 build
+> python3 scripts/build.py
+
+'distclean' finished successfully (0.007s)
+
+[1m[33mA new SDK is available: v4.44 (current: v4.33.1)[0m
+[33m  Update with: pebble sdk install latest[0m
+
+[1m[33mA new pebble-tool is available: v5.1.2 (current: v5.0.40)[0m
+[33m  Update with: uv tool upgrade pebble-tool[0m
+
+up to date, audited 2 packages in 436ms
+
+found 0 vulnerabilities
+
+up to date, audited 2 packages in 386ms
+
+found 0 vulnerabilities
+Setting top to                           : /home/xela/Projekty/Pebble/pebble-app-dashboard 
+Setting out to                           : /home/xela/Projekty/Pebble/pebble-app-dashboard/build 
+Checking for program 'webpack'           : /home/xela/Projekty/Pebble/.recovery-tools/data/pebble-sdk/SDKs/current/node_modules/.bin/webpack 
+Found Pebble SDK for emery in:           : /home/xela/Projekty/Pebble/.recovery-tools/data/pebble-sdk/SDKs/current/sdk-core/pebble/emery 
+Checking for program 'gcc, cc'           : arm-none-eabi-gcc 
+Checking for program 'ar'                : arm-none-eabi-ar 
+'configure' finished successfully (0.039s)
+Waf: Entering directory `/home/xela/Projekty/Pebble/pebble-app-dashboard/build'
+[1/3] Creating message_key_json:  -> build/js/message_keys.json
+[2/3] Creating message_key_definitions:  -> build/src/message_keys.auto.c
+[3/3] Creating message_key_header:  -> build/include/message_keys.auto.h
+[ 4/32] Compiling emery | reso: resources/fonts/Fredoka-Bold-Clock.ttf -> build/emery/resources/fonts/Fredoka-Bold-Clock.ttf.FONT_CLOCK_40.reso
+[ 5/32] Compiling emery | reso: resources/fonts/RobotoCondensed-Bold.ttf -> build/emery/resources/fonts/RobotoCondensed-Bold.ttf.FONT_BODY_16.reso
+[ 6/32] Compiling emery | reso: resources/images/menu-icon.png -> build/emery/resources/images/menu-icon.png.IMAGE_MENU_ICON.reso
+[ 7/32] Compiling emery | reso: resources/fonts/RobotoCondensed-Bold.ttf -> build/emery/resources/fonts/RobotoCondensed-Bold.ttf.FONT_BODY_28.reso
+[ 8/32] Compiling emery | reso: resources/fonts/RobotoCondensed-Bold.ttf -> build/emery/resources/fonts/RobotoCondensed-Bold.ttf.FONT_BODY_18.reso
+[ 9/32] Compiling emery | reso: resources/fonts/RobotoCondensed-Bold.ttf -> build/emery/resources/fonts/RobotoCondensed-Bold.ttf.FONT_BODY_20.reso
+[10/32] Compiling emery | reso: resources/fonts/RobotoCondensed-Bold.ttf -> build/emery/resources/fonts/RobotoCondensed-Bold.ttf.FONT_BODY_11.reso
+[11/32] Compiling emery | reso: resources/fonts/RobotoCondensed-Bold.ttf -> build/emery/resources/fonts/RobotoCondensed-Bold.ttf.FONT_BODY_24.reso
+[12/32] Compiling emery | reso: resources/fonts/Fredoka-Bold-Clock.ttf -> build/emery/resources/fonts/Fredoka-Bold-Clock.ttf.FONT_CLOCK_20.reso
+[13/32] Compiling emery | reso: resources/fonts/RobotoCondensed-Bold.ttf -> build/emery/resources/fonts/RobotoCondensed-Bold.ttf.FONT_BODY_12.reso
+[14/32] Compiling emery | reso: resources/fonts/Fredoka-Bold-Clock.ttf -> build/emery/resources/fonts/Fredoka-Bold-Clock.ttf.FONT_CLOCK_24.reso
+[15/32] Compiling emery | reso: resources/fonts/Fredoka-Bold-Clock.ttf -> build/emery/resources/fonts/Fredoka-Bold-Clock.ttf.FONT_CLOCK_32.reso
+[16/32] Compiling emery | reso: resources/fonts/Fredoka-Bold-Clock.ttf -> build/emery/resources/fonts/Fredoka-Bold-Clock.ttf.FONT_CLOCK_26.reso
+[17/32] Compiling emery | reso: resources/fonts/RobotoCondensed-Bold.ttf -> build/emery/resources/fonts/RobotoCondensed-Bold.ttf.FONT_BODY_14.reso
+[18/32] Creating emery | /home/xela/Projekty/Pebble/pebble-app-dashboard/build/emery/appinfo.auto.c:  -> build/emery/appinfo.auto.c
+[19/32] Compiling emery | subst: ../.recovery-tools/data/pebble-sdk/SDKs/current/sdk-core/pebble/common/pebble_app.ld.template -> build/emery/pebble_app.ld.auto
+[20/32] Compiling emery | c: build/src/message_keys.auto.c -> build/src/message_keys.auto.c.9.o
+[21/32] Compiling emery | c: src/c/dashboard.c -> build/src/c/dashboard.c.9.o
+[22/32] Creating emery | /home/xela/Projekty/Pebble/pebble-app-dashboard/build/appinfo.json:  -> build/appinfo.json
+[23/32] Processing emery | resource_ball: build/emery/resources/fonts/RobotoCondensed-Bold.ttf.FONT_BODY_11.reso build/emery/resources/fonts/RobotoCondensed-Bold.ttf.FONT_BODY_12.reso build/emery/resources/fonts/RobotoCondensed-Bold.ttf.FONT_BODY_14.reso build/emery/resources/fonts/RobotoCondensed-Bold.ttf.FONT_BODY_16.reso build/emery/resources/fonts/RobotoCondensed-Bold.ttf.FONT_BODY_20.reso build/emery/resources/fonts/RobotoCondensed-Bold.ttf.FONT_BODY_24.reso build/emery/resources/fonts/Fredoka-Bold-Clock.ttf.FONT_CLOCK_20.reso build/emery/resources/fonts/Fredoka-Bold-Clock.ttf.FONT_CLOCK_24.reso build/emery/resources/fonts/Fredoka-Bold-Clock.ttf.FONT_CLOCK_26.reso build/emery/resources/images/menu-icon.png.IMAGE_MENU_ICON.reso build/emery/resources/fonts/Fredoka-Bold-Clock.ttf.FONT_CLOCK_32.reso build/emery/resources/fonts/Fredoka-Bold-Clock.ttf.FONT_CLOCK_40.reso build/emery/resources/fonts/RobotoCondensed-Bold.ttf.FONT_BODY_28.reso build/emery/resources/fonts/RobotoCondensed-Bold.ttf.FONT_BODY_18.reso -> build/emery/system_resources.resball
+[24/32] Compiling emery | generate_resource_id_definitions: build/emery/system_resources.resball -> build/emery/src/resource_ids.auto.c
+[25/32] Compiling emery | generate_pbpack: build/emery/system_resources.resball -> build/emery/app_resources.pbpack
+[26/32] Compiling emery | generate_resource_id_header: build/emery/system_resources.resball -> build/emery/src/resource_ids.auto.h
+[27/32] Compiling emery | c: build/emery/src/resource_ids.auto.c -> build/emery/src/resource_ids.auto.c.9.o
+[28/32] Compiling emery | c: src/c/main.c -> build/src/c/main.c.9.o
+[29/32] Compiling emery | c: src/c/dashboard_deadline.c -> build/src/c/dashboard_deadline.c.9.o
+[30/32] Compiling emery | c: build/emery/appinfo.auto.c -> build/emery/appinfo.auto.c.9.o
+[31/32] Linking emery | cprogram: build/src/c/dashboard.c.9.o build/src/c/dashboard_deadline.c.9.o build/src/c/main.c.9.o build/emery/appinfo.auto.c.9.o build/emery/src/resource_ids.auto.c.9.o build/src/message_keys.auto.c.9.o -> build/emery/pebble-app.elf
+/home/xela/Projekty/Pebble/.recovery-tools/data/pebble-sdk/SDKs/4.33.1/toolchain/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/bin/ld: warning: /home/xela/Projekty/Pebble/pebble-app-dashboard/build/emery/pebble-app.elf has a LOAD segment with RWX permissions
+
+[32/32] Processing emery | memory_usage_report: build/emery/pebble-app.elf build/emery/app_resources.pbpack
+-------------------------------------------------------
+EMERY APP MEMORY USAGE
+Total size of resources:        71219 bytes / 256.0KB
+Total footprint in RAM:         33147 bytes / 128.0KB
+Free RAM available (heap):      97925 bytes
+------------------------------------------------------- 
+[33/36] Compiling emery | /home/xela/Projekty/Pebble/pebble-app-dashboard/build/emery/pebble-app.raw.bin: build/emery/pebble-app.elf -> build/emery/pebble-app.raw.bin
+[34/36] Processing merge_js: src/pkjs/app-picker.js src/pkjs/catalogue.js src/pkjs/commands.js src/pkjs/index.js src/pkjs/protocol.js src/pkjs/queue.js src/pkjs/runtime.js src/pkjs/settings-i18n.js src/pkjs/settings-page.js src/pkjs/settings.js src/pkjs/sources.js -> build/pebble-js-app.js build/pebble-js-app.js.map
+[35/36] Processing emery | inject-metadata: build/emery/pebble-app.raw.bin build/emery/pebble-app.elf build/emery/app_resources.pbpack -> build/emery/pebble-app.bin
+[36/36] Creating app_bundle:  -> build/pebble-app-dashboard.pbw
+Waf: Leaving directory `/home/xela/Projekty/Pebble/pebble-app-dashboard/build'
+'build' finished successfully (1.383s)
+
+[1m[33mA new SDK is available: v4.44 (current: v4.33.1)[0m
+[33m  Update with: pebble sdk install latest[0m
+
+[1m[33mA new pebble-tool is available: v5.1.2 (current: v5.0.40)[0m
+[33m  Update with: uv tool upgrade pebble-tool[0m
+/home/xela/Projekty/Pebble/pebble-app-dashboard/dist/Dashboard-0.5.0.pbw
+/home/xela/Projekty/Pebble/pebble-app-dashboard/dist/Dashboard-0.5.0-debug.zip

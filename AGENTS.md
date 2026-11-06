@@ -1,6 +1,6 @@
 # Dashboard maintainer notes
 
-This repository contains the native Dashboard local candidate (0.4.3),
+This repository contains the native Dashboard local candidate (0.5.0),
 its phone runtime/settings, and earlier browser design studies. Read README.md
 and docs/IMPLEMENTATION.md. Preserve UUID f76f9fc1-2944-4248-bcc5-3eea2af0183b,
 DSH1 message keys and existing published sibling apps.
@@ -176,12 +176,19 @@ in the acknowledgment, and preserve terminal runtime.stop behavior. Keep both
 the real closed-page browser regressions and separate DOM/native storage model;
 a shared Map cannot reproduce the SDK overwrite. See docs/APP-PICKER.md sources.
 
-## Approved UI/UX alignment (implementation pending)
+## Shared UI/UX alignment in local 0.5.0
 
-Read [the UI/UX alignment handoff](docs/UX-ALIGNMENT.md) before the next
-interface implementation. It links the canonical local XOCE design standard
-and records this app's remaining work, including applicable stay-open phone
-settings with confirmed inline Save feedback. This is an approved future target,
-not a claim that the released app already implements it. Current lifecycle,
-storage, privacy, native ownership and release rules above still apply. The
-documentation update does not change runtime code or frozen release artifacts.
+Read [the alignment record](docs/UX-ALIGNMENT.md) and its canonical local XOCE
+reference before changing the interface. The local candidate implements the
+shared native header, safe Cancel-first confirmation, neutral/teal settings
+shell, English/Czech owned copy and persistent confirmed Save feedback. Its
+current evidence is in `docs/qa/0.5.0`; device checks remain separate.
+
+Keep the existing header band and Snapshot geometry: clock right, compact
+context/count/status left, with both pin rows visible. All essential state
+retains ordinary readable type; no text scrolling or perpetual animation.
+The bundled settings page stays open and confirms exact phone persistence.
+The legacy close-URL fallback still closes and must not claim the modern
+acknowledgement. Local validation failure and an uncertain write are distinct.
+Preserve user/provider text and bindings when localising interface copy.
+The existing ownership, privacy, Android storage and frozen-release rules apply.
