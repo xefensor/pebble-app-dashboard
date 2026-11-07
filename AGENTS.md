@@ -1,6 +1,6 @@
 # Dashboard maintainer notes
 
-This repository contains the native Dashboard local candidate (0.5.0),
+This repository contains the native Dashboard redesign candidate (0.6.0),
 its phone runtime/settings, and earlier browser design studies. Read README.md
 and docs/IMPLEMENTATION.md. Preserve UUID f76f9fc1-2944-4248-bcc5-3eea2af0183b,
 DSH1 message keys and existing published sibling apps.
@@ -192,3 +192,13 @@ The legacy close-URL fallback still closes and must not claim the modern
 acknowledgement. Local validation failure and an uncertain write are distinct.
 Preserve user/provider text and bindings when localising interface copy.
 The existing ownership, privacy, Android storage and frozen-release rules apply.
+
+## Pebble-native redesign branch
+
+`design/pebble-native-redesign` is an aesthetic review alternative, not a released
+or approved replacement for the shared 0.5.0 baseline. Read docs/REDESIGN.md.
+It uses system Gothic utility roles, retains compact custom context labels and
+Fredoka values, and adds bounded action/list feedback. Keep labels anchored in
+list motion; settle before activation/live replacement and cancel under cover.
+The phone Watch appearance select maps back to the existing dark Boolean.
+Use versioned SHA256SUMS-0.6.0.txt so older local/released checksums stay intact.

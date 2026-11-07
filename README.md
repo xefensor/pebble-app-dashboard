@@ -1,8 +1,8 @@
 # Dashboard
 
 A stock Pebble watchapp for current activities, the latest available notification
-and pinned readings/actions. **Dashboard 0.5.0 is a local Emery candidate**
-with the shared watch/phone UI. The published 0.4.3 development prerelease
+and pinned readings/actions. **Dashboard 0.6.0 is a local Emery redesign candidate**
+on `design/pebble-native-redesign`; see the [redesign review](docs/REDESIGN.md). The published 0.4.3 development prerelease
 remains available below.
 
 Part of **XOCE — Xef's Open Computing Ecosystem**. The shared Activities
@@ -13,13 +13,13 @@ its package and import name remains `pebble-activities`.
 The native app, phone runtime and bundled settings page are implemented in
 [xefensor/pebble-app-dashboard](https://github.com/xefensor/pebble-app-dashboard).
 Current build and portable/emulator checks are recorded under
-[docs/qa/0.5.0](docs/qa/0.5.0). Real-phone permissions/provider integration and
+[docs/qa/0.6.0](docs/qa/0.6.0). Real-phone permissions/provider integration and
 physical-watch comfort/battery still need device testing. Synthetic SDK/emulator
 fixtures are not evidence of live phone operation.
 
-## Local 0.5.0 candidate
+## Local 0.6.0 redesign candidate
 
-The local package is `dist/Dashboard-0.5.0.pbw`, with its matching debug archive
+The local package is `dist/Dashboard-0.6.0.pbw`, with its matching debug archive
 and checksums in `dist/`. It has not been pushed or published.
 
 - Every native screen keeps local time on the right. Collections show their
@@ -28,7 +28,8 @@ and checksums in `dist/`. It has not been pushed or published.
 - Confirmations name the action and target. **Cancel** is selected initially;
   Down chooses Run action, Select runs only the original bound request, and
   Back cancels without changing the selected item.
-- Phone settings use the shared neutral light/dark shell with a teal accent.
+- Phone settings use a neutral light/dark shell, teal identity rule and a
+  Light/Dark watch appearance selector.
   English and Czech interface text follows the phone locale; provider names,
   saved labels and binding values remain untouched.
 - The bundled page stays open after Save, shows **✓ Saved** until another edit,
@@ -37,11 +38,14 @@ and checksums in `dist/`. It has not been pushed or published.
 - Large text and short viewports keep actions in normal page flow. Routine
   editing never focuses a text field or opens the keyboard automatically.
 
+The [0.5.0 shared-UI baseline](docs/qa/0.5.0/VALIDATION.md) remains available
+for comparison.
+
 The legacy return-URL configuration fallback still closes to deliver its save;
 it cannot claim in-page persistence confirmation. The modern bundled page owns
 the confirmed stay-open workflow. Timer controls remain deferred.
 
-See the [implementation and validation record](docs/qa/0.5.0/VALIDATION.md).
+See the [implementation and validation record](docs/qa/0.6.0/VALIDATION.md).
 
 ## Try the build
 

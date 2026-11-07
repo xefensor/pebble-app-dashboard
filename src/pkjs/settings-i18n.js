@@ -6,8 +6,8 @@ function languageFactory(language) {
   var cs = /^cs(?:-|$)/i.test(language || '');
   var words = {
     'Dashboard settings':'Nastavení Dashboardu',
-    'Choose your pinned items and activity priority. These settings belong to Dashboard.':'Vyber připnuté položky a pořadí aktivit. Toto nastavení platí jen pro Dashboard.',
-    'On the watch':'Na hodinkách', 'Dark background':'Tmavé pozadí',
+    'Choose Dashboard’s pinned items and activity priority.':'Vyber připnuté položky a pořadí aktivit Dashboardu.',
+    'On the watch':'Na hodinkách', 'Watch appearance':'Vzhled hodinek', 'Light':'Světlý', 'Dark':'Tmavý',
     'Show latest notification':'Zobrazovat poslední oznámení', 'Show notification message text':'Zobrazovat text oznámení',
     'Message text stays private and is cleared when its source withdraws it. The notification row always opens native Notifications, even without a preview.':'Text zprávy zůstává soukromý a zmizí, když ho zdroj přestane poskytovat. Řádek oznámení otevře systémová Oznámení i bez náhledu.',
     'Pinned items':'Připnuté položky',

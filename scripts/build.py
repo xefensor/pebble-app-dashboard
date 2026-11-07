@@ -46,7 +46,7 @@ for path, contents in ((destination, entries), (debug_path, debug)):
             item.external_attr = 0o644 << 16
             output.writestr(item, content)
 paths = (destination, debug_path)
-(root / 'dist' / ('SHA256SUMS' + suffix + '.txt')).write_text(''.join(
+(root / 'dist' / ('SHA256SUMS-' + package['version'] + suffix + '.txt')).write_text(''.join(
     hashlib.sha256(path.read_bytes()).hexdigest() + '  ' + path.name + '\n' for path in paths))
 print(destination)
 print(debug_path)

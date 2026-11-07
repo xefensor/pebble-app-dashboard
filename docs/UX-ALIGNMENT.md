@@ -1,6 +1,8 @@
 # Dashboard UI/UX alignment
 
-Dashboard **0.5.0 is a local implementation candidate**. It has not been pushed
+Dashboard **0.6.0 is a local redesign review candidate** on
+`design/pebble-native-redesign`; [REDESIGN.md](REDESIGN.md) describes this
+alternative. The shared **0.5.0 implementation remains the baseline** below. It has not been pushed
 or published. The earlier reviewed baseline was 0.4.3 at
 `61a38a981ba060b556feb7f71de41242a64eed67`; published artifacts remain unchanged.
 
@@ -12,7 +14,7 @@ The canonical design lives in the sibling local XOCE checkout at
 The website is not publicly deployed. Keep common design rules there and
 Dashboard-specific ownership and evidence here.
 
-## Implemented in the local candidate
+## Shared 0.5.0 baseline
 
 - The native title/context sits left and local 12/24-hour time stays right,
   including collections, status, app-opening hints and the first-use guide.
@@ -58,3 +60,24 @@ portable/native and emulator results. Automated stock-SDK/isolated storage
 models are distinct from real-phone WebView permissions and physical-watch
 readability, button timing, vibration and battery measurements. Those device
 checks remain explicitly unverified.
+
+## 0.6.0 branch alternative
+
+The review branch keeps the same Snapshot, clock, identities, actions, privacy
+and Save semantics. It tests native Gothic utility roles with Fredoka values,
+a consistent 2px/filled icon family, immediate press/release feedback and
+interruptible list-selection surface motion with stationary labels. Five 39px
+collection rows fit the last value above the display edge. Compact context
+labels retain their fitted custom sizes.
+
+The phone header adds a 48×4px teal rule after its short localized introduction.
+Headings are neutral; cards use 16px inset/24px gaps. Watch appearance is a
+Light/Dark selector backed by the existing dark Boolean. Notification/privacy
+flags remain meaningful checkboxes. Disclosures have short user-triggered
+transitions with a reduced-motion override; persistent Saved never animates or
+disappears automatically.
+
+See [0.6.0 validation](qa/0.6.0/VALIDATION.md) for actual package, controller and
+native emulator checks. The standalone phone preview is an isolated fictional
+layout fixture, not browser fitting or phone verification. The canonical XOCE
+standard remains the shared baseline until Xef reviews the branch.

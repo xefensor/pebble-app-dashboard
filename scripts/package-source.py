@@ -46,6 +46,6 @@ else:
     destination.parent.mkdir(exist_ok=True)
     destination.write_bytes(buffer.getvalue())
     artifacts = [root / 'dist' / ('Dashboard-' + version + suffix) for suffix in ('.pbw', '-debug.zip', '-source.zip')]
-    (root / 'dist/SHA256SUMS.txt').write_text(''.join(
+    (root / 'dist' / ('SHA256SUMS-' + version + '.txt')).write_text(''.join(
         hashlib.sha256(path.read_bytes()).hexdigest() + '  ' + path.name + '\n' for path in artifacts))
 print(str(destination))

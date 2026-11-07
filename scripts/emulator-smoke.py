@@ -28,7 +28,7 @@ sys.path.insert(0,str(ROOT.parent/'recovery-validation'))
 def digest(data):return hashlib.sha256(data).hexdigest()
 
 
-def run(pbw,output,expected_sha256=None,notifications_only=False,ux_only=False,reliability_only=False,paused_repro=False,activities_only=False,startup_theme_only=False):
+def run(pbw,output,expected_sha256=None,notifications_only=False,ux_only=False,reliability_only=False,paused_repro=False,activities_only=False,startup_theme_only=False,motion_only=False):
     from pipe_emulator import connect
     from libpebble2.services.appmessage import AppMessageService,Uint32,ByteArray,CString
     from libpebble2.services.screenshot import Screenshot
@@ -245,6 +245,8 @@ def run(pbw,output,expected_sha256=None,notifications_only=False,ux_only=False,r
             peer.pins=[weather,light]+[x for x in peer.pins if x['token'] not in (4,5)]
         peer.publish();select_snapshot(5)
         ready=capture('second-pin-ready',.1)
+        peer.dark=True;peer.publish();themed_capture('snapshot-dark',True)
+        peer.dark=False;peer.publish();themed_capture('snapshot-light',False)
         peer.action_behavior='defer';before=len(peer.actions);button('Select')
         await_condition(lambda:len(peer.pending_actions)==1 and len(peer.actions)==before+1,'Deferred action did not reach pending')
         pending_pixels=capture('second-pin-pending',.1);pending_request=peer.pending_actions.pop()
@@ -326,10 +328,56 @@ def run(pbw,output,expected_sha256=None,notifications_only=False,ux_only=False,r
         proofs.append({'check':'Snapshot with no activity or notification uses a neutral idle state and safely retains configured pins','passed':True})
         with peer.lock:peer.activities=saved_activities;peer.pins=saved_pins;peer.notice=saved_notice;peer.action_behavior='success'
         peer.publish();select_snapshot(1)
+        motion_checks()
+    def motion_checks():
+        snapshot_home();button('Up',.75)
+        await_condition(lambda:active_mode()==1,'Motion review Activities list missing')
+        before=counts();frames=[];started=time.monotonic()
+        def frame(name):
+            pixels=capture(name,0);frames.append({'capture':name+'.png','elapsedMs':round((time.monotonic()-started)*1000),'image':Image.frombytes('RGB',(200,228),pixels)})
+        frame('motion-list-before')
+        send_data_to_qemu(p.transport,QemuButton(state=int(QemuButton.Button.Down)));time.sleep(.16)
+        frame('motion-direction-pressed')
+        send_data_to_qemu(p.transport,QemuButton(state=0))
+        for index in range(5):
+            frame('motion-selection-release-'+str(index));time.sleep(.025)
+        time.sleep(.4);frame('motion-selection-settled')
+        assert counts()==before,'Motion alone dispatched an action or app open'
+        settled=frames[-1]['image'];arrow=(168,177,200,202)
+        def arrow_center(image,bounds):
+            points=[(x,y) for y in range(bounds[1],bounds[3]) for x in range(bounds[0],bounds[2]) if image.getpixel((x,y))==(255,255,255)]
+            assert points,'Missing native navigation icon'
+            return (min(x for x,y in points)+max(x for x,y in points))/2
+        assert arrow_center(frames[0]['image'],(168,25,200,53))==183,'Up icon did not rest after collection-opening hold'
+        assert arrow_center(frames[0]['image'],arrow)==183,'Down icon did not rest after prior hold'
+        assert arrow_center(frames[1]['image'],arrow)==188,'Raw Down press did not move exactly5px'
+        assert arrow_center(settled,arrow)==183,'Down icon did not rest after short click'
+        assert frames[0]['image'].crop(arrow).tobytes()!=frames[1]['image'].crop(arrow).tobytes(),'Raw press did not move the action icon'
+        assert frames[0]['image'].crop(arrow).tobytes()==settled.crop(arrow).tobytes(),'Released action icon did not return to rest'
+        # The selected second row has static Media text/artwork. Its interior
+        # must stay pixel-identical while only the selection edges settle.
+        interior=(12,72,154,102)
+        assert all(entry['image'].crop(interior).tobytes()==settled.crop(interior).tobytes() for entry in frames[2:-1]),'List labels/artwork moved during selection feedback'
+        time.sleep(1);frame('motion-idle-rest')
+        assert frames[-1]['image'].crop((4,68,163,106)).tobytes()==settled.crop((4,68,163,106)).tobytes(),'Idle selection failed to remain still'
+        selected=peer.view.get(key('DB_TOKEN'))
+        # A rapid second navigation followed by Select must use the synchronous
+        # selected identity, never a row that merely occupied a previous frame.
+        send_data_to_qemu(p.transport,QemuButton(state=int(QemuButton.Button.Up)));time.sleep(.04)
+        send_data_to_qemu(p.transport,QemuButton(state=0));time.sleep(.02)
+        button('Select',.04)
+        assert counts()==before,'Read-only activity activated during selection motion'
+        assert peer.view.get(key('DB_TOKEN'))!=selected,'Rapid navigation failed to update selected identity'
+        frame('motion-immediate-select-settled')
+        images=[entry.pop('image') for entry in frames]
+        durations=[max(30,frames[i+1]['elapsedMs']-entry['elapsedMs']) if i+1<len(frames) else 900 for i,entry in enumerate(frames)]
+        images[0].save(output/'selection-and-action-feedback.gif',save_all=True,append_images=images[1:],duration=durations,loop=0)
+        proofs.append({'check':'Action icons press immediately and release finitely; list selection surface animates with anchored labels; rapid navigation and Select retain the exact synchronous read-only target','passed':True,'motionFrames':frames,'frameTiming':'Actual sequential QEMU screenshots; capture transfer time limits temporal resolution. No generated or interpolated frames.','gif':'selection-and-action-feedback.gif','focusLoss':'Cancellation verified by code inspection in focus_changed; a covering native system window was not exercised.'})
+        snapshot_home()
     def write_report(result='PASS'):
         report={'result':result,'version':json.loads((ROOT/'package.json').read_text())['version'],
             'scope':'Real native Emery QEMU UI and AppMessage requests with an explicit fictional protocol peer; no phone JavaScript, live plugins, real app launches or physical watch.',
-            'focusedNotificationsOnly':notifications_only,'focusedUxOnly':ux_only,'focusedReliabilityOnly':reliability_only,'pausedMediaReproduction':paused_repro,'focusedActivitiesOnly':activities_only,'focusedStartupThemeOnly':startup_theme_only,'candidatePbwSha256':digest(pbw.read_bytes()),'nativeOnlyPbwSha256':digest(native.read_bytes()),
+            'focusedMotionOnly':motion_only,'focusedNotificationsOnly':notifications_only,'focusedUxOnly':ux_only,'focusedReliabilityOnly':reliability_only,'pausedMediaReproduction':paused_repro,'focusedActivitiesOnly':activities_only,'focusedStartupThemeOnly':startup_theme_only,'candidatePbwSha256':digest(pbw.read_bytes()),'nativeOnlyPbwSha256':digest(native.read_bytes()),
             'nativePayloadSha256':{name:digest(data) for name,data in payload.items()},'phoneJavascriptExecuted':False,
             'stateDirectory':str(state_dir),'freshIsolatedFlash':fresh_flash,'session':peer.session,'checks':proofs,'captures':captures,'themePixelChecks':theme_samples,
             'requests':[{str(k):v for k,v in request.items()} for request in requests],
@@ -359,6 +407,8 @@ def run(pbw,output,expected_sha256=None,notifications_only=False,ux_only=False,r
         assert guide_pixels!=dismissed
         proofs.append({'check':'First-use native button guide explains controls; dismissal consumes Select without dispatching an action or app launch','passed':True})
         restart_without_guide()
+        if motion_only:
+            motion_checks();assert not errors;return write_report()
         if startup_theme_only:
             def restart_withheld(name,dark,online):
                 peer.respond=False;previous=peer.session;frames=len(peer.frames)
@@ -761,11 +811,12 @@ if __name__=='__main__':
     parser.add_argument('--output',type=Path,default=ROOT/('docs/qa/'+VERSION+'/native'))
     parser.add_argument('--expected-sha256',help='Require these exact candidate bytes before installing')
     parser.add_argument('--notifications-only',action='store_true',help='Focused empty Notifications navigation, expiry and app-open checks')
+    parser.add_argument('--motion-only',action='store_true',help='Focused press/release and anchored selection pixel checks')
     parser.add_argument('--ux-only',action='store_true',help='Focused guide, feedback, hold preview, confirmation, sparse controls and idle UX checks')
     parser.add_argument('--reliability-only',action='store_true',help='Focused final-zero paint, exact unavailable capability expiry and inert bootstrap identity checks')
     parser.add_argument('--paused-media-repro',action='store_true',help='Record the old invisible paused-primary bug against a supplied baseline PBW')
     parser.add_argument('--activities-only',action='store_true',help='Focused activity presentation/selection checks')
     parser.add_argument('--startup-theme-only',action='store_true',help='Focused first-launch, cached dark/light startup, timeout, offline and accepted-theme switch checks on fresh flash')
     args=parser.parse_args()
-    if sum((args.notifications_only,args.ux_only,args.reliability_only,args.paused_media_repro,args.activities_only,args.startup_theme_only))>1:parser.error('Choose at most one focused suite')
-    run(args.pbw,args.output,args.expected_sha256,args.notifications_only,args.ux_only,args.reliability_only,args.paused_media_repro,args.activities_only,args.startup_theme_only)
+    if sum((args.notifications_only,args.ux_only,args.reliability_only,args.paused_media_repro,args.activities_only,args.startup_theme_only,args.motion_only))>1:parser.error('Choose at most one focused suite')
+    run(args.pbw,args.output,args.expected_sha256,args.notifications_only,args.ux_only,args.reliability_only,args.paused_media_repro,args.activities_only,args.startup_theme_only,args.motion_only)

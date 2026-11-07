@@ -1,0 +1,1546 @@
+{
+  "result": "PASS",
+  "version": "0.6.0",
+  "scope": "Real native Emery QEMU UI and AppMessage requests with an explicit fictional protocol peer; no phone JavaScript, live plugins, real app launches or physical watch.",
+  "focusedMotionOnly": false,
+  "focusedNotificationsOnly": false,
+  "focusedUxOnly": true,
+  "focusedReliabilityOnly": false,
+  "pausedMediaReproduction": false,
+  "focusedActivitiesOnly": false,
+  "focusedStartupThemeOnly": false,
+  "candidatePbwSha256": "b0b56bdae29cc1b1361105aafdc01de5e5f1c40e0d6305a549fc0a6750675e2a",
+  "nativeOnlyPbwSha256": "ba0fd9a0047992efd059c438f7c3fcf62f24921b7f351664e45f70195765e67b",
+  "nativePayloadSha256": {
+    "emery/app_resources.pbpack": "4b6b71ec97ee870d6ab344577909b9cebc350a974445de15b5355b3d097794e6",
+    "emery/manifest.json": "7fbc67d0a610ca67ee4c1e384820aa398c2d86b326699c53590f6acfca12ff65",
+    "emery/pebble-app.bin": "b75caf41b115435306c620de450870b33c234b88fdcf093981ba6092a5a61fd8"
+  },
+  "phoneJavascriptExecuted": false,
+  "stateDirectory": "/tmp/dashboard-emery-0munbgw4",
+  "freshIsolatedFlash": true,
+  "session": 751382984,
+  "checks": [
+    {
+      "check": "First-use native button guide explains controls; dismissal consumes Select without dispatching an action or app launch",
+      "passed": true
+    },
+    {
+      "check": "First-use guide dismissal persists across a native app restart; ordinary navigation works immediately and dispatches no action",
+      "passed": true
+    },
+    {
+      "check": "Pending, success and failure feedback leaves the selected second Snapshot pin visible; values change only on successful synthetic source refresh",
+      "passed": true
+    },
+    {
+      "check": "Selected permission/unavailable reading is explained while its independently declared pin action remains usable",
+      "passed": true
+    },
+    {
+      "check": "Ordinary Music tap runs slot1; releasing Select at400ms after destination preview cancels without a tap or launch, while a completed hold opens Music exactly once",
+      "passed": true
+    },
+    {
+      "check": "Select hold previews the actual Timer destination, launches it exactly once, and adds no tap action; a pin without an app does nothing on hold",
+      "passed": true
+    },
+    {
+      "check": "Confirmation identifies Find phone and its action; safe Keep is initial, Back/Select cancel, and explicit Down then Select confirms only the original bound request",
+      "passed": true
+    },
+    {
+      "check": "Two controls show no invented third row; sparse 0/2 and sole slot1 retain original dispatch indices, stay bounded, and normalize focus after live removal",
+      "passed": true
+    },
+    {
+      "check": "Snapshot with no activity or notification uses a neutral idle state and safely retains configured pins",
+      "passed": true
+    },
+    {
+      "check": "Action icons press immediately and release finitely; list selection surface animates with anchored labels; rapid navigation and Select retain the exact synchronous read-only target",
+      "passed": true,
+      "motionFrames": [
+        {
+          "capture": "motion-list-before.png",
+          "elapsedMs": 94
+        },
+        {
+          "capture": "motion-direction-pressed.png",
+          "elapsedMs": 347
+        },
+        {
+          "capture": "motion-selection-release-0.png",
+          "elapsedMs": 515
+        },
+        {
+          "capture": "motion-selection-release-1.png",
+          "elapsedMs": 644
+        },
+        {
+          "capture": "motion-selection-release-2.png",
+          "elapsedMs": 776
+        },
+        {
+          "capture": "motion-selection-release-3.png",
+          "elapsedMs": 896
+        },
+        {
+          "capture": "motion-selection-release-4.png",
+          "elapsedMs": 1014
+        },
+        {
+          "capture": "motion-selection-settled.png",
+          "elapsedMs": 1533
+        },
+        {
+          "capture": "motion-idle-rest.png",
+          "elapsedMs": 2629
+        },
+        {
+          "capture": "motion-immediate-select-settled.png",
+          "elapsedMs": 3047
+        }
+      ],
+      "frameTiming": "Actual sequential QEMU screenshots; capture transfer time limits temporal resolution. No generated or interpolated frames.",
+      "gif": "selection-and-action-feedback.gif",
+      "focusLoss": "Cancellation verified by code inspection in focus_changed; a covering native system window was not exercised."
+    }
+  ],
+  "captures": [
+    {
+      "name": "first-use-button-guide",
+      "file": "first-use-button-guide.png",
+      "sha256": "c33201a57e88492dbedb5e8ba0ff3a0e8fe837a3a1b4fce10970e4833f647985",
+      "rgbSha256": "c7ce526180471923bbbf0d1acaf14ce1ac377e1e9f9c0784a5769474fdb4b4c5",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "first-use-guide-dismissed",
+      "file": "first-use-guide-dismissed.png",
+      "sha256": "83b413aad30e1d4bcbf018220d7d04c279ed8c045bbfc4a9c5be0776faf2be33",
+      "rgbSha256": "f2219af7dc7babbcbe479e5aeff0b13aa3551e704395251cc3c8103347372c0b",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "guide-dismissed-after-restart",
+      "file": "guide-dismissed-after-restart.png",
+      "sha256": "c6118e8f5cf51615bce825755ee8c9e27c2ae40513316659403ba45e957bfab5",
+      "rgbSha256": "d8f9b17f08e9e0cacace580b99850cab9fa436966024aed3f418eccfc2e1809a",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "activities-title-count-clock",
+      "file": "activities-title-count-clock.png",
+      "sha256": "4f15c8db161b110af5a99033e428646256c8cc0b8b854cd38d1b95f5866d7925",
+      "rgbSha256": "84d741ce645c155b8e4eba5e7bd4746e7524d8ab8ea67c66c7d8ea3ade1ec5ad",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "pinned-title-count-clock",
+      "file": "pinned-title-count-clock.png",
+      "sha256": "592ec024f33273d4025dc5536c3cfa03e9daa85ec4c6ffe97028373d7c92df60",
+      "rgbSha256": "987f22c02d7178500ad06c749b2cabee1a4d39d1146fb7344591c85dd0349615",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "second-pin-ready",
+      "file": "second-pin-ready.png",
+      "sha256": "73a93bf18659b8e8041e73716bc124941ee075da0c23f8d69e83902265e3aa17",
+      "rgbSha256": "0a93332869281b1e568b3ea4b41002e6c42b3085fe880bb6781217d0a97c14d9",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "snapshot-dark",
+      "file": "snapshot-dark.png",
+      "sha256": "1cacc3e84c0b7b4417b0ba1b7558984e6b94526940d6d0a54b416a97ef6c4850",
+      "rgbSha256": "3a258ec0814d51c0a7fcbcf546ca550fbea9fb02e1299bd63da23a254b5ef721",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "snapshot-light",
+      "file": "snapshot-light.png",
+      "sha256": "d0c8de05316395472c6a1515c7082337f40001b5a60585fc3dbed3c2141acab1",
+      "rgbSha256": "a551604617bbe196a0b695403ba72adc03efe586a353d047fb6cd76ed37742ae",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "second-pin-pending",
+      "file": "second-pin-pending.png",
+      "sha256": "57882ec04649262c765401e7a55428d0a8b2765166afef4d75f8d8fd5ab1c582",
+      "rgbSha256": "87f18923c7a85ae350b7f52a13c37299be1bdeaf7df81752a09f25d8f22237f5",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "second-pin-success",
+      "file": "second-pin-success.png",
+      "sha256": "5f0fbed587ad1c7ca1c6f44d161d6ec40eebd3d7bbf8cac98a1b83f89b7e9847",
+      "rgbSha256": "c3e5b5d0fb54427571da76b6e4a9554f07258b2e5d5e6eb7f10071067f198008",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "second-pin-failure",
+      "file": "second-pin-failure.png",
+      "sha256": "e1f31a5aea6123b89fd469e5ad1163a47882b92fd1adf86920d2d4748234856f",
+      "rgbSha256": "e4eeeb93fa6dfcbe302fa47babb23e22caa95c6b68238e89f21a895179d6a4fd",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "reading-permission-action-available",
+      "file": "reading-permission-action-available.png",
+      "sha256": "7084a1b1203c33adf0d137ed400ecd82ce20750c4bfc15c94fe6ad29914e3b90",
+      "rgbSha256": "d8f96c9592696e27fb5b2ee8b68a2cd6daf6dcc8df8d449eb22362c53b9da1e3",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "held-select-app-preview",
+      "file": "held-select-app-preview.png",
+      "sha256": "bf0b7821ea8229c6027b928fedcc857d06641055958803903f89320c89f172b3",
+      "rgbSha256": "62659dfd868731546977703d01e7c38af3bb64136faac347fdb91cf777f4fa04",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "confirmation-target-sidebar",
+      "file": "confirmation-target-sidebar.png",
+      "sha256": "356e6e598775062489b8a619e832ddfc24d3bade936a879ab3cf70b3776c7d32",
+      "rgbSha256": "7d26bac7afb5b91518a05a5e884bfa9173981896db950c43f2a393bbd511c6b8",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "confirmation-explicit-run-choice",
+      "file": "confirmation-explicit-run-choice.png",
+      "sha256": "6c302714a37e23a056a2602ae309448a20064dfa395bc77e279d5f3223730a5e",
+      "rgbSha256": "31eea85e0621c52f859012b78c94b67494e4a095e35e674c572ef6cd086c0da2",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "generic-controls-visible-slots",
+      "file": "generic-controls-visible-slots.png",
+      "sha256": "0f6ccbd79966319c16112678a7eda21d3eb075269eec139046e48f6ec032ec87",
+      "rgbSha256": "bce5282060ad01af3991d4293d146a7b51f71db4908d0fb080f3c4452bed4dcc",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "generic-sparse-controls-visible-slots",
+      "file": "generic-sparse-controls-visible-slots.png",
+      "sha256": "0f6ccbd79966319c16112678a7eda21d3eb075269eec139046e48f6ec032ec87",
+      "rgbSha256": "bce5282060ad01af3991d4293d146a7b51f71db4908d0fb080f3c4452bed4dcc",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "sparse-control-focus-removed",
+      "file": "sparse-control-focus-removed.png",
+      "sha256": "db87e6e6a2ab7855980f356936d98f45565f2dae1687787177775f13304540bb",
+      "rgbSha256": "984c2d268aba3e48ad5fb5f44b0d601f12e7eb544faedcdefb4430d042ba893c",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "generic-single-control-visible-slots",
+      "file": "generic-single-control-visible-slots.png",
+      "sha256": "59ba9aca9328ac17fac022aa3d86ea9d7835452030badb88182484819380b99a",
+      "rgbSha256": "f673044213f4cf197adda79f2cadc8157fb87a9a88bda4213d273796f13ab463",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "snapshot-idle-neutral",
+      "file": "snapshot-idle-neutral.png",
+      "sha256": "48ed095d3ddbed1323ddf4ef30a645cf665e2bcb10f09b0e329baa4b1ad4e0f1",
+      "rgbSha256": "ae7244073b7d6f6d51a5351303d92cda23eeb0bd34e5a8e92e88cec1a8f66e99",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "motion-list-before",
+      "file": "motion-list-before.png",
+      "sha256": "521b7584c82f1c6cb2ad02f77a77965b6141af4248232862911f825c9de5f6a9",
+      "rgbSha256": "a212214025d7694a0f2fa29aaa46ff0b7c3c2c59f6e9376cad8aa9643c1dcbb6",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "motion-direction-pressed",
+      "file": "motion-direction-pressed.png",
+      "sha256": "acb295200a447edb8a8c36301872cb29aca6e4c12f28522a261e1f0e5def95fe",
+      "rgbSha256": "3e7c5997ff49e4bef72045cd2a1e83b900c78c77eea7bfc3ae28f2c9e3c20739",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "motion-selection-release-0",
+      "file": "motion-selection-release-0.png",
+      "sha256": "2a9726afd9137c61b6508e5175bad0c238257e3f95cced7641c3a9d76d7333b3",
+      "rgbSha256": "00c48d2395e92a614cc32950e306285f275d06d5f725590c6550b0de509b28e5",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "motion-selection-release-1",
+      "file": "motion-selection-release-1.png",
+      "sha256": "7489d0ed9400a892b0ca46bffa0443bd786f3b968c9c7e2bf47bc78f35af08c7",
+      "rgbSha256": "a1b2835ac1537364b31a4c8f5e14496ebf9476c123f7c76b2553ccb2d2c3ed67",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "motion-selection-release-2",
+      "file": "motion-selection-release-2.png",
+      "sha256": "7489d0ed9400a892b0ca46bffa0443bd786f3b968c9c7e2bf47bc78f35af08c7",
+      "rgbSha256": "a1b2835ac1537364b31a4c8f5e14496ebf9476c123f7c76b2553ccb2d2c3ed67",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "motion-selection-release-3",
+      "file": "motion-selection-release-3.png",
+      "sha256": "7489d0ed9400a892b0ca46bffa0443bd786f3b968c9c7e2bf47bc78f35af08c7",
+      "rgbSha256": "a1b2835ac1537364b31a4c8f5e14496ebf9476c123f7c76b2553ccb2d2c3ed67",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "motion-selection-release-4",
+      "file": "motion-selection-release-4.png",
+      "sha256": "7489d0ed9400a892b0ca46bffa0443bd786f3b968c9c7e2bf47bc78f35af08c7",
+      "rgbSha256": "a1b2835ac1537364b31a4c8f5e14496ebf9476c123f7c76b2553ccb2d2c3ed67",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "motion-selection-settled",
+      "file": "motion-selection-settled.png",
+      "sha256": "7489d0ed9400a892b0ca46bffa0443bd786f3b968c9c7e2bf47bc78f35af08c7",
+      "rgbSha256": "a1b2835ac1537364b31a4c8f5e14496ebf9476c123f7c76b2553ccb2d2c3ed67",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "motion-idle-rest",
+      "file": "motion-idle-rest.png",
+      "sha256": "78ea444cac3118963f350daa8c83a25b7f31839f7ecd59d1472111af8229e39b",
+      "rgbSha256": "4298af8d1afde433db19f3d8f898158e2b90e06cf727361965e4cdd4faf463c3",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "motion-immediate-select-settled",
+      "file": "motion-immediate-select-settled.png",
+      "sha256": "7ddd8697c2546db425cc35f8c1e88744f889a475d7c10e0c382a9b92f9d48ba5",
+      "rgbSha256": "0327d69b838561aa13aa38e510be5764376cd90980dc71003e15681c47f22192",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    }
+  ],
+  "themePixelChecks": [
+    {
+      "capture": "snapshot-dark.png",
+      "dark": true,
+      "background": [
+        0,
+        0,
+        0
+      ],
+      "backgroundPoints": [
+        [
+          1,
+          10
+        ],
+        [
+          1,
+          80
+        ],
+        [
+          1,
+          225
+        ],
+        [
+          164,
+          225
+        ]
+      ],
+      "sidebarPoint": [
+        190,
+        10
+      ],
+      "sidebarColor": [
+        255,
+        255,
+        255
+      ]
+    },
+    {
+      "capture": "snapshot-light.png",
+      "dark": false,
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "backgroundPoints": [
+        [
+          1,
+          10
+        ],
+        [
+          1,
+          80
+        ],
+        [
+          1,
+          225
+        ],
+        [
+          164,
+          225
+        ]
+      ],
+      "sidebarPoint": [
+        190,
+        10
+      ],
+      "sidebarColor": [
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  "requests": [
+    {
+      "4000": 1,
+      "4001": 802697670,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0
+    },
+    {
+      "4000": 7,
+      "4001": 802697670,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 1,
+      "4006": 1
+    },
+    {
+      "4000": 1,
+      "4001": 751382984,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0
+    },
+    {
+      "4000": 7,
+      "4001": 751382984,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 1,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 751382984,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 1,
+      "4005": 3,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 751382984,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 1,
+      "4006": 1
+    },
+    {
+      "4000": 2,
+      "4001": 751382984,
+      "4002": 2,
+      "4003": 1,
+      "4004": 0,
+      "4012": 0
+    },
+    {
+      "4000": 7,
+      "4001": 751382984,
+      "4002": 2,
+      "4003": 1,
+      "4004": 0,
+      "4012": 0,
+      "4005": 1,
+      "4006": 1
+    },
+    {
+      "4000": 2,
+      "4001": 751382984,
+      "4002": 3,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 1,
+      "4006": 0
+    },
+    {
+      "4000": 7,
+      "4001": 751382984,
+      "4002": 3,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 1,
+      "4006": 1
+    },
+    {
+      "4000": 2,
+      "4001": 751382984,
+      "4002": 4,
+      "4003": 2,
+      "4004": 0,
+      "4012": 0
+    },
+    {
+      "4000": 7,
+      "4001": 751382984,
+      "4002": 4,
+      "4003": 2,
+      "4004": 0,
+      "4012": 0,
+      "4005": 4,
+      "4006": 1
+    },
+    {
+      "4000": 2,
+      "4001": 751382984,
+      "4002": 5,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 1,
+      "4006": 0
+    },
+    {
+      "4000": 7,
+      "4001": 751382984,
+      "4002": 5,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 1,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 751382984,
+      "4002": 5,
+      "4003": 0,
+      "4004": 0,
+      "4012": 1,
+      "4005": 3,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 751382984,
+      "4002": 5,
+      "4003": 0,
+      "4004": 0,
+      "4012": 2,
+      "4005": 4,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 751382984,
+      "4002": 5,
+      "4003": 0,
+      "4004": 0,
+      "4012": 3,
+      "4005": 5,
+      "4006": 1
+    },
+    {
+      "4000": 3,
+      "4001": 751382984,
+      "4002": 6,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 5,
+      "4006": 1,
+      "4007": 0,
+      "4011": 0
+    },
+    {
+      "4000": 3,
+      "4001": 751382984,
+      "4002": 7,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 5,
+      "4006": 2,
+      "4007": 0,
+      "4011": 0
+    },
+    {
+      "4000": 7,
+      "4001": 751382984,
+      "4002": 5,
+      "4003": 0,
+      "4004": 0,
+      "4012": 2,
+      "4005": 4,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 751382984,
+      "4002": 5,
+      "4003": 0,
+      "4004": 0,
+      "4012": 3,
+      "4005": 5,
+      "4006": 2
+    },
+    {
+      "4000": 3,
+      "4001": 751382984,
+      "4002": 8,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 5,
+      "4006": 3,
+      "4007": 0,
+      "4011": 0
+    },
+    {
+      "4000": 7,
+      "4001": 751382984,
+      "4002": 5,
+      "4003": 0,
+      "4004": 0,
+      "4012": 2,
+      "4005": 4,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 751382984,
+      "4002": 5,
+      "4003": 0,
+      "4004": 0,
+      "4012": 1,
+      "4005": 3,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 751382984,
+      "4002": 5,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 2,
+      "4006": 1
+    },
+    {
+      "4000": 3,
+      "4001": 751382984,
+      "4002": 9,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 2,
+      "4006": 1,
+      "4007": 1,
+      "4011": 0
+    },
+    {
+      "4000": 4,
+      "4001": 751382984,
+      "4002": 10,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 2,
+      "4006": 2
+    },
+    {
+      "4000": 7,
+      "4001": 751382984,
+      "4002": 5,
+      "4003": 0,
+      "4004": 0,
+      "4012": 3,
+      "4005": 5,
+      "4006": 4
+    },
+    {
+      "4000": 7,
+      "4001": 751382984,
+      "4002": 5,
+      "4003": 0,
+      "4004": 0,
+      "4012": 2,
+      "4005": 4,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 751382984,
+      "4002": 5,
+      "4003": 0,
+      "4004": 0,
+      "4012": 1,
+      "4005": 3,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 751382984,
+      "4002": 5,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 1,
+      "4006": 1
+    },
+    {
+      "4000": 4,
+      "4001": 751382984,
+      "4002": 11,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 1,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 751382984,
+      "4002": 5,
+      "4003": 0,
+      "4004": 0,
+      "4012": 1,
+      "4005": 3,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 751382984,
+      "4002": 5,
+      "4003": 0,
+      "4004": 0,
+      "4012": 2,
+      "4005": 4,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 751382984,
+      "4002": 5,
+      "4003": 0,
+      "4004": 0,
+      "4012": 3,
+      "4005": 5,
+      "4006": 4
+    },
+    {
+      "4000": 7,
+      "4001": 751382984,
+      "4002": 5,
+      "4003": 0,
+      "4004": 0,
+      "4012": 3,
+      "4005": 7,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 751382984,
+      "4002": 5,
+      "4003": 0,
+      "4004": 0,
+      "4012": 2,
+      "4005": 4,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 751382984,
+      "4002": 5,
+      "4003": 0,
+      "4004": 0,
+      "4012": 1,
+      "4005": 3,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 751382984,
+      "4002": 5,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 1,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 751382984,
+      "4002": 5,
+      "4003": 0,
+      "4004": 0,
+      "4012": 1,
+      "4005": 3,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 751382984,
+      "4002": 5,
+      "4003": 0,
+      "4004": 0,
+      "4012": 2,
+      "4005": 4,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 751382984,
+      "4002": 5,
+      "4003": 0,
+      "4004": 0,
+      "4012": 3,
+      "4005": 7,
+      "4006": 1
+    },
+    {
+      "4000": 3,
+      "4001": 751382984,
+      "4002": 12,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 7,
+      "4006": 1,
+      "4007": 0,
+      "4011": 0
+    },
+    {
+      "4000": 3,
+      "4001": 751382984,
+      "4002": 13,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 7,
+      "4006": 1,
+      "4007": 0,
+      "4011": 0
+    },
+    {
+      "4000": 3,
+      "4001": 751382984,
+      "4002": 14,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 7,
+      "4006": 1,
+      "4007": 0,
+      "4011": 0
+    },
+    {
+      "4000": 3,
+      "4001": 751382984,
+      "4002": 14,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 7,
+      "4006": 1,
+      "4007": 0,
+      "4011": 1
+    },
+    {
+      "4000": 7,
+      "4001": 751382984,
+      "4002": 5,
+      "4003": 0,
+      "4004": 0,
+      "4012": 2,
+      "4005": 4,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 751382984,
+      "4002": 5,
+      "4003": 0,
+      "4004": 0,
+      "4012": 1,
+      "4005": 3,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 751382984,
+      "4002": 5,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 12,
+      "4006": 1
+    },
+    {
+      "4000": 2,
+      "4001": 751382984,
+      "4002": 15,
+      "4003": 3,
+      "4004": 0,
+      "4012": 0,
+      "4005": 12,
+      "4006": 0
+    },
+    {
+      "4000": 3,
+      "4001": 751382984,
+      "4002": 16,
+      "4003": 3,
+      "4004": 0,
+      "4012": 0,
+      "4005": 12,
+      "4006": 1,
+      "4007": 1,
+      "4011": 0
+    },
+    {
+      "4000": 2,
+      "4001": 751382984,
+      "4002": 17,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 12,
+      "4006": 0
+    },
+    {
+      "4000": 7,
+      "4001": 751382984,
+      "4002": 17,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 12,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 751382984,
+      "4002": 17,
+      "4003": 0,
+      "4004": 0,
+      "4012": 3,
+      "4005": 7,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 751382984,
+      "4002": 17,
+      "4003": 0,
+      "4004": 0,
+      "4012": 2,
+      "4005": 4,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 751382984,
+      "4002": 17,
+      "4003": 0,
+      "4004": 0,
+      "4012": 1,
+      "4005": 3,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 751382984,
+      "4002": 17,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 13,
+      "4006": 1
+    },
+    {
+      "4000": 2,
+      "4001": 751382984,
+      "4002": 18,
+      "4003": 3,
+      "4004": 0,
+      "4012": 0,
+      "4005": 13,
+      "4006": 0
+    },
+    {
+      "4000": 3,
+      "4001": 751382984,
+      "4002": 19,
+      "4003": 3,
+      "4004": 0,
+      "4012": 0,
+      "4005": 13,
+      "4006": 1,
+      "4007": 2,
+      "4011": 0
+    },
+    {
+      "4000": 3,
+      "4001": 751382984,
+      "4002": 20,
+      "4003": 3,
+      "4004": 0,
+      "4012": 0,
+      "4005": 13,
+      "4006": 2,
+      "4007": 0,
+      "4011": 0
+    },
+    {
+      "4000": 2,
+      "4001": 751382984,
+      "4002": 21,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 13,
+      "4006": 0
+    },
+    {
+      "4000": 7,
+      "4001": 751382984,
+      "4002": 21,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 13,
+      "4006": 2
+    },
+    {
+      "4000": 7,
+      "4001": 751382984,
+      "4002": 21,
+      "4003": 0,
+      "4004": 0,
+      "4012": 3,
+      "4005": 7,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 751382984,
+      "4002": 21,
+      "4003": 0,
+      "4004": 0,
+      "4012": 2,
+      "4005": 4,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 751382984,
+      "4002": 21,
+      "4003": 0,
+      "4004": 0,
+      "4012": 1,
+      "4005": 3,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 751382984,
+      "4002": 21,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 14,
+      "4006": 1
+    },
+    {
+      "4000": 2,
+      "4001": 751382984,
+      "4002": 22,
+      "4003": 3,
+      "4004": 0,
+      "4012": 0,
+      "4005": 14,
+      "4006": 0
+    },
+    {
+      "4000": 3,
+      "4001": 751382984,
+      "4002": 23,
+      "4003": 3,
+      "4004": 0,
+      "4012": 0,
+      "4005": 14,
+      "4006": 1,
+      "4007": 1,
+      "4011": 0
+    },
+    {
+      "4000": 2,
+      "4001": 751382984,
+      "4002": 24,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 14,
+      "4006": 0
+    },
+    {
+      "4000": 7,
+      "4001": 751382984,
+      "4002": 24,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 14,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 751382984,
+      "4002": 24,
+      "4003": 0,
+      "4004": 0,
+      "4012": 1,
+      "4005": 7,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 751382984,
+      "4002": 24,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 4,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 751382984,
+      "4002": 24,
+      "4003": 0,
+      "4004": 0,
+      "4012": 1,
+      "4005": 7,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 751382984,
+      "4002": 24,
+      "4003": 0,
+      "4004": 0,
+      "4012": 3,
+      "4005": 6,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 751382984,
+      "4002": 24,
+      "4003": 0,
+      "4004": 0,
+      "4012": 2,
+      "4005": 4,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 751382984,
+      "4002": 24,
+      "4003": 0,
+      "4004": 0,
+      "4012": 1,
+      "4005": 3,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 751382984,
+      "4002": 24,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 1,
+      "4006": 1
+    },
+    {
+      "4000": 2,
+      "4001": 751382984,
+      "4002": 25,
+      "4003": 1,
+      "4004": 0,
+      "4012": 0
+    },
+    {
+      "4000": 7,
+      "4001": 751382984,
+      "4002": 25,
+      "4003": 1,
+      "4004": 0,
+      "4012": 0,
+      "4005": 1,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 751382984,
+      "4002": 25,
+      "4003": 1,
+      "4004": 0,
+      "4012": 1,
+      "4005": 2,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 751382984,
+      "4002": 25,
+      "4003": 1,
+      "4004": 0,
+      "4012": 0,
+      "4005": 1,
+      "4006": 1
+    },
+    {
+      "4000": 2,
+      "4001": 751382984,
+      "4002": 26,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 1,
+      "4006": 0
+    },
+    {
+      "4000": 7,
+      "4001": 751382984,
+      "4002": 26,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 1,
+      "4006": 1
+    }
+  ],
+  "mockActions": [
+    {
+      "4000": 3,
+      "4001": 751382984,
+      "4002": 6,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 5,
+      "4006": 1,
+      "4007": 0,
+      "4011": 0
+    },
+    {
+      "4000": 3,
+      "4001": 751382984,
+      "4002": 7,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 5,
+      "4006": 2,
+      "4007": 0,
+      "4011": 0
+    },
+    {
+      "4000": 3,
+      "4001": 751382984,
+      "4002": 8,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 5,
+      "4006": 3,
+      "4007": 0,
+      "4011": 0
+    },
+    {
+      "4000": 3,
+      "4001": 751382984,
+      "4002": 9,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 2,
+      "4006": 1,
+      "4007": 1,
+      "4011": 0
+    },
+    {
+      "4000": 3,
+      "4001": 751382984,
+      "4002": 12,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 7,
+      "4006": 1,
+      "4007": 0,
+      "4011": 0
+    },
+    {
+      "4000": 3,
+      "4001": 751382984,
+      "4002": 13,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 7,
+      "4006": 1,
+      "4007": 0,
+      "4011": 0
+    },
+    {
+      "4000": 3,
+      "4001": 751382984,
+      "4002": 14,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 7,
+      "4006": 1,
+      "4007": 0,
+      "4011": 0
+    },
+    {
+      "4000": 3,
+      "4001": 751382984,
+      "4002": 14,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 7,
+      "4006": 1,
+      "4007": 0,
+      "4011": 1
+    },
+    {
+      "4000": 3,
+      "4001": 751382984,
+      "4002": 16,
+      "4003": 3,
+      "4004": 0,
+      "4012": 0,
+      "4005": 12,
+      "4006": 1,
+      "4007": 1,
+      "4011": 0
+    },
+    {
+      "4000": 3,
+      "4001": 751382984,
+      "4002": 19,
+      "4003": 3,
+      "4004": 0,
+      "4012": 0,
+      "4005": 13,
+      "4006": 1,
+      "4007": 2,
+      "4011": 0
+    },
+    {
+      "4000": 3,
+      "4001": 751382984,
+      "4002": 20,
+      "4003": 3,
+      "4004": 0,
+      "4012": 0,
+      "4005": 13,
+      "4006": 2,
+      "4007": 0,
+      "4011": 0
+    },
+    {
+      "4000": 3,
+      "4001": 751382984,
+      "4002": 23,
+      "4003": 3,
+      "4004": 0,
+      "4012": 0,
+      "4005": 14,
+      "4006": 1,
+      "4007": 1,
+      "4011": 0
+    }
+  ],
+  "mockAppOpens": [
+    {
+      "4000": 4,
+      "4001": 751382984,
+      "4002": 10,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 2,
+      "4006": 2
+    },
+    {
+      "4000": 4,
+      "4001": 751382984,
+      "4002": 11,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 1,
+      "4006": 1
+    }
+  ],
+  "visualReview": {
+    "reviewed": true,
+    "scope": "Manual image-viewer inspection of the listed actual native screenshots; motion has separate pixel assertions, not a physical timing measurement.",
+    "screens": [
+      "snapshot-light.png",
+      "snapshot-dark.png",
+      "activities-title-count-clock.png",
+      "confirmation-target-sidebar.png"
+    ],
+    "findings": [
+      "Both Snapshot pins and clock remain visible in light/dark.",
+      "Selected Tea countdown is visible; fifth Podcast42% is complete above the lower edge.",
+      "Cancel is initially selected; target and action remain named.",
+      "Navigation icons return to their resting alignment."
+    ]
+  }
+}

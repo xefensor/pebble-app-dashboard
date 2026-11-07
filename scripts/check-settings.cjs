@@ -22,7 +22,7 @@ async function send(method,params={}) {const current=++id;return new Promise((re
 async function evaluate(expression) {const result=await send('Runtime.evaluate',{expression,returnByValue:true,awaitPromise:true});assert.equal(result.exceptionDetails,undefined,JSON.stringify(result.exceptionDetails));return result.result.value;}
 async function until(expression,label) {for(let step=0;step<200;step++){if(await evaluate(expression))return;await sleep(25);}throw Error('Timed out: '+label);}
 async function click(selector) {return evaluate(`(()=>{const el=document.querySelector(${JSON.stringify(selector)});if(!el)throw Error('Missing '+${JSON.stringify(selector)});el.click();return true;})()`);}
-async function field(id,value,event='change') {return evaluate(`(()=>{const el=document.getElementById(${JSON.stringify(id)});el[el.type==='checkbox'?'checked':'value']=${JSON.stringify(value)};el.dispatchEvent(new Event(${JSON.stringify(event)},{bubbles:true}));return true;})()`);}
+async function field(id,value,event='change') {return evaluate(`(()=>{const el=document.getElementById(${JSON.stringify(id)});el[el.type==='checkbox'?'checked':'value']=el.id==='dark'?${JSON.stringify(value)}?'dark':'light':${JSON.stringify(value)};el.dispatchEvent(new Event(${JSON.stringify(event)},{bubbles:true}));return true;})()`);}
 async function image(name) {const result=await send('Page.captureScreenshot',{format:'png',captureBeyondViewport:false});fs.writeFileSync(path.join(output,name+'.png'),Buffer.from(result.data,'base64'));}
 async function activitiesImage(name) {await evaluate(`document.getElementById('activities-status').closest('section').scrollIntoView({block:'start'})`);await image(name);}
 async function noAutomaticTextFocus(label) {assert.equal(await evaluate(`!!document.activeElement?.matches('textarea,input:not([type="checkbox"]):not([type="radio"]):not([type="button"]):not([type="submit"])')`),false,label+' must not automatically focus a text field');}
@@ -352,7 +352,7 @@ async function run() {
   await field('dark',false);await evaluate(`window.__settingsTest.emitReady('pkjs')`);
   await until(`document.querySelectorAll('#activities>li').length===2`,'actual PKJS discovers inactive compatible provider');
   assert.ok(await evaluate(`document.getElementById('activities').textContent.includes('Installed Timer')`));
-  assert.equal(await evaluate(`document.getElementById('dark').checked`),false,'late PKJS discovery must preserve the draft');
+  assert.equal(await evaluate(`document.getElementById('dark').value==='dark'`),false,'late PKJS discovery must preserve the draft');
   assert.equal(model.load(contextBridge.storage).dark,true,'discovery cannot save the draft');
   assert.ok(contextBridge.calls.enumerations>0);const enumerated=contextBridge.calls.enumerations;
   await activitiesImage('activities-live-discovery');
@@ -364,7 +364,7 @@ async function run() {
   await field('dark',false);await evaluate(`window.__settingsTest.catalogueFailure=true;window.__settingsTest.emitReady('pkjs')`);
   await until(`!document.getElementById('retry-activities').hidden&&document.getElementById('activities-status').classList.contains('error')`,'explicit activity discovery failure');
   assert.equal(await evaluate(`document.querySelectorAll('#activities>li').length`),2,'failed discovery keeps cached providers');
-  assert.equal(await evaluate(`document.getElementById('dark').checked`),false);
+  assert.equal(await evaluate(`document.getElementById('dark').value==='dark'`),false);
   await activitiesImage('activities-discovery-error');
   await evaluate(`window.__settingsTest.catalogueFailure=false`);await click('#retry-activities');
   await until(`document.getElementById('activities-status').textContent.includes('even when')`,'activity retry succeeds');
@@ -382,7 +382,7 @@ async function run() {
   await evaluate(`window.__settingsTest.transportFailure=true`);await click('#retry-activities');
   await until(`document.getElementById('activities-status').textContent.includes('Live discovery is unavailable')`,'PKJS rejection uses bounded plugin fallback');
   assert.deepEqual(await evaluate(`window.__settingsTest.calls.slice(-2).map(call=>call.target)`),['pkjs','plugin']);
-  assert.equal(await evaluate(`document.getElementById('dark').checked`),false,'target loss preserves edits');
+  assert.equal(await evaluate(`document.getElementById('dark').value==='dark'`),false,'target loss preserves edits');
   // An old delayed cache cannot overwrite a newer live catalogue.
   await reopen({pluginCatalogueDelay:240,waitCatalogue:false});
   contextBridge.metadata[0].name='Refreshed Timer';await evaluate(`window.__settingsTest.emitReady('pkjs')`);

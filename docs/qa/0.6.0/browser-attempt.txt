@@ -1,0 +1,13 @@
+Attempted against Dashboard-0.6.0.pbw SHA256 b0b56bdae29cc1b1361105aafdc01de5e5f1c40e0d6305a549fc0a6750675e2a
+Command: node scripts/check-settings.cjs --pbw dist/Dashboard-0.6.0.pbw
+Result: BLOCKED — Chromium debugging socket unavailable. No fresh browser fitting/full-editor Save/focus-scroll/reduced-motion result is claimed.
+
+AssertionError [ERR_ASSERTION]: Chromium socket unavailable
+    at run (/home/xela/Projekty/Pebble/pebble-app-dashboard/scripts/check-settings.cjs:128:251) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}

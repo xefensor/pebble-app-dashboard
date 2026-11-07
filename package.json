@@ -1,6 +1,6 @@
 {
   "name": "pebble-app-dashboard",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "author": "Xef",
   "private": true,
   "license": "SEE LICENSE IN LICENSE",
@@ -74,24 +74,6 @@
         },
         {
           "type": "font",
-          "name": "FONT_BODY_16",
-          "file": "fonts/RobotoCondensed-Bold.ttf",
-          "characterRegex": "[\\u0020-\\u017F\\u2013\\u2014\\u2019\\u2026]"
-        },
-        {
-          "type": "font",
-          "name": "FONT_BODY_20",
-          "file": "fonts/RobotoCondensed-Bold.ttf",
-          "characterRegex": "[\\u0020-\\u017F\\u2013\\u2014\\u2019\\u2026]"
-        },
-        {
-          "type": "font",
-          "name": "FONT_BODY_24",
-          "file": "fonts/RobotoCondensed-Bold.ttf",
-          "characterRegex": "[\\u0020-\\u017F\\u2013\\u2014\\u2019\\u2026]"
-        },
-        {
-          "type": "font",
           "name": "FONT_CLOCK_20",
           "file": "fonts/Fredoka-Bold-Clock.ttf",
           "characterRegex": "[0-9:.,%\u00b0CF+\u2212-]"
@@ -125,18 +107,6 @@
           "name": "FONT_CLOCK_40",
           "file": "fonts/Fredoka-Bold-Clock.ttf",
           "characterRegex": "[0-9:.,%\u00b0CF+\u2212-]"
-        },
-        {
-          "type": "font",
-          "name": "FONT_BODY_28",
-          "file": "fonts/RobotoCondensed-Bold.ttf",
-          "characterRegex": "[\\u0020-\\u017F\\u2013\\u2014\\u2019\\u2026]"
-        },
-        {
-          "type": "font",
-          "name": "FONT_BODY_18",
-          "file": "fonts/RobotoCondensed-Bold.ttf",
-          "characterRegex": "[\\u0020-\\u017F\\u2013\\u2014\\u2019\\u2026]"
         }
       ]
     },

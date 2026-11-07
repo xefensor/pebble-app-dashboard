@@ -5,6 +5,31 @@ The approved Snapshot and contextual input rules in README.md take precedence
 over older suite drafts. Timer commands remain deferred; Back stays ordinary.
 No sibling app, firmware or mobile-app changes are required.
 
+## Pebble-native alternative in local 0.6.0
+
+The review branch uses native Gothic 18/24/28 bold for fitted utility text,
+retaining compact 11/12/14 Roboto context roles and Fredoka primary numbers.
+Unused custom body resources are removed. Snapshot's original four items and
+header stay fitted; collections use five 39px rows with a 29px top inset.
+
+Custom action-bar icons use consistent 2px/filled shapes, a 5px immediate press
+offset and 144ms EaseOut release. List selection has a short 100ms surface
+compression/directional stretch and 250ms settle; labels remain stationary.
+Held list repeats skip selection motion. Incoming visual/identity changes,
+activation and view changes settle it; focus loss/disconnect/READY/deinit cancel
+all feedback. These animations never mutate selection, binding or validity.
+No timer runs at rest and no text marquees. The native helper remains a custom
+renderer using public Animation and bounded AppTimer APIs, rather than a
+private OS MenuLayer port.
+
+The phone template has a 48×4px identity rule, neutral section headings, 16px
+card inset/24px section spacing and Light/Dark Watch appearance selector. Only
+the select presentation changes: settings v1 stores the same dark Boolean.
+User-triggered disclosures use 160ms motion; button feedback uses 144ms and
+respects prefers-reduced-motion. The established Save/storage workflows below
+remain intact. See REDESIGN.md and qa/0.6.0/VALIDATION.md for measured evidence
+and the unavailable browser/device checks.
+
 ## Shared UI in local 0.5.0
 
 The DSH1 wire format, settings v1 and native persistence keys are unchanged.

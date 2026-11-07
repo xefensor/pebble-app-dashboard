@@ -1,0 +1,63 @@
+{
+  "version": "0.6.0",
+  "branch": "design/pebble-native-redesign",
+  "status": "Local redesign candidate; not pushed, merged or published",
+  "result": "Automated/package/native checks PASS; browser QA BLOCKED",
+  "pbwSha256": "b0b56bdae29cc1b1361105aafdc01de5e5f1c40e0d6305a549fc0a6750675e2a",
+  "debugSha256": "333c3f1b81fca603ccfcbfdff151356a0ad8cca8df3039d547053ccec72c3f1a",
+  "checks": {
+    "javascript": {
+      "result": "PASS",
+      "count": 94,
+      "includes": "Actual page controller in a small DOM model: EN/CS Boolean appearance, custom app preservation, exact ACK, persistent Saved and reopen; existing runtime/protocol/Android store models."
+    },
+    "portableNative": {
+      "result": "PASS",
+      "fixtures": 16,
+      "deadline": "Unchanged updates, expiry, correction, replacement, cancellation and registration retry."
+    },
+    "sdkBuild": "PASS",
+    "artifact": "PASS",
+    "generatedConfig": "PASS",
+    "packagedRuntime": "PASS",
+    "debugSourceResourceIdentity": "PASS",
+    "browser": {
+      "result": "BLOCKED",
+      "reason": "Chromium debugging socket unavailable in this sandbox",
+      "report": "browser-attempt.txt"
+    },
+    "sourceArchive": "Generated last; deterministic check and versioned checksums accompany handoff."
+  },
+  "native": {
+    "native-ux": {
+      "result": "PASS",
+      "captures": 30,
+      "checks": 10,
+      "report": "native-ux/emulator.json",
+      "candidatePbwSha256": "b0b56bdae29cc1b1361105aafdc01de5e5f1c40e0d6305a549fc0a6750675e2a"
+    },
+    "native-activities": {
+      "result": "PASS",
+      "captures": 16,
+      "checks": 5,
+      "report": "native-activities/emulator.json",
+      "candidatePbwSha256": "b0b56bdae29cc1b1361105aafdc01de5e5f1c40e0d6305a549fc0a6750675e2a"
+    }
+  },
+  "sdkReport": {
+    "resourceBytes": 29612,
+    "ramFootprintBytes": 34847,
+    "availableHeapBytes": 96225,
+    "scope": "Linked SDK report, not peak runtime allocation or physical-device battery measurement"
+  },
+  "phonePreview": {
+    "file": "phone-preview.html",
+    "scope": "Actual modern template, fictional read-only bridge, Save/network blocked. Layout preview, not browser/phone verification."
+  },
+  "limits": [
+    "No live Android WebView/provider/permission or physical-watch test.",
+    "Fresh browser layout, enlarged text, open-editor workflow, focus/scroll and reduced-motion fitting unavailable.",
+    "Cover cancellation and timer-allocation fallback checked in code; no covering system window or allocation-failure injection.",
+    "GIF contains actual sequential QEMU captures; transfer latency limits temporal resolution."
+  ]
+}
