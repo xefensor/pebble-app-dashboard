@@ -5,6 +5,7 @@ import re
 import sys
 
 root = Path(__file__).resolve().parents[1]
+ui_style = (root / 'node_modules/pebble-xoce-ui/src/js/settings-style.js').resolve()
 pattern = re.compile(r"\brequire\(\s*(['\"])([^'\"]+)\1\s*\)")
 
 def bundle(entry):
@@ -13,16 +14,19 @@ def bundle(entry):
         path = path.resolve()
         if path in identifiers:
             return identifiers[path]
-        if not path.is_relative_to(root / 'src') or path.suffix != '.js' or not path.is_file():
+        if (not path.is_relative_to(root / 'src') and path != ui_style) or path.suffix != '.js' or not path.is_file():
             raise ValueError(f'Unsupported config module: {path}')
         index = len(modules)
         identifiers[path] = index
         modules.append(None)
         def replace(match):
             request = match.group(2)
-            if not request.startswith('.'):
+            if request == 'pebble-xoce-ui/settings-style':
+                target = ui_style
+            elif request.startswith('.'):
+                target = path.parent / request
+            else:
                 raise ValueError(f'External config dependency: {request}')
-            target = path.parent / request
             if target.suffix != '.js':
                 target = target.with_suffix('.js')
             return f'require({visit(target)})'

@@ -1,6 +1,7 @@
 #include <assert.h>
 #include <stdio.h>
 #include "dashboard_layout.h"
+#include <pebble-xoce-ui/metrics.h>
 
 static void visible(DbListWindow window,unsigned selected,int height){
   assert(window.count&&selected>=window.first&&selected<window.first+window.count);
@@ -23,19 +24,20 @@ int main(void){
     if(db_body_ink[i].ink[3].top!=127&&(int8_t)db_body_ink[i].ink[3].top<0)negative=true;
   }
   assert(negative);
+  const int available=228-XOCE_UI_HEADER_HEIGHT;
   const int ordinary[]={39,43,39,39,39};
-  DbListWindow window=db_layout_window(ordinary,5,4,0,199);visible(window,4,199);assert(window.first==0&&window.count==5);
+  DbListWindow window=db_layout_window(ordinary,5,4,0,available);visible(window,4,available);assert(window.first==1&&window.count==4);
   const int accented[]={49,49,49,49,49};unsigned first=0;
-  for(unsigned selected=0;selected<5;selected++){window=db_layout_window(accented,5,selected,first,199);visible(window,selected,199);first=window.first;}
+  for(unsigned selected=0;selected<5;selected++){window=db_layout_window(accented,5,selected,first,available);visible(window,selected,available);first=window.first;}
   assert(window.first==1&&window.count==4);
   const int shorter[]={39,39,39,39,39};
-  DbListWindow shrunk=db_layout_window(shorter,5,4,window.first,199);visible(shrunk,4,199);assert(shrunk.first==0&&shrunk.count==5&&shrunk.used==195);
-  window=db_layout_window(accented,5,3,first,199);visible(window,3,199);assert(window.first==1); // Reverse keeps viewport anchored.
-  window=db_layout_window(accented,5,0,window.first,199);visible(window,0,199);assert(window.first==0);
+  DbListWindow shrunk=db_layout_window(shorter,5,4,window.first,available);visible(shrunk,4,available);assert(shrunk.first==0&&shrunk.count==5&&shrunk.used==195);
+  window=db_layout_window(accented,5,3,first,available);visible(window,3,available);assert(window.first==1); // Reverse keeps viewport anchored.
+  window=db_layout_window(accented,5,0,window.first,available);visible(window,0,available);assert(window.first==0);
   const int mixed[]={55,55,55,55,55};
-  for(unsigned selected=0;selected<5;selected++){window=db_layout_window(mixed,5,selected,0,199);visible(window,selected,199);assert(window.count<=3);}
-  window=db_layout_window(accented,5,3,0,199);visible(window,3,199); // New wire page reset.
-  unsigned remembered=window.first;window=db_layout_window(accented,5,3,remembered,199);visible(window,3,199);assert(window.first==remembered); // Back restores selection/window.
-  window=db_layout_window(accented,0,0,0,199);assert(!window.count);
+  for(unsigned selected=0;selected<5;selected++){window=db_layout_window(mixed,5,selected,0,available);visible(window,selected,available);assert(window.count<=3);}
+  window=db_layout_window(accented,5,3,0,available);visible(window,3,available); // New wire page reset.
+  unsigned remembered=window.first;window=db_layout_window(accented,5,3,remembered,available);visible(window,3,available);assert(window.first==remembered); // Back restores selection/window.
+  window=db_layout_window(accented,0,0,0,available);assert(!window.count);
   puts("native layout: packaged font accents/descenders/signed bearings and wildcard, adaptive fifth selection, reverse/page/back, shrink backfill and empty window passed");
 }

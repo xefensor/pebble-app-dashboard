@@ -1,0 +1,14 @@
+{
+  "package": "pebble-xoce-ui",
+  "version": "0.1.0",
+  "archive": "pebble-xoce-ui-0.1.0.tgz",
+  "sha256": "930fa228074ae0f4928d40f06415de30b0d216891f10ce99e05fa32ae35004b2",
+  "integrity": "sha512-3U2Bv2dD5yCHYheyXNhjMzhGCmVqoU4MI1u1PmMB//CU3yPq+bkU4jEGmwa1/rsuNVAm+ah/gdWc13wGndakOw==",
+  "sdk": "4.33.1",
+  "platforms": [
+    "emery"
+  ],
+  "source_repository": "pebble-lib-ui",
+  "status": "local unpublished development candidate",
+  "source_commit": "c7d58e7d251713b0fe5c0c3c9af1daf35a226b25"
+}

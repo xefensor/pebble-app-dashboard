@@ -12,20 +12,20 @@ fixtures = sorted((root / 'tests' / 'fixtures').glob('*.bin'))
 if not fixtures:
     raise SystemExit('No binary fixtures. Run node scripts/generate-fixtures.cjs first.')
 compiler = os.environ.get('CC', 'cc')
-command = [compiler, '-std=c99', '-Wall', '-Wextra', '-Werror', '-g', '-O1', '-Isrc/c',
+command = [compiler, '-std=c99', '-Inode_modules', '-Wall', '-Wextra', '-Werror', '-g', '-O1', '-Isrc/c',
            'src/c/dashboard.c', 'tests/native/test_dashboard.c', '-o', str(build / 'test_dashboard')]
 if '--sanitize' in sys.argv:
     command += ['-fsanitize=address,undefined', '-fno-omit-frame-pointer']
 subprocess.run(command, cwd=root, check=True)
 subprocess.run([str(build / 'test_dashboard'), *map(str, fixtures)], cwd=root, check=True)
-deadline = [compiler, '-std=c99', '-Wall', '-Wextra', '-Werror', '-g', '-O1',
+deadline = [compiler, '-std=c99', '-Inode_modules', '-Wall', '-Wextra', '-Werror', '-g', '-O1',
             '-Itests/fake-sdk', '-Isrc/c', 'src/c/dashboard_deadline.c',
             'tests/native/test_deadline.c', '-o', str(build / 'test_deadline')]
 if '--sanitize' in sys.argv:
     deadline += ['-fsanitize=address,undefined', '-fno-omit-frame-pointer']
 subprocess.run(deadline, cwd=root, check=True)
 subprocess.run([str(build / 'test_deadline')], cwd=root, check=True)
-layout = [compiler, '-std=c99', '-Wall', '-Wextra', '-Werror', '-g', '-O1',
+layout = [compiler, '-std=c99', '-Inode_modules', '-Wall', '-Wextra', '-Werror', '-g', '-O1',
           '-Isrc/c', 'tests/native/test_layout.c', '-o', str(build / 'test_layout')]
 if '--sanitize' in sys.argv:
     layout += ['-fsanitize=address,undefined', '-fno-omit-frame-pointer']

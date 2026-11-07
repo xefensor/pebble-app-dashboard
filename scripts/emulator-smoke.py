@@ -211,10 +211,22 @@ def run(pbw,output,expected_sha256=None,notifications_only=False,ux_only=False,r
     def counts():return len(peer.actions),len(peer.opens)
     def theme_pixels(name,pixels,dark):
         background=(0,0,0) if dark else (255,255,255);foreground=(255,255,255) if dark else (0,0,0)
-        points=[(1,10),(1,80),(1,225),(162,225)]
+        # The shared selection fills the content column. Check the header's
+        # known background, then the actual selected/unselected fixture rows;
+        # former side gutters are no longer universal background samples.
+        points=[(1,10),(162,10),(1,30),(162,30)]
         for x,y in points:assert tuple(pixels[(y*200+x)*3:(y*200+x)*3+3])==background,(name,x,y,'wrong background')
+        surfaces=[]
+        if name in ('snapshot-dark','snapshot-light'):
+            surfaces=[('selected second pin',(1,225),foreground),('selected second pin right edge',(162,225),foreground),('unselected first pin',(1,175),background)]
+        elif name=='confirmation-target-sidebar-dark':
+            surfaces=[('safe Cancel choice',(1,175),foreground),('unselected Run choice',(1,210),background)]
+        elif name in ('activities-list-dark','activities-list-light'):
+            surfaces=[('selected Media row',(1,100),foreground),('unselected Timer row',(1,50),background)]
+        for role,(x,y),color in surfaces:
+            assert tuple(pixels[(y*200+x)*3:(y*200+x)*3+3])==color,(name,role,x,y,'wrong selection surface')
         assert tuple(pixels[(80*200+198)*3:(80*200+198)*3+3])==foreground,(name,'sidebar contrast')
-        theme_samples.append({'capture':name+'.png','dark':dark,'background':list(background),'backgroundPoints':points,'sidebarPoint':[198,80],'sidebarColor':list(foreground)})
+        theme_samples.append({'capture':name+'.png','dark':dark,'background':list(background),'backgroundPoints':points,'selectionSurfaces':[{'role':role,'point':point,'color':color} for role,point,color in surfaces],'sidebarPoint':[198,80],'sidebarColor':list(foreground)})
     def themed_capture(name,dark,settle=.1):
         pixels=capture(name,settle);theme_pixels(name,pixels,dark);return pixels
     def active_mode():return peer.view.get(key('DB_MODE')) if peer.view else None
@@ -422,20 +434,20 @@ def run(pbw,output,expected_sha256=None,notifications_only=False,ux_only=False,r
             frame('motion-selection-release-'+str(index));time.sleep(.025)
         time.sleep(.4);frame('motion-selection-settled')
         assert counts()==before,'Motion alone dispatched an action or app open'
-        settled=frames[-1]['image'];arrow=(168,177,200,202)
+        settled=frames[-1]['image'];arrow=(168,162,200,187)
         def arrow_center(image,bounds):
             points=[(x,y) for y in range(bounds[1],bounds[3]) for x in range(bounds[0],bounds[2]) if image.getpixel((x,y))==(255,255,255)]
             assert points,'Missing native navigation icon'
             return (min(x for x,y in points)+max(x for x,y in points))/2
-        assert arrow_center(frames[0]['image'],(168,30,200,53))==183,'Up icon did not rest after collection-opening hold'
+        assert arrow_center(frames[0]['image'],(168,42,200,67))==183,'Up icon did not rest after collection-opening hold'
         assert arrow_center(frames[0]['image'],arrow)==183,'Down icon did not rest after prior hold'
-        assert arrow_center(frames[1]['image'],arrow)==188,'Raw Down press did not move exactly5px'
+        assert arrow_center(frames[1]['image'],arrow)==178,'Raw Down press did not move exactly5px toward content'
         assert arrow_center(settled,arrow)==183,'Down icon did not rest after short click'
         assert frames[0]['image'].crop(arrow).tobytes()!=frames[1]['image'].crop(arrow).tobytes(),'Raw press did not move the action icon'
         assert frames[0]['image'].crop(arrow).tobytes()==settled.crop(arrow).tobytes(),'Released action icon did not return to rest'
         # The selected second row has static Media text/artwork. Its interior
         # and the entire full-width inversion must already be final at release.
-        interior=(4,78,161,133)
+        interior=(1,82,165,128)
         assert all(entry['image'].crop(interior).tobytes()==settled.crop(interior).tobytes() for entry in frames[2:-1]),'Immediate selection changed or clipped its text/artwork'
         time.sleep(1);frame('motion-idle-rest')
         assert frames[-1]['image'].crop(interior).tobytes()==settled.crop(interior).tobytes(),'Idle selection failed to remain still'
