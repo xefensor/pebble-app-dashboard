@@ -72,6 +72,7 @@ def build_inputs(root):
         "minify-*",
         "release_*",
         "generate-config*",
+        "generate-localization*",
     ):
         names.update(
             str(p.relative_to(root)) for p in (root / "scripts").glob(pattern) if p.is_file()

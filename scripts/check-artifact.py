@@ -34,3 +34,6 @@ pin = json.loads((root / 'vendor/ACTIVITIES.json').read_text())
 assert hashlib.sha256((root / 'vendor' / pin['archive']).read_bytes()).hexdigest() == pin['sha256']
 print('Dashboard packaged artifact: PASS')
 print(hashlib.sha256(path.read_bytes()).hexdigest(), path.name)
+
+import subprocess
+subprocess.run(["python3",str(root / "scripts/check-localization-fonts.py"),"--pbw",str(args.pbw)],check=True)

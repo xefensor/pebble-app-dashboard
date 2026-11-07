@@ -10,7 +10,7 @@
     "pebble-xoce-ui": "file:vendor/pebble-xoce-ui-0.1.1.tgz"
   },
   "scripts": {
-    "test": "node --test tests/*.test.js && python3 scripts/test-native.py && npm run test:workflow && npm run check:docs && npm run test:release",
+    "test": "node --test tests/*.test.js && python3 scripts/test-native.py && npm run test:workflow && npm run check:docs && npm run test:release && python3 scripts/test-localization.py",
     "build": "python3 scripts/build.py",
     "check:artifact": "python3 scripts/check-artifact.py",
     "build:release": "python3 scripts/build.py --release",
@@ -22,7 +22,8 @@
     "release:prepare": "python3 scripts/github-release.py prepare",
     "release:publish": "python3 scripts/github-release.py publish",
     "test:release": "python3 -m unittest discover -s tests -p \"test_*release*.py\"",
-    "check:setup": "python3 scripts/check-setup.py"
+    "check:setup": "python3 scripts/check-setup.py",
+    "check:localization": "python3 scripts/generate-localization.py --check"
   },
   "pebble": {
     "displayName": "Dashboard",
@@ -69,19 +70,19 @@
           "type": "font",
           "name": "FONT_CLOCK_20",
           "file": "fonts/Fredoka-Bold-Clock.ttf",
-          "characterRegex": "[0-9:.,%\u00b0CF+\u2212-]"
+          "characterRegex": "[0-9:.,%°CF+−-]"
         },
         {
           "type": "font",
           "name": "FONT_CLOCK_24",
           "file": "fonts/Fredoka-Bold-Clock.ttf",
-          "characterRegex": "[0-9:.,%\u00b0CF+\u2212-]"
+          "characterRegex": "[0-9:.,%°CF+−-]"
         },
         {
           "type": "font",
           "name": "FONT_CLOCK_26",
           "file": "fonts/Fredoka-Bold-Clock.ttf",
-          "characterRegex": "[0-9:.,%\u00b0CF+\u2212-]"
+          "characterRegex": "[0-9:.,%°CF+−-]"
         },
         {
           "type": "png",
@@ -93,13 +94,13 @@
           "type": "font",
           "name": "FONT_CLOCK_32",
           "file": "fonts/Fredoka-Bold-Clock.ttf",
-          "characterRegex": "[0-9:.,%\u00b0CF+\u2212-]"
+          "characterRegex": "[0-9:.,%°CF+−-]"
         },
         {
           "type": "font",
           "name": "FONT_CLOCK_40",
           "file": "fonts/Fredoka-Bold-Clock.ttf",
-          "characterRegex": "[0-9:.,%\u00b0CF+\u2212-]"
+          "characterRegex": "[0-9:.,%°CF+−-]"
         },
         {
           "type": "font",
@@ -133,7 +134,12 @@
           "type": "font",
           "name": "FONT_CLOCK_36",
           "file": "fonts/Fredoka-Bold-Clock.ttf",
-          "characterRegex": "[0-9:.,%\u00b0CF+\u2212-]"
+          "characterRegex": "[0-9:.,%°CF+−-]"
+        },
+        {
+          "type": "raw",
+          "name": "LOCALIZATION",
+          "file": "localization.bin"
         }
       ]
     },

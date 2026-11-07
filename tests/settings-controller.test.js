@@ -71,3 +71,12 @@ test('mismatched persistence acknowledgement keeps the appearance draft unconfir
   assert.match(ui.byId.status.textContent,/not confirmed/); assert.equal(ui.state.writes.length,1);
   ui.byId.discard.onclick(); await ui.flush(); assert.equal(ui.byId.dark.value,'dark'); assert.equal(ui.byId.save.disabled,true);
 });
+
+for(const locale of require('../src/common/translations.json').languages) test('localized settings save/reopen with unchanged bindings: '+locale,async()=>{
+ const initial=settings.defaults(),ui=boot(initial,locale);await ui.flush();
+ assert.equal(ui.document.documentElement.lang,locale);
+ ui.change('dark');ui.byId.save.onclick();await ui.flush();
+ assert.equal(ui.byId.status.textContent,require('../src/common/translations.json').words[locale]['✓ Saved']);
+ assert.deepEqual(ui.state.saved.pins,initial.pins);
+ const reopened=boot(ui.state.saved,locale);await reopened.flush();assert.equal(reopened.byId.dark.value,'dark');assert.equal(reopened.byId.save.disabled,true);
+});

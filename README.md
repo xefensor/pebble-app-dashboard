@@ -50,3 +50,11 @@ Development outputs belong in ignored `build/`; published archives stay frozen.
 ## Licence
 
 [PolyForm Noncommercial 1.0.0](LICENSE). Preserve bundled third-party notices and attribution.
+
+The development checkout supports English, Czech, Slovak, German, French, Spanish,
+Italian, Portuguese, Dutch, Polish, Danish, Swedish, Norwegian, Finnish, Hungarian,
+Romanian and Turkish on watch screens and phone settings. Watch text follows the
+watch language; settings follow the phone language. Regional locale codes and
+Norwegian nb/nn are accepted; unsupported languages use English. Provider text,
+user labels and saved bindings keep their original values. Frozen release downloads
+retain their original language coverage until a new release is published.

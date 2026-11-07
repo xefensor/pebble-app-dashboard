@@ -7,7 +7,7 @@ var appPicker = require('./app-picker');
 var makeLanguage = require('./settings-i18n');
 function behavior(initial, makeModel, makeApps, makeLanguage) {
   'use strict';
-  var language = makeLanguage((navigator.languages && navigator.languages[0]) || navigator.language || 'en'), t = language.text;
+  var language = makeLanguage((navigator.languages && navigator.languages[0]) || navigator.language || 'en', initial.translations), t = language.text;
   language.staticPage(document.body);
   var model = makeModel(), apps = makeApps(), $ = function(id) { return document.getElementById(id); };
   var draft, confirmed = '', loaded = false, phase = 'loading', uncertain = false, repairing = false, savedHere = false;
@@ -270,7 +270,7 @@ function behavior(initial, makeModel, makeApps, makeLanguage) {
     [['system',t('PebbleOS apps')],['common',t('Other apps')],['saved',t('Your saved apps')],['store',t('Store search results')]].forEach(function(group) {
       var items = entries.filter(function(entry) { return entry.origin === group[0]; }); if (!items.length) return;
       var list = node('optgroup'); list.label = t(group[1]);
-      items.forEach(function(entry) { option(list, entry.uuid, entry.name + (entry.author && entry.origin !== 'system' ? ' · ' + entry.author : '')); }); target.appendChild(list);
+      items.forEach(function(entry) { option(list, entry.uuid, (entry.origin === 'system' ? t(entry.name) : entry.name) + (entry.author && entry.origin !== 'system' ? ' · ' + entry.author : '')); }); target.appendChild(list);
     });
     option(target, '__custom__', t('Custom app…')); target.value = chosen || '';
     renderAppState(); renderAppResults();
@@ -476,7 +476,7 @@ function behavior(initial, makeModel, makeApps, makeLanguage) {
   $('pin-label').oninput = function() { if (editing) editing.nameChanged = true; };
   $('icon').onchange = function() { if (editing) editing.iconChanged = true; };
   $('app-target').onchange = selectApp; $('app-search').onclick = searchApps; $('app-label').oninput = renderAppState;
-  $('app-search-query').onkeydown = function(event) { if (event.key === t('Enter')) { event.preventDefault(); searchApps(); } };
+  $('app-search-query').onkeydown = function(event) { if (event.key === 'Enter') { event.preventDefault(); searchApps(); } };
   $('pin-reading').onclick = function() { $('has-reading').checked = true; renderEditorState(); $('source').onchange(); $('reading-fields').scrollIntoView({block:'center'}); };
   $('pin-action').onclick = function() { $('action').scrollIntoView({block:'center'}); };
   $('pin-app').onclick = function() { $('app-target').scrollIntoView({block:'center'}); };
@@ -558,7 +558,7 @@ function behavior(initial, makeModel, makeApps, makeLanguage) {
   }
   window.addEventListener('resize', measureFooter); if (window.visualViewport) window.visualViewport.addEventListener('resize', measureFooter);
   if (typeof ResizeObserver !== 'undefined') new ResizeObserver(measureFooter).observe($('actions'));
-  model.icons.forEach(function(icon) { option($('icon'), icon, language.language==='cs'?t(icon):icon.charAt(0).toUpperCase() + icon.slice(1)); });
+  model.icons.forEach(function(icon) { option($('icon'), icon, language.language==='en'?icon.charAt(0).toUpperCase()+icon.slice(1):t(icon)); });
   if (legacy) { sourceEntries = collectSources(); actionEntries = collectActions(); try { apply(initial.settings, initial.needsRepair); } catch (error) { loadFailed(); } $('catalogue-status').textContent = catalogue.error || t('Installed sources and saved bindings are shown below.'); }
   else {
     draft = model.defaults(); renderActivities(); load();
@@ -571,6 +571,7 @@ function behavior(initial, makeModel, makeApps, makeLanguage) {
   measureFooter();
 }
 function render(initial) {
+  initial.translations=makeLanguage.catalogue;
   return [
     '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Dashboard settings</title><style id="xoce-settings-style">',
     settingsStyle,

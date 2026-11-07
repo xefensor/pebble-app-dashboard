@@ -59,3 +59,12 @@ and safe reruns. Finish authorized work in reviewable local commits; pushing or 
 needs explicit scope.
 
 [History index](docs/history/index.md).
+
+Interface translations live in `src/common/translations.json`. `nativeWords` provides
+compact watch wording; `@header:` entries fit the narrow utility headers without
+shortening body text. `nativeLayout` records measured control/help/warning widths.
+After editing the catalogue, run `python3 scripts/generate-localization.py` and
+`node scripts/generate-config.cjs`. Native strings load one language at a time from
+a bounded resource buffer. `npm test` checks catalogue/placeholder parity and
+resource failure handling; `npm run check:artifact` checks actual bundled glyphs,
+resources and text widths.
