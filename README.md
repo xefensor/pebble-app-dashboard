@@ -5,10 +5,26 @@ Main contains the current implementation. [Development](CONTRIBUTING.md),
 are the active contributor references. Public downloads and frozen evidence keep
 their original versions; a merge to main is not publication.
 
+## Version 0.6.3
+
+- Adopt shared XOCE headers, readable rows, full-height action rails, icons and stock Pebble action-bar feedback.
+- Keep immediate selection, complete first-use help, safe Cancel-first confirmations and exact tap/hold action bindings.
+- Bundle UI 0.1.1 and the confirmed stay-open phone settings page.
+
+GitHub development prerelease for Pebble Time 2 / Emery with SDK 4.33.1.
+Validation covers portable tests, packaged runtimes and isolated native emulator
+checks. Physical phone/watch and fresh browser testing remain unverified.
+
+[Release validation](docs/qa/0.6.3/validation.json) records the exact package and native payload.
+
+Download the [PBW](https://github.com/xefensor/pebble-app-dashboard/releases/download/v0.6.3/Dashboard-0.6.3.pbw),
+[source](https://github.com/xefensor/pebble-app-dashboard/releases/download/v0.6.3/Dashboard-0.6.3-source.zip),
+[debug files](https://github.com/xefensor/pebble-app-dashboard/releases/download/v0.6.3/Dashboard-0.6.3-debug.zip), and
+[checksums](https://github.com/xefensor/pebble-app-dashboard/releases/download/v0.6.3/SHA256SUMS.txt).
+
 A stock Pebble watchapp for current activities, the latest available notification
-and pinned readings/actions. **Dashboard 0.6.2 includes the merged Emery readability improvements**
-on `main`; see the [redesign review](docs/REDESIGN.md). The published 0.4.3 development prerelease
-remains available below.
+and pinned readings/actions. **Dashboard 0.6.3 includes the shared Emery UI and readability improvements**
+on `main`; see the [redesign review](docs/REDESIGN.md). The earlier 0.4.3 development prerelease remains available below.
 
 Part of **XOCE — Xef's Open Computing Ecosystem**. The shared Activities
 library now lives in
@@ -22,10 +38,10 @@ Current build and portable/emulator checks are recorded under
 physical-watch comfort/battery still need device testing. Synthetic SDK/emulator
 fixtures are not evidence of live phone operation.
 
-## Current merged UI 0.6.2
+## Current UI 0.6.3
 
-The local package is `dist/Dashboard-0.6.2.pbw`, with its matching debug archive
-and checksums in `dist/`. It has not been pushed or published.
+Install Dashboard 0.6.3 using the downloads above. Its matching source, debug
+archive and checksums identify the same build.
 
 - Native typography uses one coherent Roboto Condensed Bold utility family and
   Fredoka values, with ink-centered boxes and immediate full-width selection.
@@ -54,9 +70,9 @@ the confirmed stay-open workflow. Timer controls remain deferred.
 
 See the [implementation and validation record](docs/qa/0.6.2/VALIDATION.md).
 
-## Try the build
+## Earlier releases
 
-Download **Dashboard 0.4.3**:
+The previous **Dashboard 0.4.3** remains available:
 [PBW](https://github.com/xefensor/pebble-app-dashboard/releases/download/v0.4.3/Dashboard-0.4.3.pbw),
 [source](https://github.com/xefensor/pebble-app-dashboard/releases/download/v0.4.3/Dashboard-0.4.3-source.zip),
 [debugging files](https://github.com/xefensor/pebble-app-dashboard/releases/download/v0.4.3/Dashboard-0.4.3-debug.zip)

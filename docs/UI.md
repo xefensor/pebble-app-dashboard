@@ -1,13 +1,13 @@
 # Dashboard: current UI
 
-The accepted UI is merged into main; implementation version 0.6.2 remains
-unpublished. Published downloads retain their original versions and interfaces.
+The current release is 0.6.3. Earlier downloads and frozen evidence retain
+their original versions and interfaces.
 
 Tap Select performs the selected declared action or native Notifications shortcut; hold Select opens only its exact associated app. Hold Up/Down opens Activities/Pinned from Snapshot; the same held entry press must not scroll the destination. Back restores selection. Full-height 34 px contrasting rail and readable26pt time stay. Collections retain exact index/total, adaptive row heights and fifth-item/reverse/page/Back behaviour. Selection remains immediate and stationary; never reintroduce horizontal compression.
 
-## Shared UI development branch
+## Shared UI
 
-The current development branch uses the pinned `pebble-xoce-ui` package for the
+The current release uses the pinned `pebble-xoce-ui` package for the
 32 px header, 8 px common text inset, measured-ink centering, canonical icons,
 aspect-preserving image fitting, full-height action rail and physical-button
 feedback. Header title/status and clock use 26-point Roboto Condensed Bold;
@@ -26,7 +26,7 @@ Dashboard owns its fonts, layers, input callbacks, timers and command bindings.
 The library installs no callbacks. In particular, raw Select still captures
 the original token/version/mode, shows the 250 ms hold preview and preserves
 the separate 600 ms exact-app hold action. Selection remains immediate and
-stationary. This branch does not change the version or published downloads.
+stationary. Earlier published downloads remain unchanged.
 
 Preserve DSH1 identities, session/token/version checks and exact command bindings. Never persist private activity/notification content. Keep one activity, notification and two pins in Snapshot. Readings and independent commands are distinct capabilities. Zero is not owner completion. Default pins do not gain implicit actions or app bindings. Cancel is the initial confirmation choice. Source removal/expiry invalidates capability immediately according to the existing lease.
 

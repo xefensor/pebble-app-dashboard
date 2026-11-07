@@ -1,0 +1,46 @@
+{
+  "version": "0.6.3",
+  "sdk": "4.33.1",
+  "platform": "emery",
+  "result": "PASS",
+  "pbwSha256": "2260d5ce574223e922f8109c85b0627958c6ba0074c911a60673e60fe7b22d3a",
+  "nativePayloadSha256": {
+    "emery/app_resources.pbpack": "8e3ec3660e80de2c2585ccbd07345f17e7f5cd188f13d11c6f4b7305a4ef3413",
+    "emery/manifest.json": "bf448b7fdc94d0e6f1b214ecd097102ab47dac433bc82ad0365a828e550b9931",
+    "emery/pebble-app.bin": "e24f6aad748cb382b4f8383e802c5b4d74c1c5644bdae3ddadbf2ed96cab2544"
+  },
+  "portableTests": "PASS",
+  "packagedIdentityAndRuntimeChecks": "PASS",
+  "nativeScope": "Real native Emery QEMU UI and AppMessage requests with an explicit fictional protocol peer; no phone JavaScript, live plugins, real app launches or physical watch.",
+  "nativeChecks": [
+    {
+      "check": "First-use native button guide explains controls; dismissal consumes Select without dispatching an action or app launch",
+      "passed": true
+    },
+    {
+      "check": "First-use guide dismissal persists across a native app restart; ordinary navigation works immediately and dispatches no action",
+      "passed": true
+    },
+    {
+      "check": "Whole-composition review captures of Snapshot, collection, Media and safe confirmation at unified font roles",
+      "passed": true,
+      "scope": "Representative appearance only; full behavior QA is separate."
+    }
+  ],
+  "visualReview": {
+    "reviewedExamples": [
+      {
+        "file": "snapshot-dark.png",
+        "sha256": "6ff476edf0c740da497b73e91aed1933acde2244c76e694e5b2d12552bbb7092"
+      },
+      {
+        "file": "confirmation-light.png",
+        "sha256": "78fced479cdd39bf7e209a73389d1f303ee8a53880613935cb2e36fe0877899b"
+      }
+    ],
+    "scope": "Inspected actual captures; sample data in isolated Emery QEMU"
+  },
+  "physicalPhone": "not run",
+  "physicalWatch": "not run",
+  "freshBrowser": "not run"
+}
