@@ -1,6 +1,6 @@
 # Dashboard UI/UX alignment
 
-Dashboard **0.6.0 is a local redesign review candidate** on
+Dashboard **0.6.1 is a local readability correction** on
 `design/pebble-native-redesign`; [REDESIGN.md](REDESIGN.md) describes this
 alternative. The shared **0.5.0 implementation remains the baseline** below. It has not been pushed
 or published. The earlier reviewed baseline was 0.4.3 at
@@ -81,3 +81,20 @@ See [0.6.0 validation](qa/0.6.0/VALIDATION.md) for actual package, controller an
 native emulator checks. The standalone phone preview is an isolated fictional
 layout fixture, not browser fitting or phone verification. The canonical XOCE
 standard remains the shared baseline until Xef reviews the branch.
+
+## Readability correction after Xef's review
+
+Xef rejected smaller time/date, high icons, text against box bottoms and a large
+clock beside undersized content. The 0.6.1 review candidate now sizes the whole
+composition together: shared Roboto Condensed Bold 26/24/22/20 utilities,
+Fredoka 36 primary and 26px pin values. All text groups use actual packaged glyph
+ink for centering; the header spans 200px while the physical action rail keeps
+its anchors below. Selection is immediate, stationary and full-width; bounded
+144ms physical-button feedback remains.
+
+Snapshot exchanges primary/notice space, keeps two pins, and shows a fully
+accented numeric-primary notice without clipping. Media/text primaries may use
+Open to read for an optional preview. Collections adapt the visible window
+inside the unchanged five-item wire page, typically 3–4 readable rows, with
+fewer for tall accent groups. No setting, protocol or capability shape changes.
+See [the design record](REDESIGN.md) and [current evidence](qa/0.6.1/VALIDATION.md).

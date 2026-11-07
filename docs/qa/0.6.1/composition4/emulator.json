@@ -1,0 +1,549 @@
+{
+  "result": "COMPOSITION REVIEW",
+  "version": "0.6.1",
+  "scope": "Real native Emery QEMU UI and AppMessage requests with an explicit fictional protocol peer; no phone JavaScript, live plugins, real app launches or physical watch.",
+  "focusedMotionOnly": false,
+  "focusedNotificationsOnly": false,
+  "focusedUxOnly": false,
+  "focusedReliabilityOnly": false,
+  "pausedMediaReproduction": false,
+  "focusedActivitiesOnly": false,
+  "focusedStartupThemeOnly": false,
+  "candidatePbwSha256": "f90d4068879953957c3de9eb9f1439ada185d4b22be296c9638bcfee4df2f3f5",
+  "nativeOnlyPbwSha256": "5d601d226194dcd99894f67474749c3f056925a140dd74313cd8bd43c56a737a",
+  "nativePayloadSha256": {
+    "emery/app_resources.pbpack": "8e3ec3660e80de2c2585ccbd07345f17e7f5cd188f13d11c6f4b7305a4ef3413",
+    "emery/manifest.json": "9cc70703f0e2eff076a8e8fd8ea57c52ece315cf6d3ae00cb3b3012b122feafd",
+    "emery/pebble-app.bin": "65a70147793f119ef7cd895b1c083ee115e2f15aa6d409e7093f8396f6700407"
+  },
+  "phoneJavascriptExecuted": false,
+  "stateDirectory": "/tmp/dashboard-emery-lh5iqfn_",
+  "freshIsolatedFlash": true,
+  "session": 795129011,
+  "checks": [
+    {
+      "check": "First-use native button guide explains controls; dismissal consumes Select without dispatching an action or app launch",
+      "passed": true
+    },
+    {
+      "check": "First-use guide dismissal persists across a native app restart; ordinary navigation works immediately and dispatches no action",
+      "passed": true
+    },
+    {
+      "check": "Whole-composition review captures of Snapshot, collection, Media and safe confirmation at unified font roles",
+      "passed": true,
+      "scope": "Representative appearance only; full behavior QA is separate."
+    }
+  ],
+  "captures": [
+    {
+      "name": "first-use-button-guide",
+      "file": "first-use-button-guide.png",
+      "sha256": "61547af65785b948d4a294ab5aac48c8a588c49cc61a9804ecf76ee9e474c92d",
+      "rgbSha256": "e0ef709d3ae06796b95d2c1ef94fad23ea3df62aec06bf1861967b6d4be2d341",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "first-use-guide-dismissed",
+      "file": "first-use-guide-dismissed.png",
+      "sha256": "e1365786305493224190a44af8bef78f43341739018e90004988614d42b03307",
+      "rgbSha256": "154859ca243895dd6fe35c32e05646dcdf9f96f5d57aa9361acd45891a2b4c75",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "guide-dismissed-after-restart",
+      "file": "guide-dismissed-after-restart.png",
+      "sha256": "3e9c9c6780e94ee4ffff240a686e9c36bf12e9a6397f9b57c426e0217b213d29",
+      "rgbSha256": "2d565c2683ae7ee2e73ba1d4d61f3e8de6f330f75badec86e4525f9babab23dd",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "activities-title-count-clock",
+      "file": "activities-title-count-clock.png",
+      "sha256": "8f4c4282b76840dbbddf97442639b9e2791cb9d2c801cc85b0fd285fb8a989bd",
+      "rgbSha256": "215bfe970de5cf525bdfb8ee4c6761a7065839f2ee7f659bbd8ba836513d2053",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "pinned-title-count-clock",
+      "file": "pinned-title-count-clock.png",
+      "sha256": "c700b28e33a7a78e82962e24c71fce839a0fb6e96a41ff2a17d19f588c4addcf",
+      "rgbSha256": "570e1bdd504fa7ec7fde1155f35ef60d80a05b390cc146f5b9a81ea2f11b1a0b",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "snapshot-light",
+      "file": "snapshot-light.png",
+      "sha256": "b5c0198a07a856818932ca97623999deec81596022be36929dec3e0b3d47a2c8",
+      "rgbSha256": "0fdf55a27879d341847c8751287f48135232f5492bbfdc8f419286cafb734e80",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "snapshot-dark",
+      "file": "snapshot-dark.png",
+      "sha256": "83cd9b2cd38cf3d981726bc2040959be8b5df1cc1329c9aa4f50af1533f91921",
+      "rgbSha256": "dd0a7ce2b85869048e8af5324b73c9e860c0ce56f235dda293bf4d56e102132b",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "activities-list-light",
+      "file": "activities-list-light.png",
+      "sha256": "b0d86b602f97bbe4b817d807e6dc09eb3c0f8f091516fb1f6b064aac81d6633b",
+      "rgbSha256": "ff14af8a11631f9c1cf8e278e893831e9250e6a14b899e7ec8544fb194e3d49a",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "activities-list-dark",
+      "file": "activities-list-dark.png",
+      "sha256": "57232e882556b33bb08370cd1e4f95f40265bc9feab6703e996eb14c319514c9",
+      "rgbSha256": "6b336b3f3b0ef485d3eadb342ec14f9ef4f48a6d874f19636458cd8211944990",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "media-dark",
+      "file": "media-dark.png",
+      "sha256": "a92131003749fbbcc6b0b6cc01ef72753e64d706efa717ee5963744e222709a0",
+      "rgbSha256": "b157c0d522199631f0f834c02a2ed4242f2800db2432de6fe008e8b7f633133e",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "media-light",
+      "file": "media-light.png",
+      "sha256": "79e5a76be4110cc8560d2d8179e7d4548b4f4977abc451971a2340285eb8415a",
+      "rgbSha256": "3ba5c1ffc01be3222dbdc28ae4a8802df04e3b5bcfd941f526e9c4131cc246ef",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "confirmation-light",
+      "file": "confirmation-light.png",
+      "sha256": "bcff041faf503f6df0111d8cbee1410742f54a9d5a997528d3d7b51a15c9cbc6",
+      "rgbSha256": "e4b7cd48c2c8f491766cd6f54193ecb7cf200eb8d203e01f376cd95ab546fc6f",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "confirmation-dark",
+      "file": "confirmation-dark.png",
+      "sha256": "070eb2dc48cae1fd368c2897a5d92ec3d0468350365fa03e6a84c7dd25921f1e",
+      "rgbSha256": "3b79a1328bbb37fa7fcc51f0b78a5faa91ee3376ce16b6795e0e1fd313b04213",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    }
+  ],
+  "themePixelChecks": [
+    {
+      "capture": "snapshot-light.png",
+      "dark": false,
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "backgroundPoints": [
+        [
+          1,
+          10
+        ],
+        [
+          1,
+          80
+        ],
+        [
+          1,
+          225
+        ],
+        [
+          164,
+          225
+        ]
+      ],
+      "sidebarPoint": [
+        198,
+        80
+      ],
+      "sidebarColor": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "capture": "snapshot-dark.png",
+      "dark": true,
+      "background": [
+        0,
+        0,
+        0
+      ],
+      "backgroundPoints": [
+        [
+          1,
+          10
+        ],
+        [
+          1,
+          80
+        ],
+        [
+          1,
+          225
+        ],
+        [
+          164,
+          225
+        ]
+      ],
+      "sidebarPoint": [
+        198,
+        80
+      ],
+      "sidebarColor": [
+        255,
+        255,
+        255
+      ]
+    }
+  ],
+  "requests": [
+    {
+      "4000": 1,
+      "4001": 774026417,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0
+    },
+    {
+      "4000": 7,
+      "4001": 774026417,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 1,
+      "4006": 1
+    },
+    {
+      "4000": 1,
+      "4001": 795129011,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0
+    },
+    {
+      "4000": 7,
+      "4001": 795129011,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 1,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 795129011,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 1,
+      "4005": 3,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 795129011,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 1,
+      "4006": 1
+    },
+    {
+      "4000": 2,
+      "4001": 795129011,
+      "4002": 2,
+      "4003": 1,
+      "4004": 0,
+      "4012": 0
+    },
+    {
+      "4000": 7,
+      "4001": 795129011,
+      "4002": 2,
+      "4003": 1,
+      "4004": 0,
+      "4012": 0,
+      "4005": 1,
+      "4006": 1
+    },
+    {
+      "4000": 2,
+      "4001": 795129011,
+      "4002": 3,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 1,
+      "4006": 0
+    },
+    {
+      "4000": 7,
+      "4001": 795129011,
+      "4002": 3,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 1,
+      "4006": 1
+    },
+    {
+      "4000": 2,
+      "4001": 795129011,
+      "4002": 4,
+      "4003": 2,
+      "4004": 0,
+      "4012": 0
+    },
+    {
+      "4000": 7,
+      "4001": 795129011,
+      "4002": 4,
+      "4003": 2,
+      "4004": 0,
+      "4012": 0,
+      "4005": 4,
+      "4006": 1
+    },
+    {
+      "4000": 2,
+      "4001": 795129011,
+      "4002": 5,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 1,
+      "4006": 0
+    },
+    {
+      "4000": 7,
+      "4001": 795129011,
+      "4002": 5,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 1,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 795129011,
+      "4002": 5,
+      "4003": 0,
+      "4004": 0,
+      "4012": 1,
+      "4005": 3,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 795129011,
+      "4002": 5,
+      "4003": 0,
+      "4004": 0,
+      "4012": 2,
+      "4005": 4,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 795129011,
+      "4002": 5,
+      "4003": 0,
+      "4004": 0,
+      "4012": 3,
+      "4005": 5,
+      "4006": 1
+    },
+    {
+      "4000": 2,
+      "4001": 795129011,
+      "4002": 6,
+      "4003": 1,
+      "4004": 0,
+      "4012": 0
+    },
+    {
+      "4000": 7,
+      "4001": 795129011,
+      "4002": 6,
+      "4003": 1,
+      "4004": 0,
+      "4012": 0,
+      "4005": 1,
+      "4006": 1
+    },
+    {
+      "4000": 2,
+      "4001": 795129011,
+      "4002": 7,
+      "4003": 0,
+      "4004": 0,
+      "4012": 3,
+      "4005": 5,
+      "4006": 0
+    },
+    {
+      "4000": 7,
+      "4001": 795129011,
+      "4002": 7,
+      "4003": 0,
+      "4004": 0,
+      "4012": 3,
+      "4005": 5,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 795129011,
+      "4002": 7,
+      "4003": 0,
+      "4004": 0,
+      "4012": 2,
+      "4005": 4,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 795129011,
+      "4002": 7,
+      "4003": 0,
+      "4004": 0,
+      "4012": 1,
+      "4005": 3,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 795129011,
+      "4002": 7,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 2,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 795129011,
+      "4002": 7,
+      "4003": 0,
+      "4004": 0,
+      "4012": 1,
+      "4005": 3,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 795129011,
+      "4002": 7,
+      "4003": 0,
+      "4004": 0,
+      "4012": 2,
+      "4005": 4,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 795129011,
+      "4002": 7,
+      "4003": 0,
+      "4004": 0,
+      "4012": 3,
+      "4005": 7,
+      "4006": 1
+    },
+    {
+      "4000": 3,
+      "4001": 795129011,
+      "4002": 8,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 7,
+      "4006": 1,
+      "4007": 0,
+      "4011": 0
+    }
+  ],
+  "mockActions": [
+    {
+      "4000": 3,
+      "4001": 795129011,
+      "4002": 8,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 7,
+      "4006": 1,
+      "4007": 0,
+      "4011": 0
+    }
+  ],
+  "mockAppOpens": [],
+  "visualReview": {
+    "reviewed": false
+  }
+}

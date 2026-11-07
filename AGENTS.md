@@ -1,6 +1,6 @@
 # Dashboard maintainer notes
 
-This repository contains the native Dashboard redesign candidate (0.6.0),
+This repository contains the native Dashboard redesign candidate (0.6.1),
 its phone runtime/settings, and earlier browser design studies. Read README.md
 and docs/IMPLEMENTATION.md. Preserve UUID f76f9fc1-2944-4248-bcc5-3eea2af0183b,
 DSH1 message keys and existing published sibling apps.
@@ -195,10 +195,34 @@ The existing ownership, privacy, Android storage and frozen-release rules apply.
 
 ## Pebble-native redesign branch
 
-`design/pebble-native-redesign` is an aesthetic review alternative, not a released
-or approved replacement for the shared 0.5.0 baseline. Read docs/REDESIGN.md.
-It uses system Gothic utility roles, retains compact custom context labels and
-Fredoka values, and adds bounded action/list feedback. Keep labels anchored in
-list motion; settle before activation/live replacement and cancel under cover.
-The phone Watch appearance select maps back to the existing dark Boolean.
-Use versioned SHA256SUMS-0.6.0.txt so older local/released checksums stay intact.
+`design/pebble-native-redesign` is a local review alternative, not a released
+replacement for the shared 0.5.0 baseline. Read docs/REDESIGN.md and current QA.
+Xef's correction rejects tiny top time/date, icons above adjacent text, bottom-
+aligned box text and piecemeal clock enlargement. Review entire compositions.
+
+Use the shared Roboto Condensed Bold 26/24/22/20 utility roles and Fredoka values.
+The full-width 30px header contains Roboto 26 time, 24px title and 22px count. The
+34px action rail begins below it and keeps physical anchors. Snapshot uses a
+Fredoka 36 primary and 26px pin values, 22px captions/labels and 24px notice body.
+Keep one activity, notice and two pins. Numeric-primary notice space can reach
+62px with at least 2px actual primary ink margin; Media/text primaries cap notice
+space at 53px and explicitly use Open to read when an optional preview cannot
+fit. Do not shrink body roles to force density. Collections use an adaptive
+visible window inside the unchanged five-item wire page (normally 3–4 rows,
+fewer for tall accents). Test fifth selection, reverse, page, Back and shrink.
+
+Center fitted text by actual ink, including accents/descenders/ellipsis. Width
+fitting stays with public SDK APIs. Generate `generated_body_ink.h` and
+`generated_clock_ink.h` from exact SDK 4.33.1 packaged PFOs using
+`scripts/generate-body-ink.py`, then rebuild and check table/resource identity.
+Roboto resources require extended:true to retain 920 glyphs including Czech
+accents and minus. Unknown glyphs use the packaged wildcard; this is not a
+coverage/shaping guarantee. The older stock-font probe is research only.
+
+Selection is immediate, full-width and stationary; do not reintroduce horizontal
+compression or selection Animation hooks. Only physical-button feedback has a
+bounded 144ms return, canceled safely on focus loss/disconnect/teardown. Safe
+confirmation/input semantics, privacy and source ownership remain as above.
+The phone Watch appearance select maps to the same dark Boolean. Phone CSS-only
+alignment checks do not claim new browser/device evidence. Versioned checksums
+must preserve all older local/released artifact bytes.

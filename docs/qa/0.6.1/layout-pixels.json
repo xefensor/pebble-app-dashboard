@@ -1,0 +1,3788 @@
+{
+  "result": "PASS",
+  "version": "0.6.1",
+  "candidatePbwSha256": "6158c5d67bd2c6b53bea588be2a715ae7122c77d8532544f27783e3b0899b182",
+  "scope": "Actual unchanged native fixture PNG ink bounds. English/Czech selected/unselected Snapshot, full-accent tight case, Media title/artist/artwork and explicit preview hint, normal/adaptive collections, generic controls and confirmation. This is not a browser, phone or physical-watch measurement.",
+  "captures": {
+    "snapshot-light.png": "72d7463e6cc6c91b1832e5e6a9a2ab9b706bab5408c41ff81e517412d3795c78",
+    "snapshot-dark.png": "2e4824963988c2c19df58fdf484042979f5ae59df38a7bb2bab9f9c5edfa709b",
+    "layout-normal-notice-selected.png": "b78708757842bae734ddc5e982c00e34e6a8556962cb5e674cab5905a76163a4",
+    "layout-normal-first-pin-selected.png": "cc9e42841496ec0e739db8eb5f6b993eb3f9044fa20edd717a66b531f8448d59",
+    "layout-czech-primary-selected-light.png": "9e12434fcf26343e7d6c432358ecbfc93fb400e6858cae703e250e4a6edc090b",
+    "layout-czech-notice-selected-light.png": "9d525cf5103a99fd7c74a13d2bc0f3f16d321a8f88efdd98eef5843807580a02",
+    "layout-czech-first-pin-selected-light.png": "8d6197638825e98f9b2e72e9e53287b89fcd139d4e739d2d42127030863c20a6",
+    "layout-czech-second-pin-selected-light.png": "321d6d56c9db94ca2952520d0260c3fd10fc81fedf789d65958b210f409eb8b0",
+    "layout-full-accent-primary-selected-light.png": "7fae900f3c11d52782fc5eefb73501502068eb82fe23336977774b3fdb7b79fe",
+    "layout-czech-primary-selected-dark.png": "c35696e6b6707b76c4f473b9dc98f1c92f9b6db96aa71505c999bb8d7157ec71",
+    "layout-czech-notice-selected-dark.png": "decbc8b451a8cca9294fac3fb3974487f05a456b8db95df01ff6132c6eeb9f30",
+    "layout-czech-first-pin-selected-dark.png": "2178b22eb3316448d47c43157c9dc424e3ace898b459f2b748caad0ee35c38d8",
+    "layout-czech-second-pin-selected-dark.png": "37a587f2285d04b8e32708fd2c3303e597103c3684736887d5bca4ae783b0e8f",
+    "layout-full-accent-primary-selected-dark.png": "37a2a0d39ccdc844b3fb45ea81b33f817ad4367cf4b584850f7417cbc737ff80",
+    "layout-media-normal-light.png": "25eed998e2c8ba2219d71c416fea9b27b75fb27ec5256d12634a9a9a5d0005e3",
+    "layout-czech-media-light.png": "91aa2c8562cae57990314ff986f6b507de298d4ff5474008725fdded05938b30",
+    "layout-media-normal-dark.png": "c52bae9a2fcd24e0fd5fd577bc9bad3a80616de53a254f7294ea699446acafec",
+    "layout-czech-media-dark.png": "af8214527557787fdff7ca1775dbaa567877ffc7f15d8ac6638828d464f63aef",
+    "layout-accented-list-first.png": "e3af125bcd0c1dcbf26de4a3432ab02359a8ddfabbf79ba57fbd9010e4c924e3",
+    "layout-accented-list-fifth.png": "1566230096339f353cc5f9e94d1d8b6e6eaa3bbcaa6b3fc30b9c7ae71e1f7e97",
+    "layout-accented-list-reverse.png": "923c1ef41b95fb01686a3ff477aec1554cd14297a5bd42bf8b51c0fa8529ad57",
+    "layout-accented-list-next-page.png": "b746c4c8ede937530d1aa2370d72291ee5b7f53883bb4c7d3184fccdb3ff08f9",
+    "layout-accented-list-last.png": "40b428af591badb10e61508d826dfab9e3ef67531c6276d12c26cc4953566504",
+    "layout-accented-list-last-reverse.png": "dc9723441c2d931d97238e2ccd290f9a6e559acc9f8ccf019823736aaf2df75e",
+    "generic-controls-visible-slots.png": "93d22fbf8ca43892a4d080fc7d2252a2a0b8187b2854e377526accc9fb8d747a",
+    "generic-sparse-controls-visible-slots.png": "93d22fbf8ca43892a4d080fc7d2252a2a0b8187b2854e377526accc9fb8d747a",
+    "generic-single-control-visible-slots.png": "96d3d0eb3c83613442ae7191c5f183e4868a8d3a4ceed4d1a9cdb00f539afdad",
+    "confirmation-target-sidebar.png": "368da566115dfe5f340f278589976e5ec1ad60db2d4377acc3f08e10061fc272",
+    "confirmation-explicit-run-choice.png": "c5e580a796a0936f4569a70d5a7b5681c0b0a36d71762d8c866d6ebc9bcc21d4",
+    "activities-list-light.png": "7ff28707f2eab6965881e26a073be2b5e49a7d3a5f999335d7ab0811ff14a64e",
+    "activities-list-dark.png": "b2b3f782c38a46f778e7d3eb14a21295277790ec2f094bbab95fcd1034f70ecc"
+  },
+  "measurements": [
+    {
+      "capture": "snapshot-light.png",
+      "role": "Header clock",
+      "ink": [
+        137,
+        5,
+        193,
+        24
+      ],
+      "visibleHeightPixels": 19,
+      "margins": {
+        "top": 5,
+        "bottom": 6
+      }
+    },
+    {
+      "capture": "snapshot-light.png",
+      "role": "Header title/clock",
+      "iconOrLabelInk": [
+        7,
+        6,
+        108,
+        24
+      ],
+      "adjacentTextInk": [
+        137,
+        5,
+        193,
+        24
+      ],
+      "verticalCenterDifferencePixels": 0.5
+    },
+    {
+      "capture": "snapshot-light.png",
+      "role": "Header title",
+      "ink": [
+        7,
+        6,
+        108,
+        24
+      ],
+      "visibleHeightPixels": 18,
+      "margins": {
+        "top": 6,
+        "bottom": 6
+      }
+    },
+    {
+      "capture": "snapshot-light.png",
+      "role": "Primary caption/icon",
+      "iconOrLabelInk": [
+        13,
+        71,
+        32,
+        96
+      ],
+      "adjacentTextInk": [
+        42,
+        75,
+        74,
+        91
+      ],
+      "verticalCenterDifferencePixels": 0.5
+    },
+    {
+      "capture": "snapshot-light.png",
+      "role": "Whole primary value/caption/icon group",
+      "box": [
+        4,
+        33,
+        162,
+        102
+      ],
+      "ink": [
+        10,
+        39,
+        157,
+        96
+      ],
+      "margins": {
+        "top": 6,
+        "bottom": 6
+      },
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "snapshot-light.png",
+      "role": "Notification heading/icon",
+      "iconOrLabelInk": [
+        11,
+        108,
+        33,
+        132
+      ],
+      "adjacentTextInk": [
+        42,
+        109,
+        149,
+        130
+      ],
+      "verticalCenterDifferencePixels": 0.5
+    },
+    {
+      "capture": "snapshot-light.png",
+      "role": "Whole notification group",
+      "box": [
+        4,
+        105,
+        162,
+        157
+      ],
+      "ink": [
+        8,
+        108,
+        157,
+        153
+      ],
+      "margins": {
+        "top": 3,
+        "bottom": 4
+      },
+      "verticalCenterDifferencePixels": 0.5
+    },
+    {
+      "capture": "snapshot-light.png",
+      "role": "first-pin icon/value",
+      "iconOrLabelInk": [
+        10,
+        166,
+        34,
+        186
+      ],
+      "adjacentTextInk": [
+        39,
+        166,
+        90,
+        186
+      ],
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "snapshot-light.png",
+      "role": "first-pin value box",
+      "box": [
+        4,
+        160,
+        162,
+        192
+      ],
+      "ink": [
+        39,
+        166,
+        90,
+        186
+      ],
+      "margins": {
+        "top": 6,
+        "bottom": 6
+      }
+    },
+    {
+      "capture": "snapshot-light.png",
+      "role": "second-pin label/value",
+      "iconOrLabelInk": [
+        40,
+        202,
+        99,
+        219
+      ],
+      "adjacentTextInk": [
+        112,
+        201,
+        159,
+        221
+      ],
+      "verticalCenterDifferencePixels": 0.5
+    },
+    {
+      "capture": "snapshot-light.png",
+      "role": "second-pin icon/value",
+      "iconOrLabelInk": [
+        12,
+        198,
+        31,
+        224
+      ],
+      "adjacentTextInk": [
+        112,
+        201,
+        159,
+        221
+      ],
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "snapshot-light.png",
+      "role": "second-pin value box",
+      "box": [
+        4,
+        195,
+        162,
+        227
+      ],
+      "ink": [
+        112,
+        201,
+        159,
+        221
+      ],
+      "margins": {
+        "top": 6,
+        "bottom": 6
+      }
+    },
+    {
+      "capture": "snapshot-dark.png",
+      "role": "Header clock",
+      "ink": [
+        137,
+        5,
+        193,
+        24
+      ],
+      "visibleHeightPixels": 19,
+      "margins": {
+        "top": 5,
+        "bottom": 6
+      }
+    },
+    {
+      "capture": "snapshot-dark.png",
+      "role": "Header title/clock",
+      "iconOrLabelInk": [
+        7,
+        6,
+        108,
+        24
+      ],
+      "adjacentTextInk": [
+        137,
+        5,
+        193,
+        24
+      ],
+      "verticalCenterDifferencePixels": 0.5
+    },
+    {
+      "capture": "snapshot-dark.png",
+      "role": "Header title",
+      "ink": [
+        7,
+        6,
+        108,
+        24
+      ],
+      "visibleHeightPixels": 18,
+      "margins": {
+        "top": 6,
+        "bottom": 6
+      }
+    },
+    {
+      "capture": "snapshot-dark.png",
+      "role": "Primary caption/icon",
+      "iconOrLabelInk": [
+        13,
+        71,
+        32,
+        96
+      ],
+      "adjacentTextInk": [
+        42,
+        75,
+        74,
+        91
+      ],
+      "verticalCenterDifferencePixels": 0.5
+    },
+    {
+      "capture": "snapshot-dark.png",
+      "role": "Whole primary value/caption/icon group",
+      "box": [
+        4,
+        33,
+        162,
+        102
+      ],
+      "ink": [
+        10,
+        39,
+        157,
+        96
+      ],
+      "margins": {
+        "top": 6,
+        "bottom": 6
+      },
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "snapshot-dark.png",
+      "role": "Notification heading/icon",
+      "iconOrLabelInk": [
+        11,
+        108,
+        33,
+        132
+      ],
+      "adjacentTextInk": [
+        42,
+        109,
+        149,
+        130
+      ],
+      "verticalCenterDifferencePixels": 0.5
+    },
+    {
+      "capture": "snapshot-dark.png",
+      "role": "Whole notification group",
+      "box": [
+        4,
+        105,
+        162,
+        157
+      ],
+      "ink": [
+        8,
+        108,
+        157,
+        153
+      ],
+      "margins": {
+        "top": 3,
+        "bottom": 4
+      },
+      "verticalCenterDifferencePixels": 0.5
+    },
+    {
+      "capture": "snapshot-dark.png",
+      "role": "first-pin icon/value",
+      "iconOrLabelInk": [
+        10,
+        166,
+        34,
+        186
+      ],
+      "adjacentTextInk": [
+        39,
+        166,
+        90,
+        186
+      ],
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "snapshot-dark.png",
+      "role": "first-pin value box",
+      "box": [
+        4,
+        160,
+        162,
+        192
+      ],
+      "ink": [
+        39,
+        166,
+        90,
+        186
+      ],
+      "margins": {
+        "top": 6,
+        "bottom": 6
+      }
+    },
+    {
+      "capture": "snapshot-dark.png",
+      "role": "second-pin label/value",
+      "iconOrLabelInk": [
+        40,
+        202,
+        99,
+        219
+      ],
+      "adjacentTextInk": [
+        112,
+        201,
+        159,
+        221
+      ],
+      "verticalCenterDifferencePixels": 0.5
+    },
+    {
+      "capture": "snapshot-dark.png",
+      "role": "second-pin icon/value",
+      "iconOrLabelInk": [
+        12,
+        198,
+        31,
+        224
+      ],
+      "adjacentTextInk": [
+        112,
+        201,
+        159,
+        221
+      ],
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "snapshot-dark.png",
+      "role": "second-pin value box",
+      "box": [
+        4,
+        195,
+        162,
+        227
+      ],
+      "ink": [
+        112,
+        201,
+        159,
+        221
+      ],
+      "margins": {
+        "top": 6,
+        "bottom": 6
+      }
+    },
+    {
+      "capture": "layout-normal-notice-selected.png",
+      "role": "Header clock",
+      "ink": [
+        137,
+        5,
+        193,
+        24
+      ],
+      "visibleHeightPixels": 19,
+      "margins": {
+        "top": 5,
+        "bottom": 6
+      }
+    },
+    {
+      "capture": "layout-normal-notice-selected.png",
+      "role": "Header title/clock",
+      "iconOrLabelInk": [
+        7,
+        6,
+        108,
+        24
+      ],
+      "adjacentTextInk": [
+        137,
+        5,
+        193,
+        24
+      ],
+      "verticalCenterDifferencePixels": 0.5
+    },
+    {
+      "capture": "layout-normal-notice-selected.png",
+      "role": "Header title",
+      "ink": [
+        7,
+        6,
+        108,
+        24
+      ],
+      "visibleHeightPixels": 18,
+      "margins": {
+        "top": 6,
+        "bottom": 6
+      }
+    },
+    {
+      "capture": "layout-normal-notice-selected.png",
+      "role": "Primary caption/icon",
+      "iconOrLabelInk": [
+        13,
+        71,
+        32,
+        96
+      ],
+      "adjacentTextInk": [
+        42,
+        75,
+        74,
+        91
+      ],
+      "verticalCenterDifferencePixels": 0.5
+    },
+    {
+      "capture": "layout-normal-notice-selected.png",
+      "role": "Whole primary value/caption/icon group",
+      "box": [
+        4,
+        33,
+        162,
+        102
+      ],
+      "ink": [
+        10,
+        39,
+        157,
+        96
+      ],
+      "margins": {
+        "top": 6,
+        "bottom": 6
+      },
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-normal-notice-selected.png",
+      "role": "Notification heading/icon",
+      "iconOrLabelInk": [
+        11,
+        108,
+        33,
+        132
+      ],
+      "adjacentTextInk": [
+        42,
+        109,
+        149,
+        130
+      ],
+      "verticalCenterDifferencePixels": 0.5
+    },
+    {
+      "capture": "layout-normal-notice-selected.png",
+      "role": "Whole notification group",
+      "box": [
+        4,
+        105,
+        162,
+        157
+      ],
+      "ink": [
+        8,
+        108,
+        157,
+        153
+      ],
+      "margins": {
+        "top": 3,
+        "bottom": 4
+      },
+      "verticalCenterDifferencePixels": 0.5
+    },
+    {
+      "capture": "layout-normal-notice-selected.png",
+      "role": "first-pin icon/value",
+      "iconOrLabelInk": [
+        10,
+        166,
+        34,
+        186
+      ],
+      "adjacentTextInk": [
+        39,
+        166,
+        90,
+        186
+      ],
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-normal-notice-selected.png",
+      "role": "first-pin value box",
+      "box": [
+        4,
+        160,
+        162,
+        192
+      ],
+      "ink": [
+        39,
+        166,
+        90,
+        186
+      ],
+      "margins": {
+        "top": 6,
+        "bottom": 6
+      }
+    },
+    {
+      "capture": "layout-normal-notice-selected.png",
+      "role": "second-pin label/value",
+      "iconOrLabelInk": [
+        40,
+        202,
+        99,
+        219
+      ],
+      "adjacentTextInk": [
+        112,
+        201,
+        159,
+        221
+      ],
+      "verticalCenterDifferencePixels": 0.5
+    },
+    {
+      "capture": "layout-normal-notice-selected.png",
+      "role": "second-pin icon/value",
+      "iconOrLabelInk": [
+        12,
+        198,
+        31,
+        224
+      ],
+      "adjacentTextInk": [
+        112,
+        201,
+        159,
+        221
+      ],
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-normal-notice-selected.png",
+      "role": "second-pin value box",
+      "box": [
+        4,
+        195,
+        162,
+        227
+      ],
+      "ink": [
+        112,
+        201,
+        159,
+        221
+      ],
+      "margins": {
+        "top": 6,
+        "bottom": 6
+      }
+    },
+    {
+      "capture": "layout-normal-first-pin-selected.png",
+      "role": "Header clock",
+      "ink": [
+        137,
+        5,
+        193,
+        24
+      ],
+      "visibleHeightPixels": 19,
+      "margins": {
+        "top": 5,
+        "bottom": 6
+      }
+    },
+    {
+      "capture": "layout-normal-first-pin-selected.png",
+      "role": "Header title/clock",
+      "iconOrLabelInk": [
+        7,
+        6,
+        108,
+        24
+      ],
+      "adjacentTextInk": [
+        137,
+        5,
+        193,
+        24
+      ],
+      "verticalCenterDifferencePixels": 0.5
+    },
+    {
+      "capture": "layout-normal-first-pin-selected.png",
+      "role": "Header title",
+      "ink": [
+        7,
+        6,
+        108,
+        24
+      ],
+      "visibleHeightPixels": 18,
+      "margins": {
+        "top": 6,
+        "bottom": 6
+      }
+    },
+    {
+      "capture": "layout-normal-first-pin-selected.png",
+      "role": "Primary caption/icon",
+      "iconOrLabelInk": [
+        13,
+        71,
+        32,
+        96
+      ],
+      "adjacentTextInk": [
+        42,
+        75,
+        74,
+        91
+      ],
+      "verticalCenterDifferencePixels": 0.5
+    },
+    {
+      "capture": "layout-normal-first-pin-selected.png",
+      "role": "Whole primary value/caption/icon group",
+      "box": [
+        4,
+        33,
+        162,
+        102
+      ],
+      "ink": [
+        10,
+        39,
+        157,
+        96
+      ],
+      "margins": {
+        "top": 6,
+        "bottom": 6
+      },
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-normal-first-pin-selected.png",
+      "role": "Notification heading/icon",
+      "iconOrLabelInk": [
+        11,
+        108,
+        33,
+        132
+      ],
+      "adjacentTextInk": [
+        42,
+        109,
+        149,
+        130
+      ],
+      "verticalCenterDifferencePixels": 0.5
+    },
+    {
+      "capture": "layout-normal-first-pin-selected.png",
+      "role": "Whole notification group",
+      "box": [
+        4,
+        105,
+        162,
+        157
+      ],
+      "ink": [
+        8,
+        108,
+        157,
+        153
+      ],
+      "margins": {
+        "top": 3,
+        "bottom": 4
+      },
+      "verticalCenterDifferencePixels": 0.5
+    },
+    {
+      "capture": "layout-normal-first-pin-selected.png",
+      "role": "first-pin icon/value",
+      "iconOrLabelInk": [
+        10,
+        166,
+        34,
+        186
+      ],
+      "adjacentTextInk": [
+        39,
+        166,
+        90,
+        186
+      ],
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-normal-first-pin-selected.png",
+      "role": "first-pin value box",
+      "box": [
+        4,
+        160,
+        162,
+        192
+      ],
+      "ink": [
+        39,
+        166,
+        90,
+        186
+      ],
+      "margins": {
+        "top": 6,
+        "bottom": 6
+      }
+    },
+    {
+      "capture": "layout-normal-first-pin-selected.png",
+      "role": "second-pin label/value",
+      "iconOrLabelInk": [
+        40,
+        202,
+        99,
+        219
+      ],
+      "adjacentTextInk": [
+        112,
+        201,
+        159,
+        221
+      ],
+      "verticalCenterDifferencePixels": 0.5
+    },
+    {
+      "capture": "layout-normal-first-pin-selected.png",
+      "role": "second-pin icon/value",
+      "iconOrLabelInk": [
+        12,
+        198,
+        31,
+        224
+      ],
+      "adjacentTextInk": [
+        112,
+        201,
+        159,
+        221
+      ],
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-normal-first-pin-selected.png",
+      "role": "second-pin value box",
+      "box": [
+        4,
+        195,
+        162,
+        227
+      ],
+      "ink": [
+        112,
+        201,
+        159,
+        221
+      ],
+      "margins": {
+        "top": 6,
+        "bottom": 6
+      }
+    },
+    {
+      "capture": "layout-czech-primary-selected-light.png",
+      "role": "Header clock",
+      "ink": [
+        137,
+        5,
+        193,
+        24
+      ],
+      "visibleHeightPixels": 19,
+      "margins": {
+        "top": 5,
+        "bottom": 6
+      }
+    },
+    {
+      "capture": "layout-czech-primary-selected-light.png",
+      "role": "Header title/clock",
+      "iconOrLabelInk": [
+        7,
+        6,
+        108,
+        24
+      ],
+      "adjacentTextInk": [
+        137,
+        5,
+        193,
+        24
+      ],
+      "verticalCenterDifferencePixels": 0.5
+    },
+    {
+      "capture": "layout-czech-primary-selected-light.png",
+      "role": "Header title",
+      "ink": [
+        7,
+        6,
+        108,
+        24
+      ],
+      "visibleHeightPixels": 18,
+      "margins": {
+        "top": 6,
+        "bottom": 6
+      }
+    },
+    {
+      "capture": "layout-czech-primary-selected-light.png",
+      "role": "Primary caption/icon",
+      "iconOrLabelInk": [
+        13,
+        66,
+        32,
+        91
+      ],
+      "adjacentTextInk": [
+        42,
+        66,
+        149,
+        90
+      ],
+      "verticalCenterDifferencePixels": 0.5
+    },
+    {
+      "capture": "layout-czech-primary-selected-light.png",
+      "role": "Whole primary value/caption/icon group",
+      "box": [
+        4,
+        33,
+        162,
+        94
+      ],
+      "ink": [
+        10,
+        36,
+        157,
+        91
+      ],
+      "margins": {
+        "top": 3,
+        "bottom": 3
+      },
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-czech-primary-selected-light.png",
+      "role": "Notification heading/icon",
+      "iconOrLabelInk": [
+        11,
+        100,
+        33,
+        124
+      ],
+      "adjacentTextInk": [
+        41,
+        100,
+        150,
+        124
+      ],
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-czech-primary-selected-light.png",
+      "role": "Whole notification group",
+      "box": [
+        4,
+        97,
+        162,
+        157
+      ],
+      "ink": [
+        8,
+        100,
+        157,
+        154
+      ],
+      "margins": {
+        "top": 3,
+        "bottom": 3
+      },
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-czech-primary-selected-light.png",
+      "role": "first-pin label/value",
+      "iconOrLabelInk": [
+        40,
+        164,
+        66,
+        188
+      ],
+      "adjacentTextInk": [
+        108,
+        166,
+        159,
+        186
+      ],
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-czech-primary-selected-light.png",
+      "role": "first-pin icon/value",
+      "iconOrLabelInk": [
+        10,
+        166,
+        34,
+        186
+      ],
+      "adjacentTextInk": [
+        108,
+        166,
+        159,
+        186
+      ],
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-czech-primary-selected-light.png",
+      "role": "first-pin value box",
+      "box": [
+        4,
+        160,
+        162,
+        192
+      ],
+      "ink": [
+        108,
+        166,
+        159,
+        186
+      ],
+      "margins": {
+        "top": 6,
+        "bottom": 6
+      }
+    },
+    {
+      "capture": "layout-czech-primary-selected-light.png",
+      "role": "second-pin label/value",
+      "iconOrLabelInk": [
+        40,
+        199,
+        84,
+        223
+      ],
+      "adjacentTextInk": [
+        112,
+        201,
+        159,
+        221
+      ],
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-czech-primary-selected-light.png",
+      "role": "second-pin icon/value",
+      "iconOrLabelInk": [
+        12,
+        198,
+        31,
+        224
+      ],
+      "adjacentTextInk": [
+        112,
+        201,
+        159,
+        221
+      ],
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-czech-primary-selected-light.png",
+      "role": "second-pin value box",
+      "box": [
+        4,
+        195,
+        162,
+        227
+      ],
+      "ink": [
+        112,
+        201,
+        159,
+        221
+      ],
+      "margins": {
+        "top": 6,
+        "bottom": 6
+      }
+    },
+    {
+      "capture": "layout-czech-notice-selected-light.png",
+      "role": "Header clock",
+      "ink": [
+        137,
+        5,
+        193,
+        24
+      ],
+      "visibleHeightPixels": 19,
+      "margins": {
+        "top": 5,
+        "bottom": 6
+      }
+    },
+    {
+      "capture": "layout-czech-notice-selected-light.png",
+      "role": "Header title/clock",
+      "iconOrLabelInk": [
+        7,
+        6,
+        108,
+        24
+      ],
+      "adjacentTextInk": [
+        137,
+        5,
+        193,
+        24
+      ],
+      "verticalCenterDifferencePixels": 0.5
+    },
+    {
+      "capture": "layout-czech-notice-selected-light.png",
+      "role": "Header title",
+      "ink": [
+        7,
+        6,
+        108,
+        24
+      ],
+      "visibleHeightPixels": 18,
+      "margins": {
+        "top": 6,
+        "bottom": 6
+      }
+    },
+    {
+      "capture": "layout-czech-notice-selected-light.png",
+      "role": "Primary caption/icon",
+      "iconOrLabelInk": [
+        13,
+        66,
+        32,
+        91
+      ],
+      "adjacentTextInk": [
+        42,
+        66,
+        149,
+        90
+      ],
+      "verticalCenterDifferencePixels": 0.5
+    },
+    {
+      "capture": "layout-czech-notice-selected-light.png",
+      "role": "Whole primary value/caption/icon group",
+      "box": [
+        4,
+        33,
+        162,
+        94
+      ],
+      "ink": [
+        10,
+        36,
+        157,
+        91
+      ],
+      "margins": {
+        "top": 3,
+        "bottom": 3
+      },
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-czech-notice-selected-light.png",
+      "role": "Notification heading/icon",
+      "iconOrLabelInk": [
+        11,
+        100,
+        33,
+        124
+      ],
+      "adjacentTextInk": [
+        41,
+        100,
+        150,
+        124
+      ],
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-czech-notice-selected-light.png",
+      "role": "Whole notification group",
+      "box": [
+        4,
+        97,
+        162,
+        157
+      ],
+      "ink": [
+        8,
+        100,
+        157,
+        154
+      ],
+      "margins": {
+        "top": 3,
+        "bottom": 3
+      },
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-czech-notice-selected-light.png",
+      "role": "first-pin label/value",
+      "iconOrLabelInk": [
+        40,
+        164,
+        66,
+        188
+      ],
+      "adjacentTextInk": [
+        108,
+        166,
+        159,
+        186
+      ],
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-czech-notice-selected-light.png",
+      "role": "first-pin icon/value",
+      "iconOrLabelInk": [
+        10,
+        166,
+        34,
+        186
+      ],
+      "adjacentTextInk": [
+        108,
+        166,
+        159,
+        186
+      ],
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-czech-notice-selected-light.png",
+      "role": "first-pin value box",
+      "box": [
+        4,
+        160,
+        162,
+        192
+      ],
+      "ink": [
+        108,
+        166,
+        159,
+        186
+      ],
+      "margins": {
+        "top": 6,
+        "bottom": 6
+      }
+    },
+    {
+      "capture": "layout-czech-notice-selected-light.png",
+      "role": "second-pin label/value",
+      "iconOrLabelInk": [
+        40,
+        199,
+        84,
+        223
+      ],
+      "adjacentTextInk": [
+        112,
+        201,
+        159,
+        221
+      ],
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-czech-notice-selected-light.png",
+      "role": "second-pin icon/value",
+      "iconOrLabelInk": [
+        12,
+        198,
+        31,
+        224
+      ],
+      "adjacentTextInk": [
+        112,
+        201,
+        159,
+        221
+      ],
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-czech-notice-selected-light.png",
+      "role": "second-pin value box",
+      "box": [
+        4,
+        195,
+        162,
+        227
+      ],
+      "ink": [
+        112,
+        201,
+        159,
+        221
+      ],
+      "margins": {
+        "top": 6,
+        "bottom": 6
+      }
+    },
+    {
+      "capture": "layout-czech-first-pin-selected-light.png",
+      "role": "Header clock",
+      "ink": [
+        137,
+        5,
+        193,
+        24
+      ],
+      "visibleHeightPixels": 19,
+      "margins": {
+        "top": 5,
+        "bottom": 6
+      }
+    },
+    {
+      "capture": "layout-czech-first-pin-selected-light.png",
+      "role": "Header title/clock",
+      "iconOrLabelInk": [
+        7,
+        6,
+        108,
+        24
+      ],
+      "adjacentTextInk": [
+        137,
+        5,
+        193,
+        24
+      ],
+      "verticalCenterDifferencePixels": 0.5
+    },
+    {
+      "capture": "layout-czech-first-pin-selected-light.png",
+      "role": "Header title",
+      "ink": [
+        7,
+        6,
+        108,
+        24
+      ],
+      "visibleHeightPixels": 18,
+      "margins": {
+        "top": 6,
+        "bottom": 6
+      }
+    },
+    {
+      "capture": "layout-czech-first-pin-selected-light.png",
+      "role": "Primary caption/icon",
+      "iconOrLabelInk": [
+        13,
+        66,
+        32,
+        91
+      ],
+      "adjacentTextInk": [
+        42,
+        66,
+        149,
+        90
+      ],
+      "verticalCenterDifferencePixels": 0.5
+    },
+    {
+      "capture": "layout-czech-first-pin-selected-light.png",
+      "role": "Whole primary value/caption/icon group",
+      "box": [
+        4,
+        33,
+        162,
+        94
+      ],
+      "ink": [
+        10,
+        36,
+        157,
+        91
+      ],
+      "margins": {
+        "top": 3,
+        "bottom": 3
+      },
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-czech-first-pin-selected-light.png",
+      "role": "Notification heading/icon",
+      "iconOrLabelInk": [
+        11,
+        100,
+        33,
+        124
+      ],
+      "adjacentTextInk": [
+        41,
+        100,
+        150,
+        124
+      ],
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-czech-first-pin-selected-light.png",
+      "role": "Whole notification group",
+      "box": [
+        4,
+        97,
+        162,
+        157
+      ],
+      "ink": [
+        8,
+        100,
+        157,
+        154
+      ],
+      "margins": {
+        "top": 3,
+        "bottom": 3
+      },
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-czech-first-pin-selected-light.png",
+      "role": "first-pin label/value",
+      "iconOrLabelInk": [
+        40,
+        164,
+        66,
+        188
+      ],
+      "adjacentTextInk": [
+        108,
+        166,
+        159,
+        186
+      ],
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-czech-first-pin-selected-light.png",
+      "role": "first-pin icon/value",
+      "iconOrLabelInk": [
+        10,
+        166,
+        34,
+        186
+      ],
+      "adjacentTextInk": [
+        108,
+        166,
+        159,
+        186
+      ],
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-czech-first-pin-selected-light.png",
+      "role": "first-pin value box",
+      "box": [
+        4,
+        160,
+        162,
+        192
+      ],
+      "ink": [
+        108,
+        166,
+        159,
+        186
+      ],
+      "margins": {
+        "top": 6,
+        "bottom": 6
+      }
+    },
+    {
+      "capture": "layout-czech-first-pin-selected-light.png",
+      "role": "second-pin label/value",
+      "iconOrLabelInk": [
+        40,
+        199,
+        84,
+        223
+      ],
+      "adjacentTextInk": [
+        112,
+        201,
+        159,
+        221
+      ],
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-czech-first-pin-selected-light.png",
+      "role": "second-pin icon/value",
+      "iconOrLabelInk": [
+        12,
+        198,
+        31,
+        224
+      ],
+      "adjacentTextInk": [
+        112,
+        201,
+        159,
+        221
+      ],
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-czech-first-pin-selected-light.png",
+      "role": "second-pin value box",
+      "box": [
+        4,
+        195,
+        162,
+        227
+      ],
+      "ink": [
+        112,
+        201,
+        159,
+        221
+      ],
+      "margins": {
+        "top": 6,
+        "bottom": 6
+      }
+    },
+    {
+      "capture": "layout-czech-second-pin-selected-light.png",
+      "role": "Header clock",
+      "ink": [
+        137,
+        5,
+        193,
+        24
+      ],
+      "visibleHeightPixels": 19,
+      "margins": {
+        "top": 5,
+        "bottom": 6
+      }
+    },
+    {
+      "capture": "layout-czech-second-pin-selected-light.png",
+      "role": "Header title/clock",
+      "iconOrLabelInk": [
+        7,
+        6,
+        108,
+        24
+      ],
+      "adjacentTextInk": [
+        137,
+        5,
+        193,
+        24
+      ],
+      "verticalCenterDifferencePixels": 0.5
+    },
+    {
+      "capture": "layout-czech-second-pin-selected-light.png",
+      "role": "Header title",
+      "ink": [
+        7,
+        6,
+        108,
+        24
+      ],
+      "visibleHeightPixels": 18,
+      "margins": {
+        "top": 6,
+        "bottom": 6
+      }
+    },
+    {
+      "capture": "layout-czech-second-pin-selected-light.png",
+      "role": "Primary caption/icon",
+      "iconOrLabelInk": [
+        13,
+        66,
+        32,
+        91
+      ],
+      "adjacentTextInk": [
+        42,
+        66,
+        149,
+        90
+      ],
+      "verticalCenterDifferencePixels": 0.5
+    },
+    {
+      "capture": "layout-czech-second-pin-selected-light.png",
+      "role": "Whole primary value/caption/icon group",
+      "box": [
+        4,
+        33,
+        162,
+        94
+      ],
+      "ink": [
+        10,
+        36,
+        157,
+        91
+      ],
+      "margins": {
+        "top": 3,
+        "bottom": 3
+      },
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-czech-second-pin-selected-light.png",
+      "role": "Notification heading/icon",
+      "iconOrLabelInk": [
+        11,
+        100,
+        33,
+        124
+      ],
+      "adjacentTextInk": [
+        41,
+        100,
+        150,
+        124
+      ],
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-czech-second-pin-selected-light.png",
+      "role": "Whole notification group",
+      "box": [
+        4,
+        97,
+        162,
+        157
+      ],
+      "ink": [
+        8,
+        100,
+        157,
+        154
+      ],
+      "margins": {
+        "top": 3,
+        "bottom": 3
+      },
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-czech-second-pin-selected-light.png",
+      "role": "first-pin label/value",
+      "iconOrLabelInk": [
+        40,
+        164,
+        66,
+        188
+      ],
+      "adjacentTextInk": [
+        108,
+        166,
+        159,
+        186
+      ],
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-czech-second-pin-selected-light.png",
+      "role": "first-pin icon/value",
+      "iconOrLabelInk": [
+        10,
+        166,
+        34,
+        186
+      ],
+      "adjacentTextInk": [
+        108,
+        166,
+        159,
+        186
+      ],
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-czech-second-pin-selected-light.png",
+      "role": "first-pin value box",
+      "box": [
+        4,
+        160,
+        162,
+        192
+      ],
+      "ink": [
+        108,
+        166,
+        159,
+        186
+      ],
+      "margins": {
+        "top": 6,
+        "bottom": 6
+      }
+    },
+    {
+      "capture": "layout-czech-second-pin-selected-light.png",
+      "role": "second-pin label/value",
+      "iconOrLabelInk": [
+        40,
+        199,
+        84,
+        223
+      ],
+      "adjacentTextInk": [
+        112,
+        201,
+        159,
+        221
+      ],
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-czech-second-pin-selected-light.png",
+      "role": "second-pin icon/value",
+      "iconOrLabelInk": [
+        12,
+        198,
+        31,
+        224
+      ],
+      "adjacentTextInk": [
+        112,
+        201,
+        159,
+        221
+      ],
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-czech-second-pin-selected-light.png",
+      "role": "second-pin value box",
+      "box": [
+        4,
+        195,
+        162,
+        227
+      ],
+      "ink": [
+        112,
+        201,
+        159,
+        221
+      ],
+      "margins": {
+        "top": 6,
+        "bottom": 6
+      }
+    },
+    {
+      "capture": "layout-full-accent-primary-selected-light.png",
+      "role": "Header clock",
+      "ink": [
+        137,
+        5,
+        193,
+        24
+      ],
+      "visibleHeightPixels": 19,
+      "margins": {
+        "top": 5,
+        "bottom": 6
+      }
+    },
+    {
+      "capture": "layout-full-accent-primary-selected-light.png",
+      "role": "Header title/clock",
+      "iconOrLabelInk": [
+        7,
+        6,
+        108,
+        24
+      ],
+      "adjacentTextInk": [
+        137,
+        5,
+        193,
+        24
+      ],
+      "verticalCenterDifferencePixels": 0.5
+    },
+    {
+      "capture": "layout-full-accent-primary-selected-light.png",
+      "role": "Header title",
+      "ink": [
+        7,
+        6,
+        108,
+        24
+      ],
+      "visibleHeightPixels": 18,
+      "margins": {
+        "top": 6,
+        "bottom": 6
+      }
+    },
+    {
+      "capture": "layout-full-accent-primary-selected-light.png",
+      "role": "Primary caption/icon",
+      "iconOrLabelInk": [
+        13,
+        65,
+        32,
+        90
+      ],
+      "adjacentTextInk": [
+        41,
+        65,
+        122,
+        90
+      ],
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-full-accent-primary-selected-light.png",
+      "role": "Whole primary value/caption/icon group",
+      "box": [
+        4,
+        33,
+        162,
+        92
+      ],
+      "ink": [
+        10,
+        35,
+        157,
+        90
+      ],
+      "margins": {
+        "top": 2,
+        "bottom": 2
+      },
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-full-accent-primary-selected-light.png",
+      "role": "Notification heading/icon",
+      "iconOrLabelInk": [
+        11,
+        98,
+        33,
+        122
+      ],
+      "adjacentTextInk": [
+        41,
+        98,
+        122,
+        123
+      ],
+      "verticalCenterDifferencePixels": 0.5
+    },
+    {
+      "capture": "layout-full-accent-primary-selected-light.png",
+      "role": "Whole notification group",
+      "box": [
+        4,
+        95,
+        162,
+        157
+      ],
+      "ink": [
+        8,
+        98,
+        157,
+        154
+      ],
+      "margins": {
+        "top": 3,
+        "bottom": 3
+      },
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-full-accent-primary-selected-light.png",
+      "role": "first-pin label/value",
+      "iconOrLabelInk": [
+        40,
+        164,
+        66,
+        188
+      ],
+      "adjacentTextInk": [
+        108,
+        166,
+        159,
+        186
+      ],
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-full-accent-primary-selected-light.png",
+      "role": "first-pin icon/value",
+      "iconOrLabelInk": [
+        10,
+        166,
+        34,
+        186
+      ],
+      "adjacentTextInk": [
+        108,
+        166,
+        159,
+        186
+      ],
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-full-accent-primary-selected-light.png",
+      "role": "first-pin value box",
+      "box": [
+        4,
+        160,
+        162,
+        192
+      ],
+      "ink": [
+        108,
+        166,
+        159,
+        186
+      ],
+      "margins": {
+        "top": 6,
+        "bottom": 6
+      }
+    },
+    {
+      "capture": "layout-full-accent-primary-selected-light.png",
+      "role": "second-pin label/value",
+      "iconOrLabelInk": [
+        40,
+        199,
+        84,
+        223
+      ],
+      "adjacentTextInk": [
+        112,
+        201,
+        159,
+        221
+      ],
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-full-accent-primary-selected-light.png",
+      "role": "second-pin icon/value",
+      "iconOrLabelInk": [
+        12,
+        198,
+        31,
+        224
+      ],
+      "adjacentTextInk": [
+        112,
+        201,
+        159,
+        221
+      ],
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-full-accent-primary-selected-light.png",
+      "role": "second-pin value box",
+      "box": [
+        4,
+        195,
+        162,
+        227
+      ],
+      "ink": [
+        112,
+        201,
+        159,
+        221
+      ],
+      "margins": {
+        "top": 6,
+        "bottom": 6
+      }
+    },
+    {
+      "capture": "layout-czech-primary-selected-dark.png",
+      "role": "Header clock",
+      "ink": [
+        137,
+        5,
+        193,
+        24
+      ],
+      "visibleHeightPixels": 19,
+      "margins": {
+        "top": 5,
+        "bottom": 6
+      }
+    },
+    {
+      "capture": "layout-czech-primary-selected-dark.png",
+      "role": "Header title/clock",
+      "iconOrLabelInk": [
+        7,
+        6,
+        108,
+        24
+      ],
+      "adjacentTextInk": [
+        137,
+        5,
+        193,
+        24
+      ],
+      "verticalCenterDifferencePixels": 0.5
+    },
+    {
+      "capture": "layout-czech-primary-selected-dark.png",
+      "role": "Header title",
+      "ink": [
+        7,
+        6,
+        108,
+        24
+      ],
+      "visibleHeightPixels": 18,
+      "margins": {
+        "top": 6,
+        "bottom": 6
+      }
+    },
+    {
+      "capture": "layout-czech-primary-selected-dark.png",
+      "role": "Primary caption/icon",
+      "iconOrLabelInk": [
+        13,
+        66,
+        32,
+        91
+      ],
+      "adjacentTextInk": [
+        42,
+        66,
+        149,
+        90
+      ],
+      "verticalCenterDifferencePixels": 0.5
+    },
+    {
+      "capture": "layout-czech-primary-selected-dark.png",
+      "role": "Whole primary value/caption/icon group",
+      "box": [
+        4,
+        33,
+        162,
+        94
+      ],
+      "ink": [
+        10,
+        36,
+        157,
+        91
+      ],
+      "margins": {
+        "top": 3,
+        "bottom": 3
+      },
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-czech-primary-selected-dark.png",
+      "role": "Notification heading/icon",
+      "iconOrLabelInk": [
+        11,
+        100,
+        33,
+        124
+      ],
+      "adjacentTextInk": [
+        41,
+        100,
+        150,
+        124
+      ],
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-czech-primary-selected-dark.png",
+      "role": "Whole notification group",
+      "box": [
+        4,
+        97,
+        162,
+        157
+      ],
+      "ink": [
+        8,
+        100,
+        157,
+        154
+      ],
+      "margins": {
+        "top": 3,
+        "bottom": 3
+      },
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-czech-primary-selected-dark.png",
+      "role": "first-pin label/value",
+      "iconOrLabelInk": [
+        40,
+        164,
+        66,
+        188
+      ],
+      "adjacentTextInk": [
+        108,
+        166,
+        159,
+        186
+      ],
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-czech-primary-selected-dark.png",
+      "role": "first-pin icon/value",
+      "iconOrLabelInk": [
+        10,
+        166,
+        34,
+        186
+      ],
+      "adjacentTextInk": [
+        108,
+        166,
+        159,
+        186
+      ],
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-czech-primary-selected-dark.png",
+      "role": "first-pin value box",
+      "box": [
+        4,
+        160,
+        162,
+        192
+      ],
+      "ink": [
+        108,
+        166,
+        159,
+        186
+      ],
+      "margins": {
+        "top": 6,
+        "bottom": 6
+      }
+    },
+    {
+      "capture": "layout-czech-primary-selected-dark.png",
+      "role": "second-pin label/value",
+      "iconOrLabelInk": [
+        40,
+        199,
+        84,
+        223
+      ],
+      "adjacentTextInk": [
+        112,
+        201,
+        159,
+        221
+      ],
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-czech-primary-selected-dark.png",
+      "role": "second-pin icon/value",
+      "iconOrLabelInk": [
+        12,
+        198,
+        31,
+        224
+      ],
+      "adjacentTextInk": [
+        112,
+        201,
+        159,
+        221
+      ],
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-czech-primary-selected-dark.png",
+      "role": "second-pin value box",
+      "box": [
+        4,
+        195,
+        162,
+        227
+      ],
+      "ink": [
+        112,
+        201,
+        159,
+        221
+      ],
+      "margins": {
+        "top": 6,
+        "bottom": 6
+      }
+    },
+    {
+      "capture": "layout-czech-notice-selected-dark.png",
+      "role": "Header clock",
+      "ink": [
+        137,
+        5,
+        193,
+        24
+      ],
+      "visibleHeightPixels": 19,
+      "margins": {
+        "top": 5,
+        "bottom": 6
+      }
+    },
+    {
+      "capture": "layout-czech-notice-selected-dark.png",
+      "role": "Header title/clock",
+      "iconOrLabelInk": [
+        7,
+        6,
+        108,
+        24
+      ],
+      "adjacentTextInk": [
+        137,
+        5,
+        193,
+        24
+      ],
+      "verticalCenterDifferencePixels": 0.5
+    },
+    {
+      "capture": "layout-czech-notice-selected-dark.png",
+      "role": "Header title",
+      "ink": [
+        7,
+        6,
+        108,
+        24
+      ],
+      "visibleHeightPixels": 18,
+      "margins": {
+        "top": 6,
+        "bottom": 6
+      }
+    },
+    {
+      "capture": "layout-czech-notice-selected-dark.png",
+      "role": "Primary caption/icon",
+      "iconOrLabelInk": [
+        13,
+        66,
+        32,
+        91
+      ],
+      "adjacentTextInk": [
+        42,
+        66,
+        149,
+        90
+      ],
+      "verticalCenterDifferencePixels": 0.5
+    },
+    {
+      "capture": "layout-czech-notice-selected-dark.png",
+      "role": "Whole primary value/caption/icon group",
+      "box": [
+        4,
+        33,
+        162,
+        94
+      ],
+      "ink": [
+        10,
+        36,
+        157,
+        91
+      ],
+      "margins": {
+        "top": 3,
+        "bottom": 3
+      },
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-czech-notice-selected-dark.png",
+      "role": "Notification heading/icon",
+      "iconOrLabelInk": [
+        11,
+        100,
+        33,
+        124
+      ],
+      "adjacentTextInk": [
+        41,
+        100,
+        150,
+        124
+      ],
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-czech-notice-selected-dark.png",
+      "role": "Whole notification group",
+      "box": [
+        4,
+        97,
+        162,
+        157
+      ],
+      "ink": [
+        8,
+        100,
+        157,
+        154
+      ],
+      "margins": {
+        "top": 3,
+        "bottom": 3
+      },
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-czech-notice-selected-dark.png",
+      "role": "first-pin label/value",
+      "iconOrLabelInk": [
+        40,
+        164,
+        66,
+        188
+      ],
+      "adjacentTextInk": [
+        108,
+        166,
+        159,
+        186
+      ],
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-czech-notice-selected-dark.png",
+      "role": "first-pin icon/value",
+      "iconOrLabelInk": [
+        10,
+        166,
+        34,
+        186
+      ],
+      "adjacentTextInk": [
+        108,
+        166,
+        159,
+        186
+      ],
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-czech-notice-selected-dark.png",
+      "role": "first-pin value box",
+      "box": [
+        4,
+        160,
+        162,
+        192
+      ],
+      "ink": [
+        108,
+        166,
+        159,
+        186
+      ],
+      "margins": {
+        "top": 6,
+        "bottom": 6
+      }
+    },
+    {
+      "capture": "layout-czech-notice-selected-dark.png",
+      "role": "second-pin label/value",
+      "iconOrLabelInk": [
+        40,
+        199,
+        84,
+        223
+      ],
+      "adjacentTextInk": [
+        112,
+        201,
+        159,
+        221
+      ],
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-czech-notice-selected-dark.png",
+      "role": "second-pin icon/value",
+      "iconOrLabelInk": [
+        12,
+        198,
+        31,
+        224
+      ],
+      "adjacentTextInk": [
+        112,
+        201,
+        159,
+        221
+      ],
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-czech-notice-selected-dark.png",
+      "role": "second-pin value box",
+      "box": [
+        4,
+        195,
+        162,
+        227
+      ],
+      "ink": [
+        112,
+        201,
+        159,
+        221
+      ],
+      "margins": {
+        "top": 6,
+        "bottom": 6
+      }
+    },
+    {
+      "capture": "layout-czech-first-pin-selected-dark.png",
+      "role": "Header clock",
+      "ink": [
+        137,
+        5,
+        193,
+        24
+      ],
+      "visibleHeightPixels": 19,
+      "margins": {
+        "top": 5,
+        "bottom": 6
+      }
+    },
+    {
+      "capture": "layout-czech-first-pin-selected-dark.png",
+      "role": "Header title/clock",
+      "iconOrLabelInk": [
+        7,
+        6,
+        108,
+        24
+      ],
+      "adjacentTextInk": [
+        137,
+        5,
+        193,
+        24
+      ],
+      "verticalCenterDifferencePixels": 0.5
+    },
+    {
+      "capture": "layout-czech-first-pin-selected-dark.png",
+      "role": "Header title",
+      "ink": [
+        7,
+        6,
+        108,
+        24
+      ],
+      "visibleHeightPixels": 18,
+      "margins": {
+        "top": 6,
+        "bottom": 6
+      }
+    },
+    {
+      "capture": "layout-czech-first-pin-selected-dark.png",
+      "role": "Primary caption/icon",
+      "iconOrLabelInk": [
+        13,
+        66,
+        32,
+        91
+      ],
+      "adjacentTextInk": [
+        42,
+        66,
+        149,
+        90
+      ],
+      "verticalCenterDifferencePixels": 0.5
+    },
+    {
+      "capture": "layout-czech-first-pin-selected-dark.png",
+      "role": "Whole primary value/caption/icon group",
+      "box": [
+        4,
+        33,
+        162,
+        94
+      ],
+      "ink": [
+        10,
+        36,
+        157,
+        91
+      ],
+      "margins": {
+        "top": 3,
+        "bottom": 3
+      },
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-czech-first-pin-selected-dark.png",
+      "role": "Notification heading/icon",
+      "iconOrLabelInk": [
+        11,
+        100,
+        33,
+        124
+      ],
+      "adjacentTextInk": [
+        41,
+        100,
+        150,
+        124
+      ],
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-czech-first-pin-selected-dark.png",
+      "role": "Whole notification group",
+      "box": [
+        4,
+        97,
+        162,
+        157
+      ],
+      "ink": [
+        8,
+        100,
+        157,
+        154
+      ],
+      "margins": {
+        "top": 3,
+        "bottom": 3
+      },
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-czech-first-pin-selected-dark.png",
+      "role": "first-pin label/value",
+      "iconOrLabelInk": [
+        40,
+        164,
+        66,
+        188
+      ],
+      "adjacentTextInk": [
+        108,
+        166,
+        159,
+        186
+      ],
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-czech-first-pin-selected-dark.png",
+      "role": "first-pin icon/value",
+      "iconOrLabelInk": [
+        10,
+        166,
+        34,
+        186
+      ],
+      "adjacentTextInk": [
+        108,
+        166,
+        159,
+        186
+      ],
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-czech-first-pin-selected-dark.png",
+      "role": "first-pin value box",
+      "box": [
+        4,
+        160,
+        162,
+        192
+      ],
+      "ink": [
+        108,
+        166,
+        159,
+        186
+      ],
+      "margins": {
+        "top": 6,
+        "bottom": 6
+      }
+    },
+    {
+      "capture": "layout-czech-first-pin-selected-dark.png",
+      "role": "second-pin label/value",
+      "iconOrLabelInk": [
+        40,
+        199,
+        84,
+        223
+      ],
+      "adjacentTextInk": [
+        112,
+        201,
+        159,
+        221
+      ],
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-czech-first-pin-selected-dark.png",
+      "role": "second-pin icon/value",
+      "iconOrLabelInk": [
+        12,
+        198,
+        31,
+        224
+      ],
+      "adjacentTextInk": [
+        112,
+        201,
+        159,
+        221
+      ],
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-czech-first-pin-selected-dark.png",
+      "role": "second-pin value box",
+      "box": [
+        4,
+        195,
+        162,
+        227
+      ],
+      "ink": [
+        112,
+        201,
+        159,
+        221
+      ],
+      "margins": {
+        "top": 6,
+        "bottom": 6
+      }
+    },
+    {
+      "capture": "layout-czech-second-pin-selected-dark.png",
+      "role": "Header clock",
+      "ink": [
+        137,
+        5,
+        193,
+        24
+      ],
+      "visibleHeightPixels": 19,
+      "margins": {
+        "top": 5,
+        "bottom": 6
+      }
+    },
+    {
+      "capture": "layout-czech-second-pin-selected-dark.png",
+      "role": "Header title/clock",
+      "iconOrLabelInk": [
+        7,
+        6,
+        108,
+        24
+      ],
+      "adjacentTextInk": [
+        137,
+        5,
+        193,
+        24
+      ],
+      "verticalCenterDifferencePixels": 0.5
+    },
+    {
+      "capture": "layout-czech-second-pin-selected-dark.png",
+      "role": "Header title",
+      "ink": [
+        7,
+        6,
+        108,
+        24
+      ],
+      "visibleHeightPixels": 18,
+      "margins": {
+        "top": 6,
+        "bottom": 6
+      }
+    },
+    {
+      "capture": "layout-czech-second-pin-selected-dark.png",
+      "role": "Primary caption/icon",
+      "iconOrLabelInk": [
+        13,
+        66,
+        32,
+        91
+      ],
+      "adjacentTextInk": [
+        42,
+        66,
+        149,
+        90
+      ],
+      "verticalCenterDifferencePixels": 0.5
+    },
+    {
+      "capture": "layout-czech-second-pin-selected-dark.png",
+      "role": "Whole primary value/caption/icon group",
+      "box": [
+        4,
+        33,
+        162,
+        94
+      ],
+      "ink": [
+        10,
+        36,
+        157,
+        91
+      ],
+      "margins": {
+        "top": 3,
+        "bottom": 3
+      },
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-czech-second-pin-selected-dark.png",
+      "role": "Notification heading/icon",
+      "iconOrLabelInk": [
+        11,
+        100,
+        33,
+        124
+      ],
+      "adjacentTextInk": [
+        41,
+        100,
+        150,
+        124
+      ],
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-czech-second-pin-selected-dark.png",
+      "role": "Whole notification group",
+      "box": [
+        4,
+        97,
+        162,
+        157
+      ],
+      "ink": [
+        8,
+        100,
+        157,
+        154
+      ],
+      "margins": {
+        "top": 3,
+        "bottom": 3
+      },
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-czech-second-pin-selected-dark.png",
+      "role": "first-pin label/value",
+      "iconOrLabelInk": [
+        40,
+        164,
+        66,
+        188
+      ],
+      "adjacentTextInk": [
+        108,
+        166,
+        159,
+        186
+      ],
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-czech-second-pin-selected-dark.png",
+      "role": "first-pin icon/value",
+      "iconOrLabelInk": [
+        10,
+        166,
+        34,
+        186
+      ],
+      "adjacentTextInk": [
+        108,
+        166,
+        159,
+        186
+      ],
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-czech-second-pin-selected-dark.png",
+      "role": "first-pin value box",
+      "box": [
+        4,
+        160,
+        162,
+        192
+      ],
+      "ink": [
+        108,
+        166,
+        159,
+        186
+      ],
+      "margins": {
+        "top": 6,
+        "bottom": 6
+      }
+    },
+    {
+      "capture": "layout-czech-second-pin-selected-dark.png",
+      "role": "second-pin label/value",
+      "iconOrLabelInk": [
+        40,
+        199,
+        84,
+        223
+      ],
+      "adjacentTextInk": [
+        112,
+        201,
+        159,
+        221
+      ],
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-czech-second-pin-selected-dark.png",
+      "role": "second-pin icon/value",
+      "iconOrLabelInk": [
+        12,
+        198,
+        31,
+        224
+      ],
+      "adjacentTextInk": [
+        112,
+        201,
+        159,
+        221
+      ],
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-czech-second-pin-selected-dark.png",
+      "role": "second-pin value box",
+      "box": [
+        4,
+        195,
+        162,
+        227
+      ],
+      "ink": [
+        112,
+        201,
+        159,
+        221
+      ],
+      "margins": {
+        "top": 6,
+        "bottom": 6
+      }
+    },
+    {
+      "capture": "layout-full-accent-primary-selected-dark.png",
+      "role": "Header clock",
+      "ink": [
+        137,
+        5,
+        193,
+        24
+      ],
+      "visibleHeightPixels": 19,
+      "margins": {
+        "top": 5,
+        "bottom": 6
+      }
+    },
+    {
+      "capture": "layout-full-accent-primary-selected-dark.png",
+      "role": "Header title/clock",
+      "iconOrLabelInk": [
+        7,
+        6,
+        108,
+        24
+      ],
+      "adjacentTextInk": [
+        137,
+        5,
+        193,
+        24
+      ],
+      "verticalCenterDifferencePixels": 0.5
+    },
+    {
+      "capture": "layout-full-accent-primary-selected-dark.png",
+      "role": "Header title",
+      "ink": [
+        7,
+        6,
+        108,
+        24
+      ],
+      "visibleHeightPixels": 18,
+      "margins": {
+        "top": 6,
+        "bottom": 6
+      }
+    },
+    {
+      "capture": "layout-full-accent-primary-selected-dark.png",
+      "role": "Primary caption/icon",
+      "iconOrLabelInk": [
+        13,
+        65,
+        32,
+        90
+      ],
+      "adjacentTextInk": [
+        41,
+        65,
+        122,
+        90
+      ],
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-full-accent-primary-selected-dark.png",
+      "role": "Whole primary value/caption/icon group",
+      "box": [
+        4,
+        33,
+        162,
+        92
+      ],
+      "ink": [
+        10,
+        35,
+        157,
+        90
+      ],
+      "margins": {
+        "top": 2,
+        "bottom": 2
+      },
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-full-accent-primary-selected-dark.png",
+      "role": "Notification heading/icon",
+      "iconOrLabelInk": [
+        11,
+        98,
+        33,
+        122
+      ],
+      "adjacentTextInk": [
+        41,
+        98,
+        122,
+        123
+      ],
+      "verticalCenterDifferencePixels": 0.5
+    },
+    {
+      "capture": "layout-full-accent-primary-selected-dark.png",
+      "role": "Whole notification group",
+      "box": [
+        4,
+        95,
+        162,
+        157
+      ],
+      "ink": [
+        8,
+        98,
+        157,
+        154
+      ],
+      "margins": {
+        "top": 3,
+        "bottom": 3
+      },
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-full-accent-primary-selected-dark.png",
+      "role": "first-pin label/value",
+      "iconOrLabelInk": [
+        40,
+        164,
+        66,
+        188
+      ],
+      "adjacentTextInk": [
+        108,
+        166,
+        159,
+        186
+      ],
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-full-accent-primary-selected-dark.png",
+      "role": "first-pin icon/value",
+      "iconOrLabelInk": [
+        10,
+        166,
+        34,
+        186
+      ],
+      "adjacentTextInk": [
+        108,
+        166,
+        159,
+        186
+      ],
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-full-accent-primary-selected-dark.png",
+      "role": "first-pin value box",
+      "box": [
+        4,
+        160,
+        162,
+        192
+      ],
+      "ink": [
+        108,
+        166,
+        159,
+        186
+      ],
+      "margins": {
+        "top": 6,
+        "bottom": 6
+      }
+    },
+    {
+      "capture": "layout-full-accent-primary-selected-dark.png",
+      "role": "second-pin label/value",
+      "iconOrLabelInk": [
+        40,
+        199,
+        84,
+        223
+      ],
+      "adjacentTextInk": [
+        112,
+        201,
+        159,
+        221
+      ],
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-full-accent-primary-selected-dark.png",
+      "role": "second-pin icon/value",
+      "iconOrLabelInk": [
+        12,
+        198,
+        31,
+        224
+      ],
+      "adjacentTextInk": [
+        112,
+        201,
+        159,
+        221
+      ],
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-full-accent-primary-selected-dark.png",
+      "role": "second-pin value box",
+      "box": [
+        4,
+        195,
+        162,
+        227
+      ],
+      "ink": [
+        112,
+        201,
+        159,
+        221
+      ],
+      "margins": {
+        "top": 6,
+        "bottom": 6
+      }
+    },
+    {
+      "capture": "layout-media-normal-light.png",
+      "role": "Snapshot Media artwork/artist",
+      "iconOrLabelInk": [
+        9,
+        70,
+        33,
+        94
+      ],
+      "adjacentTextInk": [
+        40,
+        71,
+        157,
+        92
+      ],
+      "verticalCenterDifferencePixels": 0.5
+    },
+    {
+      "capture": "layout-media-normal-light.png",
+      "role": "Snapshot Media title/artist/artwork group",
+      "box": [
+        4,
+        33,
+        162,
+        101
+      ],
+      "ink": [
+        9,
+        41,
+        159,
+        94
+      ],
+      "titleInk": [
+        11,
+        41,
+        118,
+        64
+      ],
+      "artistInk": [
+        40,
+        71,
+        157,
+        92
+      ],
+      "artworkFrame": [
+        9,
+        70,
+        33,
+        94
+      ],
+      "margins": {
+        "top": 8,
+        "bottom": 7
+      },
+      "verticalCenterDifferencePixels": 0.5
+    },
+    {
+      "capture": "layout-media-normal-light.png",
+      "role": "Media Snapshot notice/explicit-hint group",
+      "box": [
+        4,
+        104,
+        162,
+        157
+      ],
+      "ink": [
+        9,
+        107,
+        122,
+        154
+      ],
+      "margins": {
+        "top": 3,
+        "bottom": 3
+      },
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-czech-media-light.png",
+      "role": "Snapshot Media artwork/artist",
+      "iconOrLabelInk": [
+        9,
+        71,
+        33,
+        95
+      ],
+      "adjacentTextInk": [
+        39,
+        71,
+        153,
+        95
+      ],
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-czech-media-light.png",
+      "role": "Snapshot Media title/artist/artwork group",
+      "box": [
+        4,
+        33,
+        162,
+        101
+      ],
+      "ink": [
+        9,
+        39,
+        159,
+        95
+      ],
+      "titleInk": [
+        11,
+        39,
+        155,
+        65
+      ],
+      "artistInk": [
+        39,
+        71,
+        153,
+        95
+      ],
+      "artworkFrame": [
+        9,
+        71,
+        33,
+        95
+      ],
+      "margins": {
+        "top": 6,
+        "bottom": 6
+      },
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-czech-media-light.png",
+      "role": "Media Snapshot notice/explicit-hint group",
+      "box": [
+        4,
+        104,
+        162,
+        157
+      ],
+      "ink": [
+        9,
+        107,
+        122,
+        154
+      ],
+      "margins": {
+        "top": 3,
+        "bottom": 3
+      },
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-media-normal-dark.png",
+      "role": "Snapshot Media artwork/artist",
+      "iconOrLabelInk": [
+        9,
+        70,
+        33,
+        94
+      ],
+      "adjacentTextInk": [
+        40,
+        71,
+        157,
+        92
+      ],
+      "verticalCenterDifferencePixels": 0.5
+    },
+    {
+      "capture": "layout-media-normal-dark.png",
+      "role": "Snapshot Media title/artist/artwork group",
+      "box": [
+        4,
+        33,
+        162,
+        101
+      ],
+      "ink": [
+        9,
+        41,
+        159,
+        94
+      ],
+      "titleInk": [
+        11,
+        41,
+        118,
+        64
+      ],
+      "artistInk": [
+        40,
+        71,
+        157,
+        92
+      ],
+      "artworkFrame": [
+        9,
+        70,
+        33,
+        94
+      ],
+      "margins": {
+        "top": 8,
+        "bottom": 7
+      },
+      "verticalCenterDifferencePixels": 0.5
+    },
+    {
+      "capture": "layout-media-normal-dark.png",
+      "role": "Media Snapshot notice/explicit-hint group",
+      "box": [
+        4,
+        104,
+        162,
+        157
+      ],
+      "ink": [
+        9,
+        107,
+        122,
+        154
+      ],
+      "margins": {
+        "top": 3,
+        "bottom": 3
+      },
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-czech-media-dark.png",
+      "role": "Snapshot Media artwork/artist",
+      "iconOrLabelInk": [
+        9,
+        71,
+        33,
+        95
+      ],
+      "adjacentTextInk": [
+        39,
+        71,
+        153,
+        95
+      ],
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-czech-media-dark.png",
+      "role": "Snapshot Media title/artist/artwork group",
+      "box": [
+        4,
+        33,
+        162,
+        101
+      ],
+      "ink": [
+        9,
+        39,
+        159,
+        95
+      ],
+      "titleInk": [
+        11,
+        39,
+        155,
+        65
+      ],
+      "artistInk": [
+        39,
+        71,
+        153,
+        95
+      ],
+      "artworkFrame": [
+        9,
+        71,
+        33,
+        95
+      ],
+      "margins": {
+        "top": 6,
+        "bottom": 6
+      },
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-czech-media-dark.png",
+      "role": "Media Snapshot notice/explicit-hint group",
+      "box": [
+        4,
+        104,
+        162,
+        157
+      ],
+      "ink": [
+        9,
+        107,
+        122,
+        154
+      ],
+      "margins": {
+        "top": 3,
+        "bottom": 3
+      },
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-accented-list-first.png",
+      "role": "Selected accented collection group",
+      "box": [
+        4,
+        30,
+        162,
+        97
+      ],
+      "ink": [
+        40,
+        33,
+        152,
+        94
+      ],
+      "margins": {
+        "top": 3,
+        "bottom": 3
+      },
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-accented-list-fifth.png",
+      "role": "Selected accented collection group",
+      "box": [
+        4,
+        97,
+        162,
+        164
+      ],
+      "ink": [
+        40,
+        100,
+        152,
+        161
+      ],
+      "margins": {
+        "top": 3,
+        "bottom": 3
+      },
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-accented-list-reverse.png",
+      "role": "Selected accented collection group",
+      "box": [
+        4,
+        30,
+        162,
+        97
+      ],
+      "ink": [
+        40,
+        33,
+        152,
+        94
+      ],
+      "margins": {
+        "top": 3,
+        "bottom": 3
+      },
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-accented-list-next-page.png",
+      "role": "Selected accented collection group",
+      "box": [
+        4,
+        97,
+        162,
+        164
+      ],
+      "ink": [
+        40,
+        100,
+        152,
+        161
+      ],
+      "margins": {
+        "top": 3,
+        "bottom": 3
+      },
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-accented-list-last.png",
+      "role": "Selected accented collection group",
+      "box": [
+        4,
+        97,
+        162,
+        164
+      ],
+      "ink": [
+        40,
+        100,
+        152,
+        161
+      ],
+      "margins": {
+        "top": 3,
+        "bottom": 3
+      },
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "layout-accented-list-last-reverse.png",
+      "role": "Selected accented collection group",
+      "box": [
+        4,
+        30,
+        162,
+        97
+      ],
+      "ink": [
+        40,
+        33,
+        152,
+        94
+      ],
+      "margins": {
+        "top": 3,
+        "bottom": 3
+      },
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "generic-controls-visible-slots.png",
+      "role": "Selected generic control",
+      "box": [
+        14,
+        102,
+        152,
+        158
+      ],
+      "ink": [
+        15,
+        118,
+        132,
+        141
+      ],
+      "margins": {
+        "top": 16,
+        "bottom": 17
+      },
+      "verticalCenterDifferencePixels": 0.5
+    },
+    {
+      "capture": "generic-sparse-controls-visible-slots.png",
+      "role": "Selected generic control",
+      "box": [
+        14,
+        102,
+        152,
+        158
+      ],
+      "ink": [
+        15,
+        118,
+        132,
+        141
+      ],
+      "margins": {
+        "top": 16,
+        "bottom": 17
+      },
+      "verticalCenterDifferencePixels": 0.5
+    },
+    {
+      "capture": "generic-single-control-visible-slots.png",
+      "role": "Selected generic control",
+      "box": [
+        14,
+        116,
+        152,
+        188
+      ],
+      "ink": [
+        14,
+        140,
+        141,
+        163
+      ],
+      "margins": {
+        "top": 24,
+        "bottom": 25
+      },
+      "verticalCenterDifferencePixels": 0.5
+    },
+    {
+      "capture": "confirmation-target-sidebar.png",
+      "role": "Selected confirmation choice",
+      "box": [
+        17,
+        139,
+        152,
+        175
+      ],
+      "ink": [
+        18,
+        148,
+        81,
+        166
+      ],
+      "margins": {
+        "top": 9,
+        "bottom": 9
+      },
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "confirmation-explicit-run-choice.png",
+      "role": "Selected confirmation choice",
+      "box": [
+        17,
+        183,
+        152,
+        219
+      ],
+      "ink": [
+        18,
+        192,
+        118,
+        210
+      ],
+      "margins": {
+        "top": 9,
+        "bottom": 9
+      },
+      "verticalCenterDifferencePixels": 0.0
+    },
+    {
+      "capture": "activities-list-light.png",
+      "role": "Normal selected Media collection row",
+      "box": [
+        4,
+        78,
+        161,
+        133
+      ],
+      "ink": [
+        41,
+        82,
+        158,
+        130
+      ],
+      "margins": {
+        "top": 4,
+        "bottom": 3
+      },
+      "verticalCenterDifferencePixels": 0.5
+    },
+    {
+      "capture": "activities-list-dark.png",
+      "role": "Normal selected Media collection row",
+      "box": [
+        4,
+        78,
+        161,
+        133
+      ],
+      "ink": [
+        41,
+        82,
+        158,
+        130
+      ],
+      "margins": {
+        "top": 4,
+        "bottom": 3
+      },
+      "verticalCenterDifferencePixels": 0.5
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 {
   "name": "pebble-app-dashboard",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "author": "Xef",
   "private": true,
   "license": "SEE LICENSE IN LICENSE",
@@ -56,24 +56,6 @@
       "media": [
         {
           "type": "font",
-          "name": "FONT_BODY_11",
-          "file": "fonts/RobotoCondensed-Bold.ttf",
-          "characterRegex": "[\\u0020-\\u017F\\u2013\\u2014\\u2019\\u2026]"
-        },
-        {
-          "type": "font",
-          "name": "FONT_BODY_12",
-          "file": "fonts/RobotoCondensed-Bold.ttf",
-          "characterRegex": "[\\u0020-\\u017F\\u2013\\u2014\\u2019\\u2026]"
-        },
-        {
-          "type": "font",
-          "name": "FONT_BODY_14",
-          "file": "fonts/RobotoCondensed-Bold.ttf",
-          "characterRegex": "[\\u0020-\\u017F\\u2013\\u2014\\u2019\\u2026]"
-        },
-        {
-          "type": "font",
           "name": "FONT_CLOCK_20",
           "file": "fonts/Fredoka-Bold-Clock.ttf",
           "characterRegex": "[0-9:.,%\u00b0CF+\u2212-]"
@@ -105,6 +87,40 @@
         {
           "type": "font",
           "name": "FONT_CLOCK_40",
+          "file": "fonts/Fredoka-Bold-Clock.ttf",
+          "characterRegex": "[0-9:.,%\u00b0CF+\u2212-]"
+        },
+        {
+          "type": "font",
+          "name": "FONT_BODY_20",
+          "file": "fonts/RobotoCondensed-Bold.ttf",
+          "characterRegex": "[\\u0020-\\uFFFF]",
+          "extended": true
+        },
+        {
+          "type": "font",
+          "name": "FONT_BODY_22",
+          "file": "fonts/RobotoCondensed-Bold.ttf",
+          "characterRegex": "[\\u0020-\\uFFFF]",
+          "extended": true
+        },
+        {
+          "type": "font",
+          "name": "FONT_BODY_24",
+          "file": "fonts/RobotoCondensed-Bold.ttf",
+          "characterRegex": "[\\u0020-\\uFFFF]",
+          "extended": true
+        },
+        {
+          "type": "font",
+          "name": "FONT_BODY_26",
+          "file": "fonts/RobotoCondensed-Bold.ttf",
+          "characterRegex": "[\\u0020-\\uFFFF]",
+          "extended": true
+        },
+        {
+          "type": "font",
+          "name": "FONT_CLOCK_36",
           "file": "fonts/Fredoka-Bold-Clock.ttf",
           "characterRegex": "[0-9:.,%\u00b0CF+\u2212-]"
         }

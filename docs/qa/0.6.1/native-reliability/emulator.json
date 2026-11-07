@@ -1,0 +1,453 @@
+{
+  "result": "PASS",
+  "version": "0.6.1",
+  "scope": "Real native Emery QEMU UI and AppMessage requests with an explicit fictional protocol peer; no phone JavaScript, live plugins, real app launches or physical watch.",
+  "focusedMotionOnly": false,
+  "focusedNotificationsOnly": false,
+  "focusedUxOnly": false,
+  "focusedReliabilityOnly": true,
+  "pausedMediaReproduction": false,
+  "focusedActivitiesOnly": false,
+  "focusedStartupThemeOnly": false,
+  "candidatePbwSha256": "6158c5d67bd2c6b53bea588be2a715ae7122c77d8532544f27783e3b0899b182",
+  "nativeOnlyPbwSha256": "39fc0c469e4b262c3dfe9f04bb68df152fad3069eb1e51cc53beda7bf0f3cc5c",
+  "nativePayloadSha256": {
+    "emery/app_resources.pbpack": "8e3ec3660e80de2c2585ccbd07345f17e7f5cd188f13d11c6f4b7305a4ef3413",
+    "emery/manifest.json": "a8111461e5a08985f4e927aac8b1a3c644c01052f38764d5d82e5f94b966c021",
+    "emery/pebble-app.bin": "1d149893aa2dde9c9959d3b70d2a56a3c3575fedeceefe53188d92cc6f593683"
+  },
+  "phoneJavascriptExecuted": false,
+  "stateDirectory": "/tmp/dashboard-emery-36zhhui7",
+  "freshIsolatedFlash": true,
+  "session": 796243955,
+  "checks": [
+    {
+      "check": "First-use native button guide explains controls; dismissal consumes Select without dispatching an action or app launch",
+      "passed": true
+    },
+    {
+      "check": "First-use guide dismissal persists across a native app restart; ordinary navigation works immediately and dispatches no action",
+      "passed": true
+    },
+    {
+      "check": "A running countdown paints exact00:00 before stopping second redraws; final pixels match an explicit zero-clock reference without inferring owner completion",
+      "passed": true,
+      "isolatedFixtureClockSet": true,
+      "timingAllowance": "One additional SDK tick for QEMU whole-second/transport scheduling; not a physical timing measurement."
+    },
+    {
+      "check": "A new one-second clock from a static view paints00:00 on the SDK zero-unit first tick; pixels match an explicit zero reference",
+      "passed": true,
+      "isolatedFixtureClockSet": true,
+      "timingAllowance": "One additional SDK tick for QEMU whole-second/transport scheduling; first-callback units are source-reviewed, not instrumented in this production binary."
+    },
+    {
+      "check": "Without running clocks, a short private unavailable-pin lease clears its identity and independent action/app binding; expired tap/hold cannot dispatch",
+      "passed": true
+    },
+    {
+      "check": "A requested identity omitted during LOADING stays inert instead of retargeting another action; exact identity returns after bootstrap",
+      "passed": true
+    }
+  ],
+  "captures": [
+    {
+      "name": "first-use-button-guide",
+      "file": "first-use-button-guide.png",
+      "sha256": "634f696cc0ec4b43e8e9b90cd8a5a8936e2faba95ceded9acd697ad72cbf9d6b",
+      "rgbSha256": "6f8ccae848cbd9069237bc6d3f894a36c0561d5f76697899de2e2268ee9e446e",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "first-use-guide-dismissed",
+      "file": "first-use-guide-dismissed.png",
+      "sha256": "7fca26cee317e1fbc46fd99802ba832549e9e0215da0b56f5535719d1ed90c90",
+      "rgbSha256": "5ad8feeb4f5fee065d19c2acee9a6e3c69982ca5c54d5b7940ad6a618256b854",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "guide-dismissed-after-restart",
+      "file": "guide-dismissed-after-restart.png",
+      "sha256": "0b1c18eb26b6c5a290efdff2daab08fdcc6e5b0258cbbeb4e26702727d86756d",
+      "rgbSha256": "7ab0e7543e672f029d9fb6f60c9a765a45e88d9fd3b4d5c651e5429f3ac8dee6",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "activities-title-count-clock",
+      "file": "activities-title-count-clock.png",
+      "sha256": "e947de4e2e6a0b152f3e2e46f98a94b66fbc26eafdf3af37e10b75617fdb3506",
+      "rgbSha256": "158e9e19d44b973ac08a5277200182b5bf3a76f7f2c215ad2310423c0e29b7b3",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "pinned-title-count-clock",
+      "file": "pinned-title-count-clock.png",
+      "sha256": "06531f2386e36aec32b790a38dfb1eb37d539c6a9072933f0cc896b1db4239d4",
+      "rgbSha256": "5f644ecce4aa4c2d11b479b418f869999e542999bd7c7767a9712fc903921a50",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "countdown-before-zero",
+      "file": "countdown-before-zero.png",
+      "sha256": "5f819ad86363e142cbe36244f87f5b92b0d8b1b4629b9658038ef99062977b4e",
+      "rgbSha256": "623a837a6a9643a691fc6955ee5df67ec73a83ecb234064d880ce3f554d24a0c",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "countdown-final-zero",
+      "file": "countdown-final-zero.png",
+      "sha256": "81041d3c2e9bc559ce96a4b1d32a6db3a021f23fbc7f14c9f5147ddf9a5a7c08",
+      "rgbSha256": "1d836806ec2e31b81e14f4f50d813430433e9de6ab34f7148bf3967bdc75e65f",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "countdown-zero-still",
+      "file": "countdown-zero-still.png",
+      "sha256": "81041d3c2e9bc559ce96a4b1d32a6db3a021f23fbc7f14c9f5147ddf9a5a7c08",
+      "rgbSha256": "1d836806ec2e31b81e14f4f50d813430433e9de6ab34f7148bf3967bdc75e65f",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "countdown-zero-reference",
+      "file": "countdown-zero-reference.png",
+      "sha256": "81041d3c2e9bc559ce96a4b1d32a6db3a021f23fbc7f14c9f5147ddf9a5a7c08",
+      "rgbSha256": "1d836806ec2e31b81e14f4f50d813430433e9de6ab34f7148bf3967bdc75e65f",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "first-second-callback-before-zero",
+      "file": "first-second-callback-before-zero.png",
+      "sha256": "4c85236187735346e57fb83f3f50fa0521af12d6599f682b5b22a9f3fa5a3cd1",
+      "rgbSha256": "c41358b226c8dba3f3bb2547eaff55907a4b09240b6950f286b1cea0666d5983",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "first-second-callback-final-zero",
+      "file": "first-second-callback-final-zero.png",
+      "sha256": "81041d3c2e9bc559ce96a4b1d32a6db3a021f23fbc7f14c9f5147ddf9a5a7c08",
+      "rgbSha256": "1d836806ec2e31b81e14f4f50d813430433e9de6ab34f7148bf3967bdc75e65f",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "first-second-callback-zero-reference",
+      "file": "first-second-callback-zero-reference.png",
+      "sha256": "81041d3c2e9bc559ce96a4b1d32a6db3a021f23fbc7f14c9f5147ddf9a5a7c08",
+      "rgbSha256": "1d836806ec2e31b81e14f4f50d813430433e9de6ab34f7148bf3967bdc75e65f",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "unavailable-capability-before-expiry",
+      "file": "unavailable-capability-before-expiry.png",
+      "sha256": "1c848d418f424634e756f5d631d0158c987136d4a87dcdd16a56e588cd828465",
+      "rgbSha256": "48652704fec2a8c9361bec7ea8dbfb6fda6a317ab7d38fafc7a9e8f64eb796de",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "unavailable-capability-expired",
+      "file": "unavailable-capability-expired.png",
+      "sha256": "908e99e70d6b9bbc6a34c490b77065f1072edf95eb5c1793ac2e44a9b079f956",
+      "rgbSha256": "098a5a0eb386830a6bdce8a6032c482530e0074b88ec750cbb6b16264fbd3256",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "requested-target-bootstrap-inert",
+      "file": "requested-target-bootstrap-inert.png",
+      "sha256": "d8f4c31cecf847be2669f9600f4454b33e83ba95575f85875022578029609199",
+      "rgbSha256": "28de671a607a6ae427579cd9131234af74b310c8eba839dff2c7b8dbc54b3c35",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "requested-target-restored",
+      "file": "requested-target-restored.png",
+      "sha256": "267d4c196ba55a7c4899ea33c4971c411a1d2ec73114a2ea2eedd64d7b595d99",
+      "rgbSha256": "c47e5333b704d0ddf42c7049c59256c8959ad488e475e89a4b2333cff5e3474b",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    }
+  ],
+  "themePixelChecks": [],
+  "requests": [
+    {
+      "4000": 1,
+      "4001": 774617073,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0
+    },
+    {
+      "4000": 7,
+      "4001": 774617073,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 1,
+      "4006": 1
+    },
+    {
+      "4000": 1,
+      "4001": 796243955,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0
+    },
+    {
+      "4000": 7,
+      "4001": 796243955,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 1,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 796243955,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 1,
+      "4005": 3,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 796243955,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 1,
+      "4006": 1
+    },
+    {
+      "4000": 2,
+      "4001": 796243955,
+      "4002": 2,
+      "4003": 1,
+      "4004": 0,
+      "4012": 0
+    },
+    {
+      "4000": 7,
+      "4001": 796243955,
+      "4002": 2,
+      "4003": 1,
+      "4004": 0,
+      "4012": 0,
+      "4005": 1,
+      "4006": 1
+    },
+    {
+      "4000": 2,
+      "4001": 796243955,
+      "4002": 3,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 1,
+      "4006": 0
+    },
+    {
+      "4000": 7,
+      "4001": 796243955,
+      "4002": 3,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 1,
+      "4006": 1
+    },
+    {
+      "4000": 2,
+      "4001": 796243955,
+      "4002": 4,
+      "4003": 2,
+      "4004": 0,
+      "4012": 0
+    },
+    {
+      "4000": 7,
+      "4001": 796243955,
+      "4002": 4,
+      "4003": 2,
+      "4004": 0,
+      "4012": 0,
+      "4005": 4,
+      "4006": 1
+    },
+    {
+      "4000": 2,
+      "4001": 796243955,
+      "4002": 5,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 1,
+      "4006": 0
+    },
+    {
+      "4000": 7,
+      "4001": 796243955,
+      "4002": 5,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 1,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 796243955,
+      "4002": 5,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 5,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 796243955,
+      "4002": 5,
+      "4003": 0,
+      "4004": 0,
+      "4012": 3,
+      "4005": 6,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 796243955,
+      "4002": 5,
+      "4003": 0,
+      "4004": 0,
+      "4012": 2,
+      "4005": 4,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 796243955,
+      "4002": 5,
+      "4003": 0,
+      "4004": 0,
+      "4012": 1,
+      "4005": 3,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 796243955,
+      "4002": 5,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 12,
+      "4006": 1
+    },
+    {
+      "4000": 2,
+      "4001": 796243955,
+      "4002": 6,
+      "4003": 3,
+      "4004": 0,
+      "4012": 0,
+      "4005": 12,
+      "4006": 0
+    },
+    {
+      "4000": 2,
+      "4001": 796243955,
+      "4002": 7,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 12,
+      "4006": 0
+    },
+    {
+      "4000": 2,
+      "4001": 796243955,
+      "4002": 8,
+      "4003": 3,
+      "4004": 0,
+      "4012": 0,
+      "4005": 12,
+      "4006": 0
+    }
+  ],
+  "mockActions": [],
+  "mockAppOpens": [],
+  "visualReview": {
+    "reviewed": false,
+    "scope": "Representative actual native compositions; pixel audit checks31 captures independently. No physical watch/phone/browser fitting claim.",
+    "representativeCaptures": []
+  }
+}

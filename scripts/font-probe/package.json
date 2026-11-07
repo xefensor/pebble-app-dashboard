@@ -1,0 +1,22 @@
+{
+  "name": "dashboard-font-probe",
+  "version": "1.0.0",
+  "pebble": {
+    "displayName": "Font QA",
+    "uuid": "8191396b-dc27-4c2f-8664-432662fd522a",
+    "sdkVersion": "3",
+    "projectType": "native",
+    "targetPlatforms": [
+      "emery"
+    ],
+    "watchapp": {
+      "watchface": false
+    },
+    "resources": {
+      "media": []
+    },
+    "messageKeys": {}
+  },
+  "author": "Xef",
+  "private": true
+}

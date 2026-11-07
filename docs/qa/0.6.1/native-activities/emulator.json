@@ -1,0 +1,567 @@
+{
+  "result": "PASS",
+  "version": "0.6.1",
+  "scope": "Real native Emery QEMU UI and AppMessage requests with an explicit fictional protocol peer; no phone JavaScript, live plugins, real app launches or physical watch.",
+  "focusedMotionOnly": false,
+  "focusedNotificationsOnly": false,
+  "focusedUxOnly": false,
+  "focusedReliabilityOnly": false,
+  "pausedMediaReproduction": false,
+  "focusedActivitiesOnly": true,
+  "focusedStartupThemeOnly": false,
+  "candidatePbwSha256": "6158c5d67bd2c6b53bea588be2a715ae7122c77d8532544f27783e3b0899b182",
+  "nativeOnlyPbwSha256": "39fc0c469e4b262c3dfe9f04bb68df152fad3069eb1e51cc53beda7bf0f3cc5c",
+  "nativePayloadSha256": {
+    "emery/app_resources.pbpack": "8e3ec3660e80de2c2585ccbd07345f17e7f5cd188f13d11c6f4b7305a4ef3413",
+    "emery/manifest.json": "a8111461e5a08985f4e927aac8b1a3c644c01052f38764d5d82e5f94b966c021",
+    "emery/pebble-app.bin": "1d149893aa2dde9c9959d3b70d2a56a3c3575fedeceefe53188d92cc6f593683"
+  },
+  "phoneJavascriptExecuted": false,
+  "stateDirectory": "/tmp/dashboard-emery-2uhejkcb",
+  "freshIsolatedFlash": true,
+  "session": 746632708,
+  "checks": [
+    {
+      "check": "First-use native button guide explains controls; dismissal consumes Select without dispatching an action or app launch",
+      "passed": true
+    },
+    {
+      "check": "First-use guide dismissal persists across a native app restart; ordinary navigation works immediately and dispatches no action",
+      "passed": true
+    },
+    {
+      "check": "Paused Media is visible in the existing primary/footer and list row, with and without artist, independently of sidebar selection",
+      "passed": true
+    },
+    {
+      "check": "Real summary.standard media-icon projection encodes/displays its countdown and generic Stop control; tap opens controls, original slot0 dispatches, and hold retains the same exact destination token",
+      "passed": true
+    },
+    {
+      "check": "A withdrawn selected activity remains inert through repeated complete frames and Select/hold; deliberate navigation and collection entry recover current rows",
+      "passed": true
+    }
+  ],
+  "captures": [
+    {
+      "name": "first-use-button-guide",
+      "file": "first-use-button-guide.png",
+      "sha256": "daabeb0af3a8d3ff2531a7547388b64c18101adcd2435c92e3ffbe9e4fd68e3e",
+      "rgbSha256": "33f12b4644bc6578ea0b750d51613a3edfa44d9ec53c977c84b5b0dcc0178feb",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "first-use-guide-dismissed",
+      "file": "first-use-guide-dismissed.png",
+      "sha256": "4abe7a6540ce2c6384c416a8b2d71170d36159b25ec918afa4f92de385d10438",
+      "rgbSha256": "d6f1c98d3b6031862550479d4a45f079b862c624a8fcf688f279260026afecdc",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "guide-dismissed-after-restart",
+      "file": "guide-dismissed-after-restart.png",
+      "sha256": "52bd39b79250eaae9ed49295bcf040cfbc303ee4f33805ca68e346c779b96e6a",
+      "rgbSha256": "cdb71ae355c647bc2d4d20ff725d8b2dec913e0e2b069967e5774eb156f9f833",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "activities-title-count-clock",
+      "file": "activities-title-count-clock.png",
+      "sha256": "93eeb9095eb7b066fb89a0695289291494cdd5e7239502224801aac63a53cde8",
+      "rgbSha256": "8aa0d17b81f195a63b66b91190ba9a24080cb6f9ca67d0cd2873fb723c017f3a",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "pinned-title-count-clock",
+      "file": "pinned-title-count-clock.png",
+      "sha256": "69bf80ae84a2135a1d3a31e42d029e469c830fadc9393827f7b8a7676dfab59d",
+      "rgbSha256": "d9724ae82021e5036cfcaf9d7560973ff9b019c903b67528e139a36748943257",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "media-primary-active-unselected",
+      "file": "media-primary-active-unselected.png",
+      "sha256": "2915c4afb4d2344e658360cda9792c83ba9eb82f2c2eb0d79438ef211ed77d83",
+      "rgbSha256": "fb9953b90ab792148574fb76e20e7dbbe38a97566d9747c5b846f9c628e8af80",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "media-primary-paused-unselected",
+      "file": "media-primary-paused-unselected.png",
+      "sha256": "ee9fe3c2d0c383c22ae6efcf0bd62f0eb9a155dadf398d9eeeb8508a92912fdc",
+      "rgbSha256": "ef2f7f4de01b8f1f3e83ee4411f296d807f5e2d294922e3a2234e4f04ea1edd6",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "media-paused-no-artist",
+      "file": "media-paused-no-artist.png",
+      "sha256": "49e3b899306199c9f760f943564a79fc4171cc5d809787ce311c089397682161",
+      "rgbSha256": "fa991fe3675b6defaf16aa64c0fb0363f081830fc35acb7c766df52ed0159d41",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "media-active-no-artist",
+      "file": "media-active-no-artist.png",
+      "sha256": "ad01cc90d2086cf55ff1c55e0eb2aa79730b16cd38bee9a3577a900944a7b818",
+      "rgbSha256": "241f4c710bbc36a9da59a3eb05229529e7800b6c525fdee0591ed8ceb2054e6f",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "media-paused-activity-list",
+      "file": "media-paused-activity-list.png",
+      "sha256": "a6f226ba49daee6499db96ae6157cd646d6eb60a319b36bcf979b965b4b6fae2",
+      "rgbSha256": "13a74d2275af58ac8371302f8a5bab7921c55c5a90197c2adfa93e9c929b8fa4",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "standard-media-icon-countdown",
+      "file": "standard-media-icon-countdown.png",
+      "sha256": "d1c392cabd8d64fc33a545b39d521a30da5d6b7c98d7825ad9228594c5ad2c86",
+      "rgbSha256": "788c296bfd5e1eb7f37c5652ba76fe46f1a447f2bd595d9fdd23bdbd7065b37d",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "standard-media-icon-stop-controls",
+      "file": "standard-media-icon-stop-controls.png",
+      "sha256": "915a4f62217525b187cb2d189186d40ae000aee6471982fe08bdc447b878f287",
+      "rgbSha256": "f8b3ca940e1b8f6187d3de0c26ed2c30d7795d3063f568d5d1325e5dfe660dbd",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "withdrawn-selection-inert",
+      "file": "withdrawn-selection-inert.png",
+      "sha256": "0bd1207d8c2875ad9208e71c538e513b8d7d4ab7b8a9961055a77fcbc09986ec",
+      "rgbSha256": "69b44e1f0f215d4c47335051e693c45593483c79c765d4f55c21eb7816659cb9",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "withdrawn-selection-repeated-frame-inert",
+      "file": "withdrawn-selection-repeated-frame-inert.png",
+      "sha256": "0bd1207d8c2875ad9208e71c538e513b8d7d4ab7b8a9961055a77fcbc09986ec",
+      "rgbSha256": "69b44e1f0f215d4c47335051e693c45593483c79c765d4f55c21eb7816659cb9",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "withdrawn-selection-navigation-recovered",
+      "file": "withdrawn-selection-navigation-recovered.png",
+      "sha256": "230a7b9f1eb6b183f4f3342a73bb64fd81b9fe4f472979814d24ad8deaec8cbe",
+      "rgbSha256": "b6010ee07c0ef170ab3f5ccd3a2c79a75672c9cf1d540dd4e37690d5ed6719b2",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    },
+    {
+      "name": "withdrawn-selection-collection-recovered",
+      "file": "withdrawn-selection-collection-recovered.png",
+      "sha256": "a423bba23db9265dbd7184ab741e02eab75d73b6176eab9daeab4e169d685f7a",
+      "rgbSha256": "f4e80d65384786fe0c952503c8f2bde3a77fc10c8241b964665e4f5ad77ab4f2",
+      "pixels": [
+        200,
+        228
+      ],
+      "nativePixelsModified": false
+    }
+  ],
+  "themePixelChecks": [],
+  "requests": [
+    {
+      "4000": 1,
+      "4001": 778352130,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0
+    },
+    {
+      "4000": 7,
+      "4001": 778352130,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 1,
+      "4006": 1
+    },
+    {
+      "4000": 1,
+      "4001": 746632708,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0
+    },
+    {
+      "4000": 7,
+      "4001": 746632708,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 1,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 746632708,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 1,
+      "4005": 3,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 746632708,
+      "4002": 1,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 1,
+      "4006": 1
+    },
+    {
+      "4000": 2,
+      "4001": 746632708,
+      "4002": 2,
+      "4003": 1,
+      "4004": 0,
+      "4012": 0
+    },
+    {
+      "4000": 7,
+      "4001": 746632708,
+      "4002": 2,
+      "4003": 1,
+      "4004": 0,
+      "4012": 0,
+      "4005": 1,
+      "4006": 1
+    },
+    {
+      "4000": 2,
+      "4001": 746632708,
+      "4002": 3,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 1,
+      "4006": 0
+    },
+    {
+      "4000": 7,
+      "4001": 746632708,
+      "4002": 3,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 1,
+      "4006": 1
+    },
+    {
+      "4000": 2,
+      "4001": 746632708,
+      "4002": 4,
+      "4003": 2,
+      "4004": 0,
+      "4012": 0
+    },
+    {
+      "4000": 7,
+      "4001": 746632708,
+      "4002": 4,
+      "4003": 2,
+      "4004": 0,
+      "4012": 0,
+      "4005": 4,
+      "4006": 1
+    },
+    {
+      "4000": 2,
+      "4001": 746632708,
+      "4002": 5,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 1,
+      "4006": 0
+    },
+    {
+      "4000": 7,
+      "4001": 746632708,
+      "4002": 5,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 1,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 746632708,
+      "4002": 5,
+      "4003": 0,
+      "4004": 0,
+      "4012": 3,
+      "4005": 6,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 746632708,
+      "4002": 5,
+      "4003": 0,
+      "4004": 0,
+      "4012": 2,
+      "4005": 4,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 746632708,
+      "4002": 5,
+      "4003": 0,
+      "4004": 0,
+      "4012": 1,
+      "4005": 3,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 746632708,
+      "4002": 5,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 2,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 746632708,
+      "4002": 5,
+      "4003": 0,
+      "4004": 0,
+      "4012": 1,
+      "4005": 3,
+      "4006": 1
+    },
+    {
+      "4000": 2,
+      "4001": 746632708,
+      "4002": 6,
+      "4003": 1,
+      "4004": 0,
+      "4012": 0
+    },
+    {
+      "4000": 7,
+      "4001": 746632708,
+      "4002": 6,
+      "4003": 1,
+      "4004": 0,
+      "4012": 0,
+      "4005": 2,
+      "4006": 5
+    },
+    {
+      "4000": 2,
+      "4001": 746632708,
+      "4002": 7,
+      "4003": 0,
+      "4004": 0,
+      "4012": 1,
+      "4005": 3,
+      "4006": 0
+    },
+    {
+      "4000": 7,
+      "4001": 746632708,
+      "4002": 7,
+      "4003": 0,
+      "4004": 0,
+      "4012": 1,
+      "4005": 3,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 746632708,
+      "4002": 7,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 91,
+      "4006": 1
+    },
+    {
+      "4000": 2,
+      "4001": 746632708,
+      "4002": 8,
+      "4003": 3,
+      "4004": 0,
+      "4012": 0,
+      "4005": 91,
+      "4006": 0
+    },
+    {
+      "4000": 3,
+      "4001": 746632708,
+      "4002": 9,
+      "4003": 3,
+      "4004": 0,
+      "4012": 0,
+      "4005": 91,
+      "4006": 1,
+      "4007": 0,
+      "4011": 0
+    },
+    {
+      "4000": 2,
+      "4001": 746632708,
+      "4002": 10,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 91,
+      "4006": 0
+    },
+    {
+      "4000": 7,
+      "4001": 746632708,
+      "4002": 10,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 91,
+      "4006": 1
+    },
+    {
+      "4000": 4,
+      "4001": 746632708,
+      "4002": 11,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 91,
+      "4006": 1
+    },
+    {
+      "4000": 7,
+      "4001": 746632708,
+      "4002": 10,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 2,
+      "4006": 5
+    },
+    {
+      "4000": 2,
+      "4001": 746632708,
+      "4002": 12,
+      "4003": 1,
+      "4004": 0,
+      "4012": 0
+    },
+    {
+      "4000": 7,
+      "4001": 746632708,
+      "4002": 12,
+      "4003": 1,
+      "4004": 0,
+      "4012": 0,
+      "4005": 2,
+      "4006": 5
+    }
+  ],
+  "mockActions": [
+    {
+      "4000": 3,
+      "4001": 746632708,
+      "4002": 9,
+      "4003": 3,
+      "4004": 0,
+      "4012": 0,
+      "4005": 91,
+      "4006": 1,
+      "4007": 0,
+      "4011": 0
+    }
+  ],
+  "mockAppOpens": [
+    {
+      "4000": 4,
+      "4001": 746632708,
+      "4002": 11,
+      "4003": 0,
+      "4004": 0,
+      "4012": 0,
+      "4005": 91,
+      "4006": 1
+    }
+  ],
+  "visualReview": {
+    "reviewed": false,
+    "scope": "Representative actual native compositions; pixel audit checks31 captures independently. No physical watch/phone/browser fitting claim.",
+    "representativeCaptures": []
+  }
+}

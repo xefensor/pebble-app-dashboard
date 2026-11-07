@@ -1,0 +1,43 @@
+{
+  "_identity": "activity:11111111-2222-4333-8444-555555555555:recording",
+  "title": "Recorder",
+  "subtitle": "",
+  "value": "",
+  "name": "Recorder",
+  "appLabel": "Recorder",
+  "actionLabel": "Stop",
+  "controls": [
+    "Stop",
+    "",
+    ""
+  ],
+  "flags": 8451,
+  "kind": 2,
+  "role": 0,
+  "clockMode": 1,
+  "anchor": 2000000300,
+  "baseSeconds": 300,
+  "validUntil": 2000003600,
+  "_commands": [
+    {
+      "plugin": "11111111-2222-4333-8444-555555555555",
+      "action": "stop",
+      "args": {
+        "id": "recording"
+      },
+      "label": "Stop",
+      "confirm": false
+    }
+  ],
+  "_openApp": {
+    "watchAppUuid": "22222222-2222-4333-8444-555555555555",
+    "label": "Recorder"
+  },
+  "_sourceValidUntil": 2000003600,
+  "_provider": "11111111-2222-4333-8444-555555555555",
+  "_sourceRevision": 1,
+  "_activityId": "recording",
+  "_activityState": "active",
+  "token": 91,
+  "version": 1
+}

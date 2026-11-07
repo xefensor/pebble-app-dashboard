@@ -1,4 +1,5 @@
 #include <pebble.h>
+#include "dashboard_layout.h"
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
@@ -9,7 +10,7 @@
 #define SCREEN_W 200
 #define SCREEN_H 228
 #define CONTENT_W (SCREEN_W - ACTION_BAR_WIDTH)
-#define FONT_COUNT 13
+#define FONT_COUNT 15
 #define VIEW_TIMEOUT_MS 6000
 #define ACTION_TIMEOUT_MS 12000
 #define OUTBOX_CAPACITY 4
@@ -17,8 +18,6 @@
 #define THEME_DARK_KEY 2
 #define HOLD_PREVIEW_MS 250
 #define PRESS_RELEASE_MS 144
-#define SELECTION_MOVE_MS 100
-#define SELECTION_SETTLE_MS 250
 
 typedef struct {uint8_t op,mode,action,confirm;uint16_t offset,index;uint32_t request,token,version;} Outbound;
 typedef struct {uint32_t request,token,version;uint8_t action,result;char text[65];bool active,confirmation,ended;} Command;
@@ -44,22 +43,23 @@ static GFont s_fonts[FONT_COUNT];
 static uint8_t s_tick_seconds;
 static unsigned s_last_minute;
 static uint32_t s_last_tick;
+static unsigned s_list_first;
+static uint16_t s_list_offset;
+static uint8_t s_list_mode;
 typedef struct {uint32_t started;uint8_t offset;bool held,releasing;} ButtonMotion;
 static AppTimer *s_button_motion_timer;
 static ButtonMotion s_buttons[3];
-static Animation *s_selection_animation;
-static int s_selection_stretch,s_selection_inset,s_selection_direction;
-static const uint8_t s_font_points[]={11,12,14,16,20,24,20,24,26,28,32,40,18};
-static const uint32_t s_font_ids[]={RESOURCE_ID_FONT_BODY_11,RESOURCE_ID_FONT_BODY_12,RESOURCE_ID_FONT_BODY_14,
-  0,0,0,
+static const uint8_t s_font_points[]={20,22,24,20,22,24,20,24,26,24,32,40,20,26,36};
+static const uint32_t s_font_ids[]={RESOURCE_ID_FONT_BODY_20,RESOURCE_ID_FONT_BODY_22,RESOURCE_ID_FONT_BODY_24,
+  RESOURCE_ID_FONT_BODY_20,RESOURCE_ID_FONT_BODY_22,RESOURCE_ID_FONT_BODY_24,
   RESOURCE_ID_FONT_CLOCK_20,RESOURCE_ID_FONT_CLOCK_24,RESOURCE_ID_FONT_CLOCK_26,
-  0,RESOURCE_ID_FONT_CLOCK_32,RESOURCE_ID_FONT_CLOCK_40,0};
+  RESOURCE_ID_FONT_BODY_24,RESOURCE_ID_FONT_CLOCK_32,RESOURCE_ID_FONT_CLOCK_40,RESOURCE_ID_FONT_BODY_20,RESOURCE_ID_FONT_BODY_26,RESOURCE_ID_FONT_CLOCK_36};
 
 static uint32_t utc_now(void){return (uint32_t)time(NULL);}
 static uint32_t next_request(void){s_counter=s_counter>=INT32_MAX?1:s_counter+1;return s_counter;}
 static void repaint(void){if(s_canvas&&s_focused)layer_mark_dirty(s_canvas);}
-// These short animations only paint feedback. Selection and capabilities always
-// change synchronously, and are settled before any activation or incoming frame.
+// Only physical button feedback animates. Full-width selection is immediate;
+// no decorative state can obscure a fitted label or delay a capability check.
 static uint32_t input_milliseconds(void){time_t seconds;uint16_t milliseconds;time_ms(&seconds,&milliseconds);return (uint32_t)((uint64_t)seconds*1000u+milliseconds);}
 static void settle_button_releases(void){
   for(unsigned i=0;i<3;i++)if(s_buttons[i].releasing){s_buttons[i].offset=0;s_buttons[i].releasing=false;}
@@ -80,22 +80,6 @@ static void release_frame(void *context){
   }
   repaint();if(pending&&s_focused){s_button_motion_timer=app_timer_register(next,release_frame,NULL);if(!s_button_motion_timer)settle_button_releases();}
 }
-static void settle_selection(void){
-  if(s_selection_animation)animation_unschedule(s_selection_animation);
-  s_selection_stretch=s_selection_inset=0;
-}
-static void selection_frame(Animation *animation,const AnimationProgress progress){
-  (void)animation;int elapsed=(int)((int64_t)progress*(SELECTION_MOVE_MS+SELECTION_SETTLE_MS)/ANIMATION_NORMALIZED_MAX);
-  if(elapsed<SELECTION_MOVE_MS){s_selection_inset=4-5*elapsed/SELECTION_MOVE_MS;s_selection_stretch=2*elapsed/SELECTION_MOVE_MS;}
-  else{int remaining=SELECTION_MOVE_MS+SELECTION_SETTLE_MS-elapsed;s_selection_inset=-remaining*remaining/(SELECTION_SETTLE_MS*SELECTION_SETTLE_MS);s_selection_stretch=2*remaining*remaining/(SELECTION_SETTLE_MS*SELECTION_SETTLE_MS);}
-  repaint();
-}
-static const AnimationImplementation s_selection_implementation={.update=selection_frame};
-static void animate_selection(int direction){
-  if(!s_focused||s_repeat_held)return;
-  if(!s_selection_animation){s_selection_animation=animation_create();if(!s_selection_animation)return;animation_set_implementation(s_selection_animation,&s_selection_implementation);animation_set_duration(s_selection_animation,SELECTION_MOVE_MS+SELECTION_SETTLE_MS);animation_set_curve(s_selection_animation,AnimationCurveLinear);}
-  s_selection_direction=direction;s_selection_inset=4;s_selection_stretch=0;animation_schedule(s_selection_animation);
-}
 static void button_pressed(ButtonId id){
   if(id<BUTTON_ID_UP||id>BUTTON_ID_DOWN)return;
   ButtonMotion *button=&s_buttons[id-BUTTON_ID_UP];button->held=true;button->releasing=false;button->offset=5;repaint();
@@ -110,7 +94,7 @@ static void button_released(ButtonId id){
   repaint();
 }
 static void cancel_motion(void){
-  settle_selection();if(s_button_motion_timer){app_timer_cancel(s_button_motion_timer);s_button_motion_timer=NULL;}
+  if(s_button_motion_timer){app_timer_cancel(s_button_motion_timer);s_button_motion_timer=NULL;}
   for(unsigned i=0;i<3;i++){s_buttons[i].offset=0;s_buttons[i].held=false;s_buttons[i].releasing=false;}
 }
 static void update_ticks(void);
@@ -134,15 +118,14 @@ static GColor foreground(void){return s_state.snapshot.dark?GColorWhite:GColorBl
 static GColor muted(void){return s_state.snapshot.dark?GColorLightGray:GColorDarkGray;}
 static GColor stroke(void){return s_state.snapshot.dark?GColorDarkGray:GColorLightGray;}
 static GColor accent(void){return s_state.snapshot.dark?GColorTiffanyBlue:GColorJaegerGreen;}
+static unsigned font_storage(unsigned index){return index==3||index==12?0:index==4?1:index==5||index==9?2:index;}
 static GFont font_at(unsigned index){
   if(index>=FONT_COUNT)index=3;
-  if(index==3||index==12)return fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD);
-  if(index==4||index==5)return fonts_get_system_font(FONT_KEY_GOTHIC_24_BOLD);
-  if(index==9)return fonts_get_system_font(FONT_KEY_GOTHIC_28_BOLD);
+  index=font_storage(index);
   if(!s_fonts[index])s_fonts[index]=fonts_load_custom_font(resource_get_handle(s_font_ids[index]));
-  return s_fonts[index]?s_fonts[index]:fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD);
+  return s_fonts[index]?s_fonts[index]:fonts_get_system_font(index==0?FONT_KEY_GOTHIC_24_BOLD:FONT_KEY_GOTHIC_28_BOLD);
 }
-static unsigned body_index(unsigned point){return point<=11?0:point<=12?1:point<=14?2:point<=16?3:point<=18?12:point<=20?4:point<=24?5:9;}
+static unsigned body_index(unsigned point){return point<=20?0:point<=22?4:5;}
 static int width_of(const char *value,unsigned index){
   return graphics_text_layout_get_content_size(value,font_at(index),GRect(0,0,2048,512),GTextOverflowModeFill,GTextAlignmentLeft).w;
 }
@@ -152,20 +135,55 @@ static void clean_text(char *out,size_t size,const char *value){
   snprintf(out,size,"%s",value?value:"");
   for(char *p=out;*p;p++)if(*p=='\n'||*p=='\r'||*p=='\t')*p=' ';
 }
-static void draw_text(GContext *ctx,const char *value,unsigned index,int x,int baseline,int width,GColor color,GTextAlignment alignment){
-  if(width<=0)return;
-  char text[265];clean_text(text,sizeof(text),value);
+static void fit_text(char text[265],const char *value,unsigned index,int width){
+  clean_text(text,265,value);
   if(width_of(text,index)>width){
-    while(text[0]){pop_utf8(text);size_t n=strlen(text);if(n+4>=sizeof(text))continue;memcpy(text+n,"…",4);
+    while(text[0]){pop_utf8(text);size_t n=strlen(text);if(n+4>=265)continue;memcpy(text+n,"…",4);
       if(width_of(text,index)<=width)break;
       text[n]=0;}
   }
+}
+static void paint_text(GContext *ctx,const char *text,unsigned index,int x,int baseline,int width,GColor color,GTextAlignment alignment){
   graphics_context_set_text_color(ctx,color);
-  int height=index==3?18:index==4?24:s_font_points[index];
+  int height=s_font_points[index];
+  // Explicit advance anchoring avoids the current Emery custom-font right-
+  // alignment path dropping leading clock glyphs. Keep the full fitted string.
+  if(alignment!=GTextAlignmentLeft){
+    int measured=width_of(text,index);x+=alignment==GTextAlignmentRight?width-measured:(width-measured)/2;
+    width=measured+2;alignment=GTextAlignmentLeft;
+  }
   graphics_draw_text(ctx,text,font_at(index),GRect(x,baseline-height,width,height+12),GTextOverflowModeFill,alignment,NULL);
 }
+static void draw_text(GContext *ctx,const char *value,unsigned index,int x,int baseline,int width,GColor color,GTextAlignment alignment){
+  if(width<=0)return;
+  char text[265];fit_text(text,value,index,width);paint_text(ctx,text,index,x,baseline,width,color,alignment);
+}
 static void text(GContext *ctx,const char *value,unsigned point,int x,int baseline,int width,GColor color){draw_text(ctx,value,body_index(point),x,baseline,width,color,GTextAlignmentLeft);}
-static void centered(GContext *ctx,const char *value,unsigned point,int baseline,GColor color){draw_text(ctx,value,body_index(point),6,baseline,CONTENT_W-12,color,GTextAlignmentCenter);}
+// Nominal point sizes are not visible ink. Use measured per-glyph bounds for
+// the fitted string, including accents, descenders and the actual ellipsis.
+static DbTextInk text_ink(const char *value,unsigned index){
+  unsigned storage=font_storage(index);
+  if(s_fonts[storage]&&(storage<=2||storage==13))return db_layout_body_ink(value,storage==13?3:storage);
+  int gothic=storage==0?1:2;
+  int clock=index==6?0:index==7?1:index==8?2:index==10?3:index==11?4:index==14?5:-1;
+  if(clock>=0)gothic=-1;
+  return db_layout_ink(value,gothic,clock);
+}
+static int ink_height(const char *value,unsigned index,int width){
+  char text[265];fit_text(text,value,index,width);DbTextInk ink=text_ink(text,index);return ink.visible?ink.bottom-ink.top+1:0;
+}
+static void text_top(GContext *ctx,const char *value,unsigned index,int x,int top,int width,GColor color,GTextAlignment align){
+  if(width<=0)return;
+  char fitted[265];fit_text(fitted,value,index,width);DbTextInk ink=text_ink(fitted,index);
+  int line_height=s_font_points[index];
+  paint_text(ctx,fitted,index,x,top-ink.top+line_height,width,color,align);
+}
+static void text_box(GContext *ctx,const char *value,unsigned index,GRect bounds,GColor color,GTextAlignment align){
+  if(bounds.size.w<=0)return;
+  char fitted[265];fit_text(fitted,value,index,bounds.size.w);DbTextInk ink=text_ink(fitted,index);
+  int height=ink.visible?ink.bottom-ink.top+1:0,line_height=s_font_points[index];
+  paint_text(ctx,fitted,index,bounds.origin.x,bounds.origin.y+(bounds.size.h-height)/2-ink.top+line_height,bounds.size.w,color,align);
+}
 static bool clock_chars(const char *text){
   const unsigned char *p=(const unsigned char *)text;
   while(*p){
@@ -176,31 +194,28 @@ static bool clock_chars(const char *text){
   }
   return true;
 }
-static void value_text(GContext *ctx,const char *value,int x,int baseline,int width,unsigned preferred,GColor color,GTextAlignment align){
-  static const unsigned clocks[]={11,10,8,7,6},bodies[]={9,5,4};
-  const unsigned *choices=clock_chars(value)?clocks:bodies;unsigned count=clock_chars(value)?5:3;
-  for(unsigned i=0;i<count;i++){unsigned index=choices[i];if(s_font_points[index]<=preferred&&width_of(value,index)<=width){draw_text(ctx,value,index,x,baseline,width,color,align);return;}}
-  draw_text(ctx,"Too long",4,x,baseline,width,color,align);
+static unsigned value_index(const char *value,int width,unsigned preferred){
+  static const unsigned clocks[]={11,14,10,8,7,6},bodies[]={13,9,5,4};
+  const unsigned *choices=clock_chars(value)?clocks:bodies;unsigned count=clock_chars(value)?6:4;
+  for(unsigned i=0;i<count;i++){unsigned index=choices[i];if(s_font_points[index]<=preferred&&width_of(value,index)<=width)return index;}
+  return 4;
 }
+static const char *value_label(const char *value,unsigned index,int width){return width_of(value,index)<=width?value:"Too long";}
 static void fill(GContext *ctx,GRect bounds,GColor color,int radius){graphics_context_set_fill_color(ctx,color);graphics_fill_rect(ctx,bounds,radius,GCornersAll);}
 static void edge(GContext *ctx,GRect bounds,GColor color,int radius){graphics_context_set_stroke_color(ctx,color);graphics_context_set_stroke_width(ctx,1);graphics_draw_round_rect(ctx,bounds,radius);}
 static void segment(GContext *ctx,int x,int y,int x2,int y2,GColor color){graphics_context_set_stroke_color(ctx,color);graphics_context_set_stroke_width(ctx,1);graphics_draw_line(ctx,GPoint(x,y),GPoint(x2,y2));}
 static bool item_selected(const DbItem *item){return item&&s_state.selected_token==item->token&&!s_state.loading&&!s_state.selection_lost;}
 static GColor panel(GContext *ctx,const DbItem *item,GRect bounds,bool outlined){
   if(item_selected(item)){
-    if(s_state.desired_mode==DB_ACTIVITIES||s_state.desired_mode==DB_PINNED){
-      bounds.origin.x+=s_selection_inset;bounds.size.w-=2*s_selection_inset;
-      int top=bounds.origin.y-(s_selection_direction<0?s_selection_stretch:0),bottom=bounds.origin.y+bounds.size.h+(s_selection_direction>0?s_selection_stretch:0);
-      if(top<29)top=29;
-      if(bottom>SCREEN_H)bottom=SCREEN_H;
-      bounds.origin.y=top;bounds.size.h=bottom-top;
-    }
     fill(ctx,bounds,foreground(),4);return background();
   }
   if(outlined)edge(ctx,bounds,stroke(),4);
   return foreground();
 }
 static void symbol(GContext *ctx,uint8_t kind,int x,int y,int size,GColor color){
+  // Center the painted silhouette rather than its nominal square. The
+  // notification tail adds a lower pixel; Weather's cloud has less lower ink.
+  if(kind==DB_NOTICE)y--;else if(kind==DB_WEATHER)y++;
   graphics_context_set_stroke_color(ctx,color);graphics_context_set_fill_color(ctx,color);graphics_context_set_stroke_width(ctx,2);
   int a=size/5,b=size-a,c=size/2;
   switch(kind){
@@ -264,41 +279,61 @@ static const char *command_error(void){
 }
 static void header(GContext *ctx){
   const DbItem *preview=preview_item(),*item=db_selected(&s_state);const char *status=NULL;
-  char context[40];context[0]=0;
+  char context[72];context[0]=0;
   if(preview)status=preview->app_label;
   else if(!s_has_connection||s_state.snapshot.status==DB_OFFLINE)status="Offline";
   else if(command_error())status=command_error();
   else if(item&&item->role==DB_ROLE_PIN&&!db_item_current(item,utc_now()))status=(item->flags&DB_UNAVAILABLE)&&item->subtitle[0]?item->subtitle:"No data";
   else if(item&&s_state.desired_mode==DB_MEDIA&&db_control_present(item,s_state.focus)&&!control_available(item,s_state.focus))status="Unavailable";
   const char *title=s_guide?"Buttons":s_command.confirmation?"Confirm":s_state.desired_mode==DB_ACTIVITIES?"Activities":s_state.desired_mode==DB_PINNED?"Pinned":s_state.desired_mode==DB_MEDIA?"Controls":"Dashboard";
-  if(!status&&(s_state.desired_mode==DB_ACTIVITIES||s_state.desired_mode==DB_PINNED)){
-    if(s_state.loading)snprintf(context,sizeof(context),"Loading…");else snprintf(context,sizeof(context),"%u / %u",s_state.snapshot.total?s_state.selected_index+1:0,s_state.snapshot.total);status=context;
+  bool collection=!status&&(s_state.desired_mode==DB_ACTIVITIES||s_state.desired_mode==DB_PINNED);
+  if(collection){
+    if(s_state.loading)snprintf(context,sizeof(context),"%s…",title);
+    else snprintf(context,sizeof(context),"%u/%u",s_state.snapshot.total?s_state.selected_index+1:0,s_state.snapshot.total);
+    status=context;
   }
-  if(status){text(ctx,title,12,6,11,98,muted());text(ctx,status,18,6,27,98,foreground());}
-  else text(ctx,title,20,6,22,98,foreground());
+  // The header owns all 200px. Keep one readable context line instead of
+  // squeezing tiny title/status rows next to the clock inside the content rail.
+  if(collection&&!s_state.loading){
+    int count_width=width_of(context,4);text_box(ctx,title,5,GRect(6,0,120-count_width,30),foreground(),GTextAlignmentLeft);
+    text_box(ctx,context,4,GRect(130-count_width,0,count_width,30),foreground(),GTextAlignmentRight);
+  }else text_box(ctx,status?status:title,status?4:5,GRect(6,0,124,30),foreground(),GTextAlignmentLeft);
   char right[16];time_t now=time(NULL);struct tm *local=localtime(&now);
   strftime(right,sizeof(right),clock_is_24h_style()?"%H:%M":"%I:%M",local);
   if(!clock_is_24h_style()&&right[0]=='0')memmove(right,right+1,strlen(right));
-  draw_text(ctx,right,4,108,22,CONTENT_W-114,muted(),GTextAlignmentRight);segment(ctx,5,28,CONTENT_W-5,28,stroke());
+  text_box(ctx,right,13,GRect(132,0,62,30),foreground(),GTextAlignmentRight);segment(ctx,5,29,195,29,stroke());
 }
 static bool control_available(const DbItem *item,unsigned index){const uint16_t bits[]={DB_MEDIA_PREVIOUS,DB_MEDIA_TOGGLE,DB_MEDIA_NEXT};return item&&index<3&&(item->flags&bits[index])&&db_item_actionable(item,utc_now());}
 static void item_value(const DbItem *item,char *value,size_t size){
   if(item->flags&DB_LOCAL_WATCH){BatteryChargeState battery=battery_state_service_peek();snprintf(value,size,"%u%%",battery.charge_percent);return;}
   db_item_value(item,utc_now(),value,size);
 }
-static void activity_main(GContext *ctx,const DbItem *item){
-  GColor ink=panel(ctx,item,GRect(4,29,CONTENT_W-8,73),false);
-  if(!db_item_current(item,utc_now())){text(ctx,"Activity unavailable",20,10,73,CONTENT_W-20,ink);return;}
+static void activity_main(GContext *ctx,const DbItem *item,int height){
+  GColor ink=panel(ctx,item,GRect(4,33,CONTENT_W-8,height),false);
+  if(!db_item_current(item,utc_now())){text_box(ctx,"Activity unavailable",5,GRect(10,33,CONTENT_W-20,height),ink,GTextAlignmentLeft);return;}
   if(item->flags&DB_IS_MEDIA){
     char title[193],identity[144];clean_text(title,sizeof(title),item->title);db_item_media_identity(item,identity,sizeof(identity));unsigned split=0;
-    if(width_of(title,5)>CONTENT_W-20){for(unsigned i=0;title[i];i++)if(title[i]==' '){char saved=title[i];title[i]=0;if(width_of(title,5)<=CONTENT_W-20)split=i;title[i]=saved;}}
-    if(split){char first[193];memcpy(first,title,split);first[split]=0;text(ctx,first,24,10,54,CONTENT_W-20,ink);text(ctx,title+split+1,24,10,77,CONTENT_W-20,ink);picture(ctx,item,10,80,20,ink);text(ctx,identity,20,37,100,CONTENT_W-47,ink);}
-    else{text(ctx,title,24,10,59,CONTENT_W-20,ink);picture(ctx,item,10,65,32,ink);text(ctx,identity,20,50,91,CONTENT_W-60,ink);}
+    // Snapshot uses one title and one artist line at the same readable roles.
+    char first[193];if(split){memcpy(first,title,split);first[split]=0;if(ink_height(first,5,CONTENT_W-20)+4+ink_height(title+split+1,5,CONTENT_W-20)+6+20>height-4)split=0;}
+    int picture_size=24,first_height=ink_height(split?first:title,5,CONTENT_W-20),title_height=split?first_height+4+ink_height(title+split+1,5,CONTENT_W-20):first_height;
+    if(title_height+6+picture_size>height-6)picture_size=24;
+    int detail_height=ink_height(identity,4,119);if(detail_height<picture_size)detail_height=picture_size;
+    const char *artist=identity;if(title_height+6+detail_height>height){artist="…";detail_height=picture_size;}
+    int top=33+(height-title_height-6-detail_height)/2,detail_y=top+title_height+6;
+    if(split){text_top(ctx,first,5,10,top,CONTENT_W-20,ink,GTextAlignmentLeft);text_top(ctx,title+split+1,5,10,top+first_height+4,CONTENT_W-20,ink,GTextAlignmentLeft);}
+    else text_top(ctx,title,5,10,top,CONTENT_W-20,ink,GTextAlignmentLeft);
+    picture(ctx,item,9,detail_y+(detail_height-picture_size)/2,picture_size,ink);
+    text_box(ctx,artist,4,GRect(39,detail_y,119,detail_height),ink,GTextAlignmentLeft);
   }else{
     char value[64];item_value(item,value,sizeof(value));
-    if(value[0])value_text(ctx,value,10,76,CONTENT_W-20,item->clock_mode?40:32,ink,GTextAlignmentLeft);
-    else text(ctx,item->title[0]?item->title:item->name,28,10,69,CONTENT_W-20,ink);
-    picture(ctx,item,10,79,20,ink);text(ctx,value[0]?(item->title[0]?item->title:item->name):item->subtitle,20,37,100,CONTENT_W-47,ink);
+    const char *title=item->title[0]?item->title:item->name,*caption=value[0]?title:item->subtitle;
+    if(!value[0]&&!caption[0]){picture(ctx,item,10,33+(height-28)/2,28,ink);text_box(ctx,title,13,GRect(46,33,CONTENT_W-56,height),ink,GTextAlignmentLeft);return;}
+    unsigned index=value[0]?value_index(value,CONTENT_W-20,36):13;const char *shown=value[0]?value_label(value,index,CONTENT_W-20):title;
+    int value_height=ink_height(shown,index,CONTENT_W-20),detail_height=ink_height(caption,4,CONTENT_W-51),gap=height<64?4:6;if(detail_height<24)detail_height=24;
+    if(value_height+gap+detail_height>height-4){caption="…";detail_height=24;}
+    int top=33+(height-value_height-gap-detail_height)/2,detail_y=top+value_height+gap;
+    text_top(ctx,shown,index,10,top,CONTENT_W-20,ink,GTextAlignmentLeft);
+    picture(ctx,item,10,detail_y+(detail_height-24)/2,24,ink);text_box(ctx,caption,4,GRect(41,detail_y,CONTENT_W-51,detail_height),ink,GTextAlignmentLeft);
   }
 }
 static bool redundant_pin_label(const DbItem *item){
@@ -310,39 +345,80 @@ static void pin_row(GContext *ctx,const DbItem *item,int y){
   GColor ink=panel(ctx,item,GRect(4,y,CONTENT_W-8,32),false);char value[64];item_value(item,value,sizeof(value));
   picture(ctx,item,9,y+4,24,ink);
   if(value[0]){
-    if(redundant_pin_label(item))value_text(ctx,value,40,y+31,CONTENT_W-50,32,ink,GTextAlignmentLeft);
+    if(redundant_pin_label(item)){unsigned index=value_index(value,120,26);text_box(ctx,value_label(value,index,120),index,GRect(39,y,120,32),ink,GTextAlignmentLeft);}
     else{unsigned index=clock_chars(value)?8:5;int value_width=width_of(value,index);if(value_width>CONTENT_W-89)value_width=CONTENT_W-89;
-      text(ctx,item->title,20,40,y+27,CONTENT_W-53-value_width,ink);value_text(ctx,value,CONTENT_W-9-value_width,y+29,value_width,26,ink,GTextAlignmentRight);}
-  }else text(ctx,item->title,24,40,y+29,CONTENT_W-50,ink);
+      index=value_index(value,value_width,26);text_box(ctx,item->title,4,GRect(39,y,116-value_width,32),ink,GTextAlignmentLeft);text_box(ctx,value_label(value,index,value_width),index,GRect(159-value_width,y,value_width,32),ink,GTextAlignmentRight);}
+  }else text_box(ctx,item->title,5,GRect(39,y,120,32),ink,GTextAlignmentLeft);
 }
-static void notice(GContext *ctx,const DbItem *item){
-  GColor ink=panel(ctx,item,GRect(4,108,CONTENT_W-8,43),false);
-  if(!db_item_current(item,utc_now())){symbol(ctx,DB_NOTICE,10,111,20,ink);text(ctx,"Notifications",20,37,128,CONTENT_W-47,ink);text(ctx,"No preview",20,8,150,CONTENT_W-16,ink);return;}
-  picture(ctx,item,10,111,20,ink);char heading[265];
-  if(item->name[0]&&strcmp(item->name,item->title))snprintf(heading,sizeof(heading),"%s · %s",item->title,item->name);else snprintf(heading,sizeof(heading),"%s",item->title[0]?item->title:item->name);
-  text(ctx,heading,20,37,128,CONTENT_W-47,ink);text(ctx,item->subtitle[0]?item->subtitle:"New notification",20,8,150,CONTENT_W-16,ink);
+static int notice_layout(const DbItem *item,char heading[265],const char **message,int *heading_height,int maximum,bool *hint){
+  *hint=false;
+  if(!db_item_current(item,utc_now())){snprintf(heading,265,"Notifications");*message="No preview";}
+  else{
+    if(item->name[0]&&strcmp(item->name,item->title))snprintf(heading,265,"%s · %s",item->title,item->name);else snprintf(heading,265,"%s",item->title[0]?item->title:item->name);
+    *message=item->subtitle[0]?item->subtitle:"New notification";
+  }
+  *heading_height=ink_height(heading,4,CONTENT_W-51);if(*heading_height<24)*heading_height=24;
+  int needed=*heading_height+3+ink_height(*message,5,CONTENT_W-16)+6;
+  if(needed>maximum){*message="Open to read";*hint=true;needed=*heading_height+3+ink_height(*message,0,CONTENT_W-16)+6;}
+  return needed<52?52:needed;
 }
-static void empty_message(GContext *ctx,const char *title,const char *detail,int y){symbol(ctx,DB_GENERIC,(CONTENT_W-28)/2,y,28,muted());centered(ctx,title,20,y+57,foreground());if(detail&&detail[0])centered(ctx,detail,20,y+84,muted());}
+static void notice(GContext *ctx,const DbItem *item,int y,int height,int maximum){
+  GColor ink=panel(ctx,item,GRect(4,y,CONTENT_W-8,height),false);char heading[265];const char *message;int heading_height;bool hint;
+  notice_layout(item,heading,&message,&heading_height,maximum,&hint);unsigned body=hint?0:5;
+  int top=y+(height-heading_height-3-ink_height(message,body,CONTENT_W-16))/2;
+  picture(ctx,item,10,top+(heading_height-24)/2,24,ink);text_box(ctx,heading,4,GRect(41,top,CONTENT_W-51,heading_height),ink,GTextAlignmentLeft);
+  text_top(ctx,message,body,8,top+heading_height+3,CONTENT_W-16,ink,GTextAlignmentLeft);
+}
+static void empty_message(GContext *ctx,const char *title,const char *detail,int y){
+  (void)y;bool has_detail=detail&&detail[0];int title_height=ink_height(title,4,CONTENT_W-12),height=28+16+title_height+(has_detail?8+ink_height(detail,4,CONTENT_W-12):0),top=29+(SCREEN_H-29-height)/2;
+  symbol(ctx,DB_GENERIC,(CONTENT_W-28)/2,top,28,muted());
+  text_top(ctx,title,4,6,top+44,CONTENT_W-12,foreground(),GTextAlignmentCenter);
+  if(has_detail)text_top(ctx,detail,4,6,top+44+title_height+8,CONTENT_W-12,muted(),GTextAlignmentCenter);
+}
 static void snapshot(GContext *ctx){
   const DbItem *activity=NULL,*notification=NULL;unsigned pins=0;
   for(unsigned i=0;i<s_state.snapshot.count;i++){const DbItem *item=&s_state.snapshot.items[i];if(item->role==DB_ROLE_ACTIVITY&&!activity)activity=item;else if(item->role==DB_ROLE_NOTICE&&!notification)notification=item;}
-  if(activity)activity_main(ctx,activity);else centered(ctx,"Nothing active",24,77,muted());
-  segment(ctx,8,105,CONTENT_W-8,105,stroke());
-  if(notification)notice(ctx,notification);else{symbol(ctx,DB_NOTICE,10,117,22,muted());text(ctx,"No notifications",20,39,138,CONTENT_W-49,muted());}
-  segment(ctx,8,154,CONTENT_W-8,154,stroke());
-  for(unsigned i=0;i<s_state.snapshot.count;i++)if(s_state.snapshot.items[i].role==DB_ROLE_PIN&&pins<2)pin_row(ctx,&s_state.snapshot.items[i],158+35*(int)pins++);
+  bool large_primary=false;if(activity){char value[64];item_value(activity,value,sizeof(value));large_primary=(activity->flags&DB_IS_MEDIA)||(value[0]&&!clock_chars(value))||(!value[0]&&activity->subtitle[0]);}
+  int notice_maximum=large_primary?53:62,notice_height=52;if(notification){char heading[265];const char *message;int heading_height;bool hint;notice_height=notice_layout(notification,heading,&message,&heading_height,notice_maximum,&hint);}
+  int notice_y=157-notice_height,primary_height=notice_y-3-33;
+  if(activity)activity_main(ctx,activity,primary_height);else text_box(ctx,"Nothing active",5,GRect(6,33,CONTENT_W-12,primary_height),muted(),GTextAlignmentCenter);
+  segment(ctx,8,notice_y-2,CONTENT_W-8,notice_y-2,stroke());
+  if(notification)notice(ctx,notification,notice_y,notice_height,notice_maximum);else{symbol(ctx,DB_NOTICE,10,notice_y+(notice_height-24)/2,24,muted());text_box(ctx,"No notifications",5,GRect(41,notice_y,CONTENT_W-51,notice_height),muted(),GTextAlignmentLeft);}
+  segment(ctx,8,158,CONTENT_W-8,158,stroke());segment(ctx,8,193,CONTENT_W-8,193,stroke());
+  for(unsigned i=0;i<s_state.snapshot.count;i++)if(s_state.snapshot.items[i].role==DB_ROLE_PIN&&pins<2)pin_row(ctx,&s_state.snapshot.items[i],160+35*(int)pins++);
   if(!pins)text(ctx,"Choose pins on phone",20,10,194,CONTENT_W-20,muted());
 }
-static void list_row(GContext *ctx,const DbItem *item,int y){
-  GColor ink=panel(ctx,item,GRect(4,y,CONTENT_W-9,38),false);char value[64];item_value(item,value,sizeof(value));picture(ctx,item,9,y+6,26,ink);
-  if(item->flags&DB_IS_MEDIA){char identity[144];db_item_media_identity(item,identity,sizeof(identity));text(ctx,item->title,20,42,y+18,CONTENT_W-53,ink);text(ctx,identity,20,42,y+37,CONTENT_W-53,ink);}
-  else if(value[0]){text(ctx,item->title[0]?item->title:item->name,20,42,y+17,CONTENT_W-53,ink);value_text(ctx,value,42,y+39,CONTENT_W-53,24,ink,GTextAlignmentLeft);}
-  else text(ctx,item->title[0]?item->title:item->name,24,42,y+29,CONTENT_W-53,ink);
+static int list_row_height(const DbItem *item){
+  char value[64],identity[144];item_value(item,value,sizeof(value));
+  if(!(item->flags&DB_IS_MEDIA)&&!value[0])return 39;
+  db_item_media_identity(item,identity,sizeof(identity));
+  const char *title=item->title[0]?item->title:item->name,*detail=(item->flags&DB_IS_MEDIA)?identity:value;
+  unsigned index=(item->flags&DB_IS_MEDIA)?4:value_index(value,119,26);
+  if(!(item->flags&DB_IS_MEDIA))detail=value_label(detail,index,119);
+  int height=ink_height(title,5,119)+4+ink_height(detail,index,119)+6;
+  return height<48?48:height;
+}
+static void list_row(GContext *ctx,const DbItem *item,int y,int height){
+  GColor ink=panel(ctx,item,GRect(4,y,CONTENT_W-9,height),false);char value[64];item_value(item,value,sizeof(value));picture(ctx,item,9,y+(height-26)/2,26,ink);
+  if((item->flags&DB_IS_MEDIA)||value[0]){
+    char identity[144];db_item_media_identity(item,identity,sizeof(identity));
+    unsigned index=(item->flags&DB_IS_MEDIA)?4:value_index(value,119,26);
+    const char *title=item->title[0]?item->title:item->name,*detail=(item->flags&DB_IS_MEDIA)?identity:value;
+    if(!(item->flags&DB_IS_MEDIA))detail=value_label(detail,index,119);
+    int title_height=ink_height(title,5,119),detail_height=ink_height(detail,index,119),gap=4;
+    int top=y+(height-title_height-gap-detail_height)/2;
+    text_top(ctx,title,5,40,top,119,ink,GTextAlignmentLeft);
+    text_top(ctx,detail,index,40,top+title_height+gap,119,ink,GTextAlignmentLeft);
+  }else text_box(ctx,item->title[0]?item->title:item->name,5,GRect(40,y,119,height),ink,GTextAlignmentLeft);
 }
 static void list_view(GContext *ctx){
   if(!s_state.snapshot.count){empty_message(ctx,s_state.desired_mode==DB_ACTIVITIES?"Nothing active":"No pinned items",s_state.desired_mode==DB_PINNED?"Choose items on phone":"",66);return;}
-  for(unsigned i=0;i<s_state.snapshot.count;i++)list_row(ctx,&s_state.snapshot.items[i],29+(int)i*39);
-  if(s_state.snapshot.total>5){int thumb=196*5/s_state.snapshot.total;if(thumb<8)thumb=8;int top=29+(196-thumb)*s_state.snapshot.offset/(s_state.snapshot.total-5);fill(ctx,GRect(CONTENT_W-3,29,2,196),stroke(),0);fill(ctx,GRect(CONTENT_W-3,top,2,thumb),foreground(),0);}
+  if(s_list_mode!=s_state.snapshot.mode||s_list_offset!=s_state.snapshot.offset){s_list_first=0;s_list_mode=s_state.snapshot.mode;s_list_offset=s_state.snapshot.offset;}
+  int heights[DB_PAGE_ITEMS];unsigned selected=s_list_first<s_state.snapshot.count?s_list_first:0;
+  for(unsigned i=0;i<s_state.snapshot.count;i++){heights[i]=list_row_height(&s_state.snapshot.items[i]);if(item_selected(&s_state.snapshot.items[i]))selected=i;}
+  DbListWindow window=db_layout_window(heights,s_state.snapshot.count,selected,s_list_first,SCREEN_H-30);s_list_first=window.first;
+  int y=30;for(unsigned i=window.first;i<window.first+window.count;i++){list_row(ctx,&s_state.snapshot.items[i],y,heights[i]);y+=heights[i];}
+  if(s_state.snapshot.total>window.count){int thumb=(SCREEN_H-30)*window.count/s_state.snapshot.total;if(thumb<8)thumb=8;int top=30+(SCREEN_H-30-thumb)*(s_state.snapshot.offset+window.first)/(s_state.snapshot.total-window.count);fill(ctx,GRect(CONTENT_W-3,30,2,SCREEN_H-30),stroke(),0);fill(ctx,GRect(CONTENT_W-3,top,2,thumb),foreground(),0);}
 }
 static void playback_icon(GContext *ctx,unsigned index,bool paused,int x,int y,GColor color){
   graphics_context_set_fill_color(ctx,color);graphics_context_set_stroke_color(ctx,color);
@@ -359,9 +435,10 @@ static void media_view(GContext *ctx){
     char title[193];clean_text(title,sizeof(title),item->title);
     unsigned split=0;char first[193]="",second[193]="";
     if(width_of(title,5)>CONTENT_W-20){for(unsigned i=0;title[i];i++)if(title[i]==' '){char saved=title[i];title[i]=0;if(width_of(title,5)<=CONTENT_W-20)split=i;title[i]=saved;}}
-    if(split){memcpy(first,title,split);first[split]=0;snprintf(second,sizeof(second),"%s",title+split+1);text(ctx,first,24,9,67,CONTENT_W-20,foreground());text(ctx,second,24,9,93,CONTENT_W-20,foreground());}
-    else text(ctx,title,24,9,93,CONTENT_W-20,foreground());
-    picture(ctx,item,9,105,40,accent());text(ctx,item->subtitle,20,58,122,CONTENT_W-68,foreground());text(ctx,item->value[0]?item->value:item->flags&DB_PAUSED?"Paused":"",20,58,146,CONTENT_W-68,muted());
+    if(split){memcpy(first,title,split);first[split]=0;snprintf(second,sizeof(second),"%s",title+split+1);int first_height=ink_height(first,5,CONTENT_W-20),height=first_height+4+ink_height(second,5,CONTENT_W-20),top=38+(59-height)/2;text_top(ctx,first,5,9,top,CONTENT_W-20,foreground(),GTextAlignmentLeft);text_top(ctx,second,5,9,top+first_height+4,CONTENT_W-20,foreground(),GTextAlignmentLeft);}
+    else text_box(ctx,title,5,GRect(9,38,CONTENT_W-20,59),foreground(),GTextAlignmentLeft);
+    const char *status=item->value[0]?item->value:item->flags&DB_PAUSED?"Paused":"";int artist_height=ink_height(item->subtitle,4,CONTENT_W-68),detail_height=artist_height+4+ink_height(status,4,CONTENT_W-68),detail_y=105+(40-detail_height)/2;
+    picture(ctx,item,9,105,40,accent());text_top(ctx,item->subtitle,4,58,detail_y,CONTENT_W-68,foreground(),GTextAlignmentLeft);text_top(ctx,status,4,58,detail_y+artist_height+4,CONTENT_W-68,muted(),GTextAlignmentLeft);
     for(unsigned i=0;i<3;i++){
       bool available=control_available(item,i),selected=s_state.focus==i;GColor ink=selected?background():available?foreground():muted();int x=5+i*52;
       if(selected)fill(ctx,GRect(x,163,48,37),foreground(),5);else edge(ctx,GRect(x,163,48,37),stroke(),5);
@@ -375,7 +452,7 @@ static void media_view(GContext *ctx){
       bool available=control_available(item,i),selected=s_state.focus==i;int y=top+(int)row++*(height+gap);
       if(selected)fill(ctx,GRect(6,y,CONTENT_W-12,height),foreground(),4);else edge(ctx,GRect(6,y,CONTENT_W-12,height),stroke(),4);
       GColor ink=selected?(available?background():(s_state.snapshot.dark?GColorDarkGray:GColorLightGray)):(available?foreground():muted());
-      text(ctx,item->controls[i][0]?item->controls[i]:"Action",24,14,y+height/2+12,CONTENT_W-28,ink);
+      text_box(ctx,item->controls[i][0]?item->controls[i]:"Action",5,GRect(14,y,CONTENT_W-28,height),ink,GTextAlignmentLeft);
     }
   }
 }
@@ -393,7 +470,7 @@ static void action_icon(GContext *ctx,const DbItem *item,unsigned action,int x,i
   else check_icon(ctx,x,y,ink);
 }
 static void action_bar(GContext *ctx){
-  GColor ink=background();int center=CONTENT_W+ACTION_BAR_WIDTH/2,x=center+s_buttons[1].offset;fill(ctx,GRect(CONTENT_W,0,ACTION_BAR_WIDTH,SCREEN_H),foreground(),0);
+  GColor ink=background();int center=CONTENT_W+ACTION_BAR_WIDTH/2,x=center+s_buttons[1].offset;fill(ctx,GRect(CONTENT_W,30,ACTION_BAR_WIDTH,SCREEN_H-30),foreground(),0);
   if(s_guide){check_icon(ctx,x,114,ink);return;}
   if(!s_command.confirmation){direction_icon(ctx,center+s_buttons[0].offset,39,-1,ink);direction_icon(ctx,center+s_buttons[2].offset,190,1,ink);}
   if(s_state.loading||!s_state.ready)return;
@@ -417,20 +494,20 @@ static void action_bar(GContext *ctx){
 }
 static void confirm_overlay(GContext *ctx){
   const DbItem *item=db_selected(&s_state);
-  fill(ctx,GRect(4,35,CONTENT_W-8,188),background(),6);edge(ctx,GRect(4,35,CONTENT_W-8,188),foreground(),6);
-  text(ctx,item&&item->action_label[0]?item->action_label:"Run action?",24,12,66,CONTENT_W-24,foreground());
-  text(ctx,item?(item->title[0]?item->title:item->name):"Selected item",20,12,96,CONTENT_W-24,foreground());
-  text(ctx,"Back cancels",18,12,123,CONTENT_W-24,muted());
-  fill(ctx,GRect(10,140,CONTENT_W-20,33),s_confirm_accept?background():foreground(),4);
-  text(ctx,"Cancel",20,17,166,CONTENT_W-34,s_confirm_accept?foreground():background());
-  fill(ctx,GRect(10,179,CONTENT_W-20,33),s_confirm_accept?foreground():background(),4);
-  text(ctx,"Run action",20,17,205,CONTENT_W-34,s_confirm_accept?background():foreground());
+  fill(ctx,GRect(4,35,CONTENT_W-8,190),background(),6);edge(ctx,GRect(4,35,CONTENT_W-8,190),foreground(),6);
+  text_box(ctx,item&&item->action_label[0]?item->action_label:"Run action?",13,GRect(12,43,CONTENT_W-24,36),foreground(),GTextAlignmentLeft);
+  text_box(ctx,item?(item->title[0]?item->title:item->name):"Selected item",5,GRect(12,80,CONTENT_W-24,34),foreground(),GTextAlignmentLeft);
+  text_box(ctx,"Back cancels",0,GRect(12,116,CONTENT_W-24,20),muted(),GTextAlignmentLeft);
+  fill(ctx,GRect(10,139,CONTENT_W-20,36),s_confirm_accept?background():foreground(),4);
+  text_box(ctx,"Cancel",5,GRect(17,139,CONTENT_W-34,36),s_confirm_accept?foreground():background(),GTextAlignmentLeft);
+  fill(ctx,GRect(10,183,CONTENT_W-20,36),s_confirm_accept?foreground():background(),4);
+  text_box(ctx,"Run action",5,GRect(17,183,CONTENT_W-34,36),s_confirm_accept?background():foreground(),GTextAlignmentLeft);
 }
 static void guide_view(GContext *ctx){
   header(ctx);
   const char *lines[]={"Up / Down: move","Hold Up: Activities","Hold Down: Pinned","Select: action","Hold Select: app","Back: return"};
-  for(unsigned i=0;i<6;i++)text(ctx,lines[i],20,6,57+(int)i*26,CONTENT_W-12,foreground());
-  fill(ctx,GRect(4,201,CONTENT_W-8,25),foreground(),4);text(ctx,"Select to start",20,10,222,CONTENT_W-20,background());
+  for(unsigned i=0;i<6;i++)text_box(ctx,lines[i],4,GRect(6,39+(int)i*26,CONTENT_W-12,24),foreground(),GTextAlignmentLeft);
+  fill(ctx,GRect(4,201,CONTENT_W-8,25),foreground(),4);text_box(ctx,"Select to start",4,GRect(10,201,CONTENT_W-20,25),background(),GTextAlignmentLeft);
 }
 static void update(Layer *layer,GContext *ctx){
   (void)layer;fill(ctx,GRect(0,0,SCREEN_W,SCREEN_H),background(),0);
@@ -486,7 +563,7 @@ static void publish_focus(void){
   if(item&&s_state.snapshot.mode!=DB_MEDIA)queue_message((Outbound){.op=DB_OP_FOCUS,.mode=s_state.snapshot.mode,.request=s_state.view_request,.offset=s_state.snapshot.offset,.index=s_state.selected_index,.token=item->token,.version=item->version});
 }
 static void request_view(uint8_t mode,uint16_t offset,uint16_t index,uint32_t token,bool hello){
-  settle_selection();
+
   if(!hello)s_state.selection_lost=false; //Deliberate navigation can choose a new row.
   uint32_t request=next_request();db_state_expect(&s_state,request,mode,index,token);
   if(s_view_timeout)app_timer_cancel(s_view_timeout);
@@ -531,7 +608,7 @@ static void inbox(DictionaryIterator *dict,void *context){
     if(db_decode((const uint8_t *)data->value,data->length,incoming)){
       bool was_loading=s_state.loading,theme_changed=s_state.snapshot.dark!=incoming->dark,redraw=s_state.loading||!s_state.ready||!visually_equal(&s_state.snapshot,incoming);uint32_t selected=s_state.selected_token;uint16_t selected_index=s_state.selected_index;
       if(db_state_apply(&s_state,incoming)){
-        if(redraw||selected!=s_state.selected_token||selected_index!=s_state.selected_index)settle_selection();
+
         if(theme_changed)window_set_background_color(s_window,background());
 #ifndef DASHBOARD_FIXTURE
         // Save only the accepted preference, never snapshot content or bindings.
@@ -600,7 +677,7 @@ static void update_ticks(void){
 static void stop_repeat(void){s_repeat_held=false;if(s_repeat){app_timer_cancel(s_repeat);s_repeat=NULL;}}
 static void move_selection(int delta){
   if(s_command.confirmation)return;
-  settle_selection();
+
   uint16_t index=s_state.selected_index;uint8_t focus=s_state.focus;
   if(!db_state_move(&s_state,delta,&index))return;
   if(s_state.snapshot.mode==DB_MEDIA){if(focus!=s_state.focus)repaint();return;}
@@ -608,7 +685,7 @@ static void move_selection(int delta){
     uint16_t offset=index>=3?index-3:0;if(s_state.snapshot.total>DB_PAGE_ITEMS&&offset>s_state.snapshot.total-DB_PAGE_ITEMS)offset=s_state.snapshot.total-DB_PAGE_ITEMS;
     request_view(s_state.snapshot.mode,offset,index,0,false);
   }else{
-    if(s_state.snapshot.mode==DB_ACTIVITIES||s_state.snapshot.mode==DB_PINNED)animate_selection(delta);
+
     publish_focus();
     repaint();
   }
@@ -640,7 +717,7 @@ static void show_hold_preview(void *context){
   if(s_select_down&&!s_guide&&!s_command.confirmation&&s_has_connection&&db_item_capability_current(item,utc_now())&&(item->flags&DB_APP)&&!(s_command.active&&s_command.result==DB_PENDING)){s_hold_preview=true;s_hold_intent=true;repaint();}
 }
 static void select_raw(ClickRecognizerRef recognizer,void *context){
-  (void)recognizer;(void)context;settle_selection();button_pressed(BUTTON_ID_SELECT);cancel_hold_preview();s_hold_intent=false;s_select_down=true;
+  (void)recognizer;(void)context;button_pressed(BUTTON_ID_SELECT);cancel_hold_preview();s_hold_intent=false;s_select_down=true;
   if(s_guide){s_press_token=s_press_version=0;return;}
   acknowledge_feedback();const DbItem *item=db_selected(&s_state);s_press_token=item?item->token:0;s_press_version=item?item->version:0;s_press_mode=s_state.desired_mode;
   if(item&&(item->flags&DB_APP)&&!s_command.confirmation)s_hold_timer=app_timer_register(HOLD_PREVIEW_MS,show_hold_preview,NULL);
@@ -656,7 +733,7 @@ static void run_command(const DbItem *item,uint8_t operation,uint8_t action,bool
   queue_message((Outbound){.op=operation,.mode=s_state.desired_mode,.request=request,.token=item->token,.version=item->version,.action=action,.confirm=confirmation?1:0});repaint();
 }
 static void select_click(ClickRecognizerRef recognizer,void *context){
-  (void)recognizer;(void)context;button_released(BUTTON_ID_SELECT);settle_selection();cancel_hold_preview();
+  (void)recognizer;(void)context;button_released(BUTTON_ID_SELECT);cancel_hold_preview();
   if(s_guide){s_guide=false;persist_write_bool(GUIDE_SEEN_KEY,true);s_press_token=s_press_version=0;s_hold_intent=false;update_ticks();repaint();return;}
   if(s_hold_intent){s_hold_intent=false;return;}
   if(s_command.confirmation){if(!s_confirm_accept){memset(&s_command,0,sizeof(s_command));repaint();return;}const DbItem *item=db_selected(&s_state);if(item&&item->token==s_command.token&&item->version==s_command.version)run_command(item,DB_OP_ACTION,s_command.action,true);else{s_command.confirmation=false;s_command.result=DB_STALE;repaint();}return;}
@@ -669,9 +746,9 @@ static void select_click(ClickRecognizerRef recognizer,void *context){
     request_view(DB_MEDIA,0,0,item->token,false);
   }else if(item->role==DB_ROLE_PIN&&db_item_actionable(item,utc_now()))run_command(item,DB_OP_ACTION,0,false);
 }
-static void select_hold(ClickRecognizerRef recognizer,void *context){(void)recognizer;(void)context;settle_selection();cancel_hold_preview();if(s_guide||s_command.confirmation)return;const DbItem *item=pressed_item();if(item&&(item->flags&DB_APP))run_command(item,DB_OP_OPEN,0,false);}
+static void select_hold(ClickRecognizerRef recognizer,void *context){(void)recognizer;(void)context;cancel_hold_preview();if(s_guide||s_command.confirmation)return;const DbItem *item=pressed_item();if(item&&(item->flags&DB_APP))run_command(item,DB_OP_OPEN,0,false);}
 static void back_click(ClickRecognizerRef recognizer,void *context){
-  (void)recognizer;(void)context;settle_selection();stop_repeat();cancel_hold_preview();acknowledge_feedback();
+  (void)recognizer;(void)context;stop_repeat();cancel_hold_preview();acknowledge_feedback();
   if(s_command.confirmation){memset(&s_command,0,sizeof(s_command));repaint();return;}
   DbReturn previous;if(db_state_back(&s_state,&previous)){s_state.focus=previous.focus;request_view(previous.mode,previous.offset,previous.index,previous.token,false);}
   else{queue_message((Outbound){.op=DB_OP_CANCEL,.request=next_request()});window_stack_pop_all(false);}
@@ -726,7 +803,7 @@ static void init(void){
 #endif
 }
 static void deinit(void){
-  cancel_motion();if(s_selection_animation)animation_destroy(s_selection_animation);
+  cancel_motion();
   stop_repeat();cancel_hold_preview();if(s_view_timeout)app_timer_cancel(s_view_timeout);if(s_action_timeout)app_timer_cancel(s_action_timeout);db_deadline_clear(&s_expiry);tick_timer_service_unsubscribe();battery_state_service_unsubscribe();connection_service_unsubscribe();app_focus_service_unsubscribe();app_message_deregister_callbacks();
   if(s_canvas)layer_destroy(s_canvas);
   if(s_window)window_destroy(s_window);

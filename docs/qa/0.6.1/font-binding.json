@@ -1,0 +1,37 @@
+{
+  "result": "PASS",
+  "candidatePbwSha256": "6158c5d67bd2c6b53bea588be2a715ae7122c77d8532544f27783e3b0899b182",
+  "regeneratedFontDataIdentical": true,
+  "resourcePackMatchesPbw": true,
+  "debugSourceManifestMatchesWorkingSources": true,
+  "fontDataSha256": {
+    "src/c/generated_body_ink.h": "cc4db9503ebe98916ee5f49fc06300ee982b5c157c87859d72145aca4ab37cc8",
+    "src/c/generated_clock_ink.h": "092c921cc26891707aae809466fa7d5d60e95c70602a9687ef10f0883faeff8c",
+    "docs/qa/0.6.1/body-ink.json": "26b626ebd7ff3f51f914d6aa684d1a95861acd938544dd7a7b6d5a64cecdf602",
+    "docs/qa/0.6.1/clock-ink.json": "a12d67fcfc165b23542638464a3ad5e60abee0ff0ac615db3fa21aa4a7dc9555"
+  },
+  "older060ArtifactsUnchanged": {
+    "Dashboard-0.6.0-debug.zip": "333c3f1b81fca603ccfcbfdff151356a0ad8cca8df3039d547053ccec72c3f1a",
+    "Dashboard-0.6.0-source.zip": "69cf488a2ab9f26193db5ed3ceb775f3bce8a3c8c8bfcc80d5bc6f1a2f88482c",
+    "Dashboard-0.6.0.pbw": "b0b56bdae29cc1b1361105aafdc01de5e5f1c40e0d6305a549fc0a6750675e2a",
+    "SHA256SUMS-0.6.0.txt": "01008cb7a7dda1bd2283b11dfdaf6ea0ff64e77229ccf4e2be3e1a9634406e17"
+  },
+  "scope": "Local generated-font/header/resource/debug identity, no physical device claim.",
+  "whitespaceOnlyRebuildComparison": {
+    "onlyBinaryChangedOffsets": [
+      124,
+      125,
+      126
+    ],
+    "headerBuildTimestampByteRange": [
+      124,
+      127
+    ],
+    "testedNativeBinarySha256": "1d149893aa2dde9c9959d3b70d2a56a3c3575fedeceefe53188d92cc6f593683",
+    "whitespaceRebuildNativeBinarySha256": "5cca2d877e138c53f8c2ebf8f318d2633308cb1daf86108cbe302be3fbced56e",
+    "nativeBinaryOutsideTimestampIdentical": true,
+    "allOtherPayloadsIdenticalExceptGeneratedManifest": true,
+    "testedPbwRestoredByteForByte": true,
+    "timestampMeaning": "SDK RESOURCE_TIMESTAMP_ADDR written from the build timestamp by common/tools/inject_metadata.py"
+  }
+}

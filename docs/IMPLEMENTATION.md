@@ -5,7 +5,10 @@ The approved Snapshot and contextual input rules in README.md take precedence
 over older suite drafts. Timer commands remain deferred; Back stays ordinary.
 No sibling app, firmware or mobile-app changes are required.
 
-## Pebble-native alternative in local 0.6.0
+The current 0.6.1 readability correction is described at the end of this file
+and in [REDESIGN.md](REDESIGN.md); the earlier 0.6.0 trial remains historical.
+
+## Historical 0.6.0 trial
 
 The review branch uses native Gothic 18/24/28 bold for fitted utility text,
 retaining compact 11/12/14 Roboto context roles and Fredoka primary numbers.
@@ -359,3 +362,26 @@ current row. A reconnect HELLO is not deliberate replacement navigation.
 Group Back restores overview selection; controls Back restores the originating item.
 Native loading/offline/permission failures stay navigable. New view requests
 invalidate old responses; timed-out requests cannot leave an indefinite spinner.
+
+## Readability revision 0.6.1
+
+The review branch uses Roboto Condensed Bold 26/24/22/20 utility roles and Fredoka
+numeric values. `dashboard_layout.h` isolates compact exact-PFO ink bounds and
+adaptive list-window selection from data/capability ownership. Public SDK APIs
+still own text widths and rendering. Resources use extended:true; missing
+characters map to the packaged wildcard. Regenerate both ink headers from the
+compiled resource pack, rebuild, then bind reports to the final artifacts.
+
+The 200px header is 30px tall; its 34px action rail keeps physical anchors below.
+Snapshot retains activity/notice/two 32px pins. Its notice can grow to 62px for a
+numeric primary; the measured worst accented primary retains 2px ink margins.
+Media/text primaries reserve more space and use an explicit Open to read hint
+when the preview cannot fit. Collections adapt their visible window inside the
+same five-item wire page, retaining token/index, Back and FOCUS7; live shrink
+backfills room. Visible list count can drop below four for tall accent groups.
+
+Selection has no Animation lifecycle or geometric transform. Only physical
+button icons use a bounded 144ms AppTimer return; repeated releases are idempotent,
+allocation failure settles the icons, and focus/disconnect/teardown cancel work.
+Phone template changes are CSS-only alignment; Save, storage, schemas, target
+binding and privacy logic remain unchanged. See docs/REDESIGN.md and current QA.

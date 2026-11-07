@@ -1,0 +1,109 @@
+{
+  "result": "PASS",
+  "version": "0.6.1",
+  "localOnly": true,
+  "branch": "design/pebble-native-redesign",
+  "workingBase": "f5a632d",
+  "candidatePbwSha256": "6158c5d67bd2c6b53bea588be2a715ae7122c77d8532544f27783e3b0899b182",
+  "scope": "Final local candidate portable, packaged, synthetic native-emulator and actual fixture ink checks. No real providers/actions/launches, browser fitting, phone/watch or battery measurement.",
+  "portable": {
+    "javascriptTests": 94,
+    "nativeModelBinaryFixtures": 16,
+    "nativeDeadlineRegression": true,
+    "nativeLayoutRegression": true,
+    "layoutCases": [
+      "exact bundled accents/descenders/negative bearings/wildcard",
+      "selected fifth item",
+      "reverse anchor",
+      "page reset",
+      "Back window",
+      "live shrink backfill",
+      "empty page"
+    ]
+  },
+  "packaged": {
+    "artifactIdentityPermissionsLicensesAndConfig": true,
+    "runtimeSdkModel": true,
+    "generatedInkResourcesAndDebugSources": true,
+    "older060ArtifactsUnchanged": true
+  },
+  "native": {
+    "native-ux": {
+      "captures": 56,
+      "checks": 11,
+      "report": "native-ux/emulator.json",
+      "candidatePbwSha256": "6158c5d67bd2c6b53bea588be2a715ae7122c77d8532544f27783e3b0899b182"
+    },
+    "native-activities": {
+      "captures": 16,
+      "checks": 5,
+      "report": "native-activities/emulator.json",
+      "candidatePbwSha256": "6158c5d67bd2c6b53bea588be2a715ae7122c77d8532544f27783e3b0899b182"
+    },
+    "native-reliability": {
+      "captures": 16,
+      "checks": 6,
+      "report": "native-reliability/emulator.json",
+      "candidatePbwSha256": "6158c5d67bd2c6b53bea588be2a715ae7122c77d8532544f27783e3b0899b182"
+    }
+  },
+  "actualPixelAudit": {
+    "captures": 31,
+    "measurements": 203,
+    "maximumCenterDifferencePixels": 0.5,
+    "worstFullAccentPrimaryMarginsPixels": [
+      2,
+      2
+    ],
+    "worstFullAccentNoticeMarginsPixels": [
+      3,
+      3
+    ],
+    "report": "layout-pixels.json"
+  },
+  "memory": {
+    "resourcesBytes": 141501,
+    "nativeRamFootprintBytes": 46130,
+    "freeHeapBytes": 84942
+  },
+  "fontRepertoire": {
+    "bodySizes": [
+      20,
+      22,
+      24,
+      26
+    ],
+    "glyphsPerBodyPfo": 920,
+    "body": "Roboto Condensed Bold",
+    "values": "Fredoka Bold Clock",
+    "sdk": "4.33.1",
+    "provenance": [
+      "body-ink.json",
+      "clock-ink.json",
+      "font-binding.json"
+    ]
+  },
+  "fixtureCorrections": "Theme background sample avoids the collection scrollbar. Czech Media dark now explicitly verifies dark. Reliability RTC is synchronized to its fictional peer anchor and allows one extra SDK tick after early fixed-wall-time captures showed00:01; production first-callback handling is source-reviewed, not instrumented.",
+  "unverified": [
+    "new browser layout/rendering",
+    "real Android WebView persistence/permissions/providers",
+    "physical watch readability/button timing/vibration",
+    "battery/performance measurements on hardware"
+  ],
+  "whitespaceRebuild": {
+    "onlyBinaryChangedOffsets": [
+      124,
+      125,
+      126
+    ],
+    "headerBuildTimestampByteRange": [
+      124,
+      127
+    ],
+    "testedNativeBinarySha256": "1d149893aa2dde9c9959d3b70d2a56a3c3575fedeceefe53188d92cc6f593683",
+    "whitespaceRebuildNativeBinarySha256": "5cca2d877e138c53f8c2ebf8f318d2633308cb1daf86108cbe302be3fbced56e",
+    "nativeBinaryOutsideTimestampIdentical": true,
+    "allOtherPayloadsIdenticalExceptGeneratedManifest": true,
+    "testedPbwRestoredByteForByte": true
+  }
+}

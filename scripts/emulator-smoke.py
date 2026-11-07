@@ -28,7 +28,7 @@ sys.path.insert(0,str(ROOT.parent/'recovery-validation'))
 def digest(data):return hashlib.sha256(data).hexdigest()
 
 
-def run(pbw,output,expected_sha256=None,notifications_only=False,ux_only=False,reliability_only=False,paused_repro=False,activities_only=False,startup_theme_only=False,motion_only=False):
+def run(pbw,output,expected_sha256=None,notifications_only=False,ux_only=False,reliability_only=False,paused_repro=False,activities_only=False,startup_theme_only=False,motion_only=False,composition_only=False):
     from pipe_emulator import connect
     from libpebble2.services.appmessage import AppMessageService,Uint32,ByteArray,CString
     from libpebble2.services.screenshot import Screenshot
@@ -205,10 +205,10 @@ def run(pbw,output,expected_sha256=None,notifications_only=False,ux_only=False,r
     def counts():return len(peer.actions),len(peer.opens)
     def theme_pixels(name,pixels,dark):
         background=(0,0,0) if dark else (255,255,255);foreground=(255,255,255) if dark else (0,0,0)
-        points=[(1,10),(1,80),(1,225),(164,225)]
+        points=[(1,10),(1,80),(1,225),(162,225)]
         for x,y in points:assert tuple(pixels[(y*200+x)*3:(y*200+x)*3+3])==background,(name,x,y,'wrong background')
-        assert tuple(pixels[(10*200+190)*3:(10*200+190)*3+3])==foreground,(name,'sidebar contrast')
-        theme_samples.append({'capture':name+'.png','dark':dark,'background':list(background),'backgroundPoints':points,'sidebarPoint':[190,10],'sidebarColor':list(foreground)})
+        assert tuple(pixels[(80*200+198)*3:(80*200+198)*3+3])==foreground,(name,'sidebar contrast')
+        theme_samples.append({'capture':name+'.png','dark':dark,'background':list(background),'backgroundPoints':points,'sidebarPoint':[198,80],'sidebarColor':list(foreground)})
     def themed_capture(name,dark,settle=.1):
         pixels=capture(name,settle);theme_pixels(name,pixels,dark);return pixels
     def active_mode():return peer.view.get(key('DB_MODE')) if peer.view else None
@@ -293,6 +293,8 @@ def run(pbw,output,expected_sha256=None,notifications_only=False,ux_only=False,r
             peer.pins=[weather,find]+[x for x in peer.pins if x['token'] not in (4,7)]
         peer.publish();select_snapshot(7);peer.action_behavior='confirm';before=len(peer.actions);button('Select')
         await_condition(lambda:len(peer.actions)==before+1,'Confirmation request missing');capture('confirmation-target-sidebar',.1)
+        peer.dark=True;peer.publish();themed_capture('confirmation-target-sidebar-dark',True)
+        peer.dark=False;peer.publish()
         assert not peer.actions[-1].get(key('DB_CONFIRM'))
         button('Back');assert len(peer.actions)==before+1
         button('Select');await_condition(lambda:len(peer.actions)==before+2,'Confirmation retry missing')
@@ -329,6 +331,77 @@ def run(pbw,output,expected_sha256=None,notifications_only=False,ux_only=False,r
         with peer.lock:peer.activities=saved_activities;peer.pins=saved_pins;peer.notice=saved_notice;peer.action_behavior='success'
         peer.publish();select_snapshot(1)
         motion_checks()
+        layout_checks()
+    def composition_checks():
+        snapshot_home()
+        with peer.lock:
+            timer=next(x for x in peer.activities if x['token']==1);peer.activities=[timer]+[x for x in peer.activities if x['token']!=1]
+            weather=next(x for x in peer.pins if x['token']==4);light=next(x for x in peer.pins if x['token']==5)
+            weather.update(title='Weather',value='13°C');light.update(title='Kitchen',value='65%');peer.pins=[weather,light]+[x for x in peer.pins if x['token'] not in (4,5)]
+        peer.publish();select_snapshot(5)
+        for dark in (False,True):
+            peer.dark=dark;peer.publish();themed_capture('snapshot-'+('dark' if dark else 'light'),dark)
+        peer.dark=False;peer.publish();button('Up',.75);capture('activities-list-light',.45)
+        peer.dark=True;peer.publish();capture('activities-list-dark',.45);snapshot_home()
+        with peer.lock:
+            music=next(x for x in peer.activities if x['token']==2);peer.activities=[music]+[x for x in peer.activities if x['token']!=2]
+        peer.publish();select_snapshot(2);capture('media-dark',.45)
+        peer.dark=False;peer.publish();capture('media-light',.45)
+        with peer.lock:
+            find=next(x for x in peer.pins if x['token']==7);find['flags']|=2048;peer.pins=[weather,find]+[x for x in peer.pins if x['token'] not in (4,7)]
+        peer.publish();select_snapshot(7);peer.action_behavior='confirm';button('Select');capture('confirmation-light',.45)
+        peer.dark=True;peer.publish();capture('confirmation-dark',.45)
+        proofs.append({'check':'Whole-composition review captures of Snapshot, collection, Media and safe confirmation at unified font roles','passed':True,'scope':'Representative appearance only; full behavior QA is separate.'})
+    def layout_checks():
+        snapshot_home()
+        with peer.lock:
+            saved_activities=copy.deepcopy(peer.activities);saved_pins=copy.deepcopy(peer.pins);saved_notice=copy.deepcopy(peer.notice)
+            timer=next(x for x in peer.activities if x['token']==1)
+            weather=next(x for x in peer.pins if x['token']==4);light=next(x for x in peer.pins if x['token']==5)
+            peer.pins=[weather,light]+[x for x in peer.pins if x['token'] not in (4,5)]
+        peer.publish();select_snapshot(3);capture('layout-normal-notice-selected',.1)
+        select_snapshot(4);capture('layout-normal-first-pin-selected',.1)
+        with peer.lock:
+            timer['title']='Žluťoučký čaj';weather['title']='Čaj';weather['value']='13°C';light['title']='Žlutý';light['value']='65%'
+            peer.notice['title']='Ágnes';peer.notice['name']='Zprávy';peer.notice['subtitle']='Ágnes má čaj.'
+        peer.publish();before=counts()
+        for dark in (False,True):
+            peer.dark=dark;peer.publish()
+            for token,label in ((1,'primary'),(3,'notice'),(4,'first-pin'),(5,'second-pin')):
+                select_snapshot(token);capture('layout-czech-'+label+'-selected-'+('dark' if dark else 'light'),.1)
+        with peer.lock:
+            timer['title']='ÁÉČŘŮžý';peer.notice['title']='ÁÉČŘŮžý';peer.notice['name']='';peer.notice['subtitle']='ÁÉČŘŮžý'
+        peer.publish();select_snapshot(1);capture('layout-full-accent-primary-selected-dark',.1)
+        peer.dark=False;peer.publish();capture('layout-full-accent-primary-selected-light',.1)
+        assert counts()==before,'Layout review caused an action or app open'
+        with peer.lock:
+            music=next(x for x in peer.activities if x['token']==2);music['title']='Žluťoučký čaj domů';music['subtitle']='Ágnes Čajová';peer.activities=[music]
+        peer.publish();select_snapshot(2)
+        for dark in (False,True):
+            peer.dark=dark;peer.publish();themed_capture('layout-czech-media-'+('dark' if dark else 'light'),dark)
+        with peer.lock:music.update(title='Night Drive',subtitle='The Midnight')
+        for dark in (False,True):
+            peer.dark=dark;peer.publish();themed_capture('layout-media-normal-'+('dark' if dark else 'light'),dark)
+        with peer.lock:
+            peer.activities=saved_activities;peer.notice=saved_notice;prototype=copy.deepcopy(saved_pins[0]);peer.pins=[]
+            for i in range(8):
+                pin=copy.deepcopy(prototype);pin.update(token=50+i,version=1,flags=0,kind=0,role=2,title='Ágnes Žlutý '+str(i+1),subtitle='',value='Čaj zprávy',appLabel='',validUntil=peer.fixture_now+3600)
+                peer.pins.append(pin)
+        peer.publish();select_snapshot(50);origin=peer.view[key('DB_TOKEN')]
+        button('Down',.75);await_condition(lambda:active_mode()==2,'Accented Pinned view missing')
+        capture('layout-accented-list-first',.45)
+        for i in range(1,5):
+            button('Down');await_condition(lambda:peer.view.get(key('DB_TOKEN'))==50+i,'Accented local selection mismatch')
+        capture('layout-accented-list-fifth',.45)
+        button('Up');assert peer.view[key('DB_TOKEN')]==53;capture('layout-accented-list-reverse',.45)
+        button('Down');button('Down');await_condition(lambda:peer.view.get(key('DB_TOKEN'))==55,'Accented page boundary lost selection');capture('layout-accented-list-next-page',.45)
+        button('Down');button('Down');assert peer.view[key('DB_TOKEN')]==57;capture('layout-accented-list-last',.45)
+        button('Up');assert peer.view[key('DB_TOKEN')]==56;capture('layout-accented-list-last-reverse',.45)
+        button('Back');await_condition(lambda:active_mode()==0,'Accented Back failed');assert peer.view[key('DB_TOKEN')]==origin;capture('layout-back-restores-snapshot-selection',.1)
+        assert counts()==before,'Read-only accented rows dispatched an action or app open'
+        with peer.lock:peer.activities=saved_activities;peer.pins=saved_pins;peer.notice=saved_notice;peer.dark=False
+        peer.publish();select_snapshot(1)
+        proofs.append({'check':'Measured ink layout retains normal and accented Snapshot activity/notification/two pins in light and dark; accented collection fifth item, reverse navigation, wire page boundary, last item and Back retain the exact binding without actions','passed':True,'fixtures':'Fictional English/Czech source strings; no real providers or phone JavaScript','pixelAudit':'Separate layout-pixels.json records actual ink bounds/margins.'})
     def motion_checks():
         snapshot_home();button('Up',.75)
         await_condition(lambda:active_mode()==1,'Motion review Activities list missing')
@@ -348,18 +421,20 @@ def run(pbw,output,expected_sha256=None,notifications_only=False,ux_only=False,r
             points=[(x,y) for y in range(bounds[1],bounds[3]) for x in range(bounds[0],bounds[2]) if image.getpixel((x,y))==(255,255,255)]
             assert points,'Missing native navigation icon'
             return (min(x for x,y in points)+max(x for x,y in points))/2
-        assert arrow_center(frames[0]['image'],(168,25,200,53))==183,'Up icon did not rest after collection-opening hold'
+        assert arrow_center(frames[0]['image'],(168,30,200,53))==183,'Up icon did not rest after collection-opening hold'
         assert arrow_center(frames[0]['image'],arrow)==183,'Down icon did not rest after prior hold'
         assert arrow_center(frames[1]['image'],arrow)==188,'Raw Down press did not move exactly5px'
         assert arrow_center(settled,arrow)==183,'Down icon did not rest after short click'
         assert frames[0]['image'].crop(arrow).tobytes()!=frames[1]['image'].crop(arrow).tobytes(),'Raw press did not move the action icon'
         assert frames[0]['image'].crop(arrow).tobytes()==settled.crop(arrow).tobytes(),'Released action icon did not return to rest'
         # The selected second row has static Media text/artwork. Its interior
-        # must stay pixel-identical while only the selection edges settle.
-        interior=(12,72,154,102)
-        assert all(entry['image'].crop(interior).tobytes()==settled.crop(interior).tobytes() for entry in frames[2:-1]),'List labels/artwork moved during selection feedback'
+        # and the entire full-width inversion must already be final at release.
+        interior=(4,78,161,133)
+        assert all(entry['image'].crop(interior).tobytes()==settled.crop(interior).tobytes() for entry in frames[2:-1]),'Immediate selection changed or clipped its text/artwork'
         time.sleep(1);frame('motion-idle-rest')
-        assert frames[-1]['image'].crop((4,68,163,106)).tobytes()==settled.crop((4,68,163,106)).tobytes(),'Idle selection failed to remain still'
+        assert frames[-1]['image'].crop(interior).tobytes()==settled.crop(interior).tobytes(),'Idle selection failed to remain still'
+        for dark in (True,False):
+            peer.dark=dark;peer.publish();themed_capture('activities-list-'+('dark' if dark else 'light'),dark)
         selected=peer.view.get(key('DB_TOKEN'))
         # A rapid second navigation followed by Select must use the synchronous
         # selected identity, never a row that merely occupied a previous frame.
@@ -372,7 +447,7 @@ def run(pbw,output,expected_sha256=None,notifications_only=False,ux_only=False,r
         images=[entry.pop('image') for entry in frames]
         durations=[max(30,frames[i+1]['elapsedMs']-entry['elapsedMs']) if i+1<len(frames) else 900 for i,entry in enumerate(frames)]
         images[0].save(output/'selection-and-action-feedback.gif',save_all=True,append_images=images[1:],duration=durations,loop=0)
-        proofs.append({'check':'Action icons press immediately and release finitely; list selection surface animates with anchored labels; rapid navigation and Select retain the exact synchronous read-only target','passed':True,'motionFrames':frames,'frameTiming':'Actual sequential QEMU screenshots; capture transfer time limits temporal resolution. No generated or interpolated frames.','gif':'selection-and-action-feedback.gif','focusLoss':'Cancellation verified by code inspection in focus_changed; a covering native system window was not exercised.'})
+        proofs.append({'check':'Action icons press immediately and release finitely; selection is immediate, full-width and stationary; rapid navigation and Select retain the exact synchronous read-only target','passed':True,'motionFrames':frames,'frameTiming':'Actual sequential QEMU screenshots; capture transfer time limits temporal resolution. No generated or interpolated frames.','gif':'selection-and-action-feedback.gif','focusLoss':'Cancellation verified by code inspection in focus_changed; a covering native system window was not exercised.'})
         snapshot_home()
     def write_report(result='PASS'):
         report={'result':result,'version':json.loads((ROOT/'package.json').read_text())['version'],
@@ -407,6 +482,8 @@ def run(pbw,output,expected_sha256=None,notifications_only=False,ux_only=False,r
         assert guide_pixels!=dismissed
         proofs.append({'check':'First-use native button guide explains controls; dismissal consumes Select without dispatching an action or app launch','passed':True})
         restart_without_guide()
+        if composition_only:
+            composition_checks();return write_report('COMPOSITION REVIEW')
         if motion_only:
             motion_checks();assert not errors;return write_report()
         if startup_theme_only:
@@ -518,8 +595,12 @@ item.token=91;item.version=1;process.stdout.write(JSON.stringify(item));
                 original_activities=copy.deepcopy(peer.activities);original_pins=copy.deepcopy(peer.pins);original_notice=copy.deepcopy(peer.notice)
             frame=peer.frame();timer=frame['items'][0]
             timer.update(clockMode=1,anchor=frame['now']+3,baseSeconds=0,validUntil=frame['now']+90)
+            # Align this isolated synthetic RTC with its peer anchor. The
+            # startup SetUTC precedes installation/navigation, so host and
+            # emulated whole seconds can otherwise differ at this boundary.
+            p.send_packet(TimeMessage(message=SetUTC(unix_time=frame['now'],utc_offset=0,tz_name='UTC')))
             inject(frame)
-            before=capture('countdown-before-zero',.1);time.sleep(3.2)
+            before=capture('countdown-before-zero',.1);time.sleep(4.2)
             zero=capture('countdown-final-zero',.1);still=capture('countdown-zero-still',1.2)
             reference=copy.deepcopy(frame)
             with peer.lock:peer.sequence+=1;reference['sequence']=peer.sequence
@@ -528,7 +609,7 @@ item.token=91;item.version=1;process.stdout.write(JSON.stringify(item));
             def crop(pixels,bounds):return Image.frombytes('RGB',(200,228),pixels).crop(bounds).tobytes()
             assert crop(before,primary_roi)!=crop(zero,primary_roi)
             assert crop(zero,primary_roi)==crop(still,primary_roi)==crop(expected,primary_roi)
-            proofs.append({'check':'A running countdown paints exact00:00 before stopping second redraws; final pixels match an explicit zero-clock reference without inferring owner completion','passed':True})
+            proofs.append({'check':'A running countdown paints exact00:00 before stopping second redraws; final pixels match an explicit zero-clock reference without inferring owner completion','passed':True,'isolatedFixtureClockSet':True,'timingAllowance':'One additional SDK tick for QEMU whole-second/transport scheduling; not a physical timing measurement.'})
 
             # Static zero above leaves a MINUTE subscription. The next one-
             # second clock therefore finishes on the SDK's first SECOND tick,
@@ -539,14 +620,14 @@ item.token=91;item.version=1;process.stdout.write(JSON.stringify(item));
             with peer.lock:peer.sequence+=1;first_tick['sequence']=peer.sequence
             first_tick['items'][0].update(anchor=first_tick['now']+1,validUntil=first_tick['now']+90)
             inject(first_tick);one=capture('first-second-callback-before-zero',0)
-            completed=capture('first-second-callback-final-zero',1.2)
+            completed=capture('first-second-callback-final-zero',2.2)
             first_reference=copy.deepcopy(first_tick)
             with peer.lock:peer.sequence+=1;first_reference['sequence']=peer.sequence
             first_reference['items'][0]['anchor']=0;inject(first_reference)
             expected=capture('first-second-callback-zero-reference',.1)
             assert crop(one,primary_roi)!=crop(completed,primary_roi)
             assert crop(completed,primary_roi)==crop(expected,primary_roi)
-            proofs.append({'check':'A new one-second clock from a static view paints00:00 on the SDK zero-unit first tick; pixels match an explicit zero reference','passed':True,'isolatedFixtureClockSet':True})
+            proofs.append({'check':'A new one-second clock from a static view paints00:00 on the SDK zero-unit first tick; pixels match an explicit zero reference','passed':True,'isolatedFixtureClockSet':True,'timingAllowance':'One additional SDK tick for QEMU whole-second/transport scheduling; first-callback units are source-reviewed, not instrumented in this production binary.'})
 
             # With no running clock, an unavailable reading's independent
             # capability still needs the absolute expiry callback, not the
@@ -812,11 +893,12 @@ if __name__=='__main__':
     parser.add_argument('--expected-sha256',help='Require these exact candidate bytes before installing')
     parser.add_argument('--notifications-only',action='store_true',help='Focused empty Notifications navigation, expiry and app-open checks')
     parser.add_argument('--motion-only',action='store_true',help='Focused press/release and anchored selection pixel checks')
+    parser.add_argument('--composition-only',action='store_true',help='Early whole-composition appearance review; not full acceptance QA')
     parser.add_argument('--ux-only',action='store_true',help='Focused guide, feedback, hold preview, confirmation, sparse controls and idle UX checks')
     parser.add_argument('--reliability-only',action='store_true',help='Focused final-zero paint, exact unavailable capability expiry and inert bootstrap identity checks')
     parser.add_argument('--paused-media-repro',action='store_true',help='Record the old invisible paused-primary bug against a supplied baseline PBW')
     parser.add_argument('--activities-only',action='store_true',help='Focused activity presentation/selection checks')
     parser.add_argument('--startup-theme-only',action='store_true',help='Focused first-launch, cached dark/light startup, timeout, offline and accepted-theme switch checks on fresh flash')
     args=parser.parse_args()
-    if sum((args.notifications_only,args.ux_only,args.reliability_only,args.paused_media_repro,args.activities_only,args.startup_theme_only,args.motion_only))>1:parser.error('Choose at most one focused suite')
-    run(args.pbw,args.output,args.expected_sha256,args.notifications_only,args.ux_only,args.reliability_only,args.paused_media_repro,args.activities_only,args.startup_theme_only,args.motion_only)
+    if sum((args.notifications_only,args.ux_only,args.reliability_only,args.paused_media_repro,args.activities_only,args.startup_theme_only,args.motion_only,args.composition_only))>1:parser.error('Choose at most one focused suite')
+    run(args.pbw,args.output,args.expected_sha256,args.notifications_only,args.ux_only,args.reliability_only,args.paused_media_repro,args.activities_only,args.startup_theme_only,args.motion_only,args.composition_only)

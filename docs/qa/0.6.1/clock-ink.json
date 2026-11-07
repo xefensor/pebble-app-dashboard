@@ -1,0 +1,38 @@
+{
+  "fontOrder": [
+    20,
+    24,
+    26,
+    32,
+    40,
+    36
+  ],
+  "fonts": [
+    {
+      "font": "FONT_CLOCK_20",
+      "pfoSha256": "6f2f00cb7f71ce1fb98f5a919db8f0e5fec26eff6c94dff411c03e7c8f3469b1"
+    },
+    {
+      "font": "FONT_CLOCK_24",
+      "pfoSha256": "b9670ce19fa150860e2c98f86d81779fd936cbf535d3fc99356adb8c4b69e28e"
+    },
+    {
+      "font": "FONT_CLOCK_26",
+      "pfoSha256": "c4efaf8c5b0fcc54d2d58925d26b05943a74bbd3cb93c89cf757fc79723070e3"
+    },
+    {
+      "font": "FONT_CLOCK_32",
+      "pfoSha256": "966d2a0c65c68c68a63183152e8e3b776e63c20abe1b9efd6629640b7930cc9b"
+    },
+    {
+      "font": "FONT_CLOCK_40",
+      "pfoSha256": "ad26e45496893074ce899239026ebda8d7cd432ae7656f6bbc04c3adbb3164c1"
+    },
+    {
+      "font": "FONT_CLOCK_36",
+      "pfoSha256": "53d590aec876da6b9bc9d3440ebe804a82a5fc6dbb60b2effd3e61ee2181d874"
+    }
+  ],
+  "generatedHeaderSha256": "092c921cc26891707aae809466fa7d5d60e95c70602a9687ef10f0883faeff8c",
+  "scope": "Exact packaged Fredoka PFO bounds; no text reshaping or font scaling."
+}

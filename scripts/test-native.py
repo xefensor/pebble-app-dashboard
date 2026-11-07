@@ -25,6 +25,12 @@ if '--sanitize' in sys.argv:
     deadline += ['-fsanitize=address,undefined', '-fno-omit-frame-pointer']
 subprocess.run(deadline, cwd=root, check=True)
 subprocess.run([str(build / 'test_deadline')], cwd=root, check=True)
+layout = [compiler, '-std=c99', '-Wall', '-Wextra', '-Werror', '-g', '-O1',
+          '-Isrc/c', 'tests/native/test_layout.c', '-o', str(build / 'test_layout')]
+if '--sanitize' in sys.argv:
+    layout += ['-fsanitize=address,undefined', '-fno-omit-frame-pointer']
+subprocess.run(layout, cwd=root, check=True)
+subprocess.run([str(build / 'test_layout')], cwd=root, check=True)
 if '--frames-dir' in sys.argv:
     at = sys.argv.index('--frames-dir')
     if at + 1 >= len(sys.argv):
