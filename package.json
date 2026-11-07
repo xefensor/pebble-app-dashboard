@@ -10,7 +10,7 @@
     "pebble-xoce-ui": "file:vendor/pebble-xoce-ui-0.1.1.tgz"
   },
   "scripts": {
-    "test": "node --test tests/*.test.js && python3 scripts/test-native.py && npm run test:workflow && npm run check:docs",
+    "test": "node --test tests/*.test.js && python3 scripts/test-native.py && npm run test:workflow && npm run check:docs && npm run test:release",
     "build": "python3 scripts/build.py",
     "check:artifact": "python3 scripts/check-artifact.py",
     "build:release": "python3 scripts/build.py --release",
@@ -18,7 +18,10 @@
     "test:source": "node --test tests/*.test.js && python3 scripts/test-native.py",
     "check:config": "node scripts/generate-config.cjs --check",
     "release:source": "python3 scripts/package-source.py",
-    "check:docs": "python3 scripts/check-docs.py"
+    "check:docs": "python3 scripts/check-docs.py",
+    "release:prepare": "python3 scripts/github-release.py prepare",
+    "release:publish": "python3 scripts/github-release.py publish",
+    "test:release": "python3 -m unittest discover -s tests -p \"test_*release*.py\""
   },
   "pebble": {
     "displayName": "Dashboard",

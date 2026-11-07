@@ -1,9 +1,30 @@
 # Dashboard
 
-Main contains the current implementation. [Development](CONTRIBUTING.md),
-[current maintenance contracts](docs/MAINTENANCE.md) and [release policy](docs/RELEASING.md)
-are the active contributor references. Public downloads and frozen evidence keep
-their original versions; a merge to main is not publication.
+A stock PebbleOS app showing a current activity, the latest notification and two configurable
+pins.
+
+## Download
+
+[Version 0.6.3](https://github.com/xefensor/pebble-app-dashboard/releases/tag/v0.6.3) is a development prerelease.
+
+[PBW](https://github.com/xefensor/pebble-app-dashboard/releases/download/v0.6.3/Dashboard-0.6.3.pbw),
+[source](https://github.com/xefensor/pebble-app-dashboard/releases/download/v0.6.3/Dashboard-0.6.3-source.zip),
+[debug files](https://github.com/xefensor/pebble-app-dashboard/releases/download/v0.6.3/Dashboard-0.6.3-debug.zip), and
+[checksums](https://github.com/xefensor/pebble-app-dashboard/releases/download/v0.6.3/SHA256SUMS.txt).
+
+Install the PBW through the Pebble phone app. No separate library installation is needed.
+
+Choose activity sources and pins in the phone settings. Each pin has separate reading, Select
+action and Hold Select destination choices. Enable the permissions needed by your chosen
+sources. Timer Pause/Resume from Dashboard remains deferred.
+
+[Usage and controls](docs/USAGE.md) · [Current UI](docs/UI.md).
+
+## Compatibility
+
+The current SDK target is **Pebble Time 2 / Emery**, using **Pebble SDK 4.33.1**. Portable and
+emulator evidence is versioned; physical phone/watch checks retain their documented gaps.
+Existing screenshots keep their original version and provenance.
 
 ## Version 0.6.3
 
@@ -11,288 +32,21 @@ their original versions; a merge to main is not publication.
 - Keep immediate selection, complete first-use help, safe Cancel-first confirmations and exact tap/hold action bindings.
 - Bundle UI 0.1.1 and the confirmed stay-open phone settings page.
 
-GitHub development prerelease for Pebble Time 2 / Emery with SDK 4.33.1.
-Validation covers portable tests, packaged runtimes and isolated native emulator
-checks. Physical phone/watch and fresh browser testing remain unverified.
+## Development
 
-[Release validation](docs/qa/0.6.3/validation.json) records the exact package and native payload.
+Use Node 22, Python 3.12 and a C compiler. SDK builds additionally need Pebble SDK 4.33.1 on
+PATH.
 
-Download the [PBW](https://github.com/xefensor/pebble-app-dashboard/releases/download/v0.6.3/Dashboard-0.6.3.pbw),
-[source](https://github.com/xefensor/pebble-app-dashboard/releases/download/v0.6.3/Dashboard-0.6.3-source.zip),
-[debug files](https://github.com/xefensor/pebble-app-dashboard/releases/download/v0.6.3/Dashboard-0.6.3-debug.zip), and
-[checksums](https://github.com/xefensor/pebble-app-dashboard/releases/download/v0.6.3/SHA256SUMS.txt).
+```sh
+npm ci --ignore-scripts
+npm test
+npm run build
+npm run check:artifact
+```
 
-A stock Pebble watchapp for current activities, the latest available notification
-and pinned readings/actions. **Dashboard 0.6.3 includes the shared Emery UI and readability improvements**
-on `main`; see the [redesign review](docs/REDESIGN.md). The earlier 0.4.3 development prerelease remains available below.
+[Contributor guide](CONTRIBUTING.md) · [Release preparation](docs/RELEASING.md) · [History index](docs/history/index.md).
+Development outputs belong in ignored `build/`; published archives stay frozen.
 
-Part of **XOCE — Xef's Open Computing Ecosystem**. The shared Activities
-library now lives in
-[xefensor/pebble-lib-activities](https://github.com/xefensor/pebble-lib-activities);
-its package and import name remains `pebble-activities`.
+## Licence
 
-The native app, phone runtime and bundled settings page are implemented in
-[xefensor/pebble-app-dashboard](https://github.com/xefensor/pebble-app-dashboard).
-Current build and portable/emulator checks are recorded under
-[docs/qa/0.6.2](docs/qa/0.6.2). Real-phone permissions/provider integration and
-physical-watch comfort/battery still need device testing. Synthetic SDK/emulator
-fixtures are not evidence of live phone operation.
-
-## Current UI 0.6.3
-
-Install Dashboard 0.6.3 using the downloads above. Its matching source, debug
-archive and checksums identify the same build.
-
-- Native typography uses one coherent Roboto Condensed Bold utility family and
-  Fredoka values, with ink-centered boxes and immediate full-width selection.
-- Every native screen keeps local time on the right. Collections show their
-  position in a readable content-column header; errors and app hints keep the clock and
-  both Snapshot pins visible.
-- Confirmations name the action and target. **Cancel** is selected initially;
-  Down chooses Run action, Select runs only the original bound request, and
-  Back cancels without changing the selected item.
-- Phone settings use a neutral light/dark shell, teal identity rule and a
-  Light/Dark watch appearance selector.
-  English and Czech interface text follows the phone locale; provider names,
-  saved labels and binding values remain untouched.
-- The bundled page stays open after Save, shows **✓ Saved** until another edit,
-  and disables unchanged Save. Save includes an open pin editor. Validation and
-  uncertain writes keep the draft, and Cancel restores the correct clean state.
-- Large text and short viewports keep actions in normal page flow. Routine
-  editing never focuses a text field or opens the keyboard automatically.
-
-The [0.5.0 shared-UI baseline](docs/qa/0.5.0/VALIDATION.md) remains available
-for comparison.
-
-The legacy return-URL configuration fallback still closes to deliver its save;
-it cannot claim in-page persistence confirmation. The modern bundled page owns
-the confirmed stay-open workflow. Timer controls remain deferred.
-
-See the [implementation and validation record](docs/qa/0.6.2/VALIDATION.md).
-
-## Earlier releases
-
-The previous **Dashboard 0.4.3** remains available:
-[PBW](https://github.com/xefensor/pebble-app-dashboard/releases/download/v0.4.3/Dashboard-0.4.3.pbw),
-[source](https://github.com/xefensor/pebble-app-dashboard/releases/download/v0.4.3/Dashboard-0.4.3-source.zip),
-[debugging files](https://github.com/xefensor/pebble-app-dashboard/releases/download/v0.4.3/Dashboard-0.4.3-debug.zip)
-and [checksums](https://github.com/xefensor/pebble-app-dashboard/releases/download/v0.4.3/SHA256SUMS.txt).
-The published PBW is also available locally as `dist/Dashboard-0.4.3.pbw`;
-its settings save/reopen checks are
-recorded in [docs/qa/0.4.3](docs/qa/0.4.3). Native-app picker checks remain in
-[docs/qa/0.4.2](docs/qa/0.4.2), and startup-theme checks remain in
-[docs/qa/0.4.1](docs/qa/0.4.1).
-
-The 0.4.3 release is frozen at tested source
-[`61e4bab`](https://github.com/xefensor/pebble-app-dashboard/tree/61e4babc91bef0409c14f8c8699053d047baa2be).
-Its source ZIP identifies that commit; later documentation on `main` does not
-replace the published archives or tag.
-
-The previous [Dashboard 0.4.0 prerelease](https://github.com/xefensor/pebble-app-dashboard/releases/tag/v0.4.0)
-retains its original PBW, source, debug files and checksums. It is pinned to
-tested source
-[`dc3bbd5`](https://github.com/xefensor/pebble-app-dashboard/tree/dc3bbd53c79d70daf188cbcd8a0d1074c00d8819).
-The previous [Dashboard 0.3.1](https://github.com/xefensor/pebble-app-dashboard/releases/download/v0.3.1/Dashboard-0.3.1.pbw) remains available,
-with source, debug files and checksums in its
-[development release](https://github.com/xefensor/pebble-app-dashboard/releases/tag/v0.3.1).
-Install the PBW using the official Pebble phone app with plugins
-enabled. Allow permissions needed by your selected readings and controls. Open
-Dashboard normally or assign it to Quick Launch in Pebble settings.
-
-App UUID: `f76f9fc1-2944-4248-bcc5-3eea2af0183b`. Initially targets Pebble Time 2 /
-Emery, 200 × 228. Existing Dynamic, Timer and Open Activity installations keep
-their own identities, preferences and behavior.
-
-## On the watch
-
-Snapshot shows one current activity, one latest notification and the first
-two Pinned items. The activity can come from any supported source. Fewer visible
-items make room for larger text, clocks and icons. A right-side action bar shows
-the selected item's available button actions. Weather and battery pins use an
-icon and value; specific devices and action-only pins keep meaningful names.
-Pinned is one collection: an item can expose a reading, a tap action, or both,
-plus an optional associated app destination. A light's brightness and toggle can
-belong to the same pin; toggle state comes from a real Boolean source.
-
-| Button | Tap | Hold |
-| --- | --- | --- |
-| Up | Previous item/control | Snapshot: Activities; list: scroll up; controls: previous control |
-| Select | Music play/pause, useful controls for other activities, native Notifications, or pin action; otherwise no-op | Associated app when available |
-| Down | Next item/control | Snapshot: Pinned; list: scroll down; controls: next control |
-| Back | Previous screen, retaining selection; exit at Snapshot | Standard OS behavior |
-
-A readable button guide appears once on first use. Select dismisses it without
-performing the underlying item's action. During a deliberate Select hold, the
-header previews the actual associated app and the sidebar shows the launch icon.
-Releasing after that preview but before the hold completes cancels the gesture
-without also performing the item's tap action.
-The watch saves the guide-dismissed preference and the last confirmed light/dark
-theme. Loading, offline and error screens use that theme immediately on launch,
-without waiting for the phone. With no cached theme, including the first launch
-after upgrading from 0.4.0, the default is light until the phone sends settings.
-If settings change while Dashboard is closed, startup uses the previous theme
-until the first accepted phone update supplies the new one. Activity content and
-action bindings are never saved on the watch.
-
-Holds start after 600 ms; list navigation repeats every 140 ms while held.
-Opening a collection never also scrolls it; releasing adds no tap or extra step.
-Back restores the original item, viewport and control focus. Live reordering
-preserves selection by identity, including moves made locally within a page.
-If that activity disappears, Select and hold stay inert through subsequent
-updates. Use Up or Down to choose a current item; reconnect never silently
-substitutes another app or action for the requested activity.
-Phone-runtime restart establishes a new native session; old replies and action
-tokens cannot acquire a different target.
-
-Music toggles playback directly on Select when the source declares play/pause.
-Paused Music says Paused in its artist row, even when another item is selected.
-Hold Select opens the native Music app for the rest of its controls. Other
-activities can expose up to three provider-declared controls. Only present
-controls take space; navigation preserves their original action indices and
-skips absent slots. A named disabled control remains distinct from an absent one
-when the received data actually describes it.
-Summary-only activities and pins without actions do nothing on tap. Source
-clocks tick on the watch; text stays static and starts from its beginning.
-Native redraw follows visible changes rather than automatic text scrolling.
-
-Commands show static pending dots and a brief success check in the sidebar.
-Failures and connection status use the compact left header, leaving the local
-clock and both pins visible. A
-selected missing reading shows a short reason such as No data or Allow access;
-its independent action/app capability remains separate. Confirmation identifies
-the action and target, starts on Cancel and uses the selected action icon in
-the sidebar. The idle activity area uses a neutral Nothing active state.
-
-Commands require exact current bindings and are
-never automatically replayed after timeout. Configured/provider confirmation is
-honored. A command acknowledgment does not fabricate a new reading: refreshed
-device/source data supplies the value.
-
-## Settings and sources
-
-Pins have separate **Show a reading**, **Tap Select** and **Hold Select** choices.
-Quick setup buttons take you to the right part of the editor; these capabilities
-can still be combined in one pin. App selection fills a new pin's name and icon,
-and preserves any name or icon you have edited. The page's **Save** applies the
-pin currently open in the editor along with your other changes. **Add pin** or
-**Done** can optionally keep the item in your draft while you edit other items.
-Other pins stay locked while you finish or cancel the current item. Opening an
-editor or using quick setup does not automatically focus a field or open the
-keyboard. Failed saves retain your unfinished fields and do not claim success.
-
-For **Hold Select**, choose an app by name. **PebbleOS apps** offers Weather,
-Music, Notifications, Alarms, Workout, Health, Timeline, Settings and Watchfaces
-without store search or UUID entry; availability depends on your watch and OS.
-This suite's Timer is under **Other apps**. For example, edit a Weather pin and
-choose **Hold Select → Open app → Weather**, then **Save**. Its reading and
-any separate tap action are preserved. **Find another app by name** searches the
-official public Pebble store and shows name/author choices; selecting one fills
-its actual watchapp destination. Choose an app already installed on your watch.
-The current phone SDK cannot supply an installed-watchapp list, and store search
-does not verify installation. Sideloaded/private apps can use **Custom app**;
-manual UUID entry is kept there rather than required for normal setup. Saved
-destinations and custom names survive empty results, errors and offline use.
-
-Store search is explicit and needs Dashboard's scoped app-store Internet access
-in Pebble. After changing that permission, save any edits and reopen Dashboard
-settings before searching again. Common/saved choices need no store request.
-The phone's permission policy may also ask you to approve reading access after
-this update; existing explicit grants remain valid. See [app-picker API and
-permission notes](docs/APP-PICKER.md) for the current stock SDK limits.
-
-The bundled phone page works independently of Dashboard's native lifetime.
-Open Dashboard on the watch once to discover installed providers. Live discovery
-runs in its phone-side app code; Pebble does not provide that API to the settings
-plugin or start Dashboard merely because its settings page opens. After discovery,
-the page can use a bounded saved list of public provider declarations while the
-watchapp is closed. It refreshes when Dashboard becomes available and explains
-missing discovery beside the Activity priority list. Inactive compatible providers
-are listed too. Only public declarations are cached, never activity instances,
-readings, message content or action arguments.
-Choose sources/properties and stable instances, add optional actions with typed
-arguments, and reorder pins. Dashboard's activity priority/visibility is separate
-from Dynamic. Saves are explicit; failed loads never silently replace saved
-preferences. Confirmed settings changes notify the running phone runtime.
-Within one provider at the same saved priority, active entries precede paused
-and finished entries; countdowns use the soonest deadline first. An explicit
-instance priority still wins. Countdown tie-breaking preserves text positions
-within each state group and never moves another provider. An activity's icon does not choose its
-layout: a standard countdown can use a music icon and keep ordinary controls.
-
-Defaults are Weather temperature, Phone battery, local Watch battery and Find
-phone. No fictional home-light provider is installed. Find phone runs only on an
-explicit tap; discovery never reads its side-effecting source. Missing providers
-retain saved bindings and show unavailable instead of selecting another entity.
-
-The first profile allows up to 64 configured pins and a bounded phone-side
-activity catalogue. Native receives up to four overview items, five list items or
-one control view at a time. The six activities/twelve pins in design examples are not
-list limits. Dashboard owns DSH1 paging/commands; Dynamic's two-card ACT3 transport
-is unchanged. See [implementation contract](docs/IMPLEMENTATION.md).
-
-Current Music/Notifications built-ins are Android capabilities. Third-party
-Activities summaries and ordinary plugin readings/actions use the existing
-plugin API. Stock app destinations require verified built-in source identity;
-other sources need an explicit real app association.
-
-## Notifications and privacy
-
-Dashboard shows the newest currently available permitted notification returned
-by the built-in source, including its initial snapshot. This is separate from
-Dynamic's temporary new-notification alert. It creates no history and replays no
-alert. Opening Notifications opens the app, not a particular message.
-
-The notification row stays selectable when there is no preview. Select opens
-native Notifications from this empty row too. Turning off "Show latest
-notification" stops reading message data while keeping the app shortcut.
-Unavailable previews never stand in for the phone's full notification history.
-
-Message bodies are off by default. Withdrawal, redaction and permission loss
-clear content. Music, notifications, artwork and live source values stay in RAM;
-only configuration is stored. Source observations/expiry and native Timer
-ownership remain authoritative. Null-TTL live sources have a separate 60-second
-watch transport lease, renewed only while their subscription remains active.
-That lease never renews finite native-owner source validity.
-
-Reconnect refreshes source subscriptions and invalidates previous confirmations;
-duplicate connection events do not repeat that work. Late refresh reads cannot
-replace newer live readings or restore withdrawn permission. Static local/action
-views skip unchanged heartbeat frames. Hidden activity providers are not read;
-explicit pinned readings from those providers remain independent. Source leases
-and settings checks retain
-their normal schedule. Countdown display stops ticking at zero while waiting for
-the owner to report completion. Original validity and privacy deadlines still
-clear content and capabilities at their precise native deadline.
-
-The public connection service debounces disconnect reporting (25 seconds in the
-stock firmware used for emulator QA). Native private content clears when the SDK
-notification arrives or its lease expires; physical radio loss is not detected
-immediately. Old session frames, expired bindings and stale commands are rejected.
-
-## Current scope
-
-- Timer exposes its summary and app destination. Dashboard Pause/Resume remains
-  deferred; native Timer owns saved state and alarms.
-- App opening uses the official phone Watch State action. It needs a connection
-  and permission and currently targets connected watches: use one connected
-  watch. It opens the whole app. A dispatched platform action cannot be recalled.
-- Back keeps stock behavior. PebbleOS reserves held Back to exit to the launcher;
-  custom Back shortcuts remain deferred. No global success-exit override is set.
-- This is a development testing build, not an appstore publication or a claim that every
-  arbitrary plugin schema/action has been tested on a real phone.
-
-## Build and validate
-
-Use [CONTRIBUTING](CONTRIBUTING.md) for current setup, safe candidate builds and
-verification. Release preparation is a separate [explicit workflow](docs/RELEASING.md).
-
-## Design previews
-
-[Earlier interactive Snapshot](previews/snapshot.html),
-[browser expansion study](previews/expansion-overview.png) and
-[earlier comparison](previews/index.html) remain discussion artifacts. Actual
-native captures are in the versioned QA folder. Those browser studies predate
-the larger 0.3.0 Snapshot and its direct Music play/pause behavior.
-
-Licensed under the suite's PolyForm Noncommercial terms; see LICENSE and
-THIRD-PARTY-NOTICES.md. Activities 0.4.4 is vendored with checksum provenance.
+[PolyForm Noncommercial 1.0.0](LICENSE). Preserve bundled third-party notices and attribution.

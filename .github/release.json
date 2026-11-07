@@ -1,0 +1,23 @@
+{
+  "repository": "xefensor/pebble-app-dashboard",
+  "display_name": "Dashboard",
+  "tag_prefix": "v",
+  "prerelease": true,
+  "kind": "app",
+  "notes": {
+    "path": "README.md",
+    "heading": "## Version {version}"
+  },
+  "app_uuid": "f76f9fc1-2944-4248-bcc5-3eea2af0183b",
+  "assets": [
+    "dist/Dashboard-{version}.pbw",
+    "dist/Dashboard-{version}-source.zip",
+    "dist/Dashboard-{version}-debug.zip"
+  ],
+  "checksums_file": "dist/SHA256SUMS-{version}.txt",
+  "source_archive": {
+    "path": "dist/Dashboard-{version}-source.zip",
+    "prefix": ""
+  },
+  "debug_archive": "dist/Dashboard-{version}-debug.zip"
+}
