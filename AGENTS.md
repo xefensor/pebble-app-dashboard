@@ -1,6 +1,6 @@
 # Dashboard maintainer notes
 
-This repository contains the native Dashboard redesign candidate (0.6.1),
+This repository contains the native Dashboard redesign candidate (0.6.2),
 its phone runtime/settings, and earlier browser design studies. Read README.md
 and docs/IMPLEMENTATION.md. Preserve UUID f76f9fc1-2944-4248-bcc5-3eea2af0183b,
 DSH1 message keys and existing published sibling apps.
@@ -226,3 +226,15 @@ confirmation/input semantics, privacy and source ownership remain as above.
 The phone Watch appearance select maps to the same dark Boolean. Phone CSS-only
 alignment checks do not claim new browser/device evidence. Versioned checksums
 must preserve all older local/released artifact bytes.
+
+## Full-height rail — local0.6.2 (current requirement)
+
+Xef accepts the black action rail and requires it to stretch from top to bottom.
+The34px contrasting column now covers y0..227, including beside the header.
+Header text and divider must remain inside166px, with26pt time atx94..159 and
+unchanged readable utility roles. Snapshot's short heading is Home. Collections
+show their exact selected index/total; omit a redundant long collection title
+instead of shrinking the type or losing the index. Keep all four Snapshot items,
+measured ink alignment, adaptive lists and contextual header error/app feedback.
+The0.6.1 full-width-header instruction above is historical. Dynamic and Open
+Activity have no physical action rail; do not add empty rails to those apps.

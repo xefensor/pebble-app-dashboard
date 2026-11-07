@@ -1,0 +1,3 @@
+274f95db1ec1e2b931b144a1b63b0a34eb2a089ff8dae09e4b533b2c147a07ef  Dashboard-0.6.2.pbw
+06061ba3bd704462ace255c4fa6bec4782634012c25ce11f225c1c2aec4fbd42  Dashboard-0.6.2-debug.zip
+65e74aae29a539407b09cf35d0283b9dc38c98eeea6e6dd5cb4df6a26d0b1171  Dashboard-0.6.2-source.zip

@@ -1,0 +1,60 @@
+{
+  "result": "PASS",
+  "scope": "Actual PBW phone and settings-plugin JavaScript executed with isolated fictional SDK sources/actions; not a live phone or physical watch test.",
+  "version": "0.6.2",
+  "pbwSha256": "274f95db1ec1e2b931b144a1b63b0a34eb2a089ff8dae09e4b533b2c147a07ef",
+  "phoneSha256": "45ab72a3b7ac1903440b68cd4bc0f12b26daa663213aa60c0b53c535d527aa3c",
+  "proofs": {
+    "realActivitiesProviderAndConsumer": true,
+    "metadataOnlyPKJSConfiguration": true,
+    "inactiveInstalledProviderDiscovery": true,
+    "closedWatchSettingsPublicCatalogueCache": true,
+    "overviewFourItems": true,
+    "overviewOneActivityOneNotificationTwoPins": true,
+    "fullCatalogueRetained": true,
+    "sourceCountdownAnchors": true,
+    "artworkBridge": true,
+    "privateBodyOptOut": true,
+    "musicCommandOnceAndConfirmedReading": true,
+    "musicTapDirectFromSnapshot": true,
+    "musicHoldVerifiedApp": true,
+    "findPhoneExplicitOnly": true,
+    "associatedAppDestination": true,
+    "notificationPrivateWithdrawalRetainsPublicLauncher": true,
+    "emptyNotificationLauncherOpensExactNativeApp": true,
+    "notificationPreviewOptOutKeepsLauncherWithoutSubscription": true,
+    "liveSettingsReload": true,
+    "pagedPins": true,
+    "privateContentNeverPersisted": true,
+    "bundledSettingsPlugin": true,
+    "legacyRepairExplicitOnly": true,
+    "noCommandsAfterCancel": true
+  },
+  "actualEncodedFrameCount": 33,
+  "mockInvocations": [
+    {
+      "plugin": "00000000-0000-0000-0001-000000000003",
+      "action": "set_playing"
+    },
+    {
+      "plugin": "00000000-0000-0000-0001-000000000007",
+      "action": "launch_app"
+    },
+    {
+      "plugin": "00000000-0000-0000-0001-000000000008",
+      "action": "ring"
+    },
+    {
+      "plugin": "00000000-0000-0000-0001-000000000007",
+      "action": "launch_app"
+    },
+    {
+      "plugin": "00000000-0000-0000-0001-000000000007",
+      "action": "launch_app"
+    },
+    {
+      "plugin": "00000000-0000-0000-0001-000000000007",
+      "action": "launch_app"
+    }
+  ]
+}

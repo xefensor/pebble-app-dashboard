@@ -35,13 +35,13 @@ def text_groups(im,box,color):
 def snapshot(name,dark,selected,czech=False,full=False):
     im=load(name);foreground=(255,255,255) if dark else (0,0,0);background=(0,0,0) if dark else (255,255,255)
     first,second=divider(im,dark);primary=(4,33,162,first-1);notice=(4,first+2,162,157)
-    clock=bbox(im,(132,0,195,30),foreground)
+    clock=bbox(im,(94,0,160,30),foreground)
     assert clock[3]-clock[1]>=18,(name,'Clock shrank',clock)
     assert clock[1]>=3 and 30-clock[3]>=3,(name,'Clock touches header',clock)
-    rows.append({'capture':name+'.png','role':'Header clock','ink':clock,'visibleHeightPixels':clock[3]-clock[1],'margins':margins(clock,(132,0,195,30))})
-    title=bbox(im,(6,0,130,29),foreground)
+    rows.append({'capture':name+'.png','role':'Header clock','ink':clock,'visibleHeightPixels':clock[3]-clock[1],'margins':margins(clock,(94,0,160,30))})
+    title=bbox(im,(6,0,90,29),foreground)
     paired(name,'Header title/clock',title,clock)
-    rows.append({'capture':name+'.png','role':'Header title','ink':title,'visibleHeightPixels':title[3]-title[1],'margins':margins(title,(6,0,130,30))})
+    rows.append({'capture':name+'.png','role':'Header title','ink':title,'visibleHeightPixels':title[3]-title[1],'margins':margins(title,(6,0,90,30))})
     ink=background if selected=='primary' else foreground
     value=bbox(im,(10,33,157,33+(primary[3]-33)//2+2),ink)
     caption_top=value[3]+2

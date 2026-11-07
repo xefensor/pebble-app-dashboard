@@ -1,3 +1,28 @@
+# Dashboard0.6.2 — full-height action rail
+
+Xef clarified that the black rail is acceptable; its interrupted height is the
+problem. The34px contrasting rail now covers all228rows, including beside the
+header. Light/dark retain the original contrasting palettes and contextual icons.
+All content and the header divider remain left of x166. The26pt clock stays
+readable atx94..159. The shorter Home heading and collection index/total avoid
+crowding a long repeated app/list name beside the clock. Body roles, all four
+Snapshot items, adaptive lists and source/input behavior are unchanged.
+
+This is local on `design/pebble-native-redesign`; main and older artifact bytes
+remain intact. [Current validation](qa/0.6.2/validation.json),
+[representative compositions](qa/0.6.2/composition/emulator.json),
+[complete current UX captures](qa/0.6.2/native-ux/emulator.json) and
+[activity checks](qa/0.6.2/native-activities/emulator.json) use exact packaged
+native bytes in isolated Emery QEMU with synthetic peers. Full-height rail
+assertions run on every capture, including header/footer, dark/light, confirmation,
+loading/error and held action states. The current source/compiled font ink checks
+still apply. [Phone preview](qa/0.6.2/phone-preview.html) uses the unchanged actual
+settings with a mock bridge; fresh browser and real phone/watch checks are unverified.
+Nothing is pushed or published.
+
+The previous0.6.1 description below is historical; its full-width header has
+been replaced by the content-column header above.
+
 # Dashboard readability correction for review
 
 Local **0.6.1** on `design/pebble-native-redesign`, following Xef's review of

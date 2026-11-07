@@ -1,0 +1,57 @@
+{
+  "result": "PASS",
+  "version": "0.6.2",
+  "branch": "design/pebble-native-redesign",
+  "previousCandidateCommit": "48b43abf844e73888f9dcff57d858178f6aeee45",
+  "pbwSha256": "274f95db1ec1e2b931b144a1b63b0a34eb2a089ff8dae09e4b533b2c147a07ef",
+  "nativePayloadSha256": {
+    "emery/app_resources.pbpack": "8e3ec3660e80de2c2585ccbd07345f17e7f5cd188f13d11c6f4b7305a4ef3413",
+    "emery/manifest.json": "4b4b3661bde5f4878aff48189a164dc60399d001089b55410a99372b24dec9d1",
+    "emery/pebble-app.bin": "a18f301e35748626ae5f983491e51e3acfa9670e9182e2b63ad6fefe90153de2"
+  },
+  "nativeReports": {
+    "composition/emulator.json": {
+      "captures": 13,
+      "checks": 3,
+      "sha256": "d353df61106de277cc0f863ae7aeef85f1359418fa15742084eeba9d2af47db2"
+    },
+    "native-ux/emulator.json": {
+      "captures": 56,
+      "checks": 11,
+      "sha256": "cb248b7096a320ad4dab07a68c6c35a5056c624ce95d8f3a152db495f201538e"
+    },
+    "native-activities/emulator.json": {
+      "captures": 16,
+      "checks": 5,
+      "sha256": "e3102c2dec8c77d825382e4267a15bec9fb7e58659f45b49ac3dc92b46e067cd"
+    }
+  },
+  "fullHeightActionRail": {
+    "x": [
+      166,
+      199
+    ],
+    "y": [
+      0,
+      227
+    ],
+    "headerAndFooterConfinedToContent": true,
+    "clockFontPointSize": 26,
+    "clockInkHeight": 19,
+    "palette": "Original contrasting Light/Dark; Timer alarm retains dark-gray"
+  },
+  "buildAndAutomatedTests": "PASS",
+  "packagedRuntimeChecks": "PASS",
+  "earlierArtifactsByteIdentical": 9,
+  "identityProtocolPermissionsUnchanged": true,
+  "phoneControllerUnchanged": true,
+  "freshBrowserVerified": false,
+  "realPhoneVerified": false,
+  "physicalWatchVerified": false,
+  "pushedOrPublished": false,
+  "textInkAudit": {
+    "report": "layout-pixels.json",
+    "measurements": 203
+  },
+  "qaSamplingNote": "An initial full-height assertion sampledx198 inside a legitimate held launch glyph. Final assertions check uninterrupted left-edge columns and the full top/bottom strips; icons may occupy their interior. No production change was needed."
+}

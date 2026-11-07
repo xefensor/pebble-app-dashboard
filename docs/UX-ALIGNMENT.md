@@ -1,3 +1,8 @@
+The current local0.6.2 review revision restores a continuous contrasting action
+rail from y0to227. Header text/divider fit inside166px with the same readable
+26pt clock; Home and collection position are concise context labels.
+See [current design/evidence](REDESIGN.md). Older geometry below is historical.
+
 # Dashboard UI/UX alignment
 
 Dashboard **0.6.1 is a local readability correction** on

@@ -1,0 +1,6 @@
+
+> pebble-app-dashboard@0.6.2 check:artifact
+> python3 scripts/check-artifact.py
+
+Dashboard packaged artifact: PASS
+274f95db1ec1e2b931b144a1b63b0a34eb2a089ff8dae09e4b533b2c147a07ef Dashboard-0.6.2.pbw

@@ -1,7 +1,7 @@
 # Dashboard
 
 A stock Pebble watchapp for current activities, the latest available notification
-and pinned readings/actions. **Dashboard 0.6.1 is a local Emery readability correction**
+and pinned readings/actions. **Dashboard 0.6.2 is a local Emery readability correction**
 on `design/pebble-native-redesign`; see the [redesign review](docs/REDESIGN.md). The published 0.4.3 development prerelease
 remains available below.
 
@@ -13,19 +13,19 @@ its package and import name remains `pebble-activities`.
 The native app, phone runtime and bundled settings page are implemented in
 [xefensor/pebble-app-dashboard](https://github.com/xefensor/pebble-app-dashboard).
 Current build and portable/emulator checks are recorded under
-[docs/qa/0.6.1](docs/qa/0.6.1). Real-phone permissions/provider integration and
+[docs/qa/0.6.2](docs/qa/0.6.2). Real-phone permissions/provider integration and
 physical-watch comfort/battery still need device testing. Synthetic SDK/emulator
 fixtures are not evidence of live phone operation.
 
-## Local 0.6.1 readability correction
+## Local 0.6.2 readability correction
 
-The local package is `dist/Dashboard-0.6.1.pbw`, with its matching debug archive
+The local package is `dist/Dashboard-0.6.2.pbw`, with its matching debug archive
 and checksums in `dist/`. It has not been pushed or published.
 
 - Native typography uses one coherent Roboto Condensed Bold utility family and
   Fredoka values, with ink-centered boxes and immediate full-width selection.
 - Every native screen keeps local time on the right. Collections show their
-  position in a readable full-width header; errors and app hints keep the clock and
+  position in a readable content-column header; errors and app hints keep the clock and
   both Snapshot pins visible.
 - Confirmations name the action and target. **Cancel** is selected initially;
   Down chooses Run action, Select runs only the original bound request, and
@@ -47,7 +47,7 @@ The legacy return-URL configuration fallback still closes to deliver its save;
 it cannot claim in-page persistence confirmation. The modern bundled page owns
 the confirmed stay-open workflow. Timer controls remain deferred.
 
-See the [implementation and validation record](docs/qa/0.6.1/VALIDATION.md).
+See the [implementation and validation record](docs/qa/0.6.2/VALIDATION.md).
 
 ## Try the build
 

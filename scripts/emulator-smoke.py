@@ -199,7 +199,12 @@ def run(pbw,output,expected_sha256=None,notifications_only=False,ux_only=False,r
         # Ordinary scenes settle transient success feedback; explicit UX scenes
         # use a short delay to retain their pending/error/preview state.
         time.sleep(settle);rows=Screenshot(p).grab_image();assert len(rows)==228 and all(len(x)==600 for x in rows)
-        rgb=b''.join(rows);path=output/(name+'.png');Image.frombytes('RGB',(200,228),rgb).save(path)
+        rgb=b''.join(rows)
+        rail=rgb[(100*200+199)*3:(100*200+200)*3]
+        assert rail in (b'\x00\x00\x00',b'\xff\xff\xff'),name+' action-rail palette'
+        assert all(rgb[(y*200+x)*3:(y*200+x+1)*3]==rail for y in range(228) for x in (166,167)),name+' full-height action rail'
+        assert all(rgb[(y*200+x)*3:(y*200+x+1)*3]==rail for y in list(range(30))+list(range(202,228)) for x in range(166,200)),name+' rail must reach top and bottom edges'
+        path=output/(name+'.png');Image.frombytes('RGB',(200,228),rgb).save(path)
         captures.append({'name':name,'file':path.name,'sha256':digest(path.read_bytes()),'rgbSha256':digest(rgb),'pixels':[200,228],'nativePixelsModified':False})
         print('Native capture:',name,flush=True);return rgb
     def counts():return len(peer.actions),len(peer.opens)

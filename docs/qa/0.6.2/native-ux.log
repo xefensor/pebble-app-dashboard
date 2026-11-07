@@ -1,0 +1,68 @@
+Emery QEMU connected through local FIFOs; no phone runtime
+N/A%[=                                                      ]   0.0 B/s 0:00:00
+N/A%[=                                                    ]  38.9 KiB/s 0:00:00
+N/A%[=                                                    ] 129.8 KiB/s 0:00:00
+N/A%[=                                                    ] 135.3 KiB/s 0:00:00
+N/A%[=                                                    ] 150.1 KiB/s 0:00:00
+N/A%[=                                                    ] 154.0 KiB/s 0:00:00
+N/A%[=                                                    ] 163.0 KiB/s 0:00:00
+N/A%[=                                                    ] 168.7 KiB/s 0:00:00
+N/A%[=                                                    ] 172.3 KiB/s 0:00:00
+N/A%[=                                                    ] 148.8 KiB/s 0:00:01
+Native capture: first-use-button-guide
+Native capture: first-use-guide-dismissed
+Native capture: guide-dismissed-after-restart
+Native capture: activities-title-count-clock
+Native capture: pinned-title-count-clock
+Native capture: second-pin-ready
+Native capture: snapshot-dark
+Native capture: snapshot-light
+Native capture: second-pin-pending
+Native capture: second-pin-success
+Native capture: second-pin-failure
+Native capture: reading-permission-action-available
+Native capture: held-select-app-preview
+Native capture: confirmation-target-sidebar
+Native capture: confirmation-target-sidebar-dark
+Native capture: confirmation-explicit-run-choice
+Native capture: generic-controls-visible-slots
+Native capture: generic-sparse-controls-visible-slots
+Native capture: sparse-control-focus-removed
+Native capture: generic-single-control-visible-slots
+Native capture: snapshot-idle-neutral
+Native capture: motion-list-before
+Native capture: motion-direction-pressed
+Native capture: motion-selection-release-0
+Native capture: motion-selection-release-1
+Native capture: motion-selection-release-2
+Native capture: motion-selection-release-3
+Native capture: motion-selection-release-4
+Native capture: motion-selection-settled
+Native capture: motion-idle-rest
+Native capture: activities-list-dark
+Native capture: activities-list-light
+Native capture: motion-immediate-select-settled
+Native capture: layout-normal-notice-selected
+Native capture: layout-normal-first-pin-selected
+Native capture: layout-czech-primary-selected-light
+Native capture: layout-czech-notice-selected-light
+Native capture: layout-czech-first-pin-selected-light
+Native capture: layout-czech-second-pin-selected-light
+Native capture: layout-czech-primary-selected-dark
+Native capture: layout-czech-notice-selected-dark
+Native capture: layout-czech-first-pin-selected-dark
+Native capture: layout-czech-second-pin-selected-dark
+Native capture: layout-full-accent-primary-selected-dark
+Native capture: layout-full-accent-primary-selected-light
+Native capture: layout-czech-media-light
+Native capture: layout-czech-media-dark
+Native capture: layout-media-normal-light
+Native capture: layout-media-normal-dark
+Native capture: layout-accented-list-first
+Native capture: layout-accented-list-fifth
+Native capture: layout-accented-list-reverse
+Native capture: layout-accented-list-next-page
+Native capture: layout-accented-list-last
+Native capture: layout-accented-list-last-reverse
+Native capture: layout-back-restores-snapshot-selection
+Dashboard native emulator smoke PASS: 56 captures, 11 behavior checks

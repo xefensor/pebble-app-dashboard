@@ -1,0 +1,32 @@
+Emery QEMU connected through local FIFOs; no phone runtime
+N/A%[=                                                      ]   0.0 B/s 0:00:00
+N/A%[=                                                    ]  67.0 KiB/s 0:00:00
+N/A%[=                                                    ] 130.1 KiB/s 0:00:00
+N/A%[=                                                    ] 147.4 KiB/s 0:00:00
+N/A%[=                                                    ] 140.5 KiB/s 0:00:00
+N/A%[=                                                    ] 152.6 KiB/s 0:00:00
+N/A%[=                                                    ] 161.9 KiB/s 0:00:00
+N/A%[=                                                    ] 164.0 KiB/s 0:00:00
+N/A%[=                                                    ] 165.5 KiB/s 0:00:00
+N/A%[=                                                    ] 167.3 KiB/s 0:00:00
+N/A%[=                                                    ] 168.9 KiB/s 0:00:00
+N/A%[=                                                    ] 170.2 KiB/s 0:00:00
+N/A%[=                                                    ] 171.3 KiB/s 0:00:00
+N/A%[=                                                    ] 147.7 KiB/s 0:00:01
+Native capture: first-use-button-guide
+Native capture: first-use-guide-dismissed
+Native capture: guide-dismissed-after-restart
+Native capture: activities-title-count-clock
+Native capture: pinned-title-count-clock
+Native capture: media-primary-active-unselected
+Native capture: media-primary-paused-unselected
+Native capture: media-paused-no-artist
+Native capture: media-active-no-artist
+Native capture: media-paused-activity-list
+Native capture: standard-media-icon-countdown
+Native capture: standard-media-icon-stop-controls
+Native capture: withdrawn-selection-inert
+Native capture: withdrawn-selection-repeated-frame-inert
+Native capture: withdrawn-selection-navigation-recovered
+Native capture: withdrawn-selection-collection-recovered
+Dashboard native emulator smoke PASS: 16 captures, 5 behavior checks

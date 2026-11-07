@@ -292,16 +292,19 @@ static void header(GContext *ctx){
     else snprintf(context,sizeof(context),"%u/%u",s_state.snapshot.total?s_state.selected_index+1:0,s_state.snapshot.total);
     status=context;
   }
-  // The header owns all 200px. Keep one readable context line instead of
-  // squeezing tiny title/status rows next to the clock inside the content rail.
-  if(collection&&!s_state.loading){
-    int count_width=width_of(context,4);text_box(ctx,title,5,GRect(6,0,120-count_width,30),foreground(),GTextAlignmentLeft);
-    text_box(ctx,context,4,GRect(130-count_width,0,count_width,30),foreground(),GTextAlignmentRight);
-  }else text_box(ctx,status?status:title,status?4:5,GRect(6,0,124,30),foreground(),GTextAlignmentLeft);
+  // The header is confined to the content column; the action rail is full height.
+  // Collection position is more useful here than repeating the list's app name.
+  if(collection&&!s_state.loading)text_box(ctx,context,4,GRect(6,0,82,30),foreground(),GTextAlignmentLeft);
+  else {
+    const char *compact=title;
+    if(!strcmp(title,"Dashboard"))compact="Home";
+    else if(!strcmp(title,"Activities"))compact="Activity";
+    text_box(ctx,status?status:compact,status?4:5,GRect(6,0,82,30),foreground(),GTextAlignmentLeft);
+  }
   char right[16];time_t now=time(NULL);struct tm *local=localtime(&now);
   strftime(right,sizeof(right),clock_is_24h_style()?"%H:%M":"%I:%M",local);
   if(!clock_is_24h_style()&&right[0]=='0')memmove(right,right+1,strlen(right));
-  text_box(ctx,right,13,GRect(132,0,62,30),foreground(),GTextAlignmentRight);segment(ctx,5,29,195,29,stroke());
+  text_box(ctx,right,13,GRect(94,0,66,30),foreground(),GTextAlignmentRight);segment(ctx,5,29,160,29,stroke());
 }
 static bool control_available(const DbItem *item,unsigned index){const uint16_t bits[]={DB_MEDIA_PREVIOUS,DB_MEDIA_TOGGLE,DB_MEDIA_NEXT};return item&&index<3&&(item->flags&bits[index])&&db_item_actionable(item,utc_now());}
 static void item_value(const DbItem *item,char *value,size_t size){
@@ -470,7 +473,7 @@ static void action_icon(GContext *ctx,const DbItem *item,unsigned action,int x,i
   else check_icon(ctx,x,y,ink);
 }
 static void action_bar(GContext *ctx){
-  GColor ink=background();int center=CONTENT_W+ACTION_BAR_WIDTH/2,x=center+s_buttons[1].offset;fill(ctx,GRect(CONTENT_W,30,ACTION_BAR_WIDTH,SCREEN_H-30),foreground(),0);
+  GColor ink=background();int center=CONTENT_W+ACTION_BAR_WIDTH/2,x=center+s_buttons[1].offset;fill(ctx,GRect(CONTENT_W,0,ACTION_BAR_WIDTH,SCREEN_H),foreground(),0);
   if(s_guide){check_icon(ctx,x,114,ink);return;}
   if(!s_command.confirmation){direction_icon(ctx,center+s_buttons[0].offset,39,-1,ink);direction_icon(ctx,center+s_buttons[2].offset,190,1,ink);}
   if(s_state.loading||!s_state.ready)return;
