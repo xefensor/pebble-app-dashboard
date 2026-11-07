@@ -1,0 +1,61 @@
+{
+  "name": "Bug report",
+  "description": "Report a reproducible problem in Dashboard.",
+  "body": [
+    {
+      "type": "input",
+      "id": "version",
+      "attributes": {
+        "label": "App version",
+        "description": "Use the exact version or commit you tested."
+      },
+      "validations": {
+        "required": true
+      }
+    },
+    {
+      "type": "textarea",
+      "id": "environment",
+      "attributes": {
+        "label": "Watch, phone and connection",
+        "description": "Include watch model/firmware, phone OS/app version, and whether this happened on an emulator or physical device."
+      },
+      "validations": {
+        "required": true
+      }
+    },
+    {
+      "type": "textarea",
+      "id": "reproduction",
+      "attributes": {
+        "label": "Steps to reproduce",
+        "description": "Give the smallest sequence that reproduces the problem."
+      },
+      "validations": {
+        "required": true
+      }
+    },
+    {
+      "type": "textarea",
+      "id": "result",
+      "attributes": {
+        "label": "Expected and actual behavior",
+        "description": "Describe what you expected and what happened."
+      },
+      "validations": {
+        "required": true
+      }
+    },
+    {
+      "type": "textarea",
+      "id": "evidence",
+      "attributes": {
+        "label": "Logs or screenshots",
+        "description": "Optional. Remove private notification text, media details, tokens and other personal information before sharing."
+      },
+      "validations": {
+        "required": false
+      }
+    }
+  ]
+}
