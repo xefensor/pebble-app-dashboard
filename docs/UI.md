@@ -16,8 +16,9 @@ concise wording such as "Home" and "Action" rather than reducing the font.
 First-use instructions retain all six complete control descriptions.
 
 On Emery, the 34 px rail uses y=54/114/174 centers and one 18 px icon grid. Held
-icons move 5 px toward the content; release settles over a bounded 144 ms cubic
-curve. Selection surfaces fill the content column with rectangular edges.
+icons move 5 px toward the content; release follows the stock SDK's bounded
+144 ms quadratic EaseOut curve at its 33 ms frame interval. Selection surfaces
+fill the content column with rectangular edges.
 Confirmation choices share Timer's y=160/196 positions, 30 px height, 36 px
 stride and left-aligned 24-point labels. "Cancel" remains the initial choice.
 

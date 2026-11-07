@@ -66,7 +66,7 @@ static void settle_button_releases(void){
   repaint();
 }
 static void release_frame(void *context){
-  (void)context;s_button_motion_timer=NULL;uint32_t now=input_milliseconds(),next=30;bool pending=false;
+  (void)context;s_button_motion_timer=NULL;uint32_t now=input_milliseconds(),next=XOCE_UI_PRESS_FRAME_MS;bool pending=false;
   for(unsigned i=0;i<3;i++){
     ButtonMotion *button=&s_buttons[i];if(!button->releasing)continue;
     uint32_t elapsed=now-button->started;
@@ -89,7 +89,7 @@ static void button_released(ButtonId id){
   ButtonMotion *button=&s_buttons[id-BUTTON_ID_UP];if(!button->held)return;button->held=false;
   if(!s_focused){button->offset=0;return;}
   button->started=input_milliseconds();button->releasing=true;
-  if(!s_button_motion_timer)s_button_motion_timer=app_timer_register(30,release_frame,NULL);
+  if(!s_button_motion_timer)s_button_motion_timer=app_timer_register(XOCE_UI_PRESS_FRAME_MS,release_frame,NULL);
   if(!s_button_motion_timer)settle_button_releases();
   repaint();
 }

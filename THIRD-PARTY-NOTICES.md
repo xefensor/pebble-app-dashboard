@@ -17,7 +17,7 @@ production build output contains no fixture content.
 
 ## XOCE shared UI
 
-The locally pinned `pebble-xoce-ui` 0.1.0 library supplies shared native drawing
+The locally pinned `pebble-xoce-ui` 0.1.1-dev.0 library supplies shared native drawing
 and phone-settings styles. It is authored by Xef and uses the same PolyForm
 Noncommercial license as this application. Its sources and license are included
 in the committed vendor archive; it is not a separately installed service.
