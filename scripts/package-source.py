@@ -43,6 +43,8 @@ destination = root / 'dist' / ('Dashboard-' + version + '-source.zip')
 if args.check:
     assert destination.read_bytes() == buffer.getvalue(), 'Source archive is stale.'
 else:
+    if destination.exists():
+        raise ValueError('Frozen source archive exists; use a new version, not a documentation rebuild.')
     destination.parent.mkdir(exist_ok=True)
     destination.write_bytes(buffer.getvalue())
     artifacts = [root / 'dist' / ('Dashboard-' + version + suffix) for suffix in ('.pbw', '-debug.zip', '-source.zip')]

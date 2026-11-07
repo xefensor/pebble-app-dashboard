@@ -1,13 +1,19 @@
 #!/usr/bin/env python3
 """Verify installable identity, config, pinned library and permissions."""
 from pathlib import Path
+import argparse
+from repo_workflow import candidate, check_build
 import hashlib
 import json
 import zipfile
 
 root = Path(__file__).resolve().parents[1]
 package = json.loads((root / 'package.json').read_text())
-path = root / 'dist' / ('Dashboard-' + package['version'] + '.pbw')
+parser=argparse.ArgumentParser(description=__doc__)
+parser.add_argument('--pbw',type=Path,default=candidate(root, 'Dashboard'))
+args=parser.parse_args()
+check_build(root,args.pbw)
+path = args.pbw
 with zipfile.ZipFile(path) as archive:
     names = archive.namelist()
     assert len(names) == len(set(names)), 'duplicate archive entries'

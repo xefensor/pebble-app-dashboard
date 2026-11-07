@@ -8,6 +8,8 @@ import subprocess
 import zipfile
 
 root = Path(__file__).resolve().parents[1]
+from repo_workflow import build_output
+output_directory = build_output(root, 'Dashboard')
 package = json.loads((root / 'package.json').read_text())
 fixture = os.environ.get('DASHBOARD_FIXTURE') == '1'
 subprocess.run(['node', str(root / 'scripts/generate-config.cjs')], cwd=root, check=True)
@@ -32,8 +34,8 @@ for name in ('OFL-Fredoka.txt', 'OFL-RobotoCondensed.txt'):
     entries['licenses/' + name] = (root / 'resources/fonts' / name).read_bytes()
 entries['licenses/pebble-activities-LICENSE.txt'] = (root / 'node_modules/pebble-activities/LICENSE').read_bytes()
 suffix = '-fixture' if fixture else ''
-destination = root / 'dist' / ('Dashboard-' + package['version'] + suffix + '.pbw')
-destination.parent.mkdir(exist_ok=True)
+destination = output_directory / ('Dashboard-' + package['version'] + suffix + '.pbw')
+destination.parent.mkdir(parents=True, exist_ok=True)
 debug_path = destination.with_name(destination.stem + '-debug.zip')
 debug['build.json'] = json.dumps({'version': package['version'], 'fixture': fixture,
     'sources': {str(path.relative_to(root)): hashlib.sha256(path.read_bytes()).hexdigest()
@@ -46,7 +48,9 @@ for path, contents in ((destination, entries), (debug_path, debug)):
             item.external_attr = 0o644 << 16
             output.writestr(item, content)
 paths = (destination, debug_path)
-(root / 'dist' / ('SHA256SUMS-' + package['version'] + suffix + '.txt')).write_text(''.join(
+(output_directory / ('SHA256SUMS-' + package['version'] + suffix + '.txt')).write_text(''.join(
     hashlib.sha256(path.read_bytes()).hexdigest() + '  ' + path.name + '\n' for path in paths))
+from repo_workflow import record_build
+record_build(root, destination, debug_path)
 print(destination)
 print(debug_path)

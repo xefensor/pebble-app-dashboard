@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 """Inspect actual native fixture pixels, independently of C line-box positions."""
 from pathlib import Path
+from repo_workflow import candidate as candidate_pbw, qa_output
 import hashlib,json
 from PIL import Image
 
 ROOT=Path(__file__).resolve().parents[1]
 VERSION=json.loads((ROOT/'package.json').read_text())['version']
-DIR=ROOT/'docs/qa'/VERSION/'native-ux'
+DIR=qa_output(ROOT, '')/'native-ux'
 rows=[];captures={}
 def sha(data):return hashlib.sha256(data).hexdigest()
 def load(name):
@@ -136,7 +137,7 @@ for stem in ('activities-list-light','activities-list-dark'):
     assert min(margins(group,box).values())>=3,(stem,group,box)
     rows.append({'capture':stem+'.png','role':'Normal selected Media collection row','box':box,'ink':group,'margins':margins(group,box),'verticalCenterDifferencePixels':abs(center(group)-center(box))})
 
-report={'result':'PASS','version':VERSION,'candidatePbwSha256':sha((ROOT/'dist'/('Dashboard-'+VERSION+'.pbw')).read_bytes()),
+report={'result':'PASS','version':VERSION,'candidatePbwSha256':sha((candidate_pbw(ROOT, 'Dashboard')).read_bytes()),
         'scope':'Actual unchanged native fixture PNG ink bounds. English/Czech selected/unselected Snapshot, full-accent tight case, Media title/artist/artwork and explicit preview hint, normal/adaptive collections, generic controls and confirmation. This is not a browser, phone or physical-watch measurement.',
         'captures':captures,'measurements':rows}
 (DIR.parent/'layout-pixels.json').write_text(json.dumps(report,indent=2)+'\n')

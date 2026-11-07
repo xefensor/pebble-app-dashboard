@@ -4,8 +4,8 @@
 const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),cp=require('node:child_process');
 const assert=require('node:assert/strict'),crypto=require('node:crypto');
 const root=path.resolve(__dirname,'..'),pkg=require('../package.json');
-const pbw=path.join(root,'dist','Dashboard-'+pkg.version+'.pbw'),packed=path.join(root,'build/packaged-check');
-const qaOutput=path.join(root,'docs/qa',pkg.version);
+const pbw=path.resolve(process.env.PEBBLE_PBW || path.join(root, 'build/candidate', 'Dashboard-' + pkg.version + '.pbw')),packed=path.join(root,'build/packaged-check');
+const qaOutput=path.resolve(process.env.PEBBLE_QA_OUTPUT_ROOT||path.join(root,'build/qa'));
 fs.mkdirSync(packed,{recursive:true});
 cp.execFileSync('python3',['-c','import zipfile,sys,pathlib\nz=zipfile.ZipFile(sys.argv[1]);out=pathlib.Path(sys.argv[2])\nfor n in ("pebble-js-app.js","plugin.js","appinfo.json"): (out/n).write_bytes(z.read(n))',pbw,packed]);
 const protocol=require('../src/pkjs/protocol'),settings=require('../src/pkjs/settings'),summary=require('pebble-activities/summary');

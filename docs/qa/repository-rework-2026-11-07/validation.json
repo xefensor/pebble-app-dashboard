@@ -1,0 +1,42 @@
+{
+  "date": "2026-11-07",
+  "scope": "Repository maintenance; preserve features, accepted UI, public API, dependency pins and frozen releases.",
+  "portableChecks": "PASS",
+  "checksRun": [
+    "npm test",
+    "npm run check:docs",
+    "npm run build",
+    "npm run test:workflow",
+    "npm run check:artifact"
+  ],
+  "preservation": {
+    "baseline": "b7fe6c2d5b60c3559832377347f2c4a08e31ea91",
+    "protectedFilesChecked": 761,
+    "result": "PASS",
+    "packageMetadataUnchangedExceptScripts": true
+  },
+  "sdkBuild": "PASS",
+  "nativeEvidence": [
+    {
+      "report": "native-emulator.json",
+      "source": "pebble-app-dashboard/build/qa/native/emulator.json",
+      "sha256": "f4940bd8f928f46d42436bfac17b5c963aa0fa827471fe16936dd60a8967e9d6"
+    },
+    {
+      "report": "packaged-runtime.json",
+      "source": "pebble-app-dashboard/build/qa/packaged-runtime.json",
+      "sha256": "b9f86f7d5683e0b7846a4b5ec175d015a48880a1515e0275e53547d221be5f23"
+    }
+  ],
+  "evidencePolicy": "New development PBWs, captures and package tarballs are disposable under build/. These reports record this run; original versioned evidence and artifacts were not overwritten.",
+  "browserVerification": "No fresh browser execution in this maintenance pass. Existing browser evidence remains historical.",
+  "physicalDeviceVerification": false,
+  "pushed": false,
+  "published": false,
+  "nativeCommands": [
+    "python3 scripts/emulator-smoke.py --composition-only"
+  ],
+  "additionalChecks": [
+    "node scripts/check-packaged.cjs"
+  ]
+}

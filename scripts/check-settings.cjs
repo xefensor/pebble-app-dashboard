@@ -7,7 +7,7 @@ const {spawn,execFileSync}=require('node:child_process'),{pathToFileURL}=require
 const root=path.resolve(__dirname,'..');
 const version=JSON.parse(fs.readFileSync(path.join(root,'package.json'),'utf8')).version;
 const outputOption=process.argv.indexOf('--output');
-const output=outputOption<0?path.join(root,'docs/qa',version,'settings'):path.resolve(process.argv[outputOption+1]);
+const output=outputOption<0?path.join(process.env.PEBBLE_QA_OUTPUT_ROOT||path.join(root,'build/qa'),'settings'):path.resolve(process.argv[outputOption+1]);
 const reproduceWeatherReopen=process.argv.includes('--reproduce-weather-reopen');
 const model=require('../src/pkjs/settings');
 const PLUGIN='00aabbcc-2233-4455-6677-889900aabbcc';

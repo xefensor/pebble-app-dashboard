@@ -1,8 +1,13 @@
 # Dashboard
 
+Main contains the current implementation. [Development](CONTRIBUTING.md),
+[current maintenance contracts](docs/MAINTENANCE.md) and [release policy](docs/RELEASING.md)
+are the active contributor references. Public downloads and frozen evidence keep
+their original versions; a merge to main is not publication.
+
 A stock Pebble watchapp for current activities, the latest available notification
-and pinned readings/actions. **Dashboard 0.6.2 is a local Emery readability correction**
-on `design/pebble-native-redesign`; see the [redesign review](docs/REDESIGN.md). The published 0.4.3 development prerelease
+and pinned readings/actions. **Dashboard 0.6.2 includes the merged Emery readability improvements**
+on `main`; see the [redesign review](docs/REDESIGN.md). The published 0.4.3 development prerelease
 remains available below.
 
 Part of **XOCE — Xef's Open Computing Ecosystem**. The shared Activities
@@ -17,7 +22,7 @@ Current build and portable/emulator checks are recorded under
 physical-watch comfort/battery still need device testing. Synthetic SDK/emulator
 fixtures are not evidence of live phone operation.
 
-## Local 0.6.2 readability correction
+## Current merged UI 0.6.2
 
 The local package is `dist/Dashboard-0.6.2.pbw`, with its matching debug archive
 and checksums in `dist/`. It has not been pushed or published.
@@ -262,34 +267,8 @@ immediately. Old session frames, expired bindings and stale commands are rejecte
 
 ## Build and validate
 
-Use Pebble SDK 4.33.1, Node.js, Python 3 and a C99 compiler:
-
-Browser QA additionally needs Node 22+ (global WebSocket) and Chromium at
-`/usr/bin/chromium`, or a path supplied through `CHROMIUM_BINARY`.
-
-```sh
-npm ci --ignore-scripts
-npm test
-npm run build
-npm run check:artifact
-node scripts/check-packaged.cjs
-node scripts/check-settings.cjs
-```
-
-In this shared workspace, first source `../recovery-validation/env.sh` to keep
-mutable SDK state inside the workspace. Use `npm run build` to package the
-permissions, plugin/config and notices; a bare SDK build is incomplete.
-
-`scripts/emulator-smoke.py` uses isolated stock-derived Emery QEMU and an explicit
-fictional phone peer. It installs no physical device and sends no real phone
-commands. Packaged-JS checks separately execute actual PBW scripts against an
-isolated SDK model and the pinned Activities provider/consumer. Portable C tests
-cross-decode JS fixtures and cover malformed/stale/expiry/navigation cases.
-Sanitizers: `python3 scripts/test-native.py --sanitize`; disable LeakSanitizer only
-where the sandbox cannot support its ptrace mechanism.
-
-Production excludes native fixtures. `DASHBOARD_FIXTURE=1` produces a separately
-named synthetic UI fixture build, not the real app.
+Use [CONTRIBUTING](CONTRIBUTING.md) for current setup, safe candidate builds and
+verification. Release preparation is a separate [explicit workflow](docs/RELEASING.md).
 
 ## Design previews
 

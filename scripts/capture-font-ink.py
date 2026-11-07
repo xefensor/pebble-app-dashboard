@@ -5,12 +5,13 @@ This QA app has a distinct UUID and no sources/actions. No firmware font pointer
 or private structure is read. Run in the workspace recovery SDK environment.
 """
 from pathlib import Path
+from repo_workflow import candidate as candidate_pbw, qa_output
 import argparse, hashlib, json, os, struct, subprocess, sys, tempfile, threading, time, uuid
 
 ROOT=Path(__file__).resolve().parents[1]
 VERSION=json.loads((ROOT/'package.json').read_text())['version']
 parser=argparse.ArgumentParser(description=__doc__)
-parser.add_argument('--output',type=Path,default=ROOT/'docs/qa'/VERSION/'font-ink')
+parser.add_argument('--output',type=Path,default=qa_output(ROOT, '')/'font-ink')
 args=parser.parse_args()
 output=args.output.resolve();output.mkdir(parents=True,exist_ok=True)
 probe=ROOT/'scripts/font-probe'

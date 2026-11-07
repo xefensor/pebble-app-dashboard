@@ -6,6 +6,7 @@ The installed native-only PBW retains exact native bytes of --pbw. Use the local
 SDK environment: source ../recovery-validation/env.sh; python3 scripts/emulator-smoke.py.
 """
 from pathlib import Path
+from repo_workflow import candidate as candidate_pbw, qa_output
 import argparse
 import copy
 import hashlib
@@ -893,8 +894,8 @@ item.token=91;item.version=1;process.stdout.write(JSON.stringify(item));
 
 if __name__=='__main__':
     parser=argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--pbw',type=Path,default=ROOT/('dist/Dashboard-'+VERSION+'.pbw'))
-    parser.add_argument('--output',type=Path,default=ROOT/('docs/qa/'+VERSION+'/native'))
+    parser.add_argument('--pbw',type=Path,default=candidate_pbw(ROOT, 'Dashboard'))
+    parser.add_argument('--output',type=Path,default=qa_output(ROOT, 'native'))
     parser.add_argument('--expected-sha256',help='Require these exact candidate bytes before installing')
     parser.add_argument('--notifications-only',action='store_true',help='Focused empty Notifications navigation, expiry and app-open checks')
     parser.add_argument('--motion-only',action='store_true',help='Focused press/release and anchored selection pixel checks')
