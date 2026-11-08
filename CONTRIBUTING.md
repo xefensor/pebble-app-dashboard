@@ -1,5 +1,7 @@
 # Developing Dashboard
 
+Follow the [XOCE contributor conventions](https://github.com/xefensor/xoce/blob/main/docs/contributor-conventions.md). Project-specific commands and exceptions are below.
+
 ## Select the development environment
 
 This checkout selects **Node 22.23.4** in `.node-version` and **Python 3.12.15** in
