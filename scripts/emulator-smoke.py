@@ -29,13 +29,14 @@ sys.path.insert(0,str(ROOT.parent/'recovery-validation'))
 def digest(data):return hashlib.sha256(data).hexdigest()
 
 
-def run(pbw,output,expected_sha256=None,notifications_only=False,ux_only=False,reliability_only=False,paused_repro=False,activities_only=False,startup_theme_only=False,motion_only=False,composition_only=False):
+def run(pbw,output,expected_sha256=None,notifications_only=False,ux_only=False,reliability_only=False,paused_repro=False,activities_only=False,startup_theme_only=False,motion_only=False,composition_only=False,native_sizes=False,confirmation_only=False):
     from pipe_emulator import connect
     from libpebble2.services.appmessage import AppMessageService,Uint32,ByteArray,CString
     from libpebble2.services.screenshot import Screenshot
+    from libpebble2.protocol.logs import AppLogMessage,AppLogShippingControl
     from libpebble2.protocol.apps import AppRunState,AppRunStateRequest,AppRunStateStart,AppRunStateStop
     from libpebble2.protocol.system import TimeMessage,SetUTC
-    from libpebble2.communication.transports.qemu.protocol import QemuButton,QemuBluetoothConnection,QemuBattery
+    from libpebble2.communication.transports.qemu.protocol import QemuButton,QemuBluetoothConnection,QemuBattery,QemuContentSize
     from pebble_tool.commands.emucontrol import send_data_to_qemu
     from pebble_tool.commands.install import ToolAppInstaller
     from PIL import Image
@@ -60,7 +61,9 @@ def run(pbw,output,expected_sha256=None,notifications_only=False,ux_only=False,r
         assert all(archive.read(name)==data for name,data in payload.items())
     target=uuid.UUID(appinfo['uuid']);keys=appinfo['messageKeys']
     encoder=subprocess.Popen(['node',str(ROOT/'tests/native-peer.cjs')],cwd=ROOT,stdin=subprocess.PIPE,stdout=subprocess.PIPE,text=True,bufsize=1)
-    p=connect();service=AppMessageService(p)
+    p=connect();service=AppMessageService(p);native_logs=[]
+    p.register_endpoint(AppLogMessage,lambda packet:native_logs.append(packet.message))
+    p.send_packet(AppLogShippingControl(enable=True))
     condition=threading.Condition();receipts={};requests=[];errors=[];captures=[];proofs=[];theme_samples=[]
     pending=queue.Queue();send_lock=threading.Lock();encoder_lock=threading.Lock()
     stopped=threading.Event()
@@ -201,6 +204,7 @@ def run(pbw,output,expected_sha256=None,notifications_only=False,ux_only=False,r
         # use a short delay to retain their pending/error/preview state.
         time.sleep(settle);rows=Screenshot(p).grab_image();assert len(rows)==228 and all(len(x)==600 for x in rows)
         rgb=b''.join(rows)
+        Image.frombytes('RGB',(200,228),rgb).save(output/(name+'-raw.png'))
         rail=rgb[(100*200+199)*3:(100*200+200)*3]
         assert rail in (b'\x00\x00\x00',b'\xff\xff\xff'),name+' action-rail palette'
         assert all(rgb[(y*200+x)*3:(y*200+x+1)*3]==rail for y in range(228) for x in (166,167)),name+' full-height action rail'
@@ -217,17 +221,22 @@ def run(pbw,output,expected_sha256=None,notifications_only=False,ux_only=False,r
         points=[(1,10),(162,10),(1,30),(162,30)]
         for x,y in points:assert tuple(pixels[(y*200+x)*3:(y*200+x)*3+3])==background,(name,x,y,'wrong background')
         surfaces=[]
-        if name in ('snapshot-dark','snapshot-light'):
-            surfaces=[('selected second pin',(1,225),foreground),('selected second pin right edge',(162,225),foreground),('unselected first pin',(1,175),background)]
-        elif name=='confirmation-target-sidebar-dark':
-            surfaces=[('safe Cancel choice',(1,175),foreground),('unselected Run choice',(1,210),background)]
-        elif name in ('activities-list-dark','activities-list-light'):
-            surfaces=[('selected Media row',(1,100),foreground),('unselected Timer row',(1,50),background)]
-        for role,(x,y),color in surfaces:
-            assert tuple(pixels[(y*200+x)*3:(y*200+x)*3+3])==color,(name,role,x,y,'wrong selection surface')
+        if name in ('snapshot-dark','snapshot-light','confirmation-target-sidebar-dark','activities-list-dark','activities-list-light'):
+            selected=[y for y in range(36,228) if all(tuple(pixels[(y*200+x)*3:(y*200+x)*3+3])==foreground for x in (1,162))]
+            assert selected,(name,'no full-width selection')
+            bands=[]
+            for y in selected:
+                if not bands or y!=bands[-1][-1]+1:bands.append([])
+                bands[-1].append(y)
+            # Exclude single divider/shadow rows from selected surfaces.
+            bands=[band for band in bands if len(band)>=24]
+            assert len(bands)==1,(name,'expected one selected native surface',bands)
+            middle=bands[0][len(bands[0])//2]
+            surfaces=[('selected row left',(1,middle),foreground),('selected row right',(162,middle),foreground)]
+            for role,(x,y),color in surfaces:assert tuple(pixels[(y*200+x)*3:(y*200+x)*3+3])==color,(name,role)
         assert tuple(pixels[(80*200+198)*3:(80*200+198)*3+3])==foreground,(name,'sidebar contrast')
         theme_samples.append({'capture':name+'.png','dark':dark,'background':list(background),'backgroundPoints':points,'selectionSurfaces':[{'role':role,'point':point,'color':color} for role,point,color in surfaces],'sidebarPoint':[198,80],'sidebarColor':list(foreground)})
-    def themed_capture(name,dark,settle=.1):
+    def themed_capture(name,dark,settle=.45):
         pixels=capture(name,settle);theme_pixels(name,pixels,dark);return pixels
     def active_mode():return peer.view.get(key('DB_MODE')) if peer.view else None
     def snapshot_home():
@@ -316,9 +325,10 @@ def run(pbw,output,expected_sha256=None,notifications_only=False,ux_only=False,r
         assert not peer.actions[-1].get(key('DB_CONFIRM'))
         button('Back');assert len(peer.actions)==before+1
         button('Select');await_condition(lambda:len(peer.actions)==before+2,'Confirmation retry missing')
-        request_id=peer.actions[-1][key('DB_REQUEST')];button('Select');assert len(peer.actions)==before+2
+        request_id=peer.actions[-1][key('DB_REQUEST')];capture('confirmation-safe-choice-reopened',.65);button('Select');assert len(peer.actions)==before+2
+        capture('confirmation-safe-cancel-return',1.0) # The next ordinary press starts after native activation.
         button('Select');await_condition(lambda:len(peer.actions)==before+3,'Safe confirmation retry missing')
-        request_id=peer.actions[-1][key('DB_REQUEST')];button('Down');capture('confirmation-explicit-run-choice',.1);button('Select')
+        request_id=peer.actions[-1][key('DB_REQUEST')];capture('confirmation-before-explicit-choice',.65);button('Down');capture('confirmation-explicit-run-choice',.45);button('Select')
         await_condition(lambda:len(peer.actions)==before+4,'Confirmation acceptance missing')
         assert peer.actions[-1][key('DB_CONFIRM')]==1 and peer.actions[-1][key('DB_REQUEST')]==request_id and peer.actions[-1][key('DB_TOKEN')]==7
         proofs.append({'check':'Confirmation identifies Find phone and its action; safe Keep is initial, Back/Select cancel, and explicit Down then Select confirms only the original bound request','passed':True})
@@ -330,7 +340,16 @@ def run(pbw,output,expected_sha256=None,notifications_only=False,ux_only=False,r
             peer.publish();select_snapshot(activity['token']);before=len(peer.actions);button('Select')
             await_condition(lambda:active_mode()==3 and peer.frames[-1]['tokens']==[activity['token']],'Generic controls view missing')
             assert len(peer.actions)==before
-            capture(fixture_name+'-visible-slots',.1)
+            capture(fixture_name+'-visible-slots',.65)
+            if fixture_name=='generic-controls':
+                before_chord=counts()
+                send_data_to_qemu(p.transport,QemuButton(state=int(QemuButton.Button.Select)));time.sleep(.06)
+                send_data_to_qemu(p.transport,QemuButton(state=int(QemuButton.Button.Select)|int(QemuButton.Button.Down)));time.sleep(.06)
+                send_data_to_qemu(p.transport,QemuButton(state=int(QemuButton.Button.Select)));time.sleep(.12)
+                send_data_to_qemu(p.transport,QemuButton(state=0));time.sleep(.65)
+                assert counts()==before_chord,'A held Select was retargeted by a different control'
+                button('Up')
+                proofs.append({'check':'Changing command focus while Select is held cancels the entire press','passed':True})
             button('Down');button('Down');button('Select')
             await_condition(lambda:len(peer.actions)==before+1,'Generic control dispatch missing')
             assert peer.actions[-1][key('DB_ACTION')]==expected and peer.actions[-1][key('DB_TOKEN')]==activity['token']
@@ -350,6 +369,122 @@ def run(pbw,output,expected_sha256=None,notifications_only=False,ux_only=False,r
         peer.publish();select_snapshot(1)
         motion_checks()
         layout_checks()
+    def confirmation_checks():
+        snapshot_home()
+        with peer.lock:
+            weather=next(x for x in peer.pins if x['token']==4);find=next(x for x in peer.pins if x['token']==7);find['flags']|=2048
+            peer.pins=[weather,find]+[x for x in peer.pins if x['token'] not in (4,7)]
+        peer.publish();select_snapshot(7);peer.action_behavior='confirm';before=len(peer.actions)
+        button('Select');await_condition(lambda:len(peer.actions)==before+1,'Confirmation request missing');capture('focused-confirmation',.6)
+        button('Select');capture('focused-after-safe-cancel',1.0)
+        button('Select');capture('focused-after-retry',.6)
+        await_condition(lambda:len(peer.actions)==before+2,'Settled confirmation retry missing')
+        proofs.append({'check':'Safe Cancel returns to actionable exact target after native pop','passed':True})
+    def native_size_checks():
+        from PIL import ImageDraw
+        def window_input(name,button_name,held=False):
+            images=[];times=[];started=time.monotonic()
+            send_data_to_qemu(p.transport,QemuButton(state=int(getattr(QemuButton.Button,button_name))))
+            if held:time.sleep(.61)
+            else:
+                time.sleep(.045);send_data_to_qemu(p.transport,QemuButton(state=0))
+            for i,delay in enumerate((0,.06,.1,.2)):
+                time.sleep(delay);rgb=b''.join(Screenshot(p).grab_image());im=Image.frombytes('RGB',(200,228),rgb)
+                path=output/(name+'-'+str(i)+'.png');im.save(path);images.append(im);times.append(round((time.monotonic()-started)*1000))
+                captures.append({'name':path.stem,'file':path.name,'sha256':digest(path.read_bytes()),'pixels':[200,228],'nativePixelsModified':False,'duringNativeWindowTransition':True})
+            if held:
+                time.sleep(max(0,1.6-(time.monotonic()-started)));send_data_to_qemu(p.transport,QemuButton(state=0))
+            time.sleep(.45)
+            durations=[max(30,times[i+1]-times[i]) if i+1<len(times) else 500 for i in range(len(times))]
+            images[0].save(output/(name+'.gif'),save_all=True,append_images=images[1:],duration=durations,loop=0)
+        size_captures=[]
+        with peer.lock:
+            timer=next(x for x in peer.activities if x['token']==1)
+            timer.update(clockMode=0,anchor=0,baseSeconds=0,value='02:30')
+            timer['flags'] &= ~(256|512)
+        for value,label in enumerate(('small','medium','large'),1):
+            old_session=peer.session;frames=len(peer.frames)
+            p.send_packet(AppRunState(data=AppRunStateStop(uuid=target)));time.sleep(.25)
+            send_data_to_qemu(p.transport,QemuContentSize(size=value));time.sleep(.25)
+            p.send_packet(AppRunState(data=AppRunStateStart(uuid=target)))
+            await_condition(lambda:len(peer.frames)>frames and peer.session!=old_session,'Size relaunch did not handshake',12)
+            for dark in (False,True):
+                peer.dark=dark;peer.publish()
+                for token,name in ((1,'activity'),(3,'notification'),(4,'first-pin'),(6,'second-pin')):
+                    select_snapshot(token);capture(label+'-'+('dark' if dark else 'light')+'-snapshot-'+name,.45)
+            peer.dark=False;peer.publish();select_snapshot(1)
+            before=counts();window_input(label+'-native-window-push','Up',True)
+            await_condition(lambda:active_mode()==1,'Native Activities did not open')
+            assert peer.view[key('DB_INDEX')]==0,'Held entry press scrolled destination'
+            capture(label+'-activities-first',.45);size_captures.append((label,label+'-activities-first.png'))
+            for _ in range(4):button('Down')
+            assert peer.view[key('DB_INDEX')]==4,'Fifth loaded selection missing'
+            capture(label+'-activities-fifth',.45)
+            button('Up');assert peer.view[key('DB_INDEX')]==3
+            capture(label+'-activities-reverse',.45)
+            window_input(label+'-native-window-pop','Back');await_condition(lambda:active_mode()==0 and peer.view.get(key('DB_TOKEN'))==1,'Back lost Snapshot identity')
+            select_snapshot(6);button('Down',1.6)
+            assert active_mode()==2 and peer.view[key('DB_INDEX')]==0,'Held Pinned entry moved focus'
+            for _ in range(6):button('Down')
+            assert peer.view[key('DB_INDEX')]==6,'Pinned paging did not retain exact index'
+            capture(label+'-pinned-page',.45)
+            button('Up');assert peer.view[key('DB_INDEX')]==5
+            button('Back');await_condition(lambda:active_mode()==0 and peer.view.get(key('DB_TOKEN'))==6,'Paged Back lost exact Snapshot pin')
+            capture(label+'-paged-back-identity',.45)
+            assert counts()==before,'Navigation dispatched an action or app open'
+            with peer.lock:
+                saved_activities=copy.deepcopy(peer.activities);saved_pins=copy.deepcopy(peer.pins)
+                generic=copy.deepcopy(json.loads((ROOT/'tests/fixtures/generic-controls.json').read_text())['items'][0])
+                generic['controls']=['Set comfortable temperature','Return to scheduled program','Restore previous thermostat']
+                generic['flags'] |= 8192|16384|32768
+                peer.activities=[generic]+[item for item in peer.activities if item['token']!=generic['token']]
+            peer.publish();select_snapshot(generic['token']);button('Select')
+            await_condition(lambda:active_mode()==3,'Measured action detail missing')
+            capture(label+'-action-detail-first',.65);button('Down');button('Down');capture(label+'-action-detail-last',.45)
+            button('Back');await_condition(lambda:active_mode()==0,'Action detail Back failed')
+            with peer.lock:
+                peer.activities=saved_activities
+                weather=next(item for item in peer.pins if item['token']==4);find=next(item for item in peer.pins if item['token']==7);find['flags']|=2048
+                peer.pins=[weather,find]+[item for item in peer.pins if item['token'] not in (4,7)]
+                peer.action_behavior='confirm'
+            peer.publish();select_snapshot(7);before_confirmation=len(peer.actions);button('Select')
+            await_condition(lambda:len(peer.actions)==before_confirmation+1,'Confirmation source request missing')
+            capture(label+'-confirmation-safe-first',.65);button('Down');capture(label+'-confirmation-explicit-choice',.45)
+            button('Back');capture(label+'-confirmation-back',.65)
+            assert len(peer.actions)==before_confirmation+1,'Confirmation Back dispatched a command'
+            with peer.lock:peer.activities=saved_activities;peer.pins=saved_pins;peer.action_behavior='success'
+            peer.publish()
+            proofs.append({'check':'OS size '+label+': Snapshot reflow, light/dark, all four panels, native window motion, fifth selection, reverse, paging, exact Back, complete action labels and safe confirmation','passed':True,'osContentSizeCommand':value})
+        # Real MenuLayer movement, sampled without assuming fixed row pixels.
+        snapshot_home();button('Up',.75);images=[];timings=[];start=time.monotonic()
+        def frame(name):
+            rgb=b''.join(Screenshot(p).grab_image());im=Image.frombytes('RGB',(200,228),rgb)
+            im.save(output/(name+'.png'));images.append(im);timings.append(round((time.monotonic()-start)*1000));return im
+        first=frame('native-menu-before');button_name=QemuButton.Button.Down
+        send_data_to_qemu(p.transport,QemuButton(state=int(button_name)));time.sleep(.045)
+        send_data_to_qemu(p.transport,QemuButton(state=0))
+        for i,delay in enumerate((0,.03,.05,.08,.18)):
+            time.sleep(delay);frame('native-menu-motion-'+str(i))
+        last=images[-1].crop((0,36,166,228)).tobytes()
+        assert first.crop((0,36,166,228)).tobytes()!=last
+        assert any(im.crop((0,36,166,228)).tobytes()!=last for im in images[1:-1]),'No intermediate native menu motion sampled'
+        images[0].save(output/'native-menu-motion.gif',save_all=True,append_images=images[1:],duration=[80]*len(images),loop=0)
+        proofs.append({'check':'Native MenuLayer has distinct intermediate and final frames','passed':True,'sampleTimesMs':timings})
+        snapshot_home()
+        for _ in range(20):
+            button('Up',.72);button('Back');button('Down',.72);button('Back')
+        capture('after-repeated-native-windows',.45)
+        heap=[]
+        import re
+        for line in native_logs:
+            match=re.search(r'ui heap=(\d+)',line)
+            if match:heap.append(int(match[1]))
+        if heap:
+            assert min(heap)>8192 and max(heap[-20:])-min(heap[-20:])<4096,heap
+            proofs.append({'check':'Separate diagnostic window heap stays bounded','passed':True,'minimum':min(heap),'last20Min':min(heap[-20:]),'last20Max':max(heap[-20:])})
+        board=Image.new('RGB',(600,252),'#ddd');draw=ImageDraw.Draw(board)
+        for i,(label,file) in enumerate(size_captures):draw.text((i*200+8,5),label,fill='black');board.paste(Image.open(output/file),(i*200,24))
+        board.save(output/'native-size-collections.png')
     def composition_checks():
         snapshot_home()
         with peer.lock:
@@ -421,56 +556,40 @@ def run(pbw,output,expected_sha256=None,notifications_only=False,ux_only=False,r
         peer.publish();select_snapshot(1)
         proofs.append({'check':'Measured ink layout retains normal and accented Snapshot activity/notification/two pins in light and dark; accented collection fifth item, reverse navigation, wire page boundary, last item and Back retain the exact binding without actions','passed':True,'fixtures':'Fictional English/Czech source strings; no real providers or phone JavaScript','pixelAudit':'Separate layout-pixels.json records actual ink bounds/margins.'})
     def motion_checks():
-        snapshot_home();button('Up',.75)
-        await_condition(lambda:active_mode()==1,'Motion review Activities list missing')
-        before=counts();frames=[];started=time.monotonic()
-        def frame(name):
-            pixels=capture(name,0);frames.append({'capture':name+'.png','elapsedMs':round((time.monotonic()-started)*1000),'image':Image.frombytes('RGB',(200,228),pixels)})
-        frame('motion-list-before')
-        send_data_to_qemu(p.transport,QemuButton(state=int(QemuButton.Button.Down)));time.sleep(.16)
-        frame('motion-direction-pressed')
+        snapshot_home();button('Up',.75);before=counts();images=[];frames=[];started=time.monotonic()
+        def frame(name,delay=0):
+            time.sleep(delay);rgb=b''.join(Screenshot(p).grab_image());im=Image.frombytes('RGB',(200,228),rgb)
+            path=output/(name+'.png');im.save(path);images.append(im)
+            frames.append({'file':path.name,'sha256':digest(path.read_bytes()),'elapsedMs':round((time.monotonic()-started)*1000)})
+            return im
+        def center(image):
+            points=[x for y in range(162,188) for x in range(166,200) if image.getpixel((x,y))==(255,255,255)]
+            assert points;return (min(points)+max(points))/2
+        frame('motion-native-before',.45)
+        send_data_to_qemu(p.transport,QemuButton(state=int(QemuButton.Button.Down)));held=frame('motion-native-held',.05)
+        assert center(held)==178,'Held icon must move exactly5px toward content'
         send_data_to_qemu(p.transport,QemuButton(state=0))
-        for index in range(5):
-            frame('motion-selection-release-'+str(index));time.sleep(.025)
-        time.sleep(.4);frame('motion-selection-settled')
-        assert counts()==before,'Motion alone dispatched an action or app open'
-        settled=frames[-1]['image'];arrow=(168,162,200,187)
-        def arrow_center(image,bounds):
-            points=[(x,y) for y in range(bounds[1],bounds[3]) for x in range(bounds[0],bounds[2]) if image.getpixel((x,y))==(255,255,255)]
-            assert points,'Missing native navigation icon'
-            return (min(x for x,y in points)+max(x for x,y in points))/2
-        assert arrow_center(frames[0]['image'],(168,42,200,67))==183,'Up icon did not rest after collection-opening hold'
-        assert arrow_center(frames[0]['image'],arrow)==183,'Down icon did not rest after prior hold'
-        assert arrow_center(frames[1]['image'],arrow)==178,'Raw Down press did not move exactly5px toward content'
-        assert arrow_center(settled,arrow)==183,'Down icon did not rest after short click'
-        assert frames[0]['image'].crop(arrow).tobytes()!=frames[1]['image'].crop(arrow).tobytes(),'Raw press did not move the action icon'
-        assert frames[0]['image'].crop(arrow).tobytes()==settled.crop(arrow).tobytes(),'Released action icon did not return to rest'
-        # The selected second row has static Media text/artwork. Its interior
-        # and the entire full-width inversion must already be final at release.
-        interior=(1,82,165,128)
-        assert all(entry['image'].crop(interior).tobytes()==settled.crop(interior).tobytes() for entry in frames[2:-1]),'Immediate selection changed or clipped its text/artwork'
-        time.sleep(1);frame('motion-idle-rest')
-        assert frames[-1]['image'].crop(interior).tobytes()==settled.crop(interior).tobytes(),'Idle selection failed to remain still'
-        for dark in (True,False):
-            peer.dark=dark;peer.publish();themed_capture('activities-list-'+('dark' if dark else 'light'),dark)
-        selected=peer.view.get(key('DB_TOKEN'))
-        # A rapid second navigation followed by Select must use the synchronous
-        # selected identity, never a row that merely occupied a previous frame.
+        for i,delay in enumerate((0,.03,.06,.1,.2)):frame('motion-native-selection-'+str(i),delay)
+        settled=images[-1];assert center(settled)==183,'Released icon must return to its stock anchor'
+        roi=(0,36,166,228);final=settled.crop(roi).tobytes()
+        assert images[0].crop(roi).tobytes()!=final
+        assert any(im.crop(roi).tobytes()!=final for im in images[2:-1]),'Native MenuLayer motion was not sampled'
+        await_condition(lambda:peer.view.get(key('DB_TOKEN'))==2,'Native selection did not target Media')
+        frame('motion-native-idle',.8)
+        for dark in (True,False):peer.dark=dark;peer.publish();themed_capture('activities-list-'+('dark' if dark else 'light'),dark)
         send_data_to_qemu(p.transport,QemuButton(state=int(QemuButton.Button.Up)));time.sleep(.04)
-        send_data_to_qemu(p.transport,QemuButton(state=0));time.sleep(.02)
-        button('Select',.04)
-        assert counts()==before,'Read-only activity activated during selection motion'
-        assert peer.view.get(key('DB_TOKEN'))!=selected,'Rapid navigation failed to update selected identity'
-        frame('motion-immediate-select-settled')
-        images=[entry.pop('image') for entry in frames]
-        durations=[max(30,frames[i+1]['elapsedMs']-entry['elapsedMs']) if i+1<len(frames) else 900 for i,entry in enumerate(frames)]
-        images[0].save(output/'selection-and-action-feedback.gif',save_all=True,append_images=images[1:],duration=durations,loop=0)
-        proofs.append({'check':'Action icons press immediately and release finitely; selection is immediate, full-width and stationary; rapid navigation and Select retain the exact synchronous read-only target','passed':True,'motionFrames':frames,'frameTiming':'Actual sequential QEMU screenshots; capture transfer time limits temporal resolution. No generated or interpolated frames.','gif':'selection-and-action-feedback.gif','focusLoss':'Cancellation verified by code inspection in focus_changed; a covering native system window was not exercised.'})
-        snapshot_home()
+        send_data_to_qemu(p.transport,QemuButton(state=0));time.sleep(.02);button('Select',.04)
+        assert counts()==before,'Read-only Timer activated during native selection motion'
+        await_condition(lambda:peer.view.get(key('DB_TOKEN'))==1,'Rapid input lost the synchronous identity')
+        frame('motion-native-immediate-select',.45)
+        images[0].save(output/'selection-and-action-feedback.gif',save_all=True,append_images=images[1:],duration=[80]*len(images),loop=0)
+        proofs.append({'check':'Native menu motion and exact synchronous selection; canonical5px raw press with finite release; rapid Select does not activate the wrong target','passed':True,'motionFrames':frames})
     def write_report(result='PASS'):
+        peer.respond=False
+        p.send_packet(AppRunState(data=AppRunStateStop(uuid=target)));time.sleep(.3)
         report={'result':result,'version':json.loads((ROOT/'package.json').read_text())['version'],
             'scope':'Real native Emery QEMU UI and AppMessage requests with an explicit fictional protocol peer; no phone JavaScript, live plugins, real app launches or physical watch.',
-            'focusedMotionOnly':motion_only,'focusedNotificationsOnly':notifications_only,'focusedUxOnly':ux_only,'focusedReliabilityOnly':reliability_only,'pausedMediaReproduction':paused_repro,'focusedActivitiesOnly':activities_only,'focusedStartupThemeOnly':startup_theme_only,'candidatePbwSha256':digest(pbw.read_bytes()),'nativeOnlyPbwSha256':digest(native.read_bytes()),
+            'nativeSizes':native_sizes,'nativeLogs':native_logs,'focusedMotionOnly':motion_only,'focusedNotificationsOnly':notifications_only,'focusedUxOnly':ux_only,'focusedReliabilityOnly':reliability_only,'pausedMediaReproduction':paused_repro,'focusedActivitiesOnly':activities_only,'focusedStartupThemeOnly':startup_theme_only,'candidatePbwSha256':digest(pbw.read_bytes()),'nativeOnlyPbwSha256':digest(native.read_bytes()),
             'nativePayloadSha256':{name:digest(data) for name,data in payload.items()},'phoneJavascriptExecuted':False,
             'stateDirectory':str(state_dir),'freshIsolatedFlash':fresh_flash,'session':peer.session,'checks':proofs,'captures':captures,'themePixelChecks':theme_samples,
             'requests':[{str(k):v for k,v in request.items()} for request in requests],
@@ -493,13 +612,17 @@ def run(pbw,output,expected_sha256=None,notifications_only=False,ux_only=False,r
             proofs.append({'check':'Fresh isolated first launch defaults to light before receiving any phone frame, retaining the first-use guide','passed':True})
         await_condition(lambda:peer.view is not None and bool(peer.frames),'Native HELLO/frame exchange missing',12)
         primary_roi=(4,29,162,102);notice_roi=(4,108,162,151)
-        guide_pixels=capture('first-use-button-guide',.1);before=counts()
+        guide_pixels=capture('first-use-button-guide',.5);before=counts()
         button('Down');button('Select',.75);assert counts()==before
         button('Select');assert counts()==before
-        dismissed=capture('first-use-guide-dismissed',.1)
+        dismissed=capture('first-use-guide-dismissed',.5)
         assert guide_pixels!=dismissed
         proofs.append({'check':'First-use native button guide explains controls; dismissal consumes Select without dispatching an action or app launch','passed':True})
         restart_without_guide()
+        if confirmation_only:
+            confirmation_checks();assert not errors;return write_report()
+        if native_sizes:
+            native_size_checks();assert not errors;return write_report()
         if composition_only:
             composition_checks();return write_report('COMPOSITION REVIEW')
         if motion_only:
@@ -898,6 +1021,11 @@ item.token=91;item.version=1;process.stdout.write(JSON.stringify(item));
         ux_checks()
         assert not errors
         return write_report()
+    except BaseException as error:
+        try:Image.frombytes('RGB',(200,228),b''.join(Screenshot(p).grab_image())).save(output/'failure.png')
+        except Exception:pass
+        (output/'failure.json').write_text(json.dumps({'error':str(error),'nativeLogs':native_logs,'requests':requests[-40:],'proofs':proofs},indent=2)+'\n')
+        raise
     finally:
         stopped.set();thread.join(timeout=1)
         for handle in handles:service.unregister_handler(handle)
@@ -911,6 +1039,8 @@ if __name__=='__main__':
     parser.add_argument('--expected-sha256',help='Require these exact candidate bytes before installing')
     parser.add_argument('--notifications-only',action='store_true',help='Focused empty Notifications navigation, expiry and app-open checks')
     parser.add_argument('--motion-only',action='store_true',help='Focused press/release and anchored selection pixel checks')
+    parser.add_argument('--confirmation-only',action='store_true',help='Focused native Cancel/pop/retry ownership check')
+    parser.add_argument('--native-sizes',action='store_true',help='Actual OS sizes, native rows, identity, paging and repeated Window navigation')
     parser.add_argument('--composition-only',action='store_true',help='Early whole-composition appearance review; not full acceptance QA')
     parser.add_argument('--ux-only',action='store_true',help='Focused guide, feedback, hold preview, confirmation, sparse controls and idle UX checks')
     parser.add_argument('--reliability-only',action='store_true',help='Focused final-zero paint, exact unavailable capability expiry and inert bootstrap identity checks')
@@ -918,5 +1048,5 @@ if __name__=='__main__':
     parser.add_argument('--activities-only',action='store_true',help='Focused activity presentation/selection checks')
     parser.add_argument('--startup-theme-only',action='store_true',help='Focused first-launch, cached dark/light startup, timeout, offline and accepted-theme switch checks on fresh flash')
     args=parser.parse_args()
-    if sum((args.notifications_only,args.ux_only,args.reliability_only,args.paused_media_repro,args.activities_only,args.startup_theme_only,args.motion_only,args.composition_only))>1:parser.error('Choose at most one focused suite')
-    run(args.pbw,args.output,args.expected_sha256,args.notifications_only,args.ux_only,args.reliability_only,args.paused_media_repro,args.activities_only,args.startup_theme_only,args.motion_only,args.composition_only)
+    if sum((args.notifications_only,args.ux_only,args.reliability_only,args.paused_media_repro,args.activities_only,args.startup_theme_only,args.motion_only,args.composition_only,args.native_sizes,args.confirmation_only))>1:parser.error('Choose at most one focused suite')
+    run(args.pbw,args.output,args.expected_sha256,args.notifications_only,args.ux_only,args.reliability_only,args.paused_media_repro,args.activities_only,args.startup_theme_only,args.motion_only,args.composition_only,args.native_sizes,args.confirmation_only)

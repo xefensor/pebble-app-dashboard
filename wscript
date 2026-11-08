@@ -14,6 +14,8 @@ def build(ctx):
     binaries = []
     for platform in ctx.env.TARGET_PLATFORMS:
         ctx.env = ctx.all_envs[platform]
+        if os.environ.get('DASHBOARD_DIAGNOSTICS') == '1':
+            ctx.env.append_value('CFLAGS', ['-DDASHBOARD_DIAGNOSTICS=1'])
         if os.environ.get('DASHBOARD_FIXTURE') == '1':
             ctx.env.append_value('CFLAGS', ['-DDASHBOARD_FIXTURE'])
         ctx.set_group(ctx.env.PLATFORM_NAME)

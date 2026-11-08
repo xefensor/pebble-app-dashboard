@@ -9,6 +9,9 @@ with zipfile.ZipFile(args.pbw) as archive:packed=archive.read('emery/app_resourc
 locale_index=next(i for i,item in enumerate(package['pebble']['resources']['media']) if item['name']=='LOCALIZATION')
 _,offset,size,_=struct.unpack_from('<4I',packed,12+locale_index*16)
 assert packed[4108+offset:4108+offset+size]==(root/'resources/localization.bin').read_bytes(), 'Packaged native locale resource differs'
+if not any(item['type']=='font' for item in package['pebble']['resources']['media']):
+ print(str(len(data['languages']))+' native locale resources verified; OS glyph rendering/fallback is checked separately in the emulator.')
+ raise SystemExit(0)
 fonts={}
 for i,item in enumerate(package['pebble']['resources']['media']):
  if item['type']!='font' or not item['name'].startswith('FONT_BODY_'):continue

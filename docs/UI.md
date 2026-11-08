@@ -3,30 +3,67 @@
 The current release is 0.6.3. Earlier downloads and frozen evidence retain
 their original versions and interfaces.
 
-Tap Select performs the selected declared action or native Notifications shortcut; hold Select opens only its exact associated app. Hold Up/Down opens Activities/Pinned from Snapshot; the same held entry press must not scroll the destination. Back restores selection. Full-height 34 px contrasting rail and readable26pt time stay. Collections retain exact index/total, adaptive row heights and fifth-item/reverse/page/Back behaviour. Selection remains immediate and stationary; never reintroduce horizontal compression.
+The published 0.6.3 download keeps its original interface. The local development
+candidate uses native PebbleOS type roles and navigation, with the same SDK
+version label and public identities. See [native navigation verification](native-navigation-checkpoint.md).
 
-## Shared UI
+Tap Select performs the selected declared action or Notifications shortcut;
+hold Select opens only the exact associated app. Hold Up/Down opens
+Activities/Pinned from Snapshot. The held entry press never scrolls its
+destination. Back restores the selected item by identity. Source capabilities,
+not the moving highlight, decide whether an input may run.
 
-The current release uses the pinned `pebble-xoce-ui` package for the
-32 px header, 8 px common text inset, measured-ink centering, canonical icons,
-aspect-preserving image fitting, full-height action rail and physical-button
-feedback. Header title/status and clock use 26-point Roboto Condensed Bold;
-ordinary labels use 24 and secondary help uses 22. Narrow header contexts use
-concise wording such as "Home" and "Action" rather than reducing the font.
-First-use instructions retain all six complete control descriptions.
+## Native controls and shared type
 
-On Emery, the 34 px rail uses y=54/114/174 centers and one 18 px icon grid. Held
-icons move 5 px toward the content; release follows the stock SDK's bounded
-144 ms quadratic EaseOut curve at its 33 ms frame interval. Selection surfaces
-fill the content column with rectangular edges.
-Confirmation choices share Timer's y=160/196 positions, 30 px height, 36 px
-stride and left-aligned 24-point labels. "Cancel" remains the initial choice.
+Snapshot, Activities, Pinned, action detail, confirmation and the button guide
+each have an app-owned Window. Ordinary navigation uses animated SDK push/pop.
+The outgoing surface retains a transient copy of its presented state until the
+transition finishes; all Window/layer objects remain alive until app exit.
+Caches are never persisted and expired/private data is redacted before drawing.
 
-Dashboard owns its fonts, layers, input callbacks, timers and command bindings.
-The library installs no callbacks. In particular, raw Select still captures
-the original token/version/mode, shows the 250 ms hold preview and preserves
-the separate 600 ms exact-app hold action. Selection remains immediate and
-stationary. Earlier published downloads remain unchanged.
+Activities and Pinned use MenuLayer with rows measured from their actual native
+fonts and content. The five-item transport page remains independent of the
+visible row count. Values and units wrap completely; optional titles/artists
+are bounded. SDK cell highlight state supplies animation colors. Native logical
+selection is immediate while the OS owns the highlight and scrolling motion.
+
+Snapshot keeps its activity, notification and two pins in a measured custom
+composition inside ScrollLayer. Larger text scrolls the selected panel into
+view. The button guide wraps all six complete descriptions and scrolls when
+needed. Non-media command detail and Cancel-first confirmation use measured
+MenuLayers, including scrollable context and complete command labels. Media
+retains its artwork and three icon controls.
+
+The pinned shared UI candidate supplies the exact PebbleOS Header,
+MenuCellTitle, MenuCellSubtitle and Footer font profiles for Emery's three OS
+sizes. The app resolves the launch-time size once and uses it for both measure
+and paint. No custom font resources are bundled. Dominant timer numbers use
+unscaled native LECO fonts; source units use the selected text role.
+
+The header reserves the measured full local clock before fitting its left label.
+The 34 px contrasting rail remains full height, with y=54/114/174 icon centers,
+18 px canonical icons, 5 px held displacement and bounded 144 ms release at a
+33 ms cadence. The app's single click provider owns tap, hold, raw and repeat
+handling; the shared library installs no callbacks.
+
+## Input ownership
+
+Raw Select captures session, view request, mode, item token/version and command
+focus. A changed identity, version, focus or view cancels that press permanently;
+returning to the earlier value before release cannot revive it. Each press can
+be consumed only once. Paging/loading blocks actions, and confirmation checks
+its original bound request again before dispatch. A simultaneous direction
+press cannot retarget a held Select.
+
+Navigation settles old input before changing the stack. A late disappearing
+Window callback cannot cancel input already owned by the destination. The
+250 ms app preview and separate 600 ms exact-app hold remain unchanged.
+Ordinary confirmation tests wait for the actual new Window before testing
+Cancel; receipt of the phone response alone is not watch-window readiness.
+Rapid-input checks remain separate and require no wrong-target dispatch.
+
+Per-project text overrides and confirmed watch preference delivery are the next
+stage. The current phone appearance selector and source protocol remain intact.
 
 Preserve DSH1 identities, session/token/version checks and exact command bindings. Never persist private activity/notification content. Keep one activity, notification and two pins in Snapshot. Readings and independent commands are distinct capabilities. Zero is not owner completion. Default pins do not gain implicit actions or app bindings. Cancel is the initial confirmation choice. Source removal/expiry invalidates capability immediately according to the existing lease.
 

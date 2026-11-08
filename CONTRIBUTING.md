@@ -64,9 +64,8 @@ needs explicit scope.
 
 Interface translations live in `src/common/translations.json`. `nativeWords` provides
 compact watch wording; `@header:` entries fit the narrow utility headers without
-shortening body text. `nativeLayout` records measured control/help/warning widths.
+shortening body text. `nativeLayout` retains the earlier custom-font width expectations for historical tooling. Development watch rendering uses the exact native PebbleOS role profiles.
 After editing the catalogue, run `python3 scripts/generate-localization.py` and
 `node scripts/generate-config.cjs`. Native strings load one language at a time from
 a bounded resource buffer. `npm test` checks catalogue/placeholder parity and
-resource failure handling; `npm run check:artifact` checks actual bundled glyphs,
-resources and text widths.
+resource failure handling; `npm run check:artifact` checks packaged resources and identities. Native font bitmaps, glyph coverage and measured layout are checked in the emulator separately.

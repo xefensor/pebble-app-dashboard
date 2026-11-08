@@ -9,11 +9,11 @@ Preserve DSH1 identities, session/token/version checks and exact command binding
 
 ## Current interaction and product boundaries
 
-Tap Select performs the selected declared action or native Notifications shortcut; hold Select opens only its exact associated app. Hold Up/Down opens Activities/Pinned from Snapshot; the same held entry press must not scroll the destination. Back restores selection. Full-height 34 px contrasting rail and readable26pt time stay. Collections retain exact index/total, adaptive row heights and fifth-item/reverse/page/Back behaviour. Selection remains immediate and stationary; never reintroduce horizontal compression.
+Tap Select performs the selected declared action or Notifications shortcut; hold Select opens only its exact associated app. Hold Up/Down enters Activities/Pinned without repeating into the destination. Real Windows own navigation; native MenuLayers own collection, command and safe confirmation motion. Snapshot and the complete guide use measured ScrollLayer content. Use actual native PebbleOS font roles at the effective size, preserving the left label/right complete clock and full-height 34 px rail. Keep exact index/total, bounded paging, fifth-item/reverse/Back behavior and identity restoration. App code owns click composition and every resource lifetime. Latch cancellation when a held Select's session, view, identity, version or command focus changes; never dispatch twice or retarget the release.
 
 ## Source ownership
 
-src/c/dashboard.c owns the portable DSH1 state; dashboard_deadline and dashboard_layout own expiry/layout policy; main.c integrates the SDK and renders. src/pkjs owns discovery, capabilities, commands and settings.
+src/c/dashboard.c owns the portable DSH1 state; dashboard_deadline owns expiry and dashboard_press owns portable press validation; main.c owns measured native rendering, windows and input. Legacy dashboard_layout/font metrics remain for historical tooling and tests. src/pkjs owns discovery, capabilities, commands and settings.
 
 ## Phone persistence and evidence
 

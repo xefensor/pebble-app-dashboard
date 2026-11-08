@@ -7,7 +7,7 @@
   "description": "A stock Pebble Dashboard for activities, notifications and mixed pinned readings/actions.",
   "dependencies": {
     "pebble-activities": "file:vendor/pebble-activities-0.4.4.tgz",
-    "pebble-xoce-ui": "file:vendor/pebble-xoce-ui-0.1.1.tgz"
+    "pebble-xoce-ui": "file:vendor/pebble-xoce-ui-0.1.1-native-type-63526c2e66e1.tgz"
   },
   "scripts": {
     "test": "node --test tests/*.test.js && python3 scripts/test-native.py && npm run test:workflow && npm run check:docs && npm run test:release && python3 scripts/test-localization.py",
@@ -67,74 +67,10 @@
     "resources": {
       "media": [
         {
-          "type": "font",
-          "name": "FONT_CLOCK_20",
-          "file": "fonts/Fredoka-Bold-Clock.ttf",
-          "characterRegex": "[0-9:.,%°CF+−-]"
-        },
-        {
-          "type": "font",
-          "name": "FONT_CLOCK_24",
-          "file": "fonts/Fredoka-Bold-Clock.ttf",
-          "characterRegex": "[0-9:.,%°CF+−-]"
-        },
-        {
-          "type": "font",
-          "name": "FONT_CLOCK_26",
-          "file": "fonts/Fredoka-Bold-Clock.ttf",
-          "characterRegex": "[0-9:.,%°CF+−-]"
-        },
-        {
           "type": "png",
           "name": "IMAGE_MENU_ICON",
           "file": "images/menu-icon.png",
           "menuIcon": true
-        },
-        {
-          "type": "font",
-          "name": "FONT_CLOCK_32",
-          "file": "fonts/Fredoka-Bold-Clock.ttf",
-          "characterRegex": "[0-9:.,%°CF+−-]"
-        },
-        {
-          "type": "font",
-          "name": "FONT_CLOCK_40",
-          "file": "fonts/Fredoka-Bold-Clock.ttf",
-          "characterRegex": "[0-9:.,%°CF+−-]"
-        },
-        {
-          "type": "font",
-          "name": "FONT_BODY_20",
-          "file": "fonts/RobotoCondensed-Bold.ttf",
-          "characterRegex": "[\\u0020-\\uFFFF]",
-          "extended": true
-        },
-        {
-          "type": "font",
-          "name": "FONT_BODY_22",
-          "file": "fonts/RobotoCondensed-Bold.ttf",
-          "characterRegex": "[\\u0020-\\uFFFF]",
-          "extended": true
-        },
-        {
-          "type": "font",
-          "name": "FONT_BODY_24",
-          "file": "fonts/RobotoCondensed-Bold.ttf",
-          "characterRegex": "[\\u0020-\\uFFFF]",
-          "extended": true
-        },
-        {
-          "type": "font",
-          "name": "FONT_BODY_26",
-          "file": "fonts/RobotoCondensed-Bold.ttf",
-          "characterRegex": "[\\u0020-\\uFFFF]",
-          "extended": true
-        },
-        {
-          "type": "font",
-          "name": "FONT_CLOCK_36",
-          "file": "fonts/Fredoka-Bold-Clock.ttf",
-          "characterRegex": "[0-9:.,%°CF+−-]"
         },
         {
           "type": "raw",

@@ -31,6 +31,10 @@ if '--sanitize' in sys.argv:
     layout += ['-fsanitize=address,undefined', '-fno-omit-frame-pointer']
 subprocess.run(layout, cwd=root, check=True)
 subprocess.run([str(build / 'test_layout')], cwd=root, check=True)
+subprocess.run([compiler, '-std=c99', '-Inode_modules', '-Wall', '-Wextra', '-Werror',
+                '-Isrc/c', 'src/c/dashboard.c', 'tests/native/test_press.c',
+                '-o', str(build / 'test_press')], cwd=root, check=True)
+subprocess.run([str(build / 'test_press')], cwd=root, check=True)
 if '--frames-dir' in sys.argv:
     at = sys.argv.index('--frames-dir')
     if at + 1 >= len(sys.argv):
