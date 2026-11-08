@@ -20,7 +20,7 @@ with zipfile.ZipFile(PBW) as source,zipfile.ZipFile(OUT/'native.pbw','w') as nat
     for name in source.namelist():
         if name=='appinfo.json' or name.startswith('emery/'):native.writestr(name,source.read(name))
 keys=info['messageKeys'];inverse={value:key for key,value in keys.items()};target=uuid.UUID(info['uuid'])
-p=connect();service=AppMessageService(p);lines=queue.Queue();lock=threading.Lock();closing=threading.Event();transactions={};replies=[];commands=0;responses={}
+p=connect();service=AppMessageService(p);lines=queue.Queue();lock=threading.Lock();closing=threading.Event();transactions={};transport_lock=threading.Lock();replies=[];commands=0;responses={}
 phone=subprocess.Popen(['node',str(ROOT/'scripts/emulator-preferences-phone.cjs'),str(OUT)],stdin=subprocess.PIPE,stdout=subprocess.PIPE,text=True)
 def write(value):
     with lock:
@@ -35,7 +35,7 @@ def receive(transaction,app,data):
     if 4014 in data:replies.append(list(data[4014]))
     write({'type':'native','payload':payload})
 def transport(transaction,app,ok):
-    identifier=transactions.pop(transaction,None)
+    with transport_lock:identifier=transactions.pop(transaction,None)
     if identifier is not None:write({'type':'transport','id':identifier,'ok':ok})
 handles=[service.register_handler('appmessage',receive),
  service.register_handler('ack',lambda tid,app:transport(tid,app,True)),
@@ -46,7 +46,9 @@ def pump():
     if line['type']=='response':responses[line['id']]=line['result'];return
     if line['type']=='send':
         values={(keys[key] if key in keys else int(key)):ByteArray(bytes(value)) if isinstance(value,list) else CString(value) if isinstance(value,str) else Uint32(value) for key,value in line['payload'].items()}
-        transactions[service.send_message(target,values)]=line['id']
+        with transport_lock:
+            transaction=service.send_message(target,values)
+            transactions[transaction]=line['id']
 def request(message=None,start=False):
     global commands
     commands+=1;write({'type':'start' if start else 'request','id':commands,'message':message})

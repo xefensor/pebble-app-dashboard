@@ -399,7 +399,8 @@ static void snapshot_body_draw(Layer *layer,GContext *ctx){
 }
 static void sync_snapshot(bool animated){
   if(!s_snapshot_scroll||s_current_screen!=DB_OVERVIEW)return;
-  const bool visible=s_state.ready&&!s_state.loading&&s_state.snapshot.status<DB_OFFLINE;
+  const bool visible=s_state.ready&&!s_state.loading&&
+      (s_state.snapshot.status<DB_OFFLINE||s_state.snapshot.count);
   layer_set_hidden(scroll_layer_get_layer(s_snapshot_scroll),!visible);if(!visible)return;
   paint_begin(DB_OVERVIEW);int height=0,selected_top=-1,selected_height=0;static SnapshotRow row;
   for(unsigned slot=0;slot<4;++slot){

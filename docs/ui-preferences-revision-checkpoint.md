@@ -1,5 +1,8 @@
 # Dashboard settings receipt freshness checkpoint — 2026-11-08
 
+The latest candidate is in the [unavailable Snapshot checkpoint](unavailable-snapshot-checkpoint.md).
+The evidence below records the preceding receipt-freshness candidate.
+
 This local candidate supersedes the candidate in the [preferences checkpoint](ui-preferences-checkpoint.md). No version change, push or publication.
 
 ## Change
