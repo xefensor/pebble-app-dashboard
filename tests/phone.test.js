@@ -108,7 +108,7 @@ test('configuration-only PKJS startup enumerates installed metadata without star
   const runtime=createRuntime({...time,pebble,storage,activitiesHost:host()});runtime.ready();
   const catalogue=await runtime.catalogue(),configuration=await runtime.configuration();
   assert.deepEqual(catalogue.activities[0],{key:UUID,name:'Idle Timer'});assert.deepEqual(configuration.catalogue.activities,catalogue.activities);
-  assert.equal(pebble.subscriptions.length,0);assert.equal(reads,0);assert.equal(pebble.invocations.length,0);assert.equal(time.count(),0);
+  assert.equal(pebble.subscriptions.length,0);assert.equal(reads,0);assert.equal(pebble.invocations.length,0);assert.equal(time.count(),1,'only the bounded UI receipt wait is armed');
   assert.equal(pebble.sent.some(message=>message[protocol.keys.DB_DATA]),false);assert.deepEqual(settings.load(storage),settings.normalize(minimal()));
   assert.deepEqual(metadata.load(storage).activities,catalogue.activities);runtime.stop();
 });

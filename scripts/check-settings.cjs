@@ -56,16 +56,18 @@ function mockAppSearch() {
 }
 function fakeBridge(initial) {
   const home='00aabbcc-2233-4455-6677-889900aabbcc';
-  const state=window.__settingsTest={store:initial,calls:[],loadFailure:false,saveFailure:false,catalogueDelay:0};
+  const state=window.__settingsTest={ui:{version:2,textSize:'follow',appearance:initial.dark?'dark':'light',lastExplicit:initial.dark?'dark':'light'},store:initial,calls:[],loadFailure:false,saveFailure:false,catalogueDelay:0};
   const catalogue={plugins:[{uuid:home,name:'Home lights',sources:[{category:'home',items:['light'],properties:{name:['shortText'],brightness:['numericValue'],on:['boolean']}}],actions:[{name:'set_on',label:'Set light',parameters:{type:'object',properties:{item:{type:'string'},instanceId:{type:'string'},on:{type:'boolean'}},required:['item','instanceId','on']}},{name:'set_label',label:'Set label',parameters:{type:'object',properties:{label:{type:'string'}},required:['label']}}]}],instances:[],activities:[{key:home,name:'Timer provider'},{key:'builtin:music',name:'Music'}]};
   window.Pebble={targets(){return Promise.resolve([{id:'plugin'},{id:'pkjs'}]);},addEventListener(type,fn){if(type==='ready')window.addEventListener('load',()=>{fn({target:'pkjs'});fn({target:'plugin'});},{once:true});},sendMessage(target,message){
+    if(message.type==='getUiPreferences'||message.type==='retryUiPreferences')return Promise.resolve({ok:true,settings:state.ui,saved:true,delivery:{applied:false,pending:true}});
+    if(message.type==='load_settings')return state.loadFailure?Promise.reject(Error('denied')):Promise.resolve({ok:true,settings:state.store,uiPreferences:{ok:true,settings:state.ui,saved:true,delivery:{applied:false,pending:true}}});
     if(target==='pkjs'&&message.type==='reload_settings'){state.calls.push({target:'pkjs',type:message.type});return Promise.resolve({ok:true});}
-    if(target==='pkjs'&&message.type==='save_settings'){state.calls.push({target:'pkjs',type:message.type});state.store=JSON.parse(JSON.stringify(message.settings));return state.saveFailure?Promise.reject(Error('uncertain')):Promise.resolve({ok:true,settings:state.store});}
+    if(target==='pkjs'&&message.type==='save_settings'){state.calls.push({target:'pkjs',type:message.type});state.store=JSON.parse(JSON.stringify(message.settings));state.ui=message.uiPreferences;return state.saveFailure?Promise.reject(Error('uncertain')):Promise.resolve({ok:true,settings:state.store,uiPreferences:{ok:true,settings:state.ui,saved:true,delivery:{applied:false,pending:true}}});}
     if(target==='pkjs'&&message.type==='catalogue'){state.calls.push({target:'pkjs',type:message.type});return new Promise(resolve=>setTimeout(()=>resolve({ok:true,catalogue}),state.catalogueDelay));}
     if(target!=='plugin')return Promise.reject(Error('Unsupported target'));
     state.calls.push(JSON.parse(JSON.stringify(message)));
     if(message.type==='load_settings')return state.loadFailure?Promise.reject(Error('denied')):Promise.resolve({ok:true,settings:state.store});
-    if(message.type==='save_settings'){state.store=JSON.parse(JSON.stringify(message.settings));return state.saveFailure?Promise.reject(Error('uncertain')):Promise.resolve({ok:true,settings:state.store});}
+    if(message.type==='save_settings'){state.store=JSON.parse(JSON.stringify(message.settings));state.ui=message.uiPreferences;return state.saveFailure?Promise.reject(Error('uncertain')):Promise.resolve({ok:true,settings:state.store,uiPreferences:{ok:true,settings:state.ui,saved:true,delivery:{applied:false,pending:true}}});}
     if(message.type==='catalogue')return Promise.resolve({ok:false,message:'Plugin runtime has no enumeration API.'});
     if(message.type==='inspect_source'){
       if(message.source.category==='phone'&&message.source.item==='find_my_phone')throw Error('Find phone must not be read');
@@ -91,7 +93,7 @@ function actualContexts(options={}) {
   const pkjs={addEventListener:(type,fn)=>{events[type]=fn;},
     enumeratePlugins:()=>{calls.enumerations++;if(flags.catalogueFailure)return Promise.reject(Error('permission denied'));return Promise.resolve(metadata);},
     readSource:forbidden('reads'),subscribeToSource:forbidden('subscriptions'),invokeAction:forbidden('actions'),
-    sendAppMessage:()=>{calls.appMessages++;},openURL:()=>{throw Error('Unexpected navigation');}};
+    sendAppMessage:(message,ok)=>{assert.ok(message.DB_UI_PREFERENCES,'settings traffic contains only UI preferences');calls.appMessages++;if(ok)ok();},openURL:()=>{throw Error('Unexpected navigation');}};
   vm.runInNewContext(fs.readFileSync(path.join(root,'src/pkjs/index.js'),'utf8'),{Pebble:pkjs,localStorage:pkjsStorage,require:name=>require(path.resolve(root,'src/pkjs',name)),setTimeout,clearTimeout,Promise,console});
   return {calls,storage,metadata,teardownPkjs(){if(options.androidStorage){const saved=new Map(domValues);values.clear();for(const [key,value] of saved)values.set(key,value);}},dispatch(request,respond){
     flags=request.flags||{};
@@ -326,7 +328,7 @@ async function run() {
   // A load failure blocks replacement edits; retry restores actual saved state.
   await field('dark',false);await evaluate('window.__settingsTest.saveFailure=true');await click('#save');await until(`document.getElementById('status').textContent.indexOf('not confirmed')>=0`,'second uncertain save');
   await evaluate('window.__settingsTest.loadFailure=true');await click('#discard');await until(`!document.getElementById('retry').hidden`,'load failure');assert.equal(await evaluate(`document.getElementById('dark').disabled`),true);
-  await evaluate('window.__settingsTest.loadFailure=false;window.__settingsTest.saveFailure=false');await click('#retry');await until(`!document.getElementById('dark').disabled`,'retry loaded');
+  await evaluate('window.__settingsTest.loadFailure=false;window.__settingsTest.saveFailure=false');await click('#retry');await until(`document.getElementById('dark')&&!document.getElementById('dark').disabled`,'retry loaded');
   await send('Emulation.setDeviceMetricsOverride',{width:320,height:520,deviceScaleFactor:1,mobile:true});await send('Emulation.setEmulatedMedia',{features:[{name:'prefers-color-scheme',value:'dark'}]});await evaluate('window.scrollTo(0,0)');await image('overview-dark-small');
   assert.equal(await evaluate('document.documentElement.scrollWidth<=window.innerWidth'),true,'settings must not horizontally overflow');
   assert.equal(await evaluate(`document.getElementById('actions').getAttribute('data-flow')`),'true','short viewport should put actions in flow');
@@ -337,7 +339,7 @@ async function run() {
     options={...options,generation:++generation};
     bridgeScript=(await send('Page.addScriptToEvaluateOnNewDocument',{source:'('+supportedContexts.toString()+')('+JSON.stringify(options)+');'})).identifier;
     await send('Page.reload',{ignoreCache:true});
-    await until(`window.__settingsTest&&window.__settingsTest.generation===${generation}&&!document.getElementById('dark').disabled`,'real handlers loaded settings');
+    await until(`window.__settingsTest&&window.__settingsTest.generation===${generation}&&document.getElementById('dark')&&!document.getElementById('dark').disabled`,'real handlers loaded settings');
     if(options.waitCatalogue!==false)await until(`document.getElementById('activities-status').textContent.indexOf('Loading')<0&&document.getElementById('activities-status').textContent.indexOf('Connecting')<0`,'provider discovery status');
   }
   await reopen();
@@ -388,7 +390,7 @@ async function run() {
   contextBridge.metadata[0].name='Refreshed Timer';await evaluate(`window.__settingsTest.emitReady('pkjs')`);
   await until(`document.getElementById('activities').textContent.includes('Refreshed Timer')`,'new live catalogue arrives before old cache');
   await sleep(300);assert.ok(await evaluate(`document.getElementById('activities').textContent.includes('Refreshed Timer')`));
-  const ordered=model.defaults();ordered.activityOrder=[PLUGIN,'builtin:music'];ordered.disabledActivities=[PLUGIN];model.save(contextBridge.storage,ordered);
+  const ordered=model.defaults();ordered.dark=model.load(contextBridge.storage).dark;ordered.activityOrder=[PLUGIN,'builtin:music'];ordered.disabledActivities=[PLUGIN];model.save(contextBridge.storage,ordered);
   for(const delays of [{settingsDelay:130,catalogueDelay:0},{settingsDelay:0,catalogueDelay:130}]){
     await reopen(delays);
     assert.ok(await evaluate(`document.querySelector('#activities>li').textContent.includes('Refreshed Timer')`),'both reply orders preserve saved priority');
@@ -446,12 +448,12 @@ async function run() {
   }
   appChecks.push('one footer Save accepts the active Weather editor and survives full-page reload through closed-plugin and live-PKJS backends, separate Android stores and PKJS teardown');
   appChecks.push('active-editor validation and live-target save failure preserve inputs without writes or unsafe plugin fallback; retry waits for acknowledgement and Add/Edit never focus text automatically');
-  assert.deepEqual({...contextTotals,enumerations:0},{enumerations:0,reads:0,subscriptions:0,actions:0,appMessages:0},'configuration must remain metadata-only without native HELLO');
+  assert.deepEqual({...contextTotals,enumerations:0,appMessages:0},{enumerations:0,reads:0,subscriptions:0,actions:0,appMessages:0},'configuration cannot read private sources or invoke actions;only UI delivery may use AppMessage');
   // The actual archived page uses the phone locale. User labels and binding
   // values stay untouched while the common Save lifecycle is translated.
   await send('Page.addScriptToEvaluateOnNewDocument',{source:"Object.defineProperty(navigator,'languages',{get:()=>['cs-CZ']});Object.defineProperty(navigator,'language',{get:()=>'cs-CZ'});"});
   await reopen({waitCatalogue:false});
-  await until(`document.documentElement.lang==='cs'&&!document.getElementById('dark').disabled`,'Czech page loaded');
+  await until(`document.documentElement.lang==='cs'&&document.getElementById('dark')&&!document.getElementById('dark').disabled`,'Czech page loaded');
   assert.equal(await evaluate(`document.getElementById('save').textContent`),'Uložit');
   assert.equal(await evaluate(`document.getElementById('status').textContent`),'Žádné změny k uložení.');
   await send('Emulation.setDeviceMetricsOverride',{width:360,height:800,deviceScaleFactor:1,mobile:true});

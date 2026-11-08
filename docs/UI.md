@@ -62,8 +62,16 @@ Ordinary confirmation tests wait for the actual new Window before testing
 Cancel; receipt of the phone response alone is not watch-window readiness.
 Rapid-input checks remain separate and require no wrong-target dispatch.
 
-Per-project text overrides and confirmed watch preference delivery are the next
-stage. The current phone appearance selector and source protocol remain intact.
+The development settings page adds Text Size (Follow Pebble / Small / Medium /
+Large) and Appearance (Follow Pebble / Light / Dark) to the existing Save flow.
+Pins, source bindings and the DSH1 protocol retain their current schema. The
+display status distinguishes saved phone choices from watch-confirmed application.
+Uncommitted defaults remain Unsaved until the phone verifies persistence.
+The SDK has no public appearance service: the page explains the unavailable
+Follow Appearance mode, retains the choice and uses its last Light/Dark fallback.
+Manual text choices use the exact native roles above. They take precedence over
+the launch-time OS size and survive relaunch. See the
+[preferences checkpoint](ui-preferences-checkpoint.md).
 
 Preserve DSH1 identities, session/token/version checks and exact command bindings. Never persist private activity/notification content. Keep one activity, notification and two pins in Snapshot. Readings and independent commands are distinct capabilities. Zero is not owner completion. Default pins do not gain implicit actions or app bindings. Cancel is the initial confirmation choice. Source removal/expiry invalidates capability immediately according to the existing lease.
 

@@ -70,6 +70,7 @@ def run(pbw,output,expected_sha256=None,notifications_only=False,ux_only=False,r
 
     def receive(_tid,app_uuid,data):
         if app_uuid!=target:return
+        if 4014 in data:return # UI receipts use their own exact-payload bridge suite.
         entry={key:int(value) if isinstance(value,int) else value for key,value in data.items()}
         with condition:requests.append(entry);condition.notify_all()
         pending.put(entry)

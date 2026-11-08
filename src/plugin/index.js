@@ -2,6 +2,7 @@
 
 var settings = require('../pkjs/settings');
 var metadata = require('../pkjs/catalogue');
+var preferences=require('../pkjs/ui-preferences');
 function safeText(value, max) { return typeof value === 'string' ? value.replace(/[\u0000-\u001f]/g, '').slice(0, max || 128) : ''; }
 function object(value) { return !!value && typeof value === 'object' && !Array.isArray(value); }
 function uuid(value) { return typeof value === 'string' && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(value); }
@@ -13,14 +14,26 @@ function instanceName(instance) {
   return safeText(property && (property.shortText && property.shortText.text || property.longText && property.longText.text) || instance && instance.instanceId, 96);
 }
 function register(pebble, storage) {
+  var ui=preferences.create({storage:storage});
+  function uiResponse(message){var result;ui.handle(message,function(value){result=value;});return result;}
   pebble.registerConfigHandler(function(message, respond) {
+    if(typeof message==='string'){try{message=JSON.parse(message);}catch(error){respond({ok:false});return;}}
     message = message || {};
+    if(preferences.isRequest(message)){ui.handle(message,respond);return;}
     var type = message.type;
     if (!type || type === 'load_settings' || type === 'getSettings') {
       var loaded = settings.load(storage);
-      respond({ok:true, settings:loaded || settings.defaults(), needsRepair:!loaded});
+      var response={ok:true,settings:loaded||settings.defaults(),needsRepair:!loaded};
+      if(message.includeUiPreferences)response.uiPreferences=uiResponse({type:'getUiPreferences'});
+      respond(response);
     } else if (type === 'save_settings' || type === 'saveSettings') {
-      try { respond({ok:true, settings:settings.save(storage, message.settings)}); }
+      try {
+        var selected=message.uiPreferences===undefined?null:preferences.normalize(message.uiPreferences);
+        if(message.uiPreferences!==undefined&&(!selected||message.settings.dark!==(selected.lastExplicit==='dark')))throw Error('Invalid display preferences.');
+        var saved=settings.save(storage,message.settings),response={ok:true,settings:saved};
+        if(selected){response.uiPreferences=uiResponse({type:'saveUiPreferences',settings:selected});if(!response.uiPreferences.ok)throw Error('Display preferences were not saved.');}
+        respond(response);
+      }
       catch (error) { respond({ok:false, message:safeText(error && error.message || 'Settings were not saved.', 160)}); }
     } else if (type === 'catalogue') {
       var saved=metadata.load(storage);

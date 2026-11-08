@@ -14,6 +14,7 @@ function behavior(initial, makeModel, makeApps, makeLanguage) {
   var catalogue = initial.catalogue || {plugins:[], instances:[], activities:[]}, bridgeReady = false, pkjsReady = false;
   var channels = {}, editing = null, inspectVersion = 0, sourceEntries = [], actionEntries = [], argumentFields = [];
   var legacy = initial.mode === 'legacy';
+  var uiSettings=null,uiConfirmed='',uiDelivery=null,uiRepairing=false,uiUncommitted=false,uiPoll=null;
   var cataloguePhase = legacy ? catalogue.error ? 'error' : 'ready' : 'waiting';
   var catalogueMessage = '', bridgeTimer = null, catalogueRefresh = 0, catalogueTargetTimer = null;
   var appEntries = [], appResults = [], appRequest = null, appSearchVersion = 0;
@@ -24,7 +25,7 @@ function behavior(initial, makeModel, makeApps, makeLanguage) {
   function option(select, value, label) { var el = node('option', label); el.value = value; select.appendChild(el); }
   function pending() { return phase === 'saving'; }
   function dirty() {
-    if(!loaded)return false;if(repairing||uncertain)return true;
+    if(!loaded)return false;if(repairing||uncertain||uiRepairing||uiUncommitted||JSON.stringify(uiSettings)!==uiConfirmed)return true;
     if(editing!==null){try{return JSON.stringify(editedSettings())!==confirmed;}catch(error){return true;}}
     return JSON.stringify(draft)!==confirmed;
   }
@@ -35,6 +36,8 @@ function behavior(initial, makeModel, makeApps, makeLanguage) {
     $('discard').textContent = legacy ? t('Cancel') : uncertain ? t('Reload saved') : t('Discard');
     $('save').textContent = t('Save');
     $('retry').hidden = phase !== 'load-error';
+    $('display-retry').hidden=legacy||!uiDelivery||uiDelivery.applied||dirty();
+    $('display-retry').disabled=pending();
     $('add-pin').disabled = !loaded || pending() || editing !== null || draft.pins.length >= 64;
     $('preview').disabled = !loaded || pending() || !draft.showNotifications;
     $('editor').hidden = editing === null;
@@ -48,17 +51,40 @@ function behavior(initial, makeModel, makeApps, makeLanguage) {
   function draftStatus() {
     say(uncertain?t('Save not confirmed. Reload saved settings or save again.'):dirty()?t('Unsaved changes.'):savedHere?t('✓ Saved'):t('No changes to save.'),uncertain);
   }
+  function normalizeDisplay(value){
+    return value&&value.version===2&&Object.keys(value).length===4&&['follow','small','medium','large'].indexOf(value.textSize)>=0&&['follow','light','dark'].indexOf(value.appearance)>=0&&['light','dark'].indexOf(value.lastExplicit)>=0&&(value.appearance==='follow'||value.appearance===value.lastExplicit)?{version:2,textSize:value.textSize,appearance:value.appearance,lastExplicit:value.lastExplicit}:null;
+  }
+  function stopDisplayPoll(){if(uiPoll!==null)clearTimeout(uiPoll);uiPoll=null;}
+  function displayStatus(){
+    stopDisplayPoll();
+    var changed=uiUncommitted||JSON.stringify(uiSettings)!==uiConfirmed;
+    $('display-status').textContent=t(uiRepairing?'Saved settings were unreadable. Review these defaults before explicitly saving.':changed?'Unsaved changes.':uiDelivery&&uiDelivery.applied?'Applied on watch':uiDelivery&&uiDelivery.error?'Saved on phone · Watch could not confirm saving':'Saved on phone · Pending on watch');
+    if(!legacy&&loaded&&phase==='ready'&&!dirty())uiPoll=setTimeout(function(){uiPoll=null;pollDisplay(false);},uiDelivery&&uiDelivery.applied?5000:2000);
+  }
+  function pollDisplay(force){
+    if(!loaded||phase!=='ready'||dirty())return;
+    settingsTarget(function(target){
+      request({type:force?'retryUiPreferences':'getUiPreferences'},function(response){
+        if(!dirty()&&response&&response.ok&&JSON.stringify(normalizeDisplay(response.settings))===uiConfirmed){uiDelivery=response.delivery;uiUncommitted=response.saved===false;controls();displayStatus();}
+      },displayStatus,'display',target);
+    },displayStatus);
+  }
+  $('display-retry').onclick=function(){stopDisplayPoll();pollDisplay(true);};
   function changed() {
     if (!loaded || pending()) return;
-    draft.dark = $('dark').value === 'dark'; draft.showNotifications = $('notifications').checked; draft.notificationPreview = $('preview').checked;
-    controls();draftStatus();
+    if($('dark').value!=='follow')uiSettings.lastExplicit=$('dark').value;
+    uiSettings.appearance=$('dark').value;uiSettings.textSize=$('text-size').value;
+    draft.dark = uiSettings.lastExplicit==='dark'; draft.showNotifications = $('notifications').checked; draft.notificationPreview = $('preview').checked;
+    controls();draftStatus();displayStatus();
   }
-  function apply(value, needsRepair) {
+  function apply(value, needsRepair, display) {
     cancelAppSearch();
     draft = model.normalize(value); confirmed = JSON.stringify(draft); loaded = true; phase = 'ready'; uncertain = false; repairing = !!needsRepair; savedHere = false; editing = null;
-    $('dark').value = draft.dark ? 'dark' : 'light'; $('notifications').checked = draft.showNotifications; $('preview').checked = draft.notificationPreview;
-    renderPins(); renderActivities(); controls();
-    say(repairing ? t('Saved settings were unreadable. Review these defaults before explicitly saving.') : t('No changes to save.'), repairing);
+    uiSettings=normalizeDisplay(display&&display.settings)||{version:2,textSize:'follow',appearance:draft.dark?'dark':'light',lastExplicit:draft.dark?'dark':'light'};
+    uiConfirmed=JSON.stringify(uiSettings);uiDelivery=display&&display.delivery||null;uiRepairing=!!(display&&display.needsRepair);uiUncommitted=!!(display&&display.saved===false);
+    $('text-size').value=uiSettings.textSize;$('dark').value=uiSettings.appearance; $('notifications').checked = draft.showNotifications; $('preview').checked = draft.notificationPreview;
+    renderPins(); renderActivities(); controls();displayStatus();
+    say(repairing||uiRepairing ? t('Saved settings were unreadable. Review these defaults before explicitly saving.') : t(uiUncommitted?'Unsaved changes.':'No changes to save.'), repairing||uiRepairing);
   }
   function request(payload, complete, failure, channel, target) {
     channel = channel || 'settings';
@@ -74,16 +100,16 @@ function behavior(initial, makeModel, makeApps, makeLanguage) {
   }
   function loadFailed() { phase = 'load-error'; loaded = false; controls(); say(t('Could not load saved settings. Retry before editing.'), true); }
   function load() {
-    phase = 'loading'; loaded = false; editing = null; controls(); say(t('Loading settings…'));
+    stopDisplayPoll();phase = 'loading'; loaded = false; editing = null; controls(); say(t('Loading settings…'));
     if (!bridgeReady) {
       if (bridgeTimer !== null) clearTimeout(bridgeTimer);
       bridgeTimer = setTimeout(function() { bridgeTimer = null; loadFailed(); catalogueFailed(t('Pebble did not connect to the settings plugin. Reopen this page from Pebble.')); }, 7000);
       return;
     }
-    request({type:'load_settings'}, function(response) {
-      try { if (!response || response.ok !== true) throw Error(); apply(response.settings, response.needsRepair); }
+    settingsTarget(function(target){request({type:'load_settings',includeUiPreferences:true}, function(response) {
+      try { if (!response || response.ok !== true) throw Error(); apply(response.settings, response.needsRepair,response.uiPreferences); }
       catch (error) { loadFailed(); }
-    }, loadFailed);
+    }, loadFailed,'settings',target);},loadFailed);
     refreshCatalogue();
   }
   function sourceKey(reading) { return [reading.plugin || '',reading.category,reading.item].join('|'); }
@@ -471,7 +497,7 @@ function behavior(initial, makeModel, makeApps, makeLanguage) {
 
   $('editor-cancel').onclick = function() { cancelAppSearch(); editing = null; inspectVersion++; controls();draftStatus(); };
   $('add-pin').onclick = function() { openEditor(draft.pins.length); };
-  ['dark','notifications','preview'].forEach(function(id) { $(id).onchange = changed; });
+  ['dark','text-size','notifications','preview'].forEach(function(id) { $(id).onchange = changed; });
   $('has-reading').onchange = renderEditorState;
   $('pin-label').oninput = function() { if (editing) editing.nameChanged = true; };
   $('icon').onchange = function() { if (editing) editing.iconChanged = true; };
@@ -500,7 +526,7 @@ function behavior(initial, makeModel, makeApps, makeLanguage) {
   $('discard').onclick = function() {
     if (legacy) { location.href = 'pebblejs://close#'; return; }
     if (uncertain) { load(); return; }
-    apply(JSON.parse(confirmed), repairing);
+    apply(JSON.parse(confirmed),repairing,{settings:JSON.parse(uiConfirmed),delivery:uiDelivery,needsRepair:uiRepairing,saved:!uiUncommitted});
   };
   function saveFailed() { phase = 'ready'; uncertain = true; controls(); say(t('Save not confirmed. Reload saved settings or save again.'), true); }
   function settingsTarget(complete, failure) {
@@ -518,30 +544,31 @@ function behavior(initial, makeModel, makeApps, makeLanguage) {
     if (event) event.preventDefault(); if ($('save').disabled) return;
     var chosen; try { chosen = editing !== null ? editedSettings() : model.normalize(draft); }
     catch (error) { if (editing !== null) $('editor-error').textContent = t(error.message || t('Check this pinned item.')); say(t('Couldn’t save. Try again.'),true); return; }
-    if (legacy) { location.href = 'pebblejs://close#' + encodeURIComponent(JSON.stringify(chosen)); return; }
+    if (legacy) { location.href = 'pebblejs://close#' + encodeURIComponent(JSON.stringify({settings:chosen,uiPreferences:uiSettings})); return; }
     cancelAppSearch(); inspectVersion++;
-    phase = 'saving'; controls(); say(t('Saving…'));
+    stopDisplayPoll();phase = 'saving'; controls(); say(t('Saving…'));
     var attempts = 0;
-    function saved(value) {
+    var selectedDisplay=clone(uiSettings);
+    function saved(value,display) {
       var x=window.scrollX,y=window.scrollY,editorIndex=editing&&editing.index;
       var editorHadFocus=editing&&$('editor').contains(document.activeElement);
-      apply(value,false);savedHere=true;say(t('✓ Saved'));
+      apply(value,false,display);savedHere=true;say(t('✓ Saved'));
       if(editorHadFocus){var row=$('pins').children[editorIndex],button=row&&row.querySelector('button');if(button)button.focus({preventScroll:true});}
       if(window.scrollX!==x||window.scrollY!==y)window.scrollTo(x,y);
     }
     function write(target) {
       if (++attempts > 3) { saveFailed(); return; }
-      request({type:'save_settings', settings:chosen}, function(response) {
+      request({type:'save_settings', settings:chosen,uiPreferences:selectedDisplay}, function(response) {
         var value;
         try {
           if (!response || !response.ok) throw Error();
           value = model.normalize(response.settings);
-          if (JSON.stringify(value) !== JSON.stringify(chosen)) throw Error();
+          if (JSON.stringify(value) !== JSON.stringify(chosen)||!response.uiPreferences||!response.uiPreferences.ok||JSON.stringify(normalizeDisplay(response.uiPreferences.settings))!==JSON.stringify(selectedDisplay)) throw Error();
         } catch (error) { saveFailed(); return; }
         // Android PKJS keeps a separate storage snapshot. It must own live
         // writes, including when it starts during a closed-plugin save.
-        if (target === 'plugin') settingsTarget(function(current) { if (current === 'pkjs') write(current); else saved(value); }, saveFailed);
-        else saved(value);
+        if (target === 'plugin') settingsTarget(function(current) { if (current === 'pkjs') write(current); else saved(value,response.uiPreferences); }, saveFailed);
+        else saved(value,response.uiPreferences);
       }, function() {
         if (target !== 'pkjs') { saveFailed(); return; }
         // Only confirmed shutdown permits the plugin fallback: a still-live
@@ -559,7 +586,7 @@ function behavior(initial, makeModel, makeApps, makeLanguage) {
   window.addEventListener('resize', measureFooter); if (window.visualViewport) window.visualViewport.addEventListener('resize', measureFooter);
   if (typeof ResizeObserver !== 'undefined') new ResizeObserver(measureFooter).observe($('actions'));
   model.icons.forEach(function(icon) { option($('icon'), icon, language.language==='en'?icon.charAt(0).toUpperCase()+icon.slice(1):t(icon)); });
-  if (legacy) { sourceEntries = collectSources(); actionEntries = collectActions(); try { apply(initial.settings, initial.needsRepair); } catch (error) { loadFailed(); } $('catalogue-status').textContent = catalogue.error || t('Installed sources and saved bindings are shown below.'); }
+  if (legacy) { sourceEntries = collectSources(); actionEntries = collectActions(); try { apply(initial.settings, initial.needsRepair,initial.uiPreferences); } catch (error) { loadFailed(); } $('catalogue-status').textContent = catalogue.error || t('Installed sources and saved bindings are shown below.'); }
   else {
     draft = model.defaults(); renderActivities(); load();
     if (typeof Pebble !== 'undefined' && typeof Pebble.addEventListener === 'function') Pebble.addEventListener('ready', function(event) {
@@ -582,7 +609,7 @@ function render(initial) {
     '#editor-save{min-height:48px;background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}.editor-actions{display:flex;gap:8px;margin-top:20px}.editor-actions button{flex:1}@media(max-width:340px){.row-buttons{gap:6px}.row-buttons button{padding-left:8px;padding-right:8px}}',
     '.pin-section{border-top:1px solid var(--line);margin-top:24px;padding-top:20px}.pin-section legend{padding-top:18px;font-size:18px}.pin-section>label:first-of-type{margin-top:8px}.quick-setup{display:flex;gap:8px;flex-wrap:wrap}.quick-setup button{flex:1;min-width:110px}.search-row{display:flex;gap:8px;align-items:end}.search-row label{flex:1;min-width:0}.search-row button{flex:0 0 auto;margin-bottom:8px}.pin-section details{margin-top:12px}#app-selection{margin-bottom:8px}#app-results button{display:block;width:100%;margin:8px 0;text-align:left;overflow-wrap:anywhere}#app-results strong,#app-results span{display:block}@media(max-width:340px){.search-row{display:block}.search-row button{width:100%}}',
     '</style></head><body><main><header><h1>Dashboard</h1><p>Choose Dashboard’s pinned items and activity priority.</p></header>',
-    '<section class="card"><h2>On the watch</h2><label>Watch appearance<select id="dark" data-edit><option value="light">Light</option><option value="dark">Dark</option></select></label><label class="inline"><input id="notifications" type="checkbox" data-edit><span>Show latest notification</span></label><label class="inline"><input id="preview" type="checkbox" data-edit><span>Show notification message text</span></label><p class="hint">Message text stays private and is cleared when its source withdraws it. The notification row always opens native Notifications, even without a preview.</p></section>',
+    '<section class="card"><h2>On the watch</h2><label>Text size<select id="text-size" data-edit><option value="follow">Follow Pebble</option><option value="small">Small</option><option value="medium">Medium</option><option value="large">Large</option></select></label><label>Watch appearance<select id="dark" data-edit><option value="follow">Follow Pebble</option><option value="light">Light</option><option value="dark">Dark</option></select></label><p class="hint">Follow Pebble appearance is unavailable on this build. It uses your last Light or Dark choice.</p><p id="display-status" class="hint" role="status" aria-live="polite"></p><button id="display-retry" type="button" hidden>Retry watch delivery</button><label class="inline"><input id="notifications" type="checkbox" data-edit><span>Show latest notification</span></label><label class="inline"><input id="preview" type="checkbox" data-edit><span>Show notification message text</span></label><p class="hint">Message text stays private and is cleared when its source withdraws it. The notification row always opens native Notifications, even without a preview.</p></section>',
     '<section class="card"><h2>Pinned items</h2><p class="hint">The first two appear on Snapshot. Hold Down there to browse all pins. A pin can show a reading, perform a tap action, or do both.</p><ol id="pins" class="items"></ol><p id="pins-empty" class="hint" hidden>No pinned items yet.</p><button id="add-pin" type="button" data-edit>Add pinned item</button></section>',
     '<section id="editor" class="card" hidden><h2 id="editor-heading">Pinned item</h2><form id="editor-form"><div id="pin-quick-setup"><p class="hint">Start with what you need. You can combine a reading, a tap action and an app in the same pin.</p><div class="quick-setup"><button id="pin-reading" type="button" data-edit>Show a reading</button><button id="pin-action" type="button" data-edit>Add an action</button><button id="pin-app" type="button" data-edit>Open an app</button></div></div><label>Name on the watch<input id="pin-label" type="text" maxlength="32" autocomplete="off" data-edit></label><details><summary>Change icon</summary><label>Icon<select id="icon" data-edit></select></label></details>',
     '<fieldset class="pin-section"><legend>Show a reading</legend><label class="inline"><input id="has-reading" type="checkbox" data-edit><span>Show a value on this pin</span></label><div id="reading-fields"><label>From<select id="source" data-edit></select></label><label>Value<select id="property" data-edit></select></label><label>Which item<select id="instance" data-edit></select></label><button id="inspect-source" type="button" data-edit>Refresh items</button><p id="inspect-status" class="hint" role="status"></p></div></fieldset>',
@@ -595,9 +622,9 @@ function render(initial) {
     JSON.stringify(initial).replace(/</g, '\\u003c').replace(/\u2028/g, '\\u2028').replace(/\u2029/g, '\\u2029'), ',(', model.browserFactory.toString(), '),(', appPicker.browserFactory.toString(), '),(', makeLanguage.toString(), '));</script></body></html>'
   ].join('\n');
 }
-module.exports = function(settings, catalogue) {
+module.exports = function(settings, catalogue,uiPreferences) {
   var current, needsRepair = false;
   try { current = model.normalize(settings); } catch (error) { current = model.defaults(); needsRepair = true; }
-  return render({mode:'legacy', settings:current, catalogue:catalogue || {plugins:[], instances:[], activities:[]}, needsRepair:needsRepair});
+  return render({mode:'legacy',uiPreferences:uiPreferences, settings:current, catalogue:catalogue || {plugins:[], instances:[], activities:[]}, needsRepair:needsRepair});
 };
 module.exports.config = function() { return render({mode:'plugin'}); };

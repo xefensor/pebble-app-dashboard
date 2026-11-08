@@ -6,6 +6,7 @@ var createSources = require('./sources');
 var createCommands = require('./commands');
 var createQueue = require('./queue');
 var metadata = require('./catalogue');
+var preferences=require('./ui-preferences');
 var F = protocol.flag, M = protocol.mode, S = protocol.status, O = protocol.op;
 function positive(value) { return typeof value === 'number' && isFinite(value) && Math.floor(value) === value && value > 0 && value <= 2147483647; }
 function bounded(value, limit) { return typeof value === 'number' && isFinite(value) && Math.floor(value) === value && value >= 0 && value <= limit; }
@@ -19,6 +20,9 @@ module.exports = function createRuntime(options) {
   var session=0,sequence=0,nextToken=1,view=null,stopped=false,started=false,heartbeat=null,publishTimer=null,connected=true,bindingEpoch=0;
   var identities=Object.create(null),bindings=Object.create(null),feedback=Object.create(null),lastFrameSignature='';
   var queue=createQueue(function(message,success,failure){pebble.sendAppMessage(message,success,failure);});
+  var uiPreferences=preferences.create({storage:options.storage,later:later,cancel:cancel,
+    send:function(message,failure,success){queue.send(message,success,failure,'ui-preferences');}});
+  function uiResponse(message){var result;uiPreferences.handle(message,function(value){result=value;});return result;}
   var sources=(options.createSources || createSources)({pebble:pebble,storage:options.storage,now:now,later:later,cancelLater:cancel,
     activitiesHost:options.activitiesHost,onChanged:function(){schedulePublish();}});
   function result(request,value,text) {
@@ -143,6 +147,7 @@ module.exports = function createRuntime(options) {
   }
   function receive(payload){
     if(stopped)return;
+    var ui=protocol.get(payload,'DB_UI_PREFERENCES_RESULT');if(ui!==undefined)uiPreferences.receive(ui);
     var kind=protocol.get(payload,'DB_OPERATION'),incoming=protocol.get(payload,'DB_SESSION'),request=protocol.get(payload,'DB_REQUEST');
     if(kind===O.HELLO){
       if(!positive(incoming)||!positive(request))return;
@@ -161,7 +166,7 @@ module.exports = function createRuntime(options) {
       var helloMode=protocol.get(payload,'DB_MODE'),helloOffset=protocol.get(payload,'DB_OFFSET'),helloIndex=protocol.get(payload,'DB_INDEX'),helloToken=protocol.get(payload,'DB_TOKEN');
       view={mode:bounded(helloMode,3)?helloMode:view?view.mode:M.OVERVIEW,
         offset:bounded(helloOffset,65535)?helloOffset:view?view.offset:0,index:bounded(helloIndex,65535)?helloIndex:view?view.index:0,
-        request:request,token:bounded(helloToken,2147483647)?helloToken:view?view.token:0,preserve:true};armHeartbeat();publish(true);return;
+        request:request,token:bounded(helloToken,2147483647)?helloToken:view?view.token:0,preserve:true};armHeartbeat();uiPreferences.reconcile(false);publish(true);return;
     }
     if(!positive(session)||incoming!==session)return;
     if(kind===O.CANCEL){
@@ -197,21 +202,26 @@ module.exports = function createRuntime(options) {
   return {
     ready:function(){
       if(stopped)return;
-      queue.send(message(O.READY));
+      queue.send(message(O.READY));uiPreferences.reconcile(true);
     },message:receive,
-    configure:function(value){
-      var normalized=settingsModel.normalize(value);prefs=settingsModel.save(options.storage,normalized);settingsError=false;
+    configure:function(value,display){
+      var normalized=settingsModel.normalize(value),selected=display===undefined?null:preferences.normalize(display);
+      if(display!==undefined&&(!selected||normalized.dark!==(selected.lastExplicit==='dark')))throw Error('Invalid display preferences.');
+      prefs=settingsModel.save(options.storage,normalized);settingsError=false;
+      if(selected){if(!uiResponse({type:'saveUiPreferences',settings:selected}).ok)throw Error('Display preferences were not saved.');}
+      else uiPreferences.legacyChanged({version:1,theme:prefs.dark?'dark':'light'});
       if(started||session)startSources();lastFrameSignature='';schedulePublish();return copy(prefs);
     },
     configuration:function(){
       syncSettings();schedulePublish();
       return metadata.discover(pebble,options.storage).then(function(catalogue){return {settings:copy(prefs),catalogue:catalogue,needsRepair:settingsError};});
     },
+    uiPreferences:function(message){var result=uiResponse(message);if(message.type==='saveUiPreferences'&&result.ok){syncSettings();schedulePublish();}return result;},
     catalogue:function(){return metadata.discover(pebble,options.storage);},
     reloadSettings:function(){syncSettings();schedulePublish();return copy(prefs);},
     connectionChanged:function(value){if(stopped||!!value===connected)return;connected=!!value;if(connected)bindingEpoch++;sources.connectionChanged(connected);schedulePublish();},
     stop:function(){
-      stopped=true;commands.stop();sources.stop();started=false;queue.clear();session=0;view=null;bindings=Object.create(null);identities=Object.create(null);
+      stopped=true;uiPreferences.stop();commands.stop();sources.stop();started=false;queue.clear();session=0;view=null;bindings=Object.create(null);identities=Object.create(null);
       [heartbeat,publishTimer].forEach(function(timer){if(timer!==null)cancel(timer);});heartbeat=publishTimer=null;
     }
   };

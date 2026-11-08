@@ -92,7 +92,8 @@
     "@header:Home",
     "@header:Activity",
     "@header:Action",
-    "@header:Pinned"
+    "@header:Pinned",
+    "Not saved"
   ],
   "words": {
     "en": {
@@ -436,7 +437,18 @@
       "@header:Home": "Home",
       "@header:Activity": "Activity",
       "@header:Action": "Action",
-      "@header:Pinned": "Pinned"
+      "@header:Pinned": "Pinned",
+      "Text size": "Text size",
+      "Follow Pebble": "Follow Pebble",
+      "Small": "Small",
+      "Medium": "Medium",
+      "Large": "Large",
+      "Follow Pebble appearance is unavailable on this build. It uses your last Light or Dark choice.": "Follow Pebble appearance is unavailable on this build. It uses your last Light or Dark choice.",
+      "Applied on watch": "Applied on watch",
+      "Saved on phone · Pending on watch": "Saved on phone · Pending on watch",
+      "Saved on phone · Watch could not confirm saving": "Saved on phone · Watch could not confirm saving",
+      "Retry watch delivery": "Retry watch delivery",
+      "Not saved": "Not saved"
     },
     "cs": {
       "Dashboard settings": "Nastavení Dashboardu",
@@ -779,7 +791,18 @@
       "@header:Home": "Přehled",
       "@header:Activity": "Aktivita",
       "@header:Action": "Akce",
-      "@header:Pinned": "Piny"
+      "@header:Pinned": "Piny",
+      "Text size": "Velikost textu",
+      "Follow Pebble": "Podle Pebble",
+      "Small": "Malá",
+      "Medium": "Střední",
+      "Large": "Velká",
+      "Follow Pebble appearance is unavailable on this build. It uses your last Light or Dark choice.": "Vzhled podle Pebble není v této verzi dostupný. Použije se poslední světlá nebo tmavá volba.",
+      "Applied on watch": "Použito v hodinkách",
+      "Saved on phone · Pending on watch": "Uloženo v telefonu · Čeká na hodinky",
+      "Saved on phone · Watch could not confirm saving": "Uloženo v telefonu · Hodinky nepotvrdily uložení",
+      "Retry watch delivery": "Znovu odeslat do hodinek",
+      "Not saved": "Neuloženo"
     },
     "sk": {
       "Dashboard settings": "Nastavenia Dashboardu",
@@ -1122,7 +1145,18 @@
       "@header:Home": "Prehľad",
       "@header:Activity": "Aktivita",
       "@header:Action": "Akcia",
-      "@header:Pinned": "Piny"
+      "@header:Pinned": "Piny",
+      "Text size": "Veľkosť textu",
+      "Follow Pebble": "Podľa Pebble",
+      "Small": "Malá",
+      "Medium": "Stredná",
+      "Large": "Veľká",
+      "Follow Pebble appearance is unavailable on this build. It uses your last Light or Dark choice.": "Vzhľad podľa Pebble nie je v tejto verzii dostupný. Použije sa posledná svetlá alebo tmavá voľba.",
+      "Applied on watch": "Použité v hodinkách",
+      "Saved on phone · Pending on watch": "Uložené v telefóne · Čaká na hodinky",
+      "Saved on phone · Watch could not confirm saving": "Uložené v telefóne · Hodinky nepotvrdili uloženie",
+      "Retry watch delivery": "Znova odoslať do hodiniek",
+      "Not saved": "Neuložené"
     },
     "de": {
       "Dashboard settings": "Dashboard-Einstellungen",
@@ -1465,7 +1499,18 @@
       "@header:Home": "Start",
       "@header:Activity": "Aktiv.",
       "@header:Action": "Aktion",
-      "@header:Pinned": "Pins"
+      "@header:Pinned": "Pins",
+      "Text size": "Textgröße",
+      "Follow Pebble": "Pebble folgen",
+      "Small": "Klein",
+      "Medium": "Mittel",
+      "Large": "Groß",
+      "Follow Pebble appearance is unavailable on this build. It uses your last Light or Dark choice.": "Das Pebble-Erscheinungsbild ist in dieser Version nicht verfügbar. Die letzte Auswahl Hell oder Dunkel wird verwendet.",
+      "Applied on watch": "Auf der Uhr angewendet",
+      "Saved on phone · Pending on watch": "Auf dem Telefon gespeichert · Auf der Uhr ausstehend",
+      "Saved on phone · Watch could not confirm saving": "Auf dem Telefon gespeichert · Uhr konnte das Speichern nicht bestätigen",
+      "Retry watch delivery": "Erneut an die Uhr senden",
+      "Not saved": "Nicht gespeichert"
     },
     "fr": {
       "Dashboard settings": "Réglages de Dashboard",
@@ -1808,7 +1853,18 @@
       "@header:Home": "Aperçu",
       "@header:Activity": "Activ.",
       "@header:Action": "Action",
-      "@header:Pinned": "Favor."
+      "@header:Pinned": "Favor.",
+      "Text size": "Taille du texte",
+      "Follow Pebble": "Suivre Pebble",
+      "Small": "Petite",
+      "Medium": "Moyenne",
+      "Large": "Grande",
+      "Follow Pebble appearance is unavailable on this build. It uses your last Light or Dark choice.": "Le thème Pebble est indisponible dans cette version. Le dernier choix Clair ou Sombre est utilisé.",
+      "Applied on watch": "Appliqué sur la montre",
+      "Saved on phone · Pending on watch": "Enregistré sur le téléphone · En attente sur la montre",
+      "Saved on phone · Watch could not confirm saving": "Enregistré sur le téléphone · La montre n’a pas confirmé l’enregistrement",
+      "Retry watch delivery": "Renvoyer à la montre",
+      "Not saved": "Non enregistré"
     },
     "es": {
       "Dashboard settings": "Ajustes de Dashboard",
@@ -2151,7 +2207,18 @@
       "@header:Home": "Inicio",
       "@header:Activity": "Activ.",
       "@header:Action": "Acción",
-      "@header:Pinned": "Fijados"
+      "@header:Pinned": "Fijados",
+      "Text size": "Tamaño del texto",
+      "Follow Pebble": "Seguir Pebble",
+      "Small": "Pequeño",
+      "Medium": "Mediano",
+      "Large": "Grande",
+      "Follow Pebble appearance is unavailable on this build. It uses your last Light or Dark choice.": "El aspecto de Pebble no está disponible en esta versión. Se usa la última opción Claro u Oscuro.",
+      "Applied on watch": "Aplicado en el reloj",
+      "Saved on phone · Pending on watch": "Guardado en el teléfono · Pendiente en el reloj",
+      "Saved on phone · Watch could not confirm saving": "Guardado en el teléfono · El reloj no confirmó el guardado",
+      "Retry watch delivery": "Reenviar al reloj",
+      "Not saved": "Sin guardar"
     },
     "it": {
       "Dashboard settings": "Impostazioni Dashboard",
@@ -2494,7 +2561,18 @@
       "@header:Home": "Home",
       "@header:Activity": "Attiv.",
       "@header:Action": "Azione",
-      "@header:Pinned": "Pref."
+      "@header:Pinned": "Pref.",
+      "Text size": "Dimensione del testo",
+      "Follow Pebble": "Segui Pebble",
+      "Small": "Piccolo",
+      "Medium": "Medio",
+      "Large": "Grande",
+      "Follow Pebble appearance is unavailable on this build. It uses your last Light or Dark choice.": "L’aspetto Pebble non è disponibile in questa versione. Viene usata l’ultima scelta Chiaro o Scuro.",
+      "Applied on watch": "Applicato sull’orologio",
+      "Saved on phone · Pending on watch": "Salvato sul telefono · In attesa sull’orologio",
+      "Saved on phone · Watch could not confirm saving": "Salvato sul telefono · L’orologio non ha confermato il salvataggio",
+      "Retry watch delivery": "Invia di nuovo all’orologio",
+      "Not saved": "Non salvato"
     },
     "pt": {
       "Dashboard settings": "Definições do Dashboard",
@@ -2837,7 +2915,18 @@
       "@header:Home": "Início",
       "@header:Activity": "Ativ.",
       "@header:Action": "Ação",
-      "@header:Pinned": "Fixados"
+      "@header:Pinned": "Fixados",
+      "Text size": "Tamanho do texto",
+      "Follow Pebble": "Seguir Pebble",
+      "Small": "Pequeno",
+      "Medium": "Médio",
+      "Large": "Grande",
+      "Follow Pebble appearance is unavailable on this build. It uses your last Light or Dark choice.": "O aspeto do Pebble não está disponível nesta versão. É usada a última escolha Claro ou Escuro.",
+      "Applied on watch": "Aplicado no relógio",
+      "Saved on phone · Pending on watch": "Guardado no telefone · Pendente no relógio",
+      "Saved on phone · Watch could not confirm saving": "Guardado no telefone · O relógio não confirmou a gravação",
+      "Retry watch delivery": "Reenviar para o relógio",
+      "Not saved": "Não guardado"
     },
     "nl": {
       "Dashboard settings": "Dashboard-instellingen",
@@ -3180,7 +3269,18 @@
       "@header:Home": "Overz.",
       "@header:Activity": "Act.",
       "@header:Action": "Actie",
-      "@header:Pinned": "Vast"
+      "@header:Pinned": "Vast",
+      "Text size": "Tekstgrootte",
+      "Follow Pebble": "Pebble volgen",
+      "Small": "Klein",
+      "Medium": "Gemiddeld",
+      "Large": "Groot",
+      "Follow Pebble appearance is unavailable on this build. It uses your last Light or Dark choice.": "De Pebble-weergave is niet beschikbaar in deze versie. De laatste keuze Licht of Donker wordt gebruikt.",
+      "Applied on watch": "Toegepast op horloge",
+      "Saved on phone · Pending on watch": "Opgeslagen op telefoon · Wacht op horloge",
+      "Saved on phone · Watch could not confirm saving": "Opgeslagen op telefoon · Horloge kon opslaan niet bevestigen",
+      "Retry watch delivery": "Opnieuw naar horloge sturen",
+      "Not saved": "Niet opgeslagen"
     },
     "pl": {
       "Dashboard settings": "Ustawienia Dashboard",
@@ -3523,7 +3623,18 @@
       "@header:Home": "Główna",
       "@header:Activity": "Aktyw.",
       "@header:Action": "Akcja",
-      "@header:Pinned": "Piny"
+      "@header:Pinned": "Piny",
+      "Text size": "Rozmiar tekstu",
+      "Follow Pebble": "Według Pebble",
+      "Small": "Mały",
+      "Medium": "Średni",
+      "Large": "Duży",
+      "Follow Pebble appearance is unavailable on this build. It uses your last Light or Dark choice.": "Wygląd według Pebble jest niedostępny w tej wersji. Używany jest ostatni wybór Jasny lub Ciemny.",
+      "Applied on watch": "Zastosowano na zegarku",
+      "Saved on phone · Pending on watch": "Zapisano w telefonie · Oczekuje na zegarek",
+      "Saved on phone · Watch could not confirm saving": "Zapisano w telefonie · Zegarek nie potwierdził zapisu",
+      "Retry watch delivery": "Wyślij ponownie na zegarek",
+      "Not saved": "Nie zapisano"
     },
     "da": {
       "Dashboard settings": "Dashboard-indstillinger",
@@ -3866,7 +3977,18 @@
       "@header:Home": "Hjem",
       "@header:Activity": "Aktiv.",
       "@header:Action": "Handl.",
-      "@header:Pinned": "Faste"
+      "@header:Pinned": "Faste",
+      "Text size": "Tekststørrelse",
+      "Follow Pebble": "Følg Pebble",
+      "Small": "Lille",
+      "Medium": "Mellem",
+      "Large": "Stor",
+      "Follow Pebble appearance is unavailable on this build. It uses your last Light or Dark choice.": "Pebbles udseende er ikke tilgængeligt i denne version. Dit seneste valg Lys eller Mørk bruges.",
+      "Applied on watch": "Anvendt på uret",
+      "Saved on phone · Pending on watch": "Gemt på telefonen · Afventer uret",
+      "Saved on phone · Watch could not confirm saving": "Gemt på telefonen · Uret kunne ikke bekræfte lagringen",
+      "Retry watch delivery": "Send til uret igen",
+      "Not saved": "Ikke gemt"
     },
     "sv": {
       "Dashboard settings": "Dashboard-inställningar",
@@ -4209,7 +4331,18 @@
       "@header:Home": "Hem",
       "@header:Activity": "Aktiv.",
       "@header:Action": "Åtgärd",
-      "@header:Pinned": "Fästa"
+      "@header:Pinned": "Fästa",
+      "Text size": "Textstorlek",
+      "Follow Pebble": "Följ Pebble",
+      "Small": "Liten",
+      "Medium": "Mellan",
+      "Large": "Stor",
+      "Follow Pebble appearance is unavailable on this build. It uses your last Light or Dark choice.": "Pebbles utseende är inte tillgängligt i denna version. Ditt senaste val Ljust eller Mörkt används.",
+      "Applied on watch": "Tillämpat på klockan",
+      "Saved on phone · Pending on watch": "Sparat på telefonen · Väntar på klockan",
+      "Saved on phone · Watch could not confirm saving": "Sparat på telefonen · Klockan kunde inte bekräfta sparandet",
+      "Retry watch delivery": "Skicka till klockan igen",
+      "Not saved": "Inte sparat"
     },
     "no": {
       "Dashboard settings": "Dashboard-innstillinger",
@@ -4552,7 +4685,18 @@
       "@header:Home": "Hjem",
       "@header:Activity": "Aktiv.",
       "@header:Action": "Handl.",
-      "@header:Pinned": "Festet"
+      "@header:Pinned": "Festet",
+      "Text size": "Tekststørrelse",
+      "Follow Pebble": "Følg Pebble",
+      "Small": "Liten",
+      "Medium": "Middels",
+      "Large": "Stor",
+      "Follow Pebble appearance is unavailable on this build. It uses your last Light or Dark choice.": "Pebbles utseende er ikke tilgjengelig i denne versjonen. Ditt siste valg Lyst eller Mørkt brukes.",
+      "Applied on watch": "Brukt på klokken",
+      "Saved on phone · Pending on watch": "Lagret på telefonen · Venter på klokken",
+      "Saved on phone · Watch could not confirm saving": "Lagret på telefonen · Klokken kunne ikke bekrefte lagringen",
+      "Retry watch delivery": "Send til klokken igjen",
+      "Not saved": "Ikke lagret"
     },
     "fi": {
       "Dashboard settings": "Dashboard-asetukset",
@@ -4895,7 +5039,18 @@
       "@header:Home": "Etusivu",
       "@header:Activity": "Toim.",
       "@header:Action": "Toim.",
-      "@header:Pinned": "Kiinn."
+      "@header:Pinned": "Kiinn.",
+      "Text size": "Tekstin koko",
+      "Follow Pebble": "Seuraa Pebbleä",
+      "Small": "Pieni",
+      "Medium": "Keskikokoinen",
+      "Large": "Suuri",
+      "Follow Pebble appearance is unavailable on this build. It uses your last Light or Dark choice.": "Pebblen ulkoasu ei ole käytettävissä tässä versiossa. Käytetään viimeisintä Vaalea- tai Tumma-valintaa.",
+      "Applied on watch": "Käytössä kellossa",
+      "Saved on phone · Pending on watch": "Tallennettu puhelimeen · Odottaa kelloa",
+      "Saved on phone · Watch could not confirm saving": "Tallennettu puhelimeen · Kello ei vahvistanut tallennusta",
+      "Retry watch delivery": "Lähetä kelloon uudelleen",
+      "Not saved": "Ei tallennettu"
     },
     "hu": {
       "Dashboard settings": "Dashboard beállításai",
@@ -5238,7 +5393,18 @@
       "@header:Home": "Kezdő",
       "@header:Activity": "Aktiv.",
       "@header:Action": "Műv.",
-      "@header:Pinned": "Rögz."
+      "@header:Pinned": "Rögz.",
+      "Text size": "Szövegméret",
+      "Follow Pebble": "Pebble követése",
+      "Small": "Kicsi",
+      "Medium": "Közepes",
+      "Large": "Nagy",
+      "Follow Pebble appearance is unavailable on this build. It uses your last Light or Dark choice.": "A Pebble megjelenése ebben a verzióban nem érhető el. Az utolsó Világos vagy Sötét választás érvényes.",
+      "Applied on watch": "Alkalmazva az órán",
+      "Saved on phone · Pending on watch": "Mentve a telefonon · Várakozás az órára",
+      "Saved on phone · Watch could not confirm saving": "Mentve a telefonon · Az óra nem igazolta vissza a mentést",
+      "Retry watch delivery": "Újraküldés az órára",
+      "Not saved": "Nincs mentve"
     },
     "ro": {
       "Dashboard settings": "Setări Dashboard",
@@ -5581,7 +5747,18 @@
       "@header:Home": "Acasă",
       "@header:Activity": "Activ.",
       "@header:Action": "Acț.",
-      "@header:Pinned": "Fixate"
+      "@header:Pinned": "Fixate",
+      "Text size": "Mărimea textului",
+      "Follow Pebble": "Urmează Pebble",
+      "Small": "Mic",
+      "Medium": "Mediu",
+      "Large": "Mare",
+      "Follow Pebble appearance is unavailable on this build. It uses your last Light or Dark choice.": "Aspectul Pebble nu este disponibil în această versiune. Se folosește ultima alegere Luminos sau Întunecat.",
+      "Applied on watch": "Aplicat pe ceas",
+      "Saved on phone · Pending on watch": "Salvat pe telefon · În așteptare pe ceas",
+      "Saved on phone · Watch could not confirm saving": "Salvat pe telefon · Ceasul nu a confirmat salvarea",
+      "Retry watch delivery": "Retrimite la ceas",
+      "Not saved": "Nesalvat"
     },
     "tr": {
       "Dashboard settings": "Dashboard ayarları",
@@ -5924,7 +6101,18 @@
       "@header:Home": "Ana",
       "@header:Activity": "Etkin.",
       "@header:Action": "Eylem",
-      "@header:Pinned": "Sabit"
+      "@header:Pinned": "Sabit",
+      "Text size": "Metin boyutu",
+      "Follow Pebble": "Pebble’ı izle",
+      "Small": "Küçük",
+      "Medium": "Orta",
+      "Large": "Büyük",
+      "Follow Pebble appearance is unavailable on this build. It uses your last Light or Dark choice.": "Pebble görünümü bu sürümde kullanılamıyor. Son Açık veya Koyu seçiminiz kullanılır.",
+      "Applied on watch": "Saatte uygulandı",
+      "Saved on phone · Pending on watch": "Telefona kaydedildi · Saat bekleniyor",
+      "Saved on phone · Watch could not confirm saving": "Telefona kaydedildi · Saat kaydetmeyi onaylamadı",
+      "Retry watch delivery": "Saate yeniden gönder",
+      "Not saved": "Kaydedilmedi"
     }
   },
   "nativeWords": {

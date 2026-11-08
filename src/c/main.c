@@ -8,6 +8,7 @@
 #include "dashboard.h"
 #include "dashboard_deadline.h"
 #include "dashboard_press.h"
+#include "dashboard_ui_preferences.h"
 
 #define SCREEN_W 200
 #define SCREEN_H 228
@@ -54,6 +55,12 @@ static int s_repeat_delta;
 static bool s_repeat_held;
 static DbPress s_press;
 static unsigned s_text_size;
+static PreferredContentSize s_system_text_size;
+static DashboardUiPreferences s_ui_preferences;
+static uint8_t s_ui_reply[DASHBOARD_UI_PREFERENCES_BYTES];
+static bool s_ui_pending,s_ui_sending,s_ui_error;
+static unsigned s_ui_attempts;
+static uint32_t s_ui_generation,s_ui_flight;
 static bool s_modern_type;
 static uint8_t s_tick_seconds;
 static unsigned s_last_minute;
@@ -266,7 +273,8 @@ static const char *command_error(void){
 static void header(GContext *ctx){
   const DbItem *preview=preview_item(),*item=db_selected(&(*s_paint_state));const char *status=NULL;
   char context[72];context[0]=0;
-  if(preview)status=preview->app_label;
+  if(s_ui_error)status=app_text("Not saved");
+  else if(preview)status=preview->app_label;
   else if(!s_has_connection||(*s_paint_state).snapshot.status==DB_OFFLINE)status=app_text("Offline");
   else if(command_error())status=command_error();
   else if(item&&item->role==DB_ROLE_PIN&&!db_item_current(item,utc_now()))status=(item->flags&DB_UNAVAILABLE)&&item->subtitle[0]?app_text(item->subtitle):app_text("No data");
@@ -720,8 +728,29 @@ static void acknowledge_feedback(void){
   if(s_command.active&&s_command.ended){if(s_action_timeout){app_timer_cancel(s_action_timeout);s_action_timeout=NULL;}memset(&s_command,0,sizeof(s_command));repaint();}
 }
 static void action_failed(void *context){(void)context;s_action_timeout=NULL;if(s_command.active){s_command.result=DB_FAILED;s_command.confirmation=false;s_command.ended=true;snprintf(s_command.text,sizeof(s_command.text),"%s",app_text("No response"));finish_feedback();repaint();}}
+static void ui_reply(const DashboardUiPreferences *value,uint8_t status,uint8_t flags){
+  dashboard_ui_preferences_encode(value,status,flags,s_ui_reply);++s_ui_generation;
+  s_ui_attempts=0;s_ui_pending=true;
+}
+static void apply_ui_preferences(const DashboardUiPreferences *value){
+  stop_repeat();cancel_hold_preview();cancel_motion();db_press_cancel(&s_press);
+  s_select_down=false;s_hold_intent=false;s_ui_preferences=*value;s_ui_error=false;
+  s_text_size=xoce_ui_effective_text_size(value->text_size,s_system_text_size);
+  s_state.snapshot.dark=dashboard_ui_preferences_dark(value);
+  for(unsigned i=0;i<SCREEN_COUNT;++i)if(s_windows[i])window_set_background_color(s_windows[i],background());
+  repaint();
+}
 static void send_queued(void){
-  if(s_sending||!s_queue_count)return;
+  if(s_sending)return;
+  if(s_ui_pending&&s_ui_attempts<3&&s_has_connection){
+    ++s_ui_attempts;DictionaryIterator *out;
+    if(app_message_outbox_begin(&out)!=APP_MSG_OK)return;
+    dict_write_data(out,DB_KEY_UI_PREFERENCES_RESULT,s_ui_reply,sizeof(s_ui_reply));dict_write_end(out);
+    s_sending=true;s_ui_sending=true;s_ui_pending=false;s_ui_flight=s_ui_generation;
+    if(app_message_outbox_send()!=APP_MSG_OK){s_sending=false;s_ui_sending=false;s_ui_pending=true;}
+    return;
+  }
+  if(!s_queue_count)return;
   DictionaryIterator *dict;AppMessageResult error=app_message_outbox_begin(&dict);if(error!=APP_MSG_OK){s_queue_count=0;if(s_state.loading)view_failed(NULL);else action_failed(NULL);return;}
   Outbound item=s_queue[0];dict_write_uint8(dict,DB_KEY_OPERATION,item.op);dict_write_uint32(dict,DB_KEY_SESSION,s_state.session);dict_write_uint32(dict,DB_KEY_REQUEST,item.request);
   dict_write_uint8(dict,DB_KEY_MODE,item.mode);dict_write_uint16(dict,DB_KEY_OFFSET,item.offset);dict_write_uint16(dict,DB_KEY_INDEX,item.index);
@@ -731,9 +760,9 @@ static void send_queued(void){
   if(app_message_outbox_send()!=APP_MSG_OK){s_sending=false;s_queue_count=0;if(s_state.loading)view_failed(NULL);else action_failed(NULL);}
 }
 static void queue_message(Outbound item){
-  if(item.op==DB_OP_VIEW||item.op==DB_OP_HELLO){for(unsigned i=s_sending?1:0;i<s_queue_count;i++)if(s_queue[i].op==DB_OP_VIEW||s_queue[i].op==DB_OP_HELLO){s_queue[i]=item;send_queued();return;}}
+  if(item.op==DB_OP_VIEW||item.op==DB_OP_HELLO){for(unsigned i=s_sending&&!s_ui_sending?1:0;i<s_queue_count;i++)if(s_queue[i].op==DB_OP_VIEW||s_queue[i].op==DB_OP_HELLO){s_queue[i]=item;send_queued();return;}}
   if(item.op==DB_OP_FOCUS){
-    for(unsigned i=s_sending?1:0;i<s_queue_count;i++)if(s_queue[i].op==DB_OP_FOCUS&&s_queue[i].request==item.request){s_queue[i]=item;send_queued();return;}
+    for(unsigned i=s_sending&&!s_ui_sending?1:0;i<s_queue_count;i++)if(s_queue[i].op==DB_OP_FOCUS&&s_queue[i].request==item.request){s_queue[i]=item;send_queued();return;}
     if(s_queue_count>=OUTBOX_CAPACITY)return;
   }
   if(s_queue_count>=OUTBOX_CAPACITY){if(s_state.loading)view_failed(NULL);else action_failed(NULL);return;}
@@ -766,6 +795,16 @@ static bool visually_equal(const DbSnapshot *a,const DbSnapshot *b){
 }
 static void inbox(DictionaryIterator *dict,void *context){
   (void)context;uint32_t operation;
+  Tuple *ui=dict_find(dict,DB_KEY_UI_PREFERENCES);
+  if(ui){
+    DashboardUiPreferences requested,confirmed;uint8_t status,flags;
+    if(ui->type==TUPLE_BYTE_ARRAY&&dashboard_ui_preferences_decode(ui->value->data,ui->length,&requested,&status,&flags)&&requested.revision&&!status&&!flags){
+      if(dashboard_ui_preferences_save(&requested)&&dashboard_ui_preferences_load(&confirmed)){
+        apply_ui_preferences(&confirmed);ui_reply(&confirmed,DASHBOARD_UI_APPLIED,0);
+      }else{s_ui_error=true;repaint();ui_reply(&requested,DASHBOARD_UI_SAVE_FAILED,0);}
+      send_queued();
+    }
+  }
   if(read_uint(dict,DB_KEY_OPERATION,&operation)&&operation==DB_OP_READY){
 #ifndef DASHBOARD_FIXTURE
     // READY can come from a freshly restarted phone JS runtime whose sequence
@@ -779,7 +818,7 @@ static void inbox(DictionaryIterator *dict,void *context){
     memset(&s_command,0,sizeof(s_command));db_press_cancel(&s_press);
     // The SDK still owns an already-sent dictionary. Keep that queue slot until
     // its ACK/NACK arrives; only unsent messages from the old epoch are dropped.
-    s_queue_count=s_sending&&s_queue_count?1:0;
+    s_queue_count=s_sending&&!s_ui_sending&&s_queue_count?1:0;
     db_state_init(&s_state,session);
     s_state.connected=s_has_connection;s_state.snapshot.dark=dark;
     request_view(DB_OVERVIEW,0,0,0,true);
@@ -791,6 +830,8 @@ static void inbox(DictionaryIterator *dict,void *context){
   if(data&&data->type==TUPLE_BYTE_ARRAY){
     DbSnapshot *incoming=malloc(sizeof(*incoming));if(!incoming){view_failed(NULL);return;}
     if(db_decode((const uint8_t *)data->value,data->length,incoming)){
+      if(s_ui_preferences.revision)incoming->dark=dashboard_ui_preferences_dark(&s_ui_preferences);
+      else s_ui_preferences.appearance=s_ui_preferences.last_explicit=incoming->dark?DASHBOARD_UI_DARK:DASHBOARD_UI_LIGHT;
       bool was_loading=s_state.loading,theme_changed=s_state.snapshot.dark!=incoming->dark,redraw=s_state.loading||!s_state.ready||!visually_equal(&s_state.snapshot,incoming);uint32_t selected=s_state.selected_token;uint16_t selected_index=s_state.selected_index;
       if(db_state_apply(&s_state,incoming)){
 
@@ -822,9 +863,10 @@ static void inbox(DictionaryIterator *dict,void *context){
     repaint();
   }
 }
-static void outbox_sent(DictionaryIterator *dict,void *context){(void)dict;(void)context;if(s_queue_count){s_queue_count--;memmove(s_queue,s_queue+1,s_queue_count*sizeof(*s_queue));}s_sending=false;send_queued();}
+static void outbox_sent(DictionaryIterator *dict,void *context){(void)context;if(s_ui_sending||(dict&&dict_find(dict,DB_KEY_UI_PREFERENCES_RESULT))){s_sending=false;s_ui_sending=false;send_queued();return;}if(s_queue_count){s_queue_count--;memmove(s_queue,s_queue+1,s_queue_count*sizeof(*s_queue));}s_sending=false;send_queued();}
 static void outbox_failed(DictionaryIterator *dict,AppMessageResult reason,void *context){
   (void)reason;(void)context;uint32_t session;
+  if(s_ui_sending||(dict&&dict_find(dict,DB_KEY_UI_PREFERENCES_RESULT))){s_sending=false;s_ui_sending=false;if(s_ui_flight==s_ui_generation)s_ui_pending=true;send_queued();return;}
   if(dict&&read_uint(dict,DB_KEY_SESSION,&session)&&session!=s_state.session){
     if(s_queue_count){s_queue_count--;memmove(s_queue,s_queue+1,s_queue_count*sizeof(*s_queue));}
     s_sending=false;send_queued();return;
@@ -957,7 +999,7 @@ static void connection_changed(bool connected){
 
   s_has_connection=connected;s_state.connected=connected;stop_repeat();cancel_hold_preview();cancel_motion();s_select_down=false;s_hold_intent=false;db_press_cancel(&s_press);
   if(!connected){db_state_redact(&s_state,utc_now(),true);if(s_state.loading)view_failed(NULL);if(s_command.active&&s_command.result==DB_PENDING)action_failed(NULL);}
-  else request_view(s_state.desired_mode,s_state.snapshot.offset,s_state.selected_index,s_state.selected_token,true);
+  else {ui_reply(&s_ui_preferences,DASHBOARD_UI_APPLIED,DASHBOARD_UI_HELLO);request_view(s_state.desired_mode,s_state.snapshot.offset,s_state.selected_index,s_state.selected_token,true);}
   update_ticks();repaint();
 }
 static void focus_changed(bool focused){s_focused=focused;if(!focused){stop_repeat();cancel_hold_preview();cancel_motion();s_select_down=false;s_hold_intent=false;db_press_cancel(&s_press);}else{db_state_redact(&s_state,utc_now(),!s_has_connection);repaint();}update_ticks();}
@@ -1015,13 +1057,15 @@ static void sync_native_windows(void){
 static void init(void){
   time_t seconds;uint16_t milliseconds;time_ms(&seconds,&milliseconds);uint32_t session=((uint32_t)seconds^((uint32_t)milliseconds<<16)^0x44534831u)&INT32_MAX;if(!session)session=1;
   db_state_init(&s_state,session);
-  s_text_size=xoce_ui_effective_text_size(0,preferred_content_size());
+  s_system_text_size=preferred_content_size();
+  s_ui_error=!dashboard_ui_preferences_load(&s_ui_preferences);
+  s_text_size=xoce_ui_effective_text_size(s_ui_preferences.text_size,s_system_text_size);
   const WatchInfoVersion firmware=watch_info_get_firmware_version();
   s_modern_type=firmware.major>4||(firmware.major==4&&firmware.minor>=44);
   UI_DIAG("type os=%u effective=%u firmware=%u.%u",(unsigned)preferred_content_size(),s_text_size,firmware.major,firmware.minor);
 #ifndef DASHBOARD_FIXTURE
   s_guide=!persist_read_bool(GUIDE_SEEN_KEY);
-  s_saved_dark=persist_read_bool(THEME_DARK_KEY);s_state.snapshot.dark=s_saved_dark;
+  s_saved_dark=dashboard_ui_preferences_dark(&s_ui_preferences);s_state.snapshot.dark=s_saved_dark;
 #endif
   s_has_connection=connection_service_peek_pebble_app_connection();s_state.connected=s_has_connection;
   s_outgoing_state=calloc(1,sizeof(*s_outgoing_state));s_presented_state=calloc(1,sizeof(*s_presented_state));
@@ -1074,6 +1118,7 @@ static void init(void){
   app_message_register_inbox_received(inbox);app_message_register_inbox_dropped(inbox_dropped);app_message_register_outbox_sent(outbox_sent);app_message_register_outbox_failed(outbox_failed);
   if(app_message_open(9216,256)!=APP_MSG_OK){s_state.ready=true;s_state.snapshot.status=DB_ERROR;}
   connection_service_subscribe((ConnectionHandlers){.pebble_app_connection_handler=connection_changed});app_focus_service_subscribe(focus_changed);battery_state_service_subscribe(battery_changed);
+  ui_reply(&s_ui_preferences,DASHBOARD_UI_APPLIED,DASHBOARD_UI_HELLO);
   window_stack_push(s_window,false);update_ticks();request_view(DB_OVERVIEW,0,0,0,true);
 #ifdef DASHBOARD_FIXTURE
 #include "../../tests/native/fixture.h"

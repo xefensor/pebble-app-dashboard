@@ -92,7 +92,9 @@
       "DB_RESULT": 4009,
       "DB_TEXT": 4010,
       "DB_CONFIRM": 4011,
-      "DB_INDEX": 4012
+      "DB_INDEX": 4012,
+      "DB_UI_PREFERENCES": 4013,
+      "DB_UI_PREFERENCES_RESULT": 4014
     }
   }
 }

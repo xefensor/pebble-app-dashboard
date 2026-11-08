@@ -35,3 +35,29 @@ sibling checkouts. Do not repin consumers or change published bytes as cleanup.
 
 [Earlier maintainer notes](history/maintainer-notes-before-rework.md) retain the
 full rationale/history. Read them only when investigating an old decision.
+
+## UI preferences delivery
+
+Dashboard owns `dashboard-ui-preferences-v1` on the phone and verified native key
+3. Guide key 1, legacy dark key 2, `dashboard.settings.v1`, pins and DSH1 identities
+retain their formats. The display adapter changes only `dark` in the original
+settings record, preserving every source, action, app binding and notification
+choice. The existing page Save submits those settings plus separately validated
+display choices. Uncertain partial saves retain the draft and require readback;
+there is no implicit rollback.
+
+Request/result keys 4013/4014 carry a fixed 20-byte little-endian frame: version,
+field count, status and hello flag occupy the first four bytes; revision, text
+choice, appearance choice and last explicit appearance occupy four bytes each.
+A positive revision and exact persistent readback precede native application and
+its receipt. The saved local override takes precedence over later DSH1 snapshot
+colours. No source content or capability is stored in this preference blob.
+
+Phone desired choices persist before transport. Only matching revision and every
+choice establishes Applied on watch. Native startup/reconnect hello invalidates
+a mismatched old receipt. Both directions share their existing single queues; UI
+callbacks never consume a queued view/action or its session receipt. READY keeps
+only an actual in-flight DSH1 queue slot, independently of an in-flight UI reply.
+Preference reflow cancels a held press without changing item identity or bindings.
+Stopping the runtime cancels UI retry work; later configuration writes remain
+phone-only. The shared UI library owns no settings or transport controller.

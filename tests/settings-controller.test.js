@@ -29,24 +29,25 @@ function boot(initial, language = 'en') {
   }
   const body = new Element('body'), documentElement = new Element('html');
   const document = {body, documentElement, activeElement:body, title:'Dashboard settings', getElementById:id => {assert.ok(byId[id], id); return byId[id];}, createElement:tag => new Element(tag), createTreeWalker:() => ({nextNode:() => null}), querySelectorAll:selector => selector === '[data-edit]' ? all.filter(el => 'data-edit' in el.attrs) : []};
-  const state = {saved:structuredClone(initial), writes:[], reject:false, mismatch:false};
+  const state = {ui:{version:2,textSize:'follow',appearance:initial.dark?'dark':'light',lastExplicit:initial.dark?'dark':'light'},saved:structuredClone(initial), writes:[], reject:false, mismatch:false};
   const location = {href:'preview://settings'};
   const window = {scrollX:0, scrollY:193, innerHeight:800, addEventListener() {}, scrollTo(x,y) {this.scrollX=x; this.scrollY=y;}};
   const Pebble = {addEventListener:(type, fn) => {events[type] = fn;}, targets:async () => [{id:'plugin'}, {id:'pkjs'}], sendMessage:async (target, message) => {
-    if (message.type === 'load_settings') return {ok:true,settings:state.saved};
+    if (message.type === 'load_settings') return {ok:true,settings:state.saved,uiPreferences:{ok:true,settings:state.ui,saved:state.uiStored!==false,delivery:{applied:!!state.applied,pending:!state.applied}}};
+    if(message.type==='getUiPreferences'||message.type==='retryUiPreferences')return {ok:true,settings:state.ui,saved:state.uiStored!==false,delivery:{applied:!!state.applied,pending:!state.applied}};
     if (message.type === 'catalogue') return {ok:true,catalogue:{plugins:[],instances:[],activities:[]}};
     if (message.type === 'save_settings') {
       state.writes.push({target, settings:structuredClone(message.settings)});
       if (state.reject) throw Error('uncertain write');
-      state.saved = structuredClone(message.settings);
-      return {ok:true,settings:state.mismatch ? {...state.saved,dark:!state.saved.dark} : state.saved};
+      state.saved = structuredClone(message.settings);state.ui=structuredClone(message.uiPreferences);state.uiStored=true;
+      return {ok:true,settings:state.mismatch ? {...state.saved,dark:!state.saved.dark} : state.saved,uiPreferences:{ok:true,settings:state.ui,saved:state.uiStored!==false,delivery:{applied:!!state.applied,pending:!state.applied}}};
     }
     throw Error('Unexpected request '+message.type);
   }};
   const context = {window, document, location, navigator:{language}, Pebble, Promise, setTimeout:fn => {timers.set(++timer,fn); return timer;}, clearTimeout:id => timers.delete(id), console};
   vm.runInNewContext(html.match(/<script>([\s\S]*)<\/script>/)[1], context);
   events.ready({target:'plugin'});
-  return {byId, state, window, location, document, async flush() {for(let i=0;i<30;i++) await Promise.resolve();}, change(value) {byId.dark.value=value; byId.dark.onchange();}};
+  return {byId, state, window, location, document,tick(){const entry=timers.entries().next().value;assert.ok(entry);timers.delete(entry[0]);entry[1]();}, async flush() {for(let i=0;i<30;i++) await Promise.resolve();}, change(value) {byId.dark.value=value; byId.dark.onchange();}};
 }
 for (const locale of ['en', 'cs']) test('appearance selector preserves boolean persistence, confirmed stay-open Save and reopen in '+locale, async () => {
   const initial=settings.defaults(); initial.dark=true;
@@ -79,4 +80,22 @@ for(const locale of require('../src/common/translations.json').languages) test('
  assert.equal(ui.byId.status.textContent,require('../src/common/translations.json').words[locale]['✓ Saved']);
  assert.deepEqual(ui.state.saved.pins,initial.pins);
  const reopened=boot(ui.state.saved,locale);await reopened.flush();assert.equal(reopened.byId.dark.value,'dark');assert.equal(reopened.byId.save.disabled,true);
+});
+
+test('manual text size, Follow fallback, discard and applied receipt preserve pins',async()=>{
+ const initial=settings.defaults(),ui=boot(initial);await ui.flush();ui.change('dark');
+ ui.byId['text-size'].value='large';ui.byId['text-size'].onchange();
+ ui.change('follow');ui.byId.save.onclick();await ui.flush();
+ assert.deepEqual(ui.state.ui,{version:2,textSize:'large',appearance:'follow',lastExplicit:'dark'});
+ assert.deepEqual(ui.state.saved.pins,initial.pins);assert.match(ui.byId['display-status'].textContent,/Pending on watch/);
+ ui.state.applied=true;ui.tick();await ui.flush();assert.equal(ui.byId['display-status'].textContent,'Applied on watch');
+ ui.byId['text-size'].value='small';ui.byId['text-size'].onchange();ui.byId.discard.onclick();
+ assert.equal(ui.byId['text-size'].value,'large');assert.equal(ui.byId.dark.value,'follow');
+});
+
+test('fresh display defaults are never labelled saved before verified phone persistence',async()=>{
+ const ui=boot(settings.defaults());ui.state.uiStored=false;await ui.flush();
+ assert.equal(ui.byId.save.disabled,false);assert.equal(ui.byId['display-status'].textContent,'Unsaved changes.');
+ ui.byId.save.onclick();await ui.flush();assert.match(ui.byId['display-status'].textContent,/Saved on phone/);
+ assert.equal(ui.byId.save.disabled,true);
 });
