@@ -319,10 +319,9 @@ static void empty_message(GContext *ctx,const char *title,const char *detail,int
 }
 typedef struct {
   const DbItem *item;
-  char title[265],detail[265];
-  unsigned title_font,detail_font;
-  int title_height,detail_height,height;
-  bool primary;
+  char title[265],detail[265],value[64];
+  unsigned title_font,value_font;
+  int title_height,value_height,value_width,label_width,detail_height,height;
 } SnapshotRow;
 static const DbItem *snapshot_item(unsigned slot){
   unsigned pins=0;
@@ -335,93 +334,79 @@ static const DbItem *snapshot_item(unsigned slot){
 }
 static void snapshot_row(unsigned slot,SnapshotRow *row){
   memset(row,0,sizeof(*row));row->item=snapshot_item(slot);const DbItem *item=row->item;
-  row->title_font=5;row->detail_font=4;row->primary=slot==0;
+  row->title_font=slot==0?5:4;row->value_font=5;
   if(!item){
-    snprintf(row->title,sizeof(row->title),"%s",app_text(slot==0?"Nothing active":slot==1?"No notifications":slot==2?"Choose pins":"on phone"));
+    clean_text(row->title,sizeof(row->title),app_text(slot==0?"Nothing active":slot==1?"No notifications":slot==2?"Choose pins":"on phone"));
     row->title_font=4;
   }else if(!db_item_current(item,utc_now())){
-    snprintf(row->title,sizeof(row->title),"%s",app_text(slot==0?"Activity unavailable":slot==1?"Notifications":"No data"));
-    if(slot==1)snprintf(row->detail,sizeof(row->detail),"%s",app_text("No preview"));
-  }else if(slot==0){
-    char value[64];item_value(item,value,sizeof(value));
-    if(item->flags&DB_IS_MEDIA){
-      clean_text(row->title,sizeof(row->title),item->title[0]?item->title:item->name);
-      media_identity(item,row->detail,sizeof(row->detail));
-    }else{
-      const char *title=item->title[0]?item->title:item->name;
-      clean_text(row->title,sizeof(row->title),value[0]?value:title);
-      clean_text(row->detail,sizeof(row->detail),value[0]?title:item->subtitle);
-      if(value[0]&&clock_chars(value))row->title_font=value_index(value,150,36);
-    }
-  }else if(slot==1){
-    row->title_font=4;
-    clean_text(row->title,sizeof(row->title),item->title[0]?item->title:app_text("Notifications"));
-    clean_text(row->detail,sizeof(row->detail),(item->flags&DB_PRIVATE)?(item->subtitle[0]?item->subtitle:app_text("New notification")):app_text(item->subtitle));
-    /* Free previews stay bounded; the exact native Notifications shortcut
-     * remains the route to the complete message. */
-    if(text_size(row->detail,4,150).h>2*text_size("Ag",4,150).h)
-      snprintf(row->detail,sizeof(row->detail),"%s",app_text("Open to read"));
+    clean_text(row->title,sizeof(row->title),app_text(slot==0?"Activity unavailable":slot==1?"Notifications":"No data"));
+    if(slot==1)clean_text(row->detail,sizeof(row->detail),app_text("No preview"));
   }else{
-    char value[64];item_value(item,value,sizeof(value));row->title_font=4;
-    snprintf(row->title,sizeof(row->title),"%s%s%s",item->title[0]?item->title:item->name,value[0]?"  ":"",value);
-    /* Units are part of the value. Wrap the actual native glyphs rather than
-     * selecting an outline size or dropping the unit to fit the old row. */
+    clean_text(row->title,sizeof(row->title),item->title[0]?item->title:item->name);
+    if(slot==0&&(item->flags&DB_IS_MEDIA))media_identity(item,row->detail,sizeof(row->detail));
+    else if(slot!=1){
+      item_value(item,row->value,sizeof(row->value));
+      if(slot==0)clean_text(row->detail,sizeof(row->detail),item->subtitle);
+    }else{
+      if(!row->title[0])clean_text(row->title,sizeof(row->title),app_text("Notifications"));
+      clean_text(row->detail,sizeof(row->detail),(item->flags&DB_PRIVATE)?(item->subtitle[0]?item->subtitle:app_text("New notification")):app_text(item->subtitle));
+    }
   }
-  const int width=row->primary?150:119;
-  row->title_height=text_size(row->title,row->title_font,width).h;
-  const int max_title=2*text_size("Ag",row->title_font,width).h;
-  if(!row->primary&&row->title_height>max_title)row->title_height=max_title;
-  if(row->detail[0])row->detail_height=text_size(row->detail,row->detail_font,row->primary?119:150).h;
-  const int max_detail=2*text_size("Ag",row->detail_font,150).h;
-  if(row->detail_height>max_detail)row->detail_height=max_detail;
-  row->height=row->title_height+(row->detail_height?4+row->detail_height:0)+8;
-  if(row->height<32)row->height=32;
+  /* Reserve complete values and units first. Only labels/previews ellipsize;
+   * an atomic value that cannot fit uses the existing localized overflow. */
+  if(row->value[0]&&width_of(row->value,row->value_font)>119){
+    clean_text(row->value,sizeof(row->value),app_text("Too long"));row->value_font=4;
+  }
+  row->value_width=row->value[0]?width_of(row->value,row->value_font):0;
+  row->label_width=119-(row->value_width?row->value_width+6:0);
+  row->title_height=text_size("Ag",row->title_font,2048).h;
+  row->value_height=row->value[0]?text_size(row->value,row->value_font,2048).h:0;
+  row->height=row->title_height>row->value_height?row->title_height:row->value_height;
+  if(row->height<24)row->height=24;
+  row->height+=8;
+}
+static void snapshot_layout(SnapshotRow rows[4],int viewport){
+  int used=0;
+  for(unsigned slot=0;slot<4;++slot){snapshot_row(slot,&rows[slot]);used+=rows[slot].height;}
+  /* A supporting line is optional. Activity identity has first claim, then
+   * the notification preview; selection never changes these allocations. */
+  for(unsigned slot=0;slot<2;++slot){
+    if(!rows[slot].detail[0])continue;
+    const int height=text_size("Ag",4,2048).h;
+    if(used+4+height<=viewport){rows[slot].detail_height=height;rows[slot].height+=4+height;used+=4+height;}
+  }
+  for(unsigned slot=0;slot<4&&used<viewport;++slot){
+    const int extra=(viewport-used)/(4-slot);rows[slot].height+=extra;used+=extra;
+  }
 }
 static void snapshot_body_draw(Layer *layer,GContext *ctx){
   paint_begin(DB_OVERVIEW);fill(ctx,layer_get_bounds(layer),background(),0);int top=0;
-  static SnapshotRow row;
+  static SnapshotRow rows[4];snapshot_layout(rows,layer_get_bounds(layer).size.h);
   for(unsigned slot=0;slot<4;++slot){
-    snapshot_row(slot,&row);const GColor ink=panel(ctx,row.item,GRect(0,top,CONTENT_W,row.height),false);
-    const int x=row.primary?8:40,width=row.primary?150:119;
-    graphics_context_set_text_color(ctx,ink);
-    graphics_draw_text(ctx,row.title,font_at(row.title_font),GRect(x,top+4,width,row.title_height),
-        GTextOverflowModeTrailingEllipsis,GTextAlignmentLeft,NULL);
-    if(!row.primary){if(row.item)picture(ctx,row.item,9,top+(row.height-24)/2,24,ink);else symbol(ctx,slot==1?DB_NOTICE:DB_GENERIC,9,top+(row.height-24)/2,24,ink);}
-    if(row.detail_height){
-      const int y=top+4+row.title_height+4;
-      if(row.primary&&row.item)picture(ctx,row.item,9,y+(row.detail_height-24)/2,24,ink);
-      graphics_draw_text(ctx,row.detail,font_at(row.detail_font),GRect(row.primary?40:8,y,row.primary?119:150,row.detail_height),
-          GTextOverflowModeTrailingEllipsis,GTextAlignmentLeft,NULL);
-    }
-    top+=row.height;segment(ctx,8,top-1,CONTENT_W-8,top-1,stroke());
+    const SnapshotRow *row=&rows[slot];const GColor ink=panel(ctx,row->item,GRect(0,top,CONTENT_W,row->height),false);
+    const int first=row->height-(row->detail_height?row->detail_height+4:0);
+    if(row->item)picture(ctx,row->item,9,top+(first-24)/2,24,ink);
+    else symbol(ctx,slot==1?DB_NOTICE:DB_GENERIC,9,top+(first-24)/2,24,ink);
+    text_box(ctx,row->title,row->title_font,GRect(40,top,row->label_width,first),ink,GTextAlignmentLeft);
+    if(row->value[0])text_box(ctx,row->value,row->value_font,GRect(159-row->value_width,top,row->value_width,first),ink,GTextAlignmentRight);
+    if(row->detail_height)text_top(ctx,row->detail,4,40,top+first,119,ink,GTextAlignmentLeft);
+    top+=row->height;segment(ctx,8,top-1,CONTENT_W-8,top-1,stroke());
   }
   paint_begin(s_current_screen);
 }
 static void sync_snapshot(bool animated){
+  (void)animated;
   if(!s_snapshot_scroll||s_current_screen!=DB_OVERVIEW)return;
   const bool visible=s_state.ready&&!s_state.loading&&
       (s_state.snapshot.status<DB_OFFLINE||s_state.snapshot.count);
   layer_set_hidden(scroll_layer_get_layer(s_snapshot_scroll),!visible);if(!visible)return;
-  paint_begin(DB_OVERVIEW);int height=0,selected_top=-1,selected_height=0;static SnapshotRow row;
-  for(unsigned slot=0;slot<4;++slot){
-    snapshot_row(slot,&row);
-    if(row.item&&row.item->token==s_state.selected_token&&!s_state.selection_lost){selected_top=height;selected_height=row.height;}
-    height+=row.height;
-  }
-  const int viewport=SCREEN_H-32;if(height<viewport)height=viewport;
-  if(layer_get_frame(s_snapshot_body).size.h!=height){
-    layer_set_frame(s_snapshot_body,GRect(0,0,CONTENT_W,height));
-    scroll_layer_set_content_size(s_snapshot_scroll,GSize(CONTENT_W,height));
-  }
-  const GPoint offset=scroll_layer_get_content_offset(s_snapshot_scroll);int target=offset.y;
-  if(selected_top>=0){
-    if(selected_top+target<0)target=-selected_top;
-    else if(selected_top+selected_height+target>viewport)target=viewport-selected_top-selected_height;
-  }
-  if(target>0)target=0;
-  if(target<viewport-height)target=viewport-height;
-  if(target!=offset.y)scroll_layer_set_content_offset(s_snapshot_scroll,GPoint(0,target),animated);
-  layer_mark_dirty(s_snapshot_body);paint_begin(s_current_screen);
+  /* ScrollLayer remains a container only. Collections/details keep their
+   * native scrolling, while the overview always uses the real viewport. */
+  const int viewport=layer_get_frame(scroll_layer_get_layer(s_snapshot_scroll)).size.h;
+  layer_set_frame(s_snapshot_body,GRect(0,0,CONTENT_W,viewport));
+  scroll_layer_set_content_size(s_snapshot_scroll,GSize(CONTENT_W,viewport));
+  scroll_layer_set_content_offset(s_snapshot_scroll,GPointZero,false);
+  layer_mark_dirty(s_snapshot_body);
 }
 typedef struct {
   char title[265],detail[144];

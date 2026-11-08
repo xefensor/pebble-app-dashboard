@@ -27,9 +27,13 @@ visible row count. Values and units wrap completely; optional titles/artists
 are bounded. SDK cell highlight state supplies animation colors. Native logical
 selection is immediate while the OS owns the highlight and scrolling motion.
 
-Snapshot keeps its activity, notification and two pins in a measured custom
-composition inside ScrollLayer. Larger text scrolls the selected panel into
-view. The button guide wraps all six complete descriptions and scrolls when
+Snapshot keeps its activity, notification and two pins inside the viewport
+below the header. All four panels start with one native-font line. Complete
+values and units reserve their width before labels are fitted. Remaining height
+goes to activity supporting text, then the notification preview; optional text
+ellipsizes. An atomic value that cannot fit uses the localized Too long state.
+Selection and live updates never scroll the overview. Its ScrollLayer is only a
+fixed-size container. The button guide wraps all six complete descriptions and scrolls when
 needed. Non-media command detail and Cancel-first confirmation use measured
 MenuLayers, including scrollable context and complete command labels. Media
 retains its artwork and three icon controls.
@@ -98,3 +102,6 @@ Supporting/help text uses the normal foreground colour rather than blended grey.
 This keeps black text on white and white text on black readable without changing
 type sizes or layouts. See the [contrast checkpoint](text-contrast-checkpoint.md)
 for the current candidate and verification scope.
+
+The compact-layout implementation and current verification scope are recorded in
+[the compact layout checkpoint](compact-layout-checkpoint.md).
