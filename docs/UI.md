@@ -90,3 +90,11 @@ or source lifecycle. Current build/QA commands are in [CONTRIBUTING](../CONTRIBU
 frozen build at `b7fe6c2d5b60c3559832377347f2c4a08e31ea91`. Routine development uses build/candidate and build/qa;
 that output does not overwrite these records. Physical phone/watch checks and
 fresh browser checks remain explicitly separate.
+
+
+## Supporting text contrast
+
+Supporting/help text uses the normal foreground colour rather than blended grey.
+This keeps black text on white and white text on black readable without changing
+type sizes or layouts. See the [contrast checkpoint](text-contrast-checkpoint.md)
+for the current candidate and verification scope.

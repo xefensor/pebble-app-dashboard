@@ -152,7 +152,7 @@ static const DbItem *preview_item(void){
 }
 static GColor background(void){return (*s_paint_state).snapshot.dark?GColorBlack:GColorWhite;}
 static GColor foreground(void){return (*s_paint_state).snapshot.dark?GColorWhite:GColorBlack;}
-static GColor muted(void){return (*s_paint_state).snapshot.dark?GColorLightGray:GColorDarkGray;}
+static GColor muted(void){return foreground();}
 static GColor stroke(void){return (*s_paint_state).snapshot.dark?GColorDarkGray:GColorLightGray;}
 static GColor accent(void){return (*s_paint_state).snapshot.dark?GColorTiffanyBlue:GColorJaegerGreen;}
 static XoceUiTypeRole font_role(unsigned index) {
@@ -560,8 +560,7 @@ static void action_row_draw(GContext *ctx,const Layer *cell,MenuIndex *index,voi
   const GRect bounds=layer_get_bounds(cell);const bool selected=menu_cell_layer_is_highlighted(cell);
   fill(ctx,bounds,selected?foreground():background(),0);
   if(control<3){
-    const bool available=control_available(item,control);
-    const GColor ink=selected?(available?background():(s_paint_state->snapshot.dark?GColorDarkGray:GColorLightGray)):(available?foreground():muted());
+    const GColor ink=selected?background():foreground();
     const char *label=item->controls[control][0]?item->controls[control]:app_text("Action");const int height=text_size(label,5,150).h;
     graphics_context_set_text_color(ctx,ink);graphics_draw_text(ctx,label,font_at(5),GRect(8,(bounds.size.h-height)/2,150,height),GTextOverflowModeWordWrap,GTextAlignmentLeft,NULL);
   }
