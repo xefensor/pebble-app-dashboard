@@ -31,7 +31,7 @@ function next(revision){return ((revision+1)>>>0)||1;}
 function isRequest(message){return message&&['getUiPreferences','saveUiPreferences','retryUiPreferences'].indexOf(message.type)>=0;}
 function create(options){
   var storage=options.storage,send=options.send,later=options.later||function(fn,ms){return setTimeout(fn,ms);},cancel=options.cancel||function(id){clearTimeout(id);};
-  var generation=0,timer=null,attempts=0,watchMismatch=false,closed=false;
+  var generation=0,timer=null,attempts=0,watchMismatch=false,closed=false,invalidatedRevision=null,revisionPending=false;
   function stop(){if(timer!==null)cancel(timer);timer=null;}
   function read(){
     var old=legacy.load(storage),raw=storage.getItem(KEY),record,stored=raw!==null&&raw!==undefined;
@@ -59,7 +59,6 @@ function create(options){
     return {ok:true,settings:record.settings,needsRepair:!state.healthy,saved:state.stored,
       delivery:{applied:applied,pending:!applied,error:record.error}};
   }
-  function pending(record){record.applied=null;record.error=null;return commit(record);}
   function retry(g){
     if(g!==generation||attempts>=3||!send)return;
     stop();timer=later(function(){timer=null;if(g===generation)deliver(g);},500*attempts);
@@ -67,7 +66,7 @@ function create(options){
   function deliver(g){
     if(g!==generation||attempts>=3||!send)return;
     var state;try{state=read();}catch(error){return;}
-    if(!state.healthy||!state.stored||!watchMismatch&&matches(state.record.applied,state.record))return;
+    if(!state.healthy||!state.stored||revisionPending||!watchMismatch&&matches(state.record.applied,state.record))return;
     ++attempts;
     var message={DB_UI_PREFERENCES:encode(state.record.settings,state.record.revision)};
     send(message,function(){retry(g);},function(){
@@ -79,10 +78,15 @@ function create(options){
   }
   function reconcile(force){
     if(closed)return false;
+    if(force){watchMismatch=true;revisionPending=true;++generation;stop();}
     var state;try{state=read();}catch(error){return false;}
     if(!state.healthy)return false;
-    if(!state.stored&&!commit(state.record))return false;
-    if(force){watchMismatch=true;if(!pending(state.record))return false;}
+    if(force||revisionPending||state.record.revision===invalidatedRevision){
+      watchMismatch=true;invalidatedRevision=state.record.revision;
+      state.record.revision=next(state.record.revision);state.record.applied=null;state.record.error=null;
+      if(!commit(state.record)){revisionPending=true;return false;}
+      revisionPending=false;
+    }else if(!state.stored&&!commit(state.record))return false;
     ++generation;attempts=0;stop();deliver(generation);return true;
   }
   function save(value){
@@ -106,17 +110,17 @@ function create(options){
     var received=decode(input),state;if(!received)return false;
     try{state=read();}catch(error){return false;}
     if(!state.healthy)return false;
-    if(received.revision===state.record.revision&&equal(received.settings,state.record.settings)){
+    if(!revisionPending&&state.record.revision!==invalidatedRevision&&received.revision===state.record.revision&&equal(received.settings,state.record.settings)){
       if(received.status===0){
         state.record.applied=encode(received.settings,received.revision);state.record.error=null;
         if(!commit(state.record)){watchMismatch=true;return false;}
-        watchMismatch=false;
+        watchMismatch=false,invalidatedRevision=null;
         stop();return true;
       }
       watchMismatch=true;
       state.record.applied=null;state.record.error='watch_save_unconfirmed';commit(state.record);return false;
     }
-    if(received.hello){watchMismatch=true;pending(state.record);reconcile(false);}
+    if(received.hello){watchMismatch=true;revisionPending=true;invalidatedRevision=state.record.revision;++generation;stop();reconcile(false);}
     return false;
   }
   function handle(message,respond){

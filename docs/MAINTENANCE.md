@@ -61,3 +61,8 @@ only an actual in-flight DSH1 queue slot, independently of an in-flight UI reply
 Preference reflow cancels a held press without changing item identity or bindings.
 Stopping the runtime cancels UI retry work; later configuration writes remain
 phone-only. The shared UI library owns no settings or transport controller.
+
+A runtime resync, explicit Retry or mismatched fresh watch hello rotates the
+positive delivery revision before sending. A delayed receipt from before that
+boundary cannot mark the new delivery applied. If the new revision cannot be
+verified in phone storage, keep the choice pending and suppress old receipts.
