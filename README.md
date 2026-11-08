@@ -26,6 +26,13 @@ The current SDK target is **Pebble Time 2 / Emery**, using **Pebble SDK 4.33.1**
 emulator evidence is versioned; physical phone/watch checks retain their documented gaps.
 Existing screenshots keep their original version and provenance.
 
+## Setup and use
+
+Install the PBW, connect the phone and configure sources and pins in its settings. Tap Select for the declared action, hold Select for the exact associated app, and hold Up/Down from Snapshot for Activities/Pinned. See [controls and safety rules](docs/UI.md).
+
+The version notes below describe the published download. Development candidates
+remain separate; use [CONTRIBUTING](CONTRIBUTING.md) for local builds.
+
 ## Version 0.6.3
 
 - Adopt shared XOCE headers, readable rows, full-height action rails, icons and stock Pebble action-bar feedback.
