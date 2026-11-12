@@ -121,7 +121,8 @@ test('factory runs verbatim in the isolated legacy/bundled browser environment',
 test('manifest grants only the exact public search domain without future app-enumeration permissions', () => {
   const manifest = require('../package.json').pebble;
   const internet = manifest.usesPermissions.filter(permission => permission && permission.name === 'Internet');
-  assert.deepEqual(internet, [{name:'Internet', parameters:{domains:['gm3s9tryo4-dsn.algolia.net']}}]);
-  assert.ok(!manifest.usesPermissions.includes('GlobalInternet'));
-  assert.ok(!manifest.usesPermissions.includes('ReadApps'));
+  assert.deepEqual(internet.map(({name,parameters}) => ({name,parameters})), [{name:'Internet', parameters:{domains:['gm3s9tryo4-dsn.algolia.net']}}]);
+  assert.ok(internet.every(permission => permission.reason && permission.required === false));
+  assert.ok(!manifest.usesPermissions.some(permission => (permission.name || permission) === 'GlobalInternet'));
+  assert.ok(!manifest.usesPermissions.some(permission => (permission.name || permission) === 'ReadApps'));
 });

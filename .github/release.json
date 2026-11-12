@@ -5,19 +5,19 @@
   "prerelease": true,
   "kind": "app",
   "notes": {
-    "path": "README.md",
-    "heading": "## Version {version}"
+    "path": "store/release-notes.txt"
   },
   "app_uuid": "f76f9fc1-2944-4248-bcc5-3eea2af0183b",
   "assets": [
-    "dist/Dashboard-{version}.pbw",
-    "dist/Dashboard-{version}-source.zip",
-    "dist/Dashboard-{version}-debug.zip"
+    "releases/Dashboard-{version}.pbw",
+    "releases/Dashboard-{version}-source.zip",
+    "releases/Dashboard-{version}-store-package.zip",
+    "releases/Dashboard-{version}-debug.zip"
   ],
-  "checksums_file": "dist/SHA256SUMS-{version}.txt",
+  "checksums_file": "releases/SHA256SUMS-{version}.txt",
   "source_archive": {
-    "path": "dist/Dashboard-{version}-source.zip",
+    "path": "releases/Dashboard-{version}-source.zip",
     "prefix": ""
   },
-  "debug_archive": "dist/Dashboard-{version}-debug.zip"
+  "debug_archive": "releases/Dashboard-{version}-debug.zip"
 }

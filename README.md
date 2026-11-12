@@ -22,7 +22,7 @@ sources. Timer Pause/Resume from Dashboard remains deferred.
 
 ## Compatibility
 
-The current SDK target is **Pebble Time 2 / Emery**, using **Pebble SDK 4.33.1**. Portable and
+The release candidate targets **Pebble Time 2 / Emery** and **Round 2 / Gabbro**, using **Pebble SDK 4.44**. Duo is deferred. Portable and
 emulator evidence is versioned; physical phone/watch checks retain their documented gaps.
 Existing screenshots keep their original version and provenance.
 
@@ -39,9 +39,15 @@ remain separate; use [CONTRIBUTING](CONTRIBUTING.md) for local builds.
 - Keep immediate selection, complete first-use help, safe Cancel-first confirmations and exact tap/hold action bindings.
 - Bundle UI 0.1.1 and the confirmed stay-open phone settings page.
 
+## Version 0.7.0 — local release candidate
+
+Add Time 2 and Round 2 SDK 4.44 builds, compact overview fitting and current permission disclosures.
+
+Physical Time 2 and Android validation and final publication approval remain pending.
+
 ## Development
 
-Use Node 22, Python 3.12 and a C compiler. SDK builds additionally need Pebble SDK 4.33.1 on
+Use Node 22, Python 3.12 and a C compiler. SDK builds additionally need Pebble SDK 4.44 on
 PATH.
 
 ```sh

@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "name": "Dashboard",
+  "author": "Xef",
+  "version": "0.7.0",
+  "uuid": "f76f9fc1-2944-4248-bcc5-3eea2af0183b",
+  "type": "watchapp",
+  "category": "Daily",
+  "price": "free",
+  "target_platforms": [
+    "emery",
+    "gabbro"
+  ],
+  "description_file": "description.txt",
+  "release_notes_file": "release-notes.txt",
+  "source_url": "https://github.com/xefensor/pebble-app-dashboard",
+  "support_url": "https://github.com/xefensor/pebble-app-dashboard/issues",
+  "privacy_url": "https://github.com/xefensor/pebble-app-dashboard/blob/main/PRIVACY.md",
+  "publication_status": "preparation",
+  "store_submission_allowed": false,
+  "publication_rule_url": "https://developer.repebble.com/guides/appstore-publishing/preparing-a-submission/",
+  "publication_rule_checked_on": "2026-11-12",
+  "icons": [
+    "icon-small-80.png",
+    "icon-large-144.png"
+  ],
+  "screenshots": {
+    "emery": [
+      "emery-overview.png"
+    ],
+    "gabbro": [
+      "gabbro-overview.png"
+    ]
+  },
+  "remaining_publication_gates": [
+    "Physical Time 2 and current Android Pebble app checks (Round 2 is emulator-only)",
+    "Verify Developer Dashboard listing ownership, UUID and unused version",
+    "Publish and verify proposed privacy/support URLs",
+    "Explicit final publication approval"
+  ]
+}

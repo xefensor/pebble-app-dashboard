@@ -28,6 +28,13 @@ def digest(content):
     return hashlib.sha256(content).hexdigest()
 
 
+def validate_json_module(text,original,path):
+    require(text.startswith("module.exports = "), "Invalid SDK JSON module: " + path)
+    value,end=json.JSONDecoder().raw_decode(text[len("module.exports = "):])
+    tail=text[len("module.exports = ")+end:]
+    require(value==json.loads(original) and re.fullmatch(r"\s*;?\s*//////////////////\n// WEBPACK FOOTER(?:\n//[^\n]*)*\s*",tail), "Stale app PKJS JSON source: " + path)
+
+
 def safe_path(value):
     require(
         isinstance(value, str) and value and "\\" not in value and ":" not in value,
@@ -323,7 +330,10 @@ def validate_app(root, config, commit, package, files, assets):
     for path, text in zip(mapping["sources"], mapping["sourcesContent"]):
         if path.startswith("./src/"):
             original = committed(root, commit, path[2:]).decode()
-            require(text.startswith(original), "Stale app PKJS source: " + path)
+            if path.endswith(".json"):
+                validate_json_module(text,original,path)
+            else:
+                require(text.startswith(original), "Stale app PKJS source: " + path)
             mapped.add(path[2:])
         elif path.startswith("./~/"):
             name, relative = path[4:].split("/", 1)

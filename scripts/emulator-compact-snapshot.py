@@ -14,15 +14,20 @@ from libpebble2.services.appmessage import AppMessageService,ByteArray,Uint32
 from libpebble2.services.screenshot import Screenshot
 from PIL import Image
 ROOT=Path(__file__).resolve().parents[1];PBW=candidate(ROOT,'Dashboard');check_build(ROOT,PBW)
-OUT=ROOT/'build/qa/compact-snapshot';OUT.mkdir(parents=True,exist_ok=True)
+PLATFORM=os.environ.get('PEBBLE_QA_PLATFORM','emery');assert PLATFORM in ('emery','gabbro')
+W,H=(260,260) if PLATFORM=='gabbro' else (200,228)
+SIDE=182 if PLATFORM=='gabbro' else 200;HEIGHT=182 if PLATFORM=='gabbro' else 228;X=(W-SIDE)//2;Y=(H-HEIGHT)//2
+# SDK 4.44's Gabbro macro is 40px (its prose still says 34px).
+CONTENT=SIDE-(40 if PLATFORM=='gabbro' else 34)
+OUT=ROOT.parent/'recovery-validation/release-qa/dashboard'/PLATFORM/str(time.time_ns());OUT.mkdir(parents=True,exist_ok=True)
 os.environ['PEBBLE_QA_STATE']=tempfile.mkdtemp(prefix='dashboard-compact-')
 sys.path.insert(0,str(ROOT.parent/'recovery-validation'))
 from pipe_emulator import connect
 with zipfile.ZipFile(PBW)as source,zipfile.ZipFile(OUT/'native.pbw','w')as native:
  info=json.loads(source.read('appinfo.json'))
- payload={n:hashlib.sha256(source.read(n)).hexdigest()for n in source.namelist()if n.startswith('emery/')}
+ payload={n:hashlib.sha256(source.read(n)).hexdigest()for n in source.namelist()if n.startswith(PLATFORM+'/')}
  for name in source.namelist():
-  if name=='appinfo.json'or name.startswith('emery/'):native.writestr(name,source.read(name))
+  if name=='appinfo.json'or name.startswith(PLATFORM+'/'):native.writestr(name,source.read(name))
 p=connect();target=uuid.UUID(info['uuid']);service=AppMessageService(p);messages=[]
 service.register_handler('appmessage',lambda tid,app,data:messages.append(dict(data))if app==target else None)
 fixture=json.loads((ROOT/'tests/fixtures/overview.json').read_text());checks=[]
@@ -44,15 +49,15 @@ def send(frame):
  encoder.stdin.write(json.dumps(frame)+'\n');encoder.stdin.flush();encoded=json.loads(encoder.stdout.readline());assert 'error'not in encoded,encoded
  service.send_message(target,{4008:ByteArray(bytes(encoded['bytes']))});time.sleep(.35)
 def shot(name,selected=0):
- image=Image.frombytes('RGB',(200,228),b''.join(Screenshot(p).grab_image()));image.save(OUT/(name+'.png'))
- stroke=(85,85,85)if image.getpixel((0,0))==(0,0,0)else(170,170,170)
- lines=[y for y in range(32,228)if all(image.getpixel((x,y))==stroke for x in range(8,158))]
- assert len(lines)==4 and lines[-1]==227,(name,lines)
- tops=[32]+[y+1 for y in lines[:-1]]
+ image=Image.frombytes('RGB',(W,H),b''.join(Screenshot(p).grab_image()));image.save(OUT/(name+'.png'))
+ stroke=(85,85,85)if image.getpixel((X,Y))==(0,0,0)else(170,170,170)
+ lines=[y for y in range(Y+32,Y+HEIGHT)if all(image.getpixel((x,y))==stroke for x in range(X+8,X+CONTENT-8))]
+ assert len(lines)==4 and lines[-1]==Y+HEIGHT-1,(name,lines)
+ tops=[Y+32]+[y+1 for y in lines[:-1]]
  for slot,(top,bottom)in enumerate(zip(tops,lines)):
-  normal=image.getpixel((0,0));highlight=tuple(255-channel for channel in normal)
-  assert image.getpixel((2,(top+bottom)//2))==(highlight if slot==selected else normal),(name,'wrong selected panel',slot)
-  assert sum(image.getpixel((x,y))in ((0,0,0),(255,255,255))for y in range(top,bottom)for x in range(40,159))>100
+  normal=image.getpixel((X,Y));highlight=tuple(255-channel for channel in normal)
+  assert image.getpixel((X+2,(top+bottom)//2))==(highlight if slot==selected else normal),(name,'wrong selected panel',slot)
+  assert sum(image.getpixel((x,y))in ((0,0,0),(255,255,255))for y in range(top,bottom)for x in range(X+40,X+CONTENT-7))>100
  return lines
 try:
  for size in (1,2,3):

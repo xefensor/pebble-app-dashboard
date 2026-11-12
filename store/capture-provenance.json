@@ -1,0 +1,30 @@
+{
+  "version": "0.7.0",
+  "nativePixelsModified": false,
+  "scope": "Raw native emulator screenshots, synthetic sample data; no phone/provider or physical-device claim. SDK timestamp/build-ID differences alone are normalized, with independent exact native package audits.",
+  "candidateSha256": "3f27c58d1da802e5bead5a2f33c438d39c0a853220026bcc27b321a8be2cff09",
+  "renderer": {
+    "emery": {
+      "nativeRendererSha256": "6ba4130fd61c207589fa7b562061128b3451dc9098ba43cb4a6d28897da6b709",
+      "resourceRendererSha256": "b7e36590c563b7160ccf7c8e0864b79d7a283c6c4efc2cbd1c99de92ce2496fb"
+    },
+    "gabbro": {
+      "nativeRendererSha256": "938118f52bf8b8d793de650b8ced28a84901df3702343832955ae47d58035587",
+      "resourceRendererSha256": "b7e36590c563b7160ccf7c8e0864b79d7a283c6c4efc2cbd1c99de92ce2496fb"
+    }
+  },
+  "screenshots": {
+    "emery-overview.png": {
+      "platform": "emery",
+      "sha256": "0627379724ab519df794c8d268735fb8db191bbd178fc404ce2d66b41c3cd3d8",
+      "source": "recovery-validation/release-qa/dashboard/emery/1794501460040295965/2-en-light-0.png",
+      "rendererProof": "Native source binary/resources match this candidate after identified SDK metadata normalization."
+    },
+    "gabbro-overview.png": {
+      "platform": "gabbro",
+      "sha256": "38ccfa15fe4e7a967cae13242e5cf86ba36b2e2c9297b0e05f929b1a959ffb86",
+      "source": "recovery-validation/release-qa/dashboard/gabbro/1794496981095652748/2-en-light-0.png",
+      "rendererProof": "Native source binary/resources match this candidate after identified SDK metadata normalization."
+    }
+  }
+}

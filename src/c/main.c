@@ -10,8 +10,9 @@
 #include "dashboard_press.h"
 #include "dashboard_ui_preferences.h"
 
-#define SCREEN_W 200
-#define SCREEN_H 228
+#include "app_geometry.h"
+#define SCREEN_W APP_SCREEN_W
+#define SCREEN_H APP_SCREEN_H
 #define CONTENT_W (SCREEN_W - ACTION_BAR_WIDTH)
 #define VIEW_TIMEOUT_MS 6000
 #define ACTION_TIMEOUT_MS 12000
@@ -309,13 +310,13 @@ static void media_identity(const DbItem *item,char *out,size_t size) {
 }
 static void empty_message(GContext *ctx,const char *title,const char *detail,int y){
   (void)y;const bool has_detail=detail&&detail[0];
-  const int title_height=text_size(title,4,150).h,detail_height=has_detail?text_size(detail,0,150).h:0;
+  const int title_height=text_size(title,4,(CONTENT_W-16)).h,detail_height=has_detail?text_size(detail,0,(CONTENT_W-16)).h:0;
   const int height=title_height+(has_detail?8+detail_height:0),icon_space=height+48<=SCREEN_H-32?44:0;
   const int top=32+(SCREEN_H-32-height-icon_space)/2;
   if(icon_space)symbol(ctx,DB_GENERIC,(CONTENT_W-28)/2,top,28,muted());
   graphics_context_set_text_color(ctx,foreground());
-  graphics_draw_text(ctx,title,font_at(4),GRect(8,top+icon_space,150,title_height),GTextOverflowModeWordWrap,GTextAlignmentCenter,NULL);
-  if(has_detail)graphics_draw_text(ctx,detail,font_at(0),GRect(8,top+icon_space+title_height+8,150,detail_height),GTextOverflowModeWordWrap,GTextAlignmentCenter,NULL);
+  graphics_draw_text(ctx,title,font_at(4),GRect(8,top+icon_space,(CONTENT_W-16),title_height),GTextOverflowModeWordWrap,GTextAlignmentCenter,NULL);
+  if(has_detail)graphics_draw_text(ctx,detail,font_at(0),GRect(8,top+icon_space+title_height+8,(CONTENT_W-16),detail_height),GTextOverflowModeWordWrap,GTextAlignmentCenter,NULL);
 }
 typedef struct {
   const DbItem *item;
@@ -354,44 +355,49 @@ static void snapshot_row(unsigned slot,SnapshotRow *row){
   }
   /* Reserve complete values and units first. Only labels/previews ellipsize;
    * an atomic value that cannot fit uses the existing localized overflow. */
-  if(row->value[0]&&width_of(row->value,row->value_font)>119){
+  if(row->value[0]&&width_of(row->value,row->value_font)>CONTENT_W-47){
     clean_text(row->value,sizeof(row->value),app_text("Too long"));row->value_font=4;
   }
   row->value_width=row->value[0]?width_of(row->value,row->value_font):0;
-  row->label_width=119-(row->value_width?row->value_width+6:0);
+  row->label_width=CONTENT_W-47-(row->value_width?row->value_width+6:0);
   row->title_height=text_size("Ag",row->title_font,2048).h;
   row->value_height=row->value[0]?text_size(row->value,row->value_font,2048).h:0;
   row->height=row->title_height>row->value_height?row->title_height:row->value_height;
   if(row->height<24)row->height=24;
   row->height+=8;
 }
-static void snapshot_layout(SnapshotRow rows[4],int viewport){
+/* One bounded formatter is reused; retaining four complete strings wastes 2 KiB
+ * of Duo's heap budget. Only row geometry survives between the two passes. */
+static SnapshotRow s_snapshot_row;
+static void snapshot_layout(int heights[4],int details[4],int viewport){
   int used=0;
-  for(unsigned slot=0;slot<4;++slot){snapshot_row(slot,&rows[slot]);used+=rows[slot].height;}
+  for(unsigned slot=0;slot<4;++slot){snapshot_row(slot,&s_snapshot_row);heights[slot]=s_snapshot_row.height;details[slot]=0;used+=heights[slot];}
   /* A supporting line is optional. Activity identity has first claim, then
    * the notification preview; selection never changes these allocations. */
   for(unsigned slot=0;slot<2;++slot){
-    if(!rows[slot].detail[0])continue;
+    snapshot_row(slot,&s_snapshot_row);if(!s_snapshot_row.detail[0])continue;
     const int height=text_size("Ag",4,2048).h;
-    if(used+4+height<=viewport){rows[slot].detail_height=height;rows[slot].height+=4+height;used+=4+height;}
+    if(used+4+height<=viewport){details[slot]=height;heights[slot]+=4+height;used+=4+height;}
   }
   for(unsigned slot=0;slot<4&&used<viewport;++slot){
-    const int extra=(viewport-used)/(4-slot);rows[slot].height+=extra;used+=extra;
+    const int extra=(viewport-used)/(4-slot);heights[slot]+=extra;used+=extra;
   }
 }
 static void snapshot_body_draw(Layer *layer,GContext *ctx){
   paint_begin(DB_OVERVIEW);fill(ctx,layer_get_bounds(layer),background(),0);int top=0;
-  static SnapshotRow rows[4];snapshot_layout(rows,layer_get_bounds(layer).size.h);
+  int heights[4],details[4];snapshot_layout(heights,details,layer_get_bounds(layer).size.h);
   for(unsigned slot=0;slot<4;++slot){
-    const SnapshotRow *row=&rows[slot];const GColor ink=panel(ctx,row->item,GRect(0,top,CONTENT_W,row->height),false);
+    snapshot_row(slot,&s_snapshot_row);s_snapshot_row.height=heights[slot];s_snapshot_row.detail_height=details[slot];
+    const SnapshotRow *row=&s_snapshot_row;const GColor ink=panel(ctx,row->item,GRect(0,top,CONTENT_W,row->height),false);
     const int first=row->height-(row->detail_height?row->detail_height+4:0);
     if(row->item)picture(ctx,row->item,9,top+(first-24)/2,24,ink);
     else symbol(ctx,slot==1?DB_NOTICE:DB_GENERIC,9,top+(first-24)/2,24,ink);
     text_box(ctx,row->title,row->title_font,GRect(40,top,row->label_width,first),ink,GTextAlignmentLeft);
-    if(row->value[0])text_box(ctx,row->value,row->value_font,GRect(159-row->value_width,top,row->value_width,first),ink,GTextAlignmentRight);
-    if(row->detail_height)text_top(ctx,row->detail,4,40,top+first,119,ink,GTextAlignmentLeft);
+    if(row->value[0])text_box(ctx,row->value,row->value_font,GRect(CONTENT_W-7-row->value_width,top,row->value_width,first),ink,GTextAlignmentRight);
+    if(row->detail_height)text_top(ctx,row->detail,4,40,top+first,CONTENT_W-47,ink,GTextAlignmentLeft);
     top+=row->height;segment(ctx,8,top-1,CONTENT_W-8,top-1,stroke());
   }
+  memset(&s_snapshot_row,0,sizeof(s_snapshot_row));
   paint_begin(s_current_screen);
 }
 static void sync_snapshot(bool animated){
@@ -518,8 +524,8 @@ static int action_context(GContext *ctx){
   int top=4;
   for(unsigned i=0;i<2;++i){
     if(!lines[i][0])continue;
-    const int height=text_size(lines[i],i?4:5,150).h;
-    if(ctx){graphics_context_set_text_color(ctx,i?muted():foreground());graphics_draw_text(ctx,lines[i],font_at(i?4:5),GRect(8,top,150,height),GTextOverflowModeWordWrap,GTextAlignmentLeft,NULL);}
+    const int height=text_size(lines[i],i?4:5,(CONTENT_W-16)).h;
+    if(ctx){graphics_context_set_text_color(ctx,i?muted():foreground());graphics_draw_text(ctx,lines[i],font_at(i?4:5),GRect(8,top,(CONTENT_W-16),height),GTextOverflowModeWordWrap,GTextAlignmentLeft,NULL);}
     top+=height+6;
   }
   return top+2;
@@ -535,7 +541,7 @@ static int16_t action_header_height(MenuLayer *menu,uint16_t section,void *conte
 static int16_t action_row_height(MenuLayer *menu,MenuIndex *index,void *context){
   (void)menu;(void)context;paint_begin(DB_MEDIA);const DbItem *item=db_selected(s_paint_state);const unsigned control=control_for_row(item,index->row);
   const char *label=control<3&&item->controls[control][0]?item->controls[control]:app_text("Action");
-  const int height=text_size(label,5,150).h+12;paint_begin(s_current_screen);return height;
+  const int height=text_size(label,5,(CONTENT_W-16)).h+12;paint_begin(s_current_screen);return height;
 }
 static void action_header_draw(GContext *ctx,const Layer *cell,uint16_t section,void *context){
   (void)cell;(void)section;(void)context;paint_begin(DB_MEDIA);action_context(ctx);paint_begin(s_current_screen);
@@ -546,8 +552,8 @@ static void action_row_draw(GContext *ctx,const Layer *cell,MenuIndex *index,voi
   fill(ctx,bounds,selected?foreground():background(),0);
   if(control<3){
     const GColor ink=selected?background():foreground();
-    const char *label=item->controls[control][0]?item->controls[control]:app_text("Action");const int height=text_size(label,5,150).h;
-    graphics_context_set_text_color(ctx,ink);graphics_draw_text(ctx,label,font_at(5),GRect(8,(bounds.size.h-height)/2,150,height),GTextOverflowModeWordWrap,GTextAlignmentLeft,NULL);
+    const char *label=item->controls[control][0]?item->controls[control]:app_text("Action");const int height=text_size(label,5,(CONTENT_W-16)).h;
+    graphics_context_set_text_color(ctx,ink);graphics_draw_text(ctx,label,font_at(5),GRect(8,(bounds.size.h-height)/2,(CONTENT_W-16),height),GTextOverflowModeWordWrap,GTextAlignmentLeft,NULL);
   }
   paint_begin(s_current_screen);
 }
@@ -561,7 +567,7 @@ static void sync_action_menu(bool animated){
   unsigned count=0,row=0;
   for(unsigned i=0;i<3;++i)if(db_control_present(item,i)){
     if(i==s_state.focus)row=count;
-    const int height=text_size(item->controls[i][0]?item->controls[i]:app_text("Action"),5,150).h+12;
+    const int height=text_size(item->controls[i][0]?item->controls[i]:app_text("Action"),5,(CONTENT_W-16)).h+12;
     if(geometry[count+1]!=height){geometry[count+1]=height;changed=true;}++count;
   }
   if(count!=previous_count){previous_count=count;changed=true;}
@@ -616,8 +622,8 @@ static int confirmation_context(GContext *ctx){
       item?(item->title[0]?item->title:item->name):app_text("Selected item"),app_text("Back cancels")};
   const unsigned fonts[]={5,4,0};int top=4;
   for(unsigned i=0;i<3;++i){
-    const int height=text_size(lines[i],fonts[i],150).h;
-    if(ctx){graphics_context_set_text_color(ctx,i==2?muted():foreground());graphics_draw_text(ctx,lines[i],font_at(fonts[i]),GRect(8,top,150,height),GTextOverflowModeWordWrap,GTextAlignmentLeft,NULL);}
+    const int height=text_size(lines[i],fonts[i],(CONTENT_W-16)).h;
+    if(ctx){graphics_context_set_text_color(ctx,i==2?muted():foreground());graphics_draw_text(ctx,lines[i],font_at(fonts[i]),GRect(8,top,(CONTENT_W-16),height),GTextOverflowModeWordWrap,GTextAlignmentLeft,NULL);}
     top+=height+6;
   }
   return top+2;
@@ -627,7 +633,7 @@ static int16_t confirmation_header_height(MenuLayer *menu,uint16_t section,void 
   (void)menu;(void)section;(void)context;paint_begin(SCREEN_CONFIRM);const int height=confirmation_context(NULL);paint_begin(s_current_screen);return height;
 }
 static int16_t confirmation_row_height(MenuLayer *menu,MenuIndex *index,void *context){
-  (void)menu;(void)context;return text_size(app_text(index->row?"Run action":"Cancel"),5,150).h+12;
+  (void)menu;(void)context;return text_size(app_text(index->row?"Run action":"Cancel"),5,(CONTENT_W-16)).h+12;
 }
 static void confirmation_header_draw(GContext *ctx,const Layer *cell,uint16_t section,void *context){
   (void)cell;(void)section;(void)context;paint_begin(SCREEN_CONFIRM);confirmation_context(ctx);paint_begin(s_current_screen);
@@ -636,8 +642,8 @@ static void confirmation_row_draw(GContext *ctx,const Layer *cell,MenuIndex *ind
   (void)context;paint_begin(SCREEN_CONFIRM);const bool selected=menu_cell_layer_is_highlighted(cell);
   const GRect bounds=layer_get_bounds(cell);const GColor ink=selected?background():foreground();
   fill(ctx,bounds,selected?foreground():background(),0);graphics_context_set_text_color(ctx,ink);
-  const char *label=app_text(index->row?"Run action":"Cancel");const int height=text_size(label,5,150).h;
-  graphics_draw_text(ctx,label,font_at(5),GRect(8,(bounds.size.h-height)/2,150,height),GTextOverflowModeWordWrap,GTextAlignmentLeft,NULL);paint_begin(s_current_screen);
+  const char *label=app_text(index->row?"Run action":"Cancel");const int height=text_size(label,5,(CONTENT_W-16)).h;
+  graphics_draw_text(ctx,label,font_at(5),GRect(8,(bounds.size.h-height)/2,(CONTENT_W-16),height),GTextOverflowModeWordWrap,GTextAlignmentLeft,NULL);paint_begin(s_current_screen);
 }
 static const char *guide_line(unsigned index){
   static const char *const keys[]={"Up / Down: move","Hold Up: activity","Hold Down: pins","Select: action","Hold Select: app","Back: return","Select to start"};
@@ -646,11 +652,11 @@ static const char *guide_line(unsigned index){
 static int guide_body(GContext *ctx){
   int top=4;
   for(unsigned i=0;i<7;++i){
-    const char *line=guide_line(i);const int height=text_size(line,0,150).h+6;
+    const char *line=guide_line(i);const int height=text_size(line,0,(CONTENT_W-16)).h+6;
     if(ctx){
       if(i==6)fill(ctx,GRect(0,top,CONTENT_W,height),foreground(),0);
       graphics_context_set_text_color(ctx,i==6?background():foreground());
-      graphics_draw_text(ctx,line,font_at(0),GRect(8,top,150,height),GTextOverflowModeWordWrap,GTextAlignmentLeft,NULL);
+      graphics_draw_text(ctx,line,font_at(0),GRect(8,top,(CONTENT_W-16),height),GTextOverflowModeWordWrap,GTextAlignmentLeft,NULL);
     }
     top+=height;
   }
@@ -665,7 +671,7 @@ static void sync_secondary(void){
   if(s_current_screen==SCREEN_CONFIRM&&s_confirm_menu){
     static int header,rows[2];const int next=confirmation_context(NULL);
     bool changed=header!=next;header=next;
-    for(unsigned i=0;i<2;++i){const int height=text_size(app_text(i?"Run action":"Cancel"),5,150).h+12;if(rows[i]!=height){rows[i]=height;changed=true;}}
+    for(unsigned i=0;i<2;++i){const int height=text_size(app_text(i?"Run action":"Cancel"),5,(CONTENT_W-16)).h+12;if(rows[i]!=height){rows[i]=height;changed=true;}}
     if(changed)menu_layer_reload_data(s_confirm_menu);
     menu_layer_set_normal_colors(s_confirm_menu,background(),foreground());menu_layer_set_highlight_colors(s_confirm_menu,foreground(),background());
     const unsigned row=s_confirm_accept?1:0;
@@ -680,7 +686,7 @@ static void guide_step(int direction){
 static void confirmation_step(bool up){
   ScrollLayer *scroll=menu_layer_get_scroll_layer(s_confirm_menu);const GPoint offset=scroll_layer_get_content_offset(scroll);
   if(!s_confirm_accept&&up&&offset.y<0){scroll_layer_set_content_offset(scroll,GPoint(0,offset.y+60>0?0:offset.y+60),true);return;}
-  if(!s_confirm_accept&&!up&&confirmation_context(NULL)+text_size(app_text("Cancel"),5,150).h+12+offset.y>SCREEN_H-36){menu_layer_set_selected_index(s_confirm_menu,(MenuIndex){0,0},MenuRowAlignBottom,true);return;}
+  if(!s_confirm_accept&&!up&&confirmation_context(NULL)+text_size(app_text("Cancel"),5,(CONTENT_W-16)).h+12+offset.y>SCREEN_H-36){menu_layer_set_selected_index(s_confirm_menu,(MenuIndex){0,0},MenuRowAlignBottom,true);return;}
   s_confirm_accept=!up;menu_layer_set_selected_index(s_confirm_menu,(MenuIndex){.row=s_confirm_accept?1:0},MenuRowAlignBottom,true);
 }
 static void update(Layer *layer,GContext *ctx){
@@ -893,7 +899,7 @@ static void move_selection(int delta){
   if(s_state.desired_mode==DB_MEDIA&&s_action_menu&&selected_item&&!(selected_item->flags&DB_IS_MEDIA)&&s_state.focus==control_for_row(selected_item,0)){
     ScrollLayer *scroll=menu_layer_get_scroll_layer(s_action_menu);const GPoint offset=scroll_layer_get_content_offset(scroll);
     if(delta<0&&offset.y<0){scroll_layer_set_content_offset(scroll,GPoint(0,offset.y+60>0?0:offset.y+60),true);return;}
-    if(delta>0&&action_context(NULL)+text_size(selected_item->controls[s_state.focus],5,150).h+12+offset.y>SCREEN_H-36){menu_layer_set_selected_index(s_action_menu,(MenuIndex){0,0},MenuRowAlignBottom,true);return;}
+    if(delta>0&&action_context(NULL)+text_size(selected_item->controls[s_state.focus],5,(CONTENT_W-16)).h+12+offset.y>SCREEN_H-36){menu_layer_set_selected_index(s_action_menu,(MenuIndex){0,0},MenuRowAlignBottom,true);return;}
   }
   uint16_t index=s_state.selected_index;uint8_t focus=s_state.focus;
   if(!db_state_move(&s_state,delta,&index))return;
@@ -1057,7 +1063,7 @@ static void init(void){
   if(!s_outgoing_state||!s_presented_state)return;
   for(unsigned screen=0;screen<SCREEN_COUNT;++screen){
     s_windows[screen]=window_create();if(!s_windows[screen])return;
-    s_canvases[screen]=layer_create_with_data(GRect(0,0,SCREEN_W,SCREEN_H),sizeof(unsigned));
+    s_canvases[screen]=layer_create_with_data(APP_SCREEN_FRAME,sizeof(unsigned));
     if(!s_canvases[screen])return;
     *(unsigned *)layer_get_data(s_canvases[screen])=screen;
     layer_set_update_proc(s_canvases[screen],update);
@@ -1071,7 +1077,7 @@ static void init(void){
   if(!s_snapshot_scroll||!s_snapshot_body)return;
   layer_set_update_proc(s_snapshot_body,snapshot_body_draw);
   scroll_layer_add_child(s_snapshot_scroll,s_snapshot_body);
-  layer_add_child(window_get_root_layer(s_windows[DB_OVERVIEW]),scroll_layer_get_layer(s_snapshot_scroll));
+  layer_add_child(s_canvases[DB_OVERVIEW],scroll_layer_get_layer(s_snapshot_scroll));
   layer_set_hidden(scroll_layer_get_layer(s_snapshot_scroll),true);
   for(unsigned i=0;i<2;++i){
     s_collection_menu[i]=menu_layer_create(GRect(0,36,CONTENT_W,SCREEN_H-36));
@@ -1080,26 +1086,26 @@ static void init(void){
     menu_layer_pad_bottom_enable(s_collection_menu[i],false);
     menu_layer_set_callbacks(s_collection_menu[i],(void *)(uintptr_t)(i+1),(MenuLayerCallbacks){
         .get_num_rows=collection_count,.get_cell_height=collection_height,.draw_row=collection_draw});
-    layer_add_child(window_get_root_layer(s_windows[i+1]),menu_layer_get_layer(s_collection_menu[i]));
+    layer_add_child(s_canvases[i+1],menu_layer_get_layer(s_collection_menu[i]));
     layer_set_hidden(menu_layer_get_layer(s_collection_menu[i]),true);
   }
   s_guide_scroll=scroll_layer_create(GRect(0,36,CONTENT_W,SCREEN_H-36));
   s_guide_body=layer_create(GRect(0,0,CONTENT_W,SCREEN_H-36));
   if(!s_guide_scroll||!s_guide_body)return;
   layer_set_update_proc(s_guide_body,guide_body_draw);scroll_layer_add_child(s_guide_scroll,s_guide_body);
-  layer_add_child(window_get_root_layer(s_windows[SCREEN_GUIDE]),scroll_layer_get_layer(s_guide_scroll));
+  layer_add_child(s_canvases[SCREEN_GUIDE],scroll_layer_get_layer(s_guide_scroll));
   s_action_menu=menu_layer_create(GRect(0,36,CONTENT_W,SCREEN_H-36));if(!s_action_menu)return;
   menu_layer_set_center_focused(s_action_menu,false);menu_layer_pad_bottom_enable(s_action_menu,false);
   menu_layer_set_callbacks(s_action_menu,NULL,(MenuLayerCallbacks){.get_num_rows=action_rows,
       .get_cell_height=action_row_height,.get_header_height=action_header_height,.draw_row=action_row_draw,.draw_header=action_header_draw});
-  layer_add_child(window_get_root_layer(s_windows[DB_MEDIA]),menu_layer_get_layer(s_action_menu));
+  layer_add_child(s_canvases[DB_MEDIA],menu_layer_get_layer(s_action_menu));
   layer_set_hidden(menu_layer_get_layer(s_action_menu),true);
   s_confirm_menu=menu_layer_create(GRect(0,36,CONTENT_W,SCREEN_H-36));if(!s_confirm_menu)return;
   menu_layer_set_center_focused(s_confirm_menu,false);menu_layer_pad_bottom_enable(s_confirm_menu,false);
   menu_layer_set_callbacks(s_confirm_menu,NULL,(MenuLayerCallbacks){.get_num_rows=confirmation_rows,
       .get_cell_height=confirmation_row_height,.get_header_height=confirmation_header_height,
       .draw_row=confirmation_row_draw,.draw_header=confirmation_header_draw});
-  layer_add_child(window_get_root_layer(s_windows[SCREEN_CONFIRM]),menu_layer_get_layer(s_confirm_menu));
+  layer_add_child(s_canvases[SCREEN_CONFIRM],menu_layer_get_layer(s_confirm_menu));
   app_message_register_inbox_received(inbox);app_message_register_inbox_dropped(inbox_dropped);app_message_register_outbox_sent(outbox_sent);app_message_register_outbox_failed(outbox_failed);
   if(app_message_open(9216,256)!=APP_MSG_OK){s_state.ready=true;s_state.snapshot.status=DB_ERROR;}
   connection_service_subscribe((ConnectionHandlers){.pebble_app_connection_handler=connection_changed});app_focus_service_subscribe(focus_changed);battery_state_service_subscribe(battery_changed);

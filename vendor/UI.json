@@ -1,14 +1,16 @@
 {
   "package": "pebble-xoce-ui",
-  "version": "0.1.1",
-  "archive": "pebble-xoce-ui-0.1.1-native-type-63526c2e66e1.tgz",
-  "sha256": "63526c2e66e1d2150aecf0b2671233733060090bd5a6c2fdfb4e1eae748cb36f",
-  "integrity": "sha512-73tFFA6QmJ9Mr6Vx5lW0omp+MOS0Nh8g+XrcsrWXF9y5UpFtIIiek57L+odvry/RJn+dI0qZCUFuql7lGn01zA==",
-  "sdk": "4.33.1",
+  "version": "0.1.2",
+  "repository": "https://github.com/xefensor/pebble-lib-ui",
+  "artifact": "pebble-xoce-ui-0.1.2.tgz",
+  "archive": "pebble-xoce-ui-0.1.2.tgz",
+  "sha256": "cdbd84416497c71f214e40ea31c735481a65ba3a10e92004f7d2b65d67fc9062",
+  "integrity": "sha512-y8ekEuD+gIaXUoejsQfT1/V1PS+3BM7UobYfkI0ZHrA+Tl+OcjIWl/94Fysnt1orgqWbtfPecLd84HxRxf5LbQ==",
+  "sdk": "4.44",
   "platforms": [
-    "emery"
+    "emery",
+    "gabbro"
   ],
-  "source_repository": "pebble-lib-ui",
-  "status": "Local native-type candidate; not published",
-  "source_commit": "b67370a5127d9e9bf7687dbed4a70ca6a97616a6"
+  "source_commit": "011ff936d84b7247587561cd40ebe3785b77e8e5",
+  "status": "Local SDK 4.44 candidate; source tests and all-target library build passed; not published"
 }

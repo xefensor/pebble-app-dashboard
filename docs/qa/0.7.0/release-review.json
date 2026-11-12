@@ -1,0 +1,37 @@
+{
+  "product": "Dashboard",
+  "version": "0.7.0",
+  "pbwSha256": "3f27c58d1da802e5bead5a2f33c438d39c0a853220026bcc27b321a8be2cff09",
+  "targets": [
+    "emery",
+    "gabbro"
+  ],
+  "automated": [
+    "npm test PASS (pinned Node/Python)",
+    "Current configuration generation PASS",
+    "Exact candidate SDK/ELF/PBW audits PASS",
+    "Store prepare/check PASS",
+    "npm audit: zero known vulnerabilities"
+  ],
+  "emulatorAndLiveScope": "Two emulator models: 108 raw frames each. Small/Medium/Large × English/Czech/German source labels × light/dark; all four selections, live values and overflow preserve the four-panel viewport. Store provenance verifies the captured renderer against this PBW.",
+  "physicalWatchTested": false,
+  "physicalPhoneTested": false,
+  "remoteCiRun": false,
+  "published": false,
+  "remainingPublicationGates": [
+    "Physical Time 2 and current Android Pebble app checks (Round 2 is emulator-only)",
+    "Verify Developer Dashboard listing ownership, UUID and unused version",
+    "Publish and verify proposed privacy/support URLs",
+    "Explicit final publication approval"
+  ],
+  "renderer": {
+    "emery": {
+      "nativeRendererSha256": "6ba4130fd61c207589fa7b562061128b3451dc9098ba43cb4a6d28897da6b709",
+      "resourceRendererSha256": "b7e36590c563b7160ccf7c8e0864b79d7a283c6c4efc2cbd1c99de92ce2496fb"
+    },
+    "gabbro": {
+      "nativeRendererSha256": "938118f52bf8b8d793de650b8ced28a84901df3702343832955ae47d58035587",
+      "resourceRendererSha256": "b7e36590c563b7160ccf7c8e0864b79d7a283c6c4efc2cbd1c99de92ce2496fb"
+    }
+  }
+}

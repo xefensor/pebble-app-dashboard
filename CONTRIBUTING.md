@@ -22,7 +22,7 @@ with `npm ci --ignore-scripts` after selecting the runtimes.
 
 Use Node 22, Python 3.12 and a C99 compiler (`cc`, or set `CC`). Portable tests do not need a
 phone, watch or Pebble SDK. For native SDK builds install [Pebble SDK
-4.33.1](https://developer.repebble.com/sdk/) and make `pebble` available on PATH. This
+4.44](https://developer.repebble.com/sdk/) and make `pebble` available on PATH. This
 repository builds independently from its own committed dependencies.
 
 ```sh
@@ -33,7 +33,8 @@ npm run check:artifact
 ```
 
 `npm test` runs source/native, workflow, release-fixture and documentation checks. CI uses Node
-22 and Python 3.12; it does not claim SDK, emulator or physical-device coverage.
+22 and Python 3.12, with a separate pinned SDK build job. Emulator and physical-device
+coverage require separate runs.
 
 `src/c` owns native layout and input; `src/pkjs` owns discovery, permissions and the single
 transport queue; `src/plugin` owns settings integration. Vendored Activities/UI packages need no
@@ -69,3 +70,27 @@ After editing the catalogue, run `python3 scripts/generate-localization.py` and
 `node scripts/generate-config.cjs`. Native strings load one language at a time from
 a bounded resource buffer. `npm test` checks catalogue/placeholder parity and
 resource failure handling; `npm run check:artifact` checks packaged resources and identities. Native font bitmaps, glyph coverage and measured layout are checked in the emulator separately.
+
+
+## Pinned native build checks
+
+The native CI job uses Node/Python version files, `requirements-release.txt`,
+`.github/sdk-lock.json` and the SDK npm lock to build every declared platform.
+It downloads verified SDK 4.44 and matching Linux x86_64 toolchain archives into
+ignored `.build-tools/`. It does not log in, upload, publish or deploy.
+`python scripts/bootstrap-sdk.py --verify-only /path/to/SDKs/4.44` checks an
+existing installation without changing it. A new isolated installation needs
+a local venv with `requirements-release.txt` and its `bin` directory on PATH;
+set `XDG_DATA_HOME` to this checkout's `.build-tools/data` for subsequent builds.
+Historical root `dist.zip` files and released versions remain unchanged.
+
+## Freeze a reviewed Store candidate
+
+After current source, artifact, configuration and Store checks pass, run
+`python3 scripts/freeze-release.py` to copy the exact checked PBW, debug and Store
+kit bytes and make the standalone source ZIP. It refuses an existing version
+and writes `releases/SHA256SUMS-VERSION.txt`; old root checksums and artifacts
+remain untouched. Commit these files locally, then run `npm run release:prepare`
+to validate committed HEAD. No build, tag, upload or publication happens during
+freezing or preparation. The current candidate's physical-device and account
+gates remain in `docs/RELEASE-READINESS.md`.

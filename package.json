@@ -1,16 +1,16 @@
 {
   "name": "pebble-app-dashboard",
-  "version": "0.6.3",
+  "version": "0.7.0",
   "author": "Xef",
   "private": true,
   "license": "SEE LICENSE IN LICENSE",
   "description": "A stock Pebble Dashboard for activities, notifications and mixed pinned readings/actions.",
   "dependencies": {
-    "pebble-activities": "file:vendor/pebble-activities-0.4.4.tgz",
-    "pebble-xoce-ui": "file:vendor/pebble-xoce-ui-0.1.1-native-type-63526c2e66e1.tgz"
+    "pebble-activities": "file:vendor/pebble-activities-0.4.5.tgz",
+    "pebble-xoce-ui": "file:vendor/pebble-xoce-ui-0.1.2.tgz"
   },
   "scripts": {
-    "test": "node --test tests/*.test.js && python3 scripts/test-native.py && npm run test:workflow && npm run check:docs && npm run test:release && python3 scripts/test-localization.py",
+    "test": "node --test tests/*.test.js && python3 scripts/test-native.py && npm run test:workflow && npm run check:docs && npm run test:release && python3 scripts/test-localization.py && npm run test:platforms && npm run test:store",
     "build": "python3 scripts/build.py",
     "check:artifact": "python3 scripts/check-artifact.py",
     "build:release": "python3 scripts/build.py --release",
@@ -23,7 +23,11 @@
     "release:publish": "python3 scripts/github-release.py publish",
     "test:release": "python3 -m unittest discover -s tests -p \"test_*release*.py\"",
     "check:setup": "python3 scripts/check-setup.py",
-    "check:localization": "python3 scripts/generate-localization.py --check"
+    "check:localization": "python3 scripts/generate-localization.py --check",
+    "test:platforms": "python3 -m unittest discover -s tests -p test_platform_audit.py",
+    "store:prepare": "python3 scripts/store-kit.py",
+    "store:check": "python3 scripts/store-kit.py --check",
+    "test:store": "python3 -m unittest discover -s tests -p test_store_kit.py"
   },
   "pebble": {
     "displayName": "Dashboard",
@@ -32,7 +36,8 @@
     "projectType": "native",
     "enableMultiJS": true,
     "targetPlatforms": [
-      "emery"
+      "emery",
+      "gabbro"
     ],
     "watchapp": {
       "watchface": false
@@ -42,20 +47,50 @@
     ],
     "configPage": "config.html",
     "usesPermissions": [
-      "Location",
-      "ReadMusic",
-      "ControlMusic",
-      "Notifications",
-      "FindMyPhone",
-      "LaunchApps",
-      "ReadWatchSettings",
+      {
+        "name": "Location",
+        "reason": "To show weather for your selected or current location",
+        "required": false
+      },
+      {
+        "name": "ReadMusic",
+        "reason": "To show the current track and album artwork",
+        "required": false
+      },
+      {
+        "name": "ControlMusic",
+        "reason": "To run the music controls you select",
+        "required": false
+      },
+      {
+        "name": "Notifications",
+        "reason": "To show notification information you enable",
+        "required": false
+      },
+      {
+        "name": "FindMyPhone",
+        "reason": "To ring your phone when you select Find phone",
+        "required": false
+      },
+      {
+        "name": "LaunchApps",
+        "reason": "To open the app associated with your chosen activity",
+        "required": false
+      },
+      {
+        "name": "ReadWatchSettings",
+        "reason": "To read watch preferences used by the display",
+        "required": false
+      },
       {
         "name": "Internet",
         "parameters": {
           "domains": [
             "gm3s9tryo4-dsn.algolia.net"
           ]
-        }
+        },
+        "reason": "To search the app catalogue when you choose an app",
+        "required": false
       }
     ],
     "plugin": {

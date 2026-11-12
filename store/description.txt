@@ -1,0 +1,9 @@
+Activities, notifications and your chosen pins together on Pebble.
+
+The overview keeps one activity, a notification panel and two pins visible. Open Activities or Pinned for the full collection. Select runs the action declared by the selected item; hold Select to open its associated app. Complete values and units stay together.
+
+Choose Small, Medium, Large or Follow Pebble text, and a light, dark or following appearance. Available in 17 languages.
+
+Works with compatible Pebble activity and reading providers. Phone features need the current Pebble mobile app with Plugins / permissions preview enabled and the permissions you choose. Music and notification integration require Android. Missing, expired or disconnected sources remain unavailable instead of acting on stale information.
+
+Free. For Pebble Time 2 and Round 2. Round 2 validation uses the emulator; physical Time 2 and Android checks are pending before publication.

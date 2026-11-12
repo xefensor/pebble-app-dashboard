@@ -22,6 +22,8 @@ subprocess.run(
     cwd=root,
     check=True,
 )
+# SDK 4.44 validates and bundles the generated root plugin entrypoint.
+(root / "plugin.js").write_bytes((root / "build/plugin.js").read_bytes())
 subprocess.run(["pebble", "build"], cwd=root, check=True)
 source_pbw = root / "build" / (root.name + ".pbw")
 with zipfile.ZipFile(source_pbw) as source:

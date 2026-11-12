@@ -14,6 +14,10 @@ def build(ctx):
     binaries = []
     for platform in ctx.env.TARGET_PLATFORMS:
         ctx.env = ctx.all_envs[platform]
+        # GCC 14 link-time optimization removes duplicate static helpers across
+        # the host and its libraries. Fat objects retain ordinary archive use.
+        ctx.env.append_unique('CFLAGS', ['-flto', '-ffat-lto-objects'])
+        ctx.env.append_unique('LINKFLAGS', ['-flto'])
         if os.environ.get('DASHBOARD_DIAGNOSTICS') == '1':
             ctx.env.append_value('CFLAGS', ['-DDASHBOARD_DIAGNOSTICS=1'])
         if os.environ.get('DASHBOARD_FIXTURE') == '1':
