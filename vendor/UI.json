@@ -1,16 +1,40 @@
 {
   "package": "pebble-xoce-ui",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "repository": "https://github.com/xefensor/pebble-lib-ui",
-  "artifact": "pebble-xoce-ui-0.1.2.tgz",
-  "archive": "pebble-xoce-ui-0.1.2.tgz",
-  "sha256": "cdbd84416497c71f214e40ea31c735481a65ba3a10e92004f7d2b65d67fc9062",
-  "integrity": "sha512-y8ekEuD+gIaXUoejsQfT1/V1PS+3BM7UobYfkI0ZHrA+Tl+OcjIWl/94Fysnt1orgqWbtfPecLd84HxRxf5LbQ==",
+  "artifact": "pebble-xoce-ui-0.1.3.tgz",
+  "archive": "pebble-xoce-ui-0.1.3.tgz",
+  "sha256": "915fe3fd4349bcac80c4f313771761ed682c51ae811417ff60f0bf0d31cdadb4",
+  "integrity": "sha512-p1Zl0w3qReTvUNssvblFIxut8LKk+cXknKnQf5+eWpN2mtPMbGwtAsjns1pmQ2TzbJVUYaetyUWoOf8u6tr/hg==",
   "sdk": "4.44",
   "platforms": [
     "emery",
     "gabbro"
   ],
-  "source_commit": "011ff936d84b7247587561cd40ebe3785b77e8e5",
-  "status": "Local SDK 4.44 candidate; source tests and all-target library build passed; not published"
+  "source_commit": "53cf0916f77dabb39398abda999e7fbab743a5b1",
+  "status": "Local Round 2 development candidate from committed source; not published",
+  "source_candidate": {
+    "inputs": {
+      "LICENSE": "d98d3677d07448a915a4ec03e84d888c3e7ead3eaa8b371288705be3d497d40f",
+      "include/metrics.h": "54ad7d31907d4ed207157319fec3f86c7f2cc9672302da2c440ec7ec9e6724fb",
+      "include/native-type.h": "af04be5595e62131f590f5dd9209c92f2414bde1e8b5526286e1bdccc8f230bb",
+      "include/pebble-xoce-ui.h": "2d803b6ea0e5296f76a5a65b8db707af9abeef5506b750fd2cf0b553f2eb5223",
+      "package-lock.json": "96bdcd8d41bb4e43958bb0aa6ce09813206682f762c0f1c15f34c759c233aadf",
+      "package.json": "d2a7ffa88a304e31dc4a20347e58fa972446d94af69323300d801e1f2195a8f4",
+      "scripts/build.py": "212376c3d6193847d9e45fa6d8715c8b384bb1a465bf1e21fdc896993a4ba4b2",
+      "scripts/package-release.py": "04e379e258445ab5dc543f1dfcad0170d34a71e9af7ab964f9f8603a9883cc1b",
+      "scripts/repo_workflow.py": "ebcb19fba53849df2d46a3b543168d8047ed1b11b763f195aa38aaa5747d8219",
+      "settings-style.js": "c84fd1662d46bd9a3c52a7fdd01ed2f3fa3527b7d7de2b44f0fb9575aaa0c7b0",
+      "src/c/content-icons.c": "8ecfc5cdbfd5104e44eb29b5b0f5e1c95b4da8fa298fa219d1b67810937e8528",
+      "src/c/header.c": "9859df23de4c1b249b42a775347fddf14b67d0ee67400558d385dd4ce2d1d8bb",
+      "src/c/icons.c": "63ee2991304296f101bf0d2bcb8f6fff514a329142b41441de1679f846f96e77",
+      "src/c/layout.c": "a814d332e82a75bc6aa045542e813e5463cac0b84c82d90c0c1a59441ed88ce0",
+      "src/c/native_type.c": "36b730307093ce7b9067976dc73224f71bf614cf22c9406015f03f0f0b988e2a",
+      "src/js/settings-style.js": "2e4876a7b0203262d5b7c22804f39ea67f83e8dd859c48c146e2d8957eda845c",
+      "wscript": "7d54f4435bc1259c9e60a9b1d85ffa3243960424ad116b531362819107fcbf50"
+    },
+    "artifacts": {
+      "dist.zip": "bd057e87b3293c7693a9534dbd488a419c7a1b22f761e0d5cd52a0d86df7c27d"
+    }
+  }
 }

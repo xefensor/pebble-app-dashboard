@@ -105,3 +105,18 @@ for the current candidate and verification scope.
 
 The compact-layout implementation and current verification scope are recorded in
 [the compact layout checkpoint](compact-layout-checkpoint.md).
+
+
+## Round 2 development layout
+
+Gabbro uses the complete 260×260 physical display. Text and artwork are fitted
+inside the chord for their vertical band; the shared UI library owns only
+geometry and drawing. Time 2 retains its established rectangular composition.
+The SDK 4.44 reference and disposable candidate evidence are in the workspace's
+`Round2-Development/` directory. This is development work; frozen release files
+and historical QA are unchanged. No physical Round 2 or Android result is implied.
+
+The overview reserves all four panels without scrolling. Complete values and
+units take precedence over icons and optional labels. Native collections and
+actions use centered selection; the reading guide uses native flow, paging and
+content indicators. The round header stacks the complete clock above context.
