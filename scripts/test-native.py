@@ -47,3 +47,5 @@ if '--frames-dir' in sys.argv:
 subprocess.run([compiler,'-std=c99','-Wall','-Wextra','-Werror','-pedantic','-Itests/fake-sdk',
  'src/c/dashboard_ui_preferences.c','tests/native/test_ui_preferences.c','-o',str(build/'test_ui_preferences')],cwd=root,check=True)
 subprocess.run([str(build/'test_ui_preferences')],cwd=root,check=True)
+
+subprocess.run(["python3", "-m", "unittest", "discover", "-s", "tests", "-p", "test_round_collection.py"], cwd=root, check=True)

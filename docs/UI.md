@@ -120,3 +120,7 @@ The overview reserves all four panels without scrolling. Complete values and
 units take precedence over icons and optional labels. Native collections and
 actions use centered selection; the reading guide uses native flow, paging and
 content indicators. The round header stacks the complete clock above context.
+
+Round collections fit their original titles against the actual drawing band, with compact surrounding rows and native selection centered in the physical circle. Dialog context uses separate native text layers and paging. Full-width menu backgrounds draw behind the curved action rail. The four-panel overview remains fixed.
+
+Round menu content indicators occupy a separate right-hand column and follow the actual menu viewport. Text measurement and drawing reserve that column, so arrows cannot cover neighboring titles.
