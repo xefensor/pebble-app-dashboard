@@ -39,7 +39,7 @@ remain separate; use [CONTRIBUTING](CONTRIBUTING.md) for local builds.
 - Keep immediate selection, complete first-use help, safe Cancel-first confirmations and exact tap/hold action bindings.
 - Bundle UI 0.1.1 and the confirmed stay-open phone settings page.
 
-## Version 0.7.1 — stable release preparation
+## Version 1.0.0 — stable release preparation
 
 Add Time 2 and Round 2 SDK 4.44 builds, compact overview fitting and current permission disclosures.
 

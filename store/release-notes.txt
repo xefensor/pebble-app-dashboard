@@ -1,5 +1,7 @@
-Dashboard 0.7.1
+Dashboard 1.0.0
 
 Prepared for SDK 4.44 on Time 2 and Round 2. Keeps the existing app identity, saved state and compatible provider/action protocols. Uses the selected Pebble text size and native controls. Full verification and remaining real-device checks are recorded in the release preparation report. Not published yet.
 
 Keep all four overview panels visible. Fit collection titles to the circle and paginate longer action context independently of native menu selection. Time 2 retains its established composition.
+
+First stable public release numbered 1.0.0. The reviewed implementation, public UUID, saved state and provider protocols are unchanged.

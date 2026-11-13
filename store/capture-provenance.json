@@ -1,31 +1,31 @@
 {
-  "version": "0.7.1",
+  "version": "1.0.0",
   "nativePixelsModified": false,
   "scope": "Raw emulator screenshots from the exact stable candidate; synthetic example data. No physical phone/watch claim.",
-  "candidateSha256": "7170f478443ce90509fd80808341027479860cc03da8147451c6a157c175aa45",
+  "candidateSha256": "96cd53f2ad6dfc477ee70f1d237fc8a9f5702cf83c02e208f91358a3285cf5a3",
   "renderer": {
     "emery": {
-      "nativeRendererSha256": "17098e3cf163885dfb0dfad2652b1c085fd735688ab3208ef12ca862d9c646fa",
+      "nativeRendererSha256": "3e834b4dbb3c483938f7d79c7112a6dd510978d737e7eeaa82be7b248cdc49ed",
       "resourceRendererSha256": "b7e36590c563b7160ccf7c8e0864b79d7a283c6c4efc2cbd1c99de92ce2496fb"
     },
     "gabbro": {
-      "nativeRendererSha256": "6013e1b0265b4c4a42e5958f89fb88923df9d333da109a643d6662dda808874e",
+      "nativeRendererSha256": "d5b58fa723178781c3de1bd54aff85c097bf8c7be5b0be0d9701f81987c07fe7",
       "resourceRendererSha256": "b7e36590c563b7160ccf7c8e0864b79d7a283c6c4efc2cbd1c99de92ce2496fb"
     }
   },
   "screenshots": {
     "emery-overview.png": {
       "platform": "emery",
-      "sha256": "0627379724ab519df794c8d268735fb8db191bbd178fc404ce2d66b41c3cd3d8",
-      "source": "Round2-Development/qa/dashboard/emery/1794531564944265572/2-en-light-0.png",
-      "sourceReport": "Round2-Development/qa/dashboard/emery/1794531564944265572/report.json",
+      "sha256": "7326990c8fda5d946a2753d8e69e5e878c2f993121b8521eba81c6485ef1779c",
+      "source": "Round2-Development/qa/dashboard/emery/1794533479713893895/2-en-light-0.png",
+      "sourceReport": "Round2-Development/qa/dashboard/emery/1794533479713893895/report.json",
       "rendererProof": "Exact stable PBW captured in native emulator; original PNG bytes unchanged."
     },
     "gabbro-overview.png": {
       "platform": "gabbro",
       "sha256": "5e06b78d88cf0458bee058d2a886a4d96796b6eb6ee5fca3903ef3600eec9434",
-      "source": "Round2-Development/qa/dashboard/gabbro/1794531564934261751/2-en-light-0.png",
-      "sourceReport": "Round2-Development/qa/dashboard/gabbro/1794531564934261751/report.json",
+      "source": "Round2-Development/qa/dashboard/gabbro/1794533479654193294/2-en-light-0.png",
+      "sourceReport": "Round2-Development/qa/dashboard/gabbro/1794533479654193294/report.json",
       "rendererProof": "Exact stable PBW captured in native emulator; original PNG bytes unchanged."
     }
   }

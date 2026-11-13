@@ -1,4 +1,4 @@
-# Stable release preparation — 0.7.1
+# Stable release preparation — 1.0.0
 
 Xef accepted the reviewed Round 2 implementation on 2026-11-13 and selected a
 stable, listed public release. This acceptance removes the earlier additional
@@ -10,7 +10,7 @@ pinned to their exact reviewed sources. Older release files and versioned QA
 records stay frozen.
 
 The current source/package/emulator coverage is recorded in
-[the release review](qa/0.7.1/release-review.json). Physical phone/watch
+[the release review](qa/1.0.0/release-review.json). Physical phone/watch
 coverage remains explicitly separate. Earlier versioned reviews retain their
 original decisions and do not override Xef's current acceptance.
 

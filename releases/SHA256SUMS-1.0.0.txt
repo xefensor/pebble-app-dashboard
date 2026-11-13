@@ -1,0 +1,4 @@
+3d10946e0b8c7a5036aba5e237c82ad4df70e1a3946ad9ce9d34c10585fc0cd6  Dashboard-1.0.0-debug.zip
+bebe8346ebe2989a8249923c8a31ded53e70e4deae8c43a9f62b24fd70b10477  Dashboard-1.0.0-source.zip
+5cb69b43fff3cdbdde7bd8fac9deb4273e020ea9fee6eddc66c1cce00e5b5082  Dashboard-1.0.0-store-package.zip
+96cd53f2ad6dfc477ee70f1d237fc8a9f5702cf83c02e208f91358a3285cf5a3  Dashboard-1.0.0.pbw
