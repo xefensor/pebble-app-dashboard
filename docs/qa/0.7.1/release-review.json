@@ -1,0 +1,43 @@
+{
+  "product": "Dashboard",
+  "version": "0.7.1",
+  "channel": "stable",
+  "pbwSha256": "7170f478443ce90509fd80808341027479860cc03da8147451c6a157c175aa45",
+  "targets": [
+    "emery",
+    "gabbro"
+  ],
+  "reviewAcceptance": {
+    "reviewer": "Xef",
+    "date": "2026-11-13",
+    "decision": "Reviewed and accepted for stable public release preparation; no additional physical-device review prerequisite."
+  },
+  "automated": [
+    "npm test PASS",
+    "SDK 4.44 build and exact artifact audit PASS",
+    "Generated configuration check PASS",
+    "All ten accepted revision-2 native renderer/resources identities retained; no code/version bytes normalized away",
+    "Store prepare/check PASS. Standalone source reconstruction is recorded after freezing in the external launch verification report."
+  ],
+  "sourceTestsLogSha256": "3f82dd6a926cdb393423e32adf4eb8e7bb41aeba189c3f362d2aed35ec9493ed",
+  "renderer": {
+    "emery": {
+      "nativeRendererSha256": "17098e3cf163885dfb0dfad2652b1c085fd735688ab3208ef12ca862d9c646fa",
+      "resourceRendererSha256": "b7e36590c563b7160ccf7c8e0864b79d7a283c6c4efc2cbd1c99de92ce2496fb"
+    },
+    "gabbro": {
+      "nativeRendererSha256": "6013e1b0265b4c4a42e5958f89fb88923df9d333da109a643d6662dda808874e",
+      "resourceRendererSha256": "b7e36590c563b7160ccf7c8e0864b79d7a283c6c4efc2cbd1c99de92ce2496fb"
+    }
+  },
+  "emulatorScope": "Exact stable package captures on Emery and Gabbro. Fresh size/theme cases, source labels, menu/editor/reopening/alarm or face reading/media/Peek cases are indexed in the launch bundle. Locale overrides are diagnostic fixtures, not public packages.",
+  "physicalWatchTested": false,
+  "physicalPhoneTested": false,
+  "remoteCiRun": false,
+  "published": false,
+  "remainingPublicationGates": [
+    "Verify signed-in Developer Dashboard ownership, listing and unused numeric version",
+    "Publish matching stable GitHub assets and upload exact frozen PBW",
+    "Verify public Store/GitHub hashes before website activation"
+  ]
+}

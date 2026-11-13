@@ -39,11 +39,11 @@ remain separate; use [CONTRIBUTING](CONTRIBUTING.md) for local builds.
 - Keep immediate selection, complete first-use help, safe Cancel-first confirmations and exact tap/hold action bindings.
 - Bundle UI 0.1.1 and the confirmed stay-open phone settings page.
 
-## Version 0.7.0 — local release candidate
+## Version 0.7.1 — stable release preparation
 
 Add Time 2 and Round 2 SDK 4.44 builds, compact overview fitting and current permission disclosures.
 
-Physical Time 2 and Android validation and final publication approval remain pending.
+Xef accepted the reviewed implementation for stable release preparation on 2026-11-13. Actual test coverage remains recorded separately; no physical-device result is implied. Publication is a separate step.
 
 ## Development
 

@@ -1,43 +1,28 @@
-# Local Store release candidate — 2026-11-12
+# Stable release preparation — 0.7.1
 
-This version is prepared for review and sideload testing. It has not been
-submitted to Pebble Store or published as a new GitHub release.
+Xef accepted the reviewed Round 2 implementation on 2026-11-13 and selected a
+stable, listed public release. This acceptance removes the earlier additional
+physical-device review prerequisite; it does not create unobserved test results.
 
-Native products target Time 2 (Emery) and Round 2 (Gabbro) only. Duo is excluded.
-ČHMÚ Weather is the public phone-only plugin. Personal Weather is never included.
+This release retains Time 2 and Round 2, the public UUID, saved state, permissions
+and provider protocols. Duo is excluded. Core/Activities/UI archives remain
+pinned to their exact reviewed sources. Older release files and versioned QA
+records stay frozen.
 
-The release uses SDK 4.44 / pebble-tool 5.1.2, Node 22.23.4 and Python 3.12.15.
-The SDK emulator firmware reports v4.44.3. Dependencies are locked and internal
-library archives record exact source commits and checksums. The native CI job
-has been prepared and checked locally; it has not run on GitHub yet.
+The current source/package/emulator coverage is recorded in
+[the release review](qa/0.7.1/release-review.json). Physical phone/watch
+coverage remains explicitly separate. Earlier versioned reviews retain their
+original decisions and do not override Xef's current acceptance.
 
-Source tests, package audits and emulator checks are separate from physical
-phone/watch validation. Raw evidence remains in the local workspace under
-`recovery-validation/release-qa/`; the release review bundle records the exact
-PBW hashes and evidence paths. Store screenshots are unmodified native pixels
-with synthetic sample data. Phone previews were refreshed from native renders.
+Prepare/check the Store kit, then freeze the exact candidate with
+`python3 scripts/freeze-release.py`. Commit its source, metadata and archives
+locally before running this repository's GitHub release preparer. The release
+configuration marks this version stable. No upload, tag or publication is
+implied by preparation.
 
-Before publication:
-
-- Test the final PBW on Time 2 with the current Android Pebble app: upgrade with
-  saved state, permission denial/regrant, actual settings Save, selected provider
-  delivery, offline/reconnect and the product's physical controls.
-- Check real Timer Wakeups/Quiet Time and live music, notifications and artwork
-  where applicable. Round 2 remains emulator-only and must be disclosed.
-- Confirm Developer Dashboard listing ownership, UUID and unused version.
-- Publish the proposed privacy/support documents at the listed URLs and verify
-  them. The current site catalogue keeps existing public downloads until the
-  new GitHub releases exist.
-- Obtain final publication approval. Local freezing and release preparation
-  do not authorize a push, release workflow, Store upload or site deployment.
-
-Use `npm run store:prepare` and `npm run store:check`, then
-`python3 scripts/freeze-release.py` to freeze exact checked candidates into new
-versioned files. Existing historical files and checksums stay unchanged.
-
-## Verified candidate
-
-Two emulator models: 108 raw frames each. Small/Medium/Large × English/Czech/German source labels × light/dark; all four selections, live values and overflow preserve the four-panel viewport. Store provenance verifies the captured renderer against this PBW.
-
-Exact package identity, checks and remaining gates are recorded in
-[the versioned review](qa/0.7.0/release-review.json).
+Publication uses the existing GitHub release workflow and the exact same frozen
+PBW in the Developer Dashboard. Verify listing ownership, the unchanged UUID,
+an unused version and live app-owned GitHub support/privacy URLs before upload.
+After all six public releases match the checked hashes, activate the redesigned
+website and then update Store metadata to its hosted product/support/privacy
+pages. The website's live release gate remains mandatory.

@@ -2,7 +2,7 @@
   "repository": "xefensor/pebble-app-dashboard",
   "display_name": "Dashboard",
   "tag_prefix": "v",
-  "prerelease": true,
+  "prerelease": false,
   "kind": "app",
   "notes": {
     "path": "store/release-notes.txt"
