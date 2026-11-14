@@ -1,5 +1,11 @@
 Activities, notifications and your chosen pins together on Pebble.
 
+Activities are live updates shown by compatible XOCE apps and watchfaces, such as a countdown, music or a new notification.
+
+Start a countdown in Timer and open Dashboard to see its activity in the overview. Hold Up to browse all available activities. Dashboard has its own activity order and does not pause or resume timers; open Timer to change the countdown.
+
+Sharing activities between apps needs plugin support in the Pebble phone app, the required permissions and a connected phone.
+
 The overview keeps one activity, a notification panel and two pins visible. Open Activities or Pinned for the full collection. Select runs the action declared by the selected item; hold Select to open its associated app. Complete values and units stay together.
 
 Choose Small, Medium, Large or Follow Pebble text, and a light, dark or following appearance. Available in 17 languages.

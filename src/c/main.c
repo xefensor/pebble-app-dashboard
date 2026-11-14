@@ -319,7 +319,7 @@ static void header(GContext *ctx){
   else if(command_error())status=command_error();
   else if(item&&item->role==DB_ROLE_PIN&&!db_item_current(item,utc_now()))status=(item->flags&DB_UNAVAILABLE)&&item->subtitle[0]?app_text(item->subtitle):app_text("No data");
   else if(item&&(*s_paint_state).desired_mode==DB_MEDIA&&db_control_present(item,(*s_paint_state).focus)&&!control_available(item,(*s_paint_state).focus))status=app_text("Unavailable");
-  const char *title=s_paint_guide?"Buttons":(*s_paint_command).confirmation?"Action":(*s_paint_state).desired_mode==DB_ACTIVITIES?"Activities":(*s_paint_state).desired_mode==DB_PINNED?"Pinned":(*s_paint_state).desired_mode==DB_MEDIA?"Action":"Dashboard";
+  const char *title=s_paint_guide?"Guide":(*s_paint_command).confirmation?"Action":(*s_paint_state).desired_mode==DB_ACTIVITIES?"Activities":(*s_paint_state).desired_mode==DB_PINNED?"Pinned":(*s_paint_state).desired_mode==DB_MEDIA?"Action":"Dashboard";
   bool collection=!status&&((*s_paint_state).desired_mode==DB_ACTIVITIES||(*s_paint_state).desired_mode==DB_PINNED);
   if(collection){
     if((*s_paint_state).loading)snprintf(context,sizeof(context),"%s…",app_text(title));
@@ -841,10 +841,9 @@ static void confirmation_row_draw(GContext *ctx,const Layer *cell,MenuIndex *ind
   const char *label=app_text(index->row?"Run action":"Cancel");const int height=text_size(label,5,(CONTENT_W-16)).h;
   (void)height;menu_label(ctx,cell,label,5,ink);paint_begin(s_current_screen);
 }
-static const char *guide_line(unsigned index){
-  static const char *const keys[]={"Up / Down: move","Hold Up: activity","Hold Down: pins","Select: action","Hold Select: app","Back: return","Select to start"};
-  return app_text(keys[index]);
-}
+static const char *const guide_keys[]={"An activity shows what is happening now, such as a Timer countdown. Open Timer to control it.","See a Timer countdown on Dynamic or Halftone. Sharing needs plugins and a connected phone.","Up / Down: move","Hold Up: activity","Hold Down: pins","Select: action","Hold Select: app","Back: return","Select to start"};
+#define GUIDE_LINE_COUNT (sizeof(guide_keys)/sizeof(guide_keys[0]))
+static const char *guide_line(unsigned index){return app_text(guide_keys[index]);}
 #ifdef PBL_ROUND
 static TextLayer *s_round_guide;
 static Layer *s_round_indicators[2];
@@ -852,11 +851,11 @@ static char s_round_guide_text[768];
 #endif
 static int guide_body(GContext *ctx){
   int top=4;
-  for(unsigned i=0;i<7;++i){
+  for(unsigned i=0;i<GUIDE_LINE_COUNT;++i){
     const char *line=guide_line(i);const int height=text_size(line,0,(CONTENT_W-16)).h+6;
     if(ctx){
-      if(i==6)fill(ctx,GRect(0,top,CONTENT_W,height),foreground(),0);
-      graphics_context_set_text_color(ctx,i==6?background():foreground());
+      if(i+1==GUIDE_LINE_COUNT)fill(ctx,GRect(0,top,CONTENT_W,height),foreground(),0);
+      graphics_context_set_text_color(ctx,i+1==GUIDE_LINE_COUNT?background():foreground());
       graphics_draw_text(ctx,line,font_at(0),GRect(8,top,(CONTENT_W-16),height),GTextOverflowModeWordWrap,GTextAlignmentLeft,NULL);
     }
     top+=height;
@@ -868,7 +867,7 @@ static void sync_secondary(void){
   if(s_current_screen==SCREEN_GUIDE&&s_guide_scroll){
 #ifdef PBL_ROUND
     s_round_guide_text[0]=0;
-    for(unsigned i=0;i<7;++i){if(i)strncat(s_round_guide_text,"\n\n",sizeof(s_round_guide_text)-strlen(s_round_guide_text)-1);strncat(s_round_guide_text,guide_line(i),sizeof(s_round_guide_text)-strlen(s_round_guide_text)-1);}
+    for(unsigned i=0;i<GUIDE_LINE_COUNT;++i){if(i)strncat(s_round_guide_text,"\n\n",sizeof(s_round_guide_text)-strlen(s_round_guide_text)-1);strncat(s_round_guide_text,guide_line(i),sizeof(s_round_guide_text)-strlen(s_round_guide_text)-1);}
     for(unsigned i=0;i<2;++i)if(s_round_indicators[i]) {
       const ContentIndicatorConfig config={.layer=s_round_indicators[i],.times_out=false,
           .alignment=i?GAlignBottom:GAlignTop,.colors={.foreground=foreground(),.background=background()}};

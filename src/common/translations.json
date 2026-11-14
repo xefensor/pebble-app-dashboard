@@ -93,7 +93,10 @@
     "@header:Activity",
     "@header:Action",
     "@header:Pinned",
-    "Not saved"
+    "Not saved",
+    "An activity shows what is happening now, such as a Timer countdown. Open Timer to control it.",
+    "See a Timer countdown on Dynamic or Halftone. Sharing needs plugins and a connected phone.",
+    "Guide"
   ],
   "words": {
     "en": {
@@ -448,7 +451,15 @@
       "Saved on phone · Pending on watch": "Saved on phone · Pending on watch",
       "Saved on phone · Watch could not confirm saving": "Saved on phone · Watch could not confirm saving",
       "Retry watch delivery": "Retry watch delivery",
-      "Not saved": "Not saved"
+      "Not saved": "Not saved",
+      "What is an activity?": "What is an activity?",
+      "Activities are live updates shown by compatible XOCE apps and watchfaces, such as a countdown, music or a new notification.": "Activities are live updates shown by compatible XOCE apps and watchfaces, such as a countdown, music or a new notification.",
+      "Start a countdown in Timer, then return to Dynamic or Halftone to see the time remaining. Timer still runs the countdown and alarm.": "Start a countdown in Timer, then return to Dynamic or Halftone to see the time remaining. Timer still runs the countdown and alarm.",
+      "Sharing activities between apps needs plugin support and a connected phone. Timer works on its own without sharing.": "Sharing activities between apps needs plugin support and a connected phone. Timer works on its own without sharing.",
+      "Dashboard shows one activity in its overview. Hold Up to browse all activities. Open Timer to change its countdown; Dashboard has no Timer pause or resume controls.": "Dashboard shows one activity in its overview. Hold Up to browse all activities. Open Timer to change its countdown; Dashboard has no Timer pause or resume controls.",
+      "An activity shows what is happening now, such as a Timer countdown. Open Timer to control it.": "An activity shows what is happening now, such as a Timer countdown. Open Timer to control it.",
+      "See a Timer countdown on Dynamic or Halftone. Sharing needs plugins and a connected phone.": "See a Timer countdown on Dynamic or Halftone. Sharing needs plugins and a connected phone.",
+      "Guide": "Guide"
     },
     "cs": {
       "Dashboard settings": "Nastavení Dashboardu",
@@ -802,7 +813,15 @@
       "Saved on phone · Pending on watch": "Uloženo v telefonu · Čeká na hodinky",
       "Saved on phone · Watch could not confirm saving": "Uloženo v telefonu · Hodinky nepotvrdily uložení",
       "Retry watch delivery": "Znovu odeslat do hodinek",
-      "Not saved": "Neuloženo"
+      "Not saved": "Neuloženo",
+      "What is an activity?": "Co je aktivita?",
+      "Activities are live updates shown by compatible XOCE apps and watchfaces, such as a countdown, music or a new notification.": "Aktivity jsou průběžné informace, které zobrazují kompatibilní aplikace a ciferníky XOCE, například odpočet, hudba nebo nové oznámení.",
+      "Start a countdown in Timer, then return to Dynamic or Halftone to see the time remaining. Timer still runs the countdown and alarm.": "Spusťte odpočet v Timer a vraťte se na Dynamic nebo Halftone. Na ciferníku uvidíte zbývající čas. Odpočet i budík nadále zajišťuje Timer.",
+      "Sharing activities between apps needs plugin support and a connected phone. Timer works on its own without sharing.": "Sdílení aktivit mezi aplikacemi vyžaduje podporu pluginů a připojený telefon. Timer funguje samostatně i bez sdílení.",
+      "Dashboard shows one activity in its overview. Hold Up to browse all activities. Open Timer to change its countdown; Dashboard has no Timer pause or resume controls.": "Dashboard zobrazuje v přehledu jednu aktivitu. Podržením Up otevřete všechny aktivity. Odpočet změňte v Timer; Dashboard nemá ovládání pro jeho pozastavení a pokračování.",
+      "An activity shows what is happening now, such as a Timer countdown. Open Timer to control it.": "Aktivita ukazuje, co právě probíhá, například odpočet Timer. Odpočet ovládejte v Timer.",
+      "See a Timer countdown on Dynamic or Halftone. Sharing needs plugins and a connected phone.": "Odpočet Timer uvidíte na Dynamic nebo Halftone. Sdílení vyžaduje pluginy a připojený telefon.",
+      "Guide": "Průvodce"
     },
     "sk": {
       "Dashboard settings": "Nastavenia Dashboardu",
@@ -1156,7 +1175,15 @@
       "Saved on phone · Pending on watch": "Uložené v telefóne · Čaká na hodinky",
       "Saved on phone · Watch could not confirm saving": "Uložené v telefóne · Hodinky nepotvrdili uloženie",
       "Retry watch delivery": "Znova odoslať do hodiniek",
-      "Not saved": "Neuložené"
+      "Not saved": "Neuložené",
+      "What is an activity?": "Čo je aktivita?",
+      "Activities are live updates shown by compatible XOCE apps and watchfaces, such as a countdown, music or a new notification.": "Aktivity sú priebežné informácie, ktoré zobrazujú kompatibilné aplikácie a ciferníky XOCE, napríklad odpočet, hudba alebo nové oznámenie.",
+      "Start a countdown in Timer, then return to Dynamic or Halftone to see the time remaining. Timer still runs the countdown and alarm.": "Spustite odpočet v Timer a vráťte sa na Dynamic alebo Halftone. Na ciferníku uvidíte zostávajúci čas. Odpočet aj budík naďalej zaisťuje Timer.",
+      "Sharing activities between apps needs plugin support and a connected phone. Timer works on its own without sharing.": "Zdieľanie aktivít medzi aplikáciami vyžaduje podporu pluginov a pripojený telefón. Timer funguje samostatne aj bez zdieľania.",
+      "Dashboard shows one activity in its overview. Hold Up to browse all activities. Open Timer to change its countdown; Dashboard has no Timer pause or resume controls.": "Dashboard zobrazuje v prehľade jednu aktivitu. Podržaním Up otvoríte všetky aktivity. Odpočet zmeňte v Timer; Dashboard nemá ovládanie na jeho pozastavenie a pokračovanie.",
+      "An activity shows what is happening now, such as a Timer countdown. Open Timer to control it.": "Aktivita ukazuje, čo práve prebieha, napríklad odpočet Timer. Odpočet ovládajte v Timer.",
+      "See a Timer countdown on Dynamic or Halftone. Sharing needs plugins and a connected phone.": "Odpočet Timer uvidíte na Dynamic alebo Halftone. Zdieľanie vyžaduje pluginy a pripojený telefón.",
+      "Guide": "Sprievodca"
     },
     "de": {
       "Dashboard settings": "Dashboard-Einstellungen",
@@ -1510,7 +1537,15 @@
       "Saved on phone · Pending on watch": "Auf dem Telefon gespeichert · Auf der Uhr ausstehend",
       "Saved on phone · Watch could not confirm saving": "Auf dem Telefon gespeichert · Uhr konnte das Speichern nicht bestätigen",
       "Retry watch delivery": "Erneut an die Uhr senden",
-      "Not saved": "Nicht gespeichert"
+      "Not saved": "Nicht gespeichert",
+      "What is an activity?": "Was ist eine Aktivität?",
+      "Activities are live updates shown by compatible XOCE apps and watchfaces, such as a countdown, music or a new notification.": "Aktivitäten sind aktuelle Informationen in kompatiblen XOCE-Apps und Zifferblättern, etwa ein Countdown, Musik oder eine neue Mitteilung.",
+      "Start a countdown in Timer, then return to Dynamic or Halftone to see the time remaining. Timer still runs the countdown and alarm.": "Starte einen Countdown in Timer und kehre zu Dynamic oder Halftone zurück, um die Restzeit zu sehen. Timer übernimmt weiterhin Countdown und Alarm.",
+      "Sharing activities between apps needs plugin support and a connected phone. Timer works on its own without sharing.": "Das Teilen von Aktivitäten zwischen Apps benötigt Plugin-Unterstützung und ein verbundenes Telefon. Timer funktioniert auch ohne Teilen.",
+      "Dashboard shows one activity in its overview. Hold Up to browse all activities. Open Timer to change its countdown; Dashboard has no Timer pause or resume controls.": "Dashboard zeigt eine Aktivität in der Übersicht. Halte Up für alle Aktivitäten. Ändere den Countdown in Timer; Dashboard bietet dafür kein Pausieren oder Fortsetzen.",
+      "An activity shows what is happening now, such as a Timer countdown. Open Timer to control it.": "Eine Aktivität zeigt, was gerade läuft, etwa einen Timer-Countdown. Steuere ihn in Timer.",
+      "See a Timer countdown on Dynamic or Halftone. Sharing needs plugins and a connected phone.": "Sieh den Timer-Countdown auf Dynamic oder Halftone. Teilen benötigt Plugins und ein verbundenes Telefon.",
+      "Guide": "Anleitung"
     },
     "fr": {
       "Dashboard settings": "Réglages de Dashboard",
@@ -1864,7 +1899,15 @@
       "Saved on phone · Pending on watch": "Enregistré sur le téléphone · En attente sur la montre",
       "Saved on phone · Watch could not confirm saving": "Enregistré sur le téléphone · La montre n’a pas confirmé l’enregistrement",
       "Retry watch delivery": "Renvoyer à la montre",
-      "Not saved": "Non enregistré"
+      "Not saved": "Non enregistré",
+      "What is an activity?": "Qu’est-ce qu’une activité ?",
+      "Activities are live updates shown by compatible XOCE apps and watchfaces, such as a countdown, music or a new notification.": "Les activités sont des informations en cours affichées par les apps et cadrans XOCE compatibles : compte à rebours, musique ou nouvelle notification.",
+      "Start a countdown in Timer, then return to Dynamic or Halftone to see the time remaining. Timer still runs the countdown and alarm.": "Lancez un compte à rebours dans Timer, puis revenez à Dynamic ou Halftone pour voir le temps restant. Timer gère toujours le décompte et l’alarme.",
+      "Sharing activities between apps needs plugin support and a connected phone. Timer works on its own without sharing.": "Le partage d’activités entre apps nécessite les plugins et un téléphone connecté. Timer fonctionne aussi sans partage.",
+      "Dashboard shows one activity in its overview. Hold Up to browse all activities. Open Timer to change its countdown; Dashboard has no Timer pause or resume controls.": "Dashboard affiche une activité dans son aperçu. Maintenez Up pour toutes les activités. Modifiez le décompte dans Timer ; Dashboard ne permet pas de le mettre en pause ou de le reprendre.",
+      "An activity shows what is happening now, such as a Timer countdown. Open Timer to control it.": "Une activité montre ce qui se passe, comme un compte à rebours Timer. Gérez-le dans Timer.",
+      "See a Timer countdown on Dynamic or Halftone. Sharing needs plugins and a connected phone.": "Voyez le décompte Timer sur Dynamic ou Halftone. Le partage nécessite les plugins et un téléphone connecté.",
+      "Guide": "Guide"
     },
     "es": {
       "Dashboard settings": "Ajustes de Dashboard",
@@ -2218,7 +2261,15 @@
       "Saved on phone · Pending on watch": "Guardado en el teléfono · Pendiente en el reloj",
       "Saved on phone · Watch could not confirm saving": "Guardado en el teléfono · El reloj no confirmó el guardado",
       "Retry watch delivery": "Reenviar al reloj",
-      "Not saved": "Sin guardar"
+      "Not saved": "Sin guardar",
+      "What is an activity?": "¿Qué es una actividad?",
+      "Activities are live updates shown by compatible XOCE apps and watchfaces, such as a countdown, music or a new notification.": "Las actividades son información en curso que muestran las apps y esferas XOCE compatibles, como una cuenta atrás, música o una nueva notificación.",
+      "Start a countdown in Timer, then return to Dynamic or Halftone to see the time remaining. Timer still runs the countdown and alarm.": "Inicia una cuenta atrás en Timer y vuelve a Dynamic o Halftone para ver el tiempo restante. Timer sigue gestionando la cuenta atrás y la alarma.",
+      "Sharing activities between apps needs plugin support and a connected phone. Timer works on its own without sharing.": "Compartir actividades entre apps requiere compatibilidad con plugins y un teléfono conectado. Timer funciona por sí solo sin compartir.",
+      "Dashboard shows one activity in its overview. Hold Up to browse all activities. Open Timer to change its countdown; Dashboard has no Timer pause or resume controls.": "Dashboard muestra una actividad en su resumen. Mantén Up para verlas todas. Cambia la cuenta atrás en Timer; Dashboard no permite pausarla ni reanudarla.",
+      "An activity shows what is happening now, such as a Timer countdown. Open Timer to control it.": "Una actividad muestra lo que ocurre, como una cuenta atrás de Timer. Contrólala en Timer.",
+      "See a Timer countdown on Dynamic or Halftone. Sharing needs plugins and a connected phone.": "Ve la cuenta atrás de Timer en Dynamic o Halftone. Compartir requiere plugins y un teléfono conectado.",
+      "Guide": "Guía"
     },
     "it": {
       "Dashboard settings": "Impostazioni Dashboard",
@@ -2572,7 +2623,15 @@
       "Saved on phone · Pending on watch": "Salvato sul telefono · In attesa sull’orologio",
       "Saved on phone · Watch could not confirm saving": "Salvato sul telefono · L’orologio non ha confermato il salvataggio",
       "Retry watch delivery": "Invia di nuovo all’orologio",
-      "Not saved": "Non salvato"
+      "Not saved": "Non salvato",
+      "What is an activity?": "Che cos’è un’attività?",
+      "Activities are live updates shown by compatible XOCE apps and watchfaces, such as a countdown, music or a new notification.": "Le attività sono aggiornamenti mostrati dalle app e dai quadranti XOCE compatibili, come un conto alla rovescia, musica o una nuova notifica.",
+      "Start a countdown in Timer, then return to Dynamic or Halftone to see the time remaining. Timer still runs the countdown and alarm.": "Avvia un conto alla rovescia in Timer, poi torna a Dynamic o Halftone per vedere il tempo rimasto. Timer continua a gestire il conto e l’allarme.",
+      "Sharing activities between apps needs plugin support and a connected phone. Timer works on its own without sharing.": "La condivisione delle attività tra app richiede il supporto dei plugin e un telefono connesso. Timer funziona anche senza condivisione.",
+      "Dashboard shows one activity in its overview. Hold Up to browse all activities. Open Timer to change its countdown; Dashboard has no Timer pause or resume controls.": "Dashboard mostra un’attività nella panoramica. Tieni premuto Up per vederle tutte. Modifica il conto in Timer; Dashboard non può metterlo in pausa o riprenderlo.",
+      "An activity shows what is happening now, such as a Timer countdown. Open Timer to control it.": "Un’attività mostra cosa è in corso, come un conto alla rovescia Timer. Gestiscilo in Timer.",
+      "See a Timer countdown on Dynamic or Halftone. Sharing needs plugins and a connected phone.": "Vedi il conto di Timer su Dynamic o Halftone. La condivisione richiede plugin e un telefono connesso.",
+      "Guide": "Guida"
     },
     "pt": {
       "Dashboard settings": "Definições do Dashboard",
@@ -2926,7 +2985,15 @@
       "Saved on phone · Pending on watch": "Guardado no telefone · Pendente no relógio",
       "Saved on phone · Watch could not confirm saving": "Guardado no telefone · O relógio não confirmou a gravação",
       "Retry watch delivery": "Reenviar para o relógio",
-      "Not saved": "Não guardado"
+      "Not saved": "Não guardado",
+      "What is an activity?": "O que é uma atividade?",
+      "Activities are live updates shown by compatible XOCE apps and watchfaces, such as a countdown, music or a new notification.": "As atividades são informações em curso mostradas por apps e mostradores XOCE compatíveis, como uma contagem decrescente, música ou uma nova notificação.",
+      "Start a countdown in Timer, then return to Dynamic or Halftone to see the time remaining. Timer still runs the countdown and alarm.": "Inicie uma contagem decrescente no Timer e volte ao Dynamic ou Halftone para ver o tempo restante. O Timer continua a gerir a contagem e o alarme.",
+      "Sharing activities between apps needs plugin support and a connected phone. Timer works on its own without sharing.": "Partilhar atividades entre apps requer suporte de plugins e um telemóvel ligado. O Timer também funciona sozinho, sem partilha.",
+      "Dashboard shows one activity in its overview. Hold Up to browse all activities. Open Timer to change its countdown; Dashboard has no Timer pause or resume controls.": "O Dashboard mostra uma atividade no resumo. Mantenha Up premido para ver todas. Altere a contagem no Timer; o Dashboard não permite pausá-la ou retomá-la.",
+      "An activity shows what is happening now, such as a Timer countdown. Open Timer to control it.": "Uma atividade mostra o que está a acontecer, como uma contagem do Timer. Controle-a no Timer.",
+      "See a Timer countdown on Dynamic or Halftone. Sharing needs plugins and a connected phone.": "Veja a contagem do Timer no Dynamic ou Halftone. A partilha requer plugins e um telemóvel ligado.",
+      "Guide": "Guia"
     },
     "nl": {
       "Dashboard settings": "Dashboard-instellingen",
@@ -3280,7 +3347,15 @@
       "Saved on phone · Pending on watch": "Opgeslagen op telefoon · Wacht op horloge",
       "Saved on phone · Watch could not confirm saving": "Opgeslagen op telefoon · Horloge kon opslaan niet bevestigen",
       "Retry watch delivery": "Opnieuw naar horloge sturen",
-      "Not saved": "Niet opgeslagen"
+      "Not saved": "Niet opgeslagen",
+      "What is an activity?": "Wat is een activiteit?",
+      "Activities are live updates shown by compatible XOCE apps and watchfaces, such as a countdown, music or a new notification.": "Activiteiten zijn actuele updates in compatibele XOCE-apps en wijzerplaten, zoals een aftelling, muziek of een nieuwe melding.",
+      "Start a countdown in Timer, then return to Dynamic or Halftone to see the time remaining. Timer still runs the countdown and alarm.": "Start een aftelling in Timer en ga terug naar Dynamic of Halftone om de resterende tijd te zien. Timer blijft de aftelling en het alarm regelen.",
+      "Sharing activities between apps needs plugin support and a connected phone. Timer works on its own without sharing.": "Activiteiten delen tussen apps vereist pluginondersteuning en een verbonden telefoon. Timer werkt ook zelfstandig zonder delen.",
+      "Dashboard shows one activity in its overview. Hold Up to browse all activities. Open Timer to change its countdown; Dashboard has no Timer pause or resume controls.": "Dashboard toont één activiteit in het overzicht. Houd Up ingedrukt voor alle activiteiten. Wijzig de aftelling in Timer; Dashboard kan deze niet pauzeren of hervatten.",
+      "An activity shows what is happening now, such as a Timer countdown. Open Timer to control it.": "Een activiteit toont wat er nu gebeurt, zoals een aftelling van Timer. Bedien deze in Timer.",
+      "See a Timer countdown on Dynamic or Halftone. Sharing needs plugins and a connected phone.": "Bekijk de aftelling van Timer op Dynamic of Halftone. Delen vereist plugins en een verbonden telefoon.",
+      "Guide": "Uitleg"
     },
     "pl": {
       "Dashboard settings": "Ustawienia Dashboard",
@@ -3634,7 +3709,15 @@
       "Saved on phone · Pending on watch": "Zapisano w telefonie · Oczekuje na zegarek",
       "Saved on phone · Watch could not confirm saving": "Zapisano w telefonie · Zegarek nie potwierdził zapisu",
       "Retry watch delivery": "Wyślij ponownie na zegarek",
-      "Not saved": "Nie zapisano"
+      "Not saved": "Nie zapisano",
+      "What is an activity?": "Czym jest aktywność?",
+      "Activities are live updates shown by compatible XOCE apps and watchfaces, such as a countdown, music or a new notification.": "Aktywności to bieżące informacje wyświetlane przez zgodne aplikacje i tarcze XOCE, takie jak odliczanie, muzyka lub nowe powiadomienie.",
+      "Start a countdown in Timer, then return to Dynamic or Halftone to see the time remaining. Timer still runs the countdown and alarm.": "Uruchom odliczanie w Timer i wróć do Dynamic lub Halftone, aby zobaczyć pozostały czas. Timer nadal obsługuje odliczanie i alarm.",
+      "Sharing activities between apps needs plugin support and a connected phone. Timer works on its own without sharing.": "Udostępnianie aktywności między aplikacjami wymaga obsługi wtyczek i połączonego telefonu. Timer działa też samodzielnie bez udostępniania.",
+      "Dashboard shows one activity in its overview. Hold Up to browse all activities. Open Timer to change its countdown; Dashboard has no Timer pause or resume controls.": "Dashboard pokazuje jedną aktywność w przeglądzie. Przytrzymaj Up, aby zobaczyć wszystkie. Zmieniaj odliczanie w Timer; Dashboard nie pozwala go wstrzymać ani wznowić.",
+      "An activity shows what is happening now, such as a Timer countdown. Open Timer to control it.": "Aktywność pokazuje, co się dzieje, np. odliczanie Timer. Steruj nim w Timer.",
+      "See a Timer countdown on Dynamic or Halftone. Sharing needs plugins and a connected phone.": "Zobacz odliczanie Timer na Dynamic lub Halftone. Udostępnianie wymaga wtyczek i połączonego telefonu.",
+      "Guide": "Przewodnik"
     },
     "da": {
       "Dashboard settings": "Dashboard-indstillinger",
@@ -3988,7 +4071,15 @@
       "Saved on phone · Pending on watch": "Gemt på telefonen · Afventer uret",
       "Saved on phone · Watch could not confirm saving": "Gemt på telefonen · Uret kunne ikke bekræfte lagringen",
       "Retry watch delivery": "Send til uret igen",
-      "Not saved": "Ikke gemt"
+      "Not saved": "Ikke gemt",
+      "What is an activity?": "Hvad er en aktivitet?",
+      "Activities are live updates shown by compatible XOCE apps and watchfaces, such as a countdown, music or a new notification.": "Aktiviteter er aktuelle oplysninger i kompatible XOCE-apps og urskiver, f.eks. en nedtælling, musik eller en ny notifikation.",
+      "Start a countdown in Timer, then return to Dynamic or Halftone to see the time remaining. Timer still runs the countdown and alarm.": "Start en nedtælling i Timer, og vend tilbage til Dynamic eller Halftone for at se den resterende tid. Timer styrer stadig nedtællingen og alarmen.",
+      "Sharing activities between apps needs plugin support and a connected phone. Timer works on its own without sharing.": "Deling af aktiviteter mellem apps kræver pluginunderstøttelse og en tilsluttet telefon. Timer virker også alene uden deling.",
+      "Dashboard shows one activity in its overview. Hold Up to browse all activities. Open Timer to change its countdown; Dashboard has no Timer pause or resume controls.": "Dashboard viser én aktivitet i oversigten. Hold Up for at se alle aktiviteter. Rediger nedtællingen i Timer; Dashboard kan ikke sætte den på pause eller genoptage den.",
+      "An activity shows what is happening now, such as a Timer countdown. Open Timer to control it.": "En aktivitet viser, hvad der sker nu, f.eks. en nedtælling i Timer. Styr den i Timer.",
+      "See a Timer countdown on Dynamic or Halftone. Sharing needs plugins and a connected phone.": "Se nedtællingen fra Timer på Dynamic eller Halftone. Deling kræver plugins og en tilsluttet telefon.",
+      "Guide": "Vejledning"
     },
     "sv": {
       "Dashboard settings": "Dashboard-inställningar",
@@ -4342,7 +4433,15 @@
       "Saved on phone · Pending on watch": "Sparat på telefonen · Väntar på klockan",
       "Saved on phone · Watch could not confirm saving": "Sparat på telefonen · Klockan kunde inte bekräfta sparandet",
       "Retry watch delivery": "Skicka till klockan igen",
-      "Not saved": "Inte sparat"
+      "Not saved": "Inte sparat",
+      "What is an activity?": "Vad är en aktivitet?",
+      "Activities are live updates shown by compatible XOCE apps and watchfaces, such as a countdown, music or a new notification.": "Aktiviteter är aktuella uppdateringar i kompatibla XOCE-appar och urtavlor, till exempel en nedräkning, musik eller en ny avisering.",
+      "Start a countdown in Timer, then return to Dynamic or Halftone to see the time remaining. Timer still runs the countdown and alarm.": "Starta en nedräkning i Timer och gå tillbaka till Dynamic eller Halftone för att se återstående tid. Timer sköter fortfarande nedräkningen och larmet.",
+      "Sharing activities between apps needs plugin support and a connected phone. Timer works on its own without sharing.": "Delning av aktiviteter mellan appar kräver pluginstöd och en ansluten telefon. Timer fungerar även självständigt utan delning.",
+      "Dashboard shows one activity in its overview. Hold Up to browse all activities. Open Timer to change its countdown; Dashboard has no Timer pause or resume controls.": "Dashboard visar en aktivitet i översikten. Håll Up för alla aktiviteter. Ändra nedräkningen i Timer; Dashboard kan inte pausa eller återuppta den.",
+      "An activity shows what is happening now, such as a Timer countdown. Open Timer to control it.": "En aktivitet visar vad som händer nu, som en nedräkning i Timer. Styr den i Timer.",
+      "See a Timer countdown on Dynamic or Halftone. Sharing needs plugins and a connected phone.": "Se nedräkningen från Timer på Dynamic eller Halftone. Delning kräver pluginer och en ansluten telefon.",
+      "Guide": "Guide"
     },
     "no": {
       "Dashboard settings": "Dashboard-innstillinger",
@@ -4696,7 +4795,15 @@
       "Saved on phone · Pending on watch": "Lagret på telefonen · Venter på klokken",
       "Saved on phone · Watch could not confirm saving": "Lagret på telefonen · Klokken kunne ikke bekrefte lagringen",
       "Retry watch delivery": "Send til klokken igjen",
-      "Not saved": "Ikke lagret"
+      "Not saved": "Ikke lagret",
+      "What is an activity?": "Hva er en aktivitet?",
+      "Activities are live updates shown by compatible XOCE apps and watchfaces, such as a countdown, music or a new notification.": "Aktiviteter er aktuelle oppdateringer i kompatible XOCE-apper og urskiver, som en nedtelling, musikk eller et nytt varsel.",
+      "Start a countdown in Timer, then return to Dynamic or Halftone to see the time remaining. Timer still runs the countdown and alarm.": "Start en nedtelling i Timer og gå tilbake til Dynamic eller Halftone for å se tiden som gjenstår. Timer styrer fortsatt nedtellingen og alarmen.",
+      "Sharing activities between apps needs plugin support and a connected phone. Timer works on its own without sharing.": "Deling av aktiviteter mellom apper krever pluginstøtte og en tilkoblet telefon. Timer fungerer også alene uten deling.",
+      "Dashboard shows one activity in its overview. Hold Up to browse all activities. Open Timer to change its countdown; Dashboard has no Timer pause or resume controls.": "Dashboard viser én aktivitet i oversikten. Hold Up for alle aktiviteter. Endre nedtellingen i Timer; Dashboard kan ikke sette den på pause eller fortsette den.",
+      "An activity shows what is happening now, such as a Timer countdown. Open Timer to control it.": "En aktivitet viser hva som skjer nå, som en nedtelling i Timer. Styr den i Timer.",
+      "See a Timer countdown on Dynamic or Halftone. Sharing needs plugins and a connected phone.": "Se nedtellingen fra Timer på Dynamic eller Halftone. Deling krever plugins og en tilkoblet telefon.",
+      "Guide": "Veiledning"
     },
     "fi": {
       "Dashboard settings": "Dashboard-asetukset",
@@ -5050,7 +5157,15 @@
       "Saved on phone · Pending on watch": "Tallennettu puhelimeen · Odottaa kelloa",
       "Saved on phone · Watch could not confirm saving": "Tallennettu puhelimeen · Kello ei vahvistanut tallennusta",
       "Retry watch delivery": "Lähetä kelloon uudelleen",
-      "Not saved": "Ei tallennettu"
+      "Not saved": "Ei tallennettu",
+      "What is an activity?": "Mikä on toiminto?",
+      "Activities are live updates shown by compatible XOCE apps and watchfaces, such as a countdown, music or a new notification.": "Toiminnot ovat yhteensopivien XOCE-sovellusten ja kellotaulujen näyttämiä ajankohtaisia tietoja, kuten ajastus, musiikki tai uusi ilmoitus.",
+      "Start a countdown in Timer, then return to Dynamic or Halftone to see the time remaining. Timer still runs the countdown and alarm.": "Käynnistä ajastus Timerissa ja palaa Dynamic- tai Halftone-kellotauluun nähdäksesi jäljellä olevan ajan. Timer huolehtii edelleen ajastuksesta ja hälytyksestä.",
+      "Sharing activities between apps needs plugin support and a connected phone. Timer works on its own without sharing.": "Toimintojen jakaminen sovellusten välillä vaatii lisäosatuen ja yhteyden puhelimeen. Timer toimii myös itsenäisesti ilman jakamista.",
+      "Dashboard shows one activity in its overview. Hold Up to browse all activities. Open Timer to change its countdown; Dashboard has no Timer pause or resume controls.": "Dashboard näyttää yleisnäkymässä yhden toiminnon. Pidä Up painettuna nähdäksesi kaikki. Muuta ajastusta Timerissa; Dashboard ei voi keskeyttää tai jatkaa sitä.",
+      "An activity shows what is happening now, such as a Timer countdown. Open Timer to control it.": "Toiminto näyttää, mitä on meneillään, kuten Timer-ajastuksen. Hallitse sitä Timerissa.",
+      "See a Timer countdown on Dynamic or Halftone. Sharing needs plugins and a connected phone.": "Näe Timer-ajastus Dynamic- tai Halftone-kellotaulussa. Jakaminen vaatii lisäosat ja puhelinyhteyden.",
+      "Guide": "Ohje"
     },
     "hu": {
       "Dashboard settings": "Dashboard beállításai",
@@ -5404,7 +5519,15 @@
       "Saved on phone · Pending on watch": "Mentve a telefonon · Várakozás az órára",
       "Saved on phone · Watch could not confirm saving": "Mentve a telefonon · Az óra nem igazolta vissza a mentést",
       "Retry watch delivery": "Újraküldés az órára",
-      "Not saved": "Nincs mentve"
+      "Not saved": "Nincs mentve",
+      "What is an activity?": "Mi az a tevékenység?",
+      "Activities are live updates shown by compatible XOCE apps and watchfaces, such as a countdown, music or a new notification.": "A tevékenységek a kompatibilis XOCE-alkalmazásokban és számlapokon megjelenő aktuális információk, például visszaszámlálás, zene vagy új értesítés.",
+      "Start a countdown in Timer, then return to Dynamic or Halftone to see the time remaining. Timer still runs the countdown and alarm.": "Indíts visszaszámlálást a Timerben, majd térj vissza a Dynamic vagy Halftone számlapra a hátralévő idő megtekintéséhez. A visszaszámlálást és a riasztást továbbra is a Timer kezeli.",
+      "Sharing activities between apps needs plugin support and a connected phone. Timer works on its own without sharing.": "A tevékenységek alkalmazások közötti megosztásához bővítménytámogatás és csatlakoztatott telefon kell. A Timer megosztás nélkül is önállóan működik.",
+      "Dashboard shows one activity in its overview. Hold Up to browse all activities. Open Timer to change its countdown; Dashboard has no Timer pause or resume controls.": "A Dashboard egy tevékenységet mutat az áttekintésben. Tartsd nyomva az Up gombot az összeshez. A visszaszámlálást a Timerben módosítsd; a Dashboard nem tudja szüneteltetni vagy folytatni.",
+      "An activity shows what is happening now, such as a Timer countdown. Open Timer to control it.": "A tevékenység azt mutatja, mi zajlik most, például a Timer visszaszámlálását. Ezt a Timerben kezelheted.",
+      "See a Timer countdown on Dynamic or Halftone. Sharing needs plugins and a connected phone.": "A Timer visszaszámlálását a Dynamic vagy Halftone számlapon is láthatod. A megosztáshoz bővítmények és csatlakoztatott telefon kell.",
+      "Guide": "Útmutató"
     },
     "ro": {
       "Dashboard settings": "Setări Dashboard",
@@ -5758,7 +5881,15 @@
       "Saved on phone · Pending on watch": "Salvat pe telefon · În așteptare pe ceas",
       "Saved on phone · Watch could not confirm saving": "Salvat pe telefon · Ceasul nu a confirmat salvarea",
       "Retry watch delivery": "Retrimite la ceas",
-      "Not saved": "Nesalvat"
+      "Not saved": "Nesalvat",
+      "What is an activity?": "Ce este o activitate?",
+      "Activities are live updates shown by compatible XOCE apps and watchfaces, such as a countdown, music or a new notification.": "Activitățile sunt informații curente afișate de aplicațiile și cadranele XOCE compatibile, precum o numărătoare inversă, muzică sau o notificare nouă.",
+      "Start a countdown in Timer, then return to Dynamic or Halftone to see the time remaining. Timer still runs the countdown and alarm.": "Pornește o numărătoare inversă în Timer, apoi revino la Dynamic sau Halftone pentru a vedea timpul rămas. Timer gestionează în continuare numărătoarea și alarma.",
+      "Sharing activities between apps needs plugin support and a connected phone. Timer works on its own without sharing.": "Partajarea activităților între aplicații necesită suport pentru pluginuri și un telefon conectat. Timer funcționează și independent, fără partajare.",
+      "Dashboard shows one activity in its overview. Hold Up to browse all activities. Open Timer to change its countdown; Dashboard has no Timer pause or resume controls.": "Dashboard arată o activitate în prezentarea generală. Ține apăsat Up pentru toate. Modifică numărătoarea în Timer; Dashboard nu o poate întrerupe sau relua.",
+      "An activity shows what is happening now, such as a Timer countdown. Open Timer to control it.": "O activitate arată ce se întâmplă acum, de exemplu o numărătoare Timer. Controleaz-o în Timer.",
+      "See a Timer countdown on Dynamic or Halftone. Sharing needs plugins and a connected phone.": "Vezi numărătoarea Timer pe Dynamic sau Halftone. Partajarea necesită pluginuri și un telefon conectat.",
+      "Guide": "Ghid"
     },
     "tr": {
       "Dashboard settings": "Dashboard ayarları",
@@ -6112,7 +6243,15 @@
       "Saved on phone · Pending on watch": "Telefona kaydedildi · Saat bekleniyor",
       "Saved on phone · Watch could not confirm saving": "Telefona kaydedildi · Saat kaydetmeyi onaylamadı",
       "Retry watch delivery": "Saate yeniden gönder",
-      "Not saved": "Kaydedilmedi"
+      "Not saved": "Kaydedilmedi",
+      "What is an activity?": "Etkinlik nedir?",
+      "Activities are live updates shown by compatible XOCE apps and watchfaces, such as a countdown, music or a new notification.": "Etkinlikler, uyumlu XOCE uygulama ve saat yüzlerinde gösterilen geri sayım, müzik veya yeni bildirim gibi güncel bilgilerdir.",
+      "Start a countdown in Timer, then return to Dynamic or Halftone to see the time remaining. Timer still runs the countdown and alarm.": "Timer’da geri sayım başlatın, ardından kalan süreyi görmek için Dynamic veya Halftone’a dönün. Geri sayımı ve alarmı yine Timer yönetir.",
+      "Sharing activities between apps needs plugin support and a connected phone. Timer works on its own without sharing.": "Uygulamalar arasında etkinlik paylaşımı için eklenti desteği ve bağlı bir telefon gerekir. Timer paylaşım olmadan da bağımsız çalışır.",
+      "Dashboard shows one activity in its overview. Hold Up to browse all activities. Open Timer to change its countdown; Dashboard has no Timer pause or resume controls.": "Dashboard genel görünümde bir etkinlik gösterir. Tümünü görmek için Up düğmesini basılı tutun. Geri sayımı Timer’da değiştirin; Dashboard duraklatma veya sürdürme sunmaz.",
+      "An activity shows what is happening now, such as a Timer countdown. Open Timer to control it.": "Etkinlik, Timer geri sayımı gibi o anda olanı gösterir. Geri sayımı Timer’da yönetin.",
+      "See a Timer countdown on Dynamic or Halftone. Sharing needs plugins and a connected phone.": "Timer geri sayımını Dynamic veya Halftone’da görün. Paylaşım için eklentiler ve bağlı telefon gerekir.",
+      "Guide": "Kılavuz"
     }
   },
   "nativeWords": {

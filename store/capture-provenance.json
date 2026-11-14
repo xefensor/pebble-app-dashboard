@@ -1,32 +1,32 @@
 {
   "version": "1.0.0",
   "nativePixelsModified": false,
-  "scope": "Raw emulator screenshots from the exact stable candidate; synthetic example data. No physical phone/watch claim.",
-  "candidateSha256": "96cd53f2ad6dfc477ee70f1d237fc8a9f5702cf83c02e208f91358a3285cf5a3",
+  "scope": "Raw emulator screenshots from the activity-education development candidate; synthetic example data. No physical phone/watch claim. Frozen releases remain unchanged.",
+  "candidateSha256": "a0c90d9965278b68b786ad84933767513f38371ad1065ae86a6d1ca09aca9363",
   "renderer": {
     "emery": {
-      "nativeRendererSha256": "3e834b4dbb3c483938f7d79c7112a6dd510978d737e7eeaa82be7b248cdc49ed",
-      "resourceRendererSha256": "b7e36590c563b7160ccf7c8e0864b79d7a283c6c4efc2cbd1c99de92ce2496fb"
+      "nativeRendererSha256": "26af80086a7968378a798a7cdd00a23f368d1c57029b0bc96904cada82c5b459",
+      "resourceRendererSha256": "61af70510ee20669081cbaa0256a509c332b5f2bcb53287122ff270fb00dd615"
     },
     "gabbro": {
-      "nativeRendererSha256": "d5b58fa723178781c3de1bd54aff85c097bf8c7be5b0be0d9701f81987c07fe7",
-      "resourceRendererSha256": "b7e36590c563b7160ccf7c8e0864b79d7a283c6c4efc2cbd1c99de92ce2496fb"
+      "nativeRendererSha256": "8379ac16fe65d44deca1334e5222ecd5eb098e8996674c80a11478d59f0e0193",
+      "resourceRendererSha256": "61af70510ee20669081cbaa0256a509c332b5f2bcb53287122ff270fb00dd615"
     }
   },
   "screenshots": {
     "emery-overview.png": {
       "platform": "emery",
-      "sha256": "7326990c8fda5d946a2753d8e69e5e878c2f993121b8521eba81c6485ef1779c",
-      "source": "Round2-Development/qa/dashboard/emery/1794533479713893895/2-en-light-0.png",
-      "sourceReport": "Round2-Development/qa/dashboard/emery/1794533479713893895/report.json",
-      "rendererProof": "Exact stable PBW captured in native emulator; original PNG bytes unchanged."
+      "sha256": "3b9e686ba98de2773c606b6f9eab2916f2286a8a13d7b570d1070f204c1b91a1",
+      "source": "Activity-Education-Development/verification/native-emery-en/dashboard-store-overview.png",
+      "sourceReport": "Activity-Education-Development/verification/native-emery-en/report.json",
+      "rendererProof": "Exact development candidate captured in native emulator; original PNG bytes unchanged."
     },
     "gabbro-overview.png": {
       "platform": "gabbro",
-      "sha256": "5e06b78d88cf0458bee058d2a886a4d96796b6eb6ee5fca3903ef3600eec9434",
-      "source": "Round2-Development/qa/dashboard/gabbro/1794533479654193294/2-en-light-0.png",
-      "sourceReport": "Round2-Development/qa/dashboard/gabbro/1794533479654193294/report.json",
-      "rendererProof": "Exact stable PBW captured in native emulator; original PNG bytes unchanged."
+      "sha256": "efbe0ee4f97feba91c1b8f7fded975ef687f8157398c124756e0f1c57214d90a",
+      "source": "Activity-Education-Development/verification/native-gabbro-en/dashboard-store-overview.png",
+      "sourceReport": "Activity-Education-Development/verification/native-gabbro-en/report.json",
+      "rendererProof": "Exact development candidate captured in native emulator; original PNG bytes unchanged."
     }
   }
 }

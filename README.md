@@ -3,6 +3,14 @@
 A stock PebbleOS app showing a current activity, the latest notification and two configurable
 pins.
 
+## Activities: see what is happening now
+
+Activities are live updates shown by compatible XOCE apps and watchfaces, such as a countdown, music or a new notification. This feature connects compatible XOCE products; support depends on the app or watchface you choose.
+
+Start a countdown in Timer and open Dashboard to see its activity in the overview. Hold Up to browse all available activities. Dashboard has its own activity order and does not pause or resume timers; open Timer to change the countdown.
+
+Sharing needs plugin support in the official Pebble phone app, the required permissions and a connected phone. Weather and battery readings use separate reading settings. Music and notification integration requires Android. Open Activity is optional; you can always open Timer from the watch’s app list.
+
 ## Download
 
 [Version 0.6.3](https://github.com/xefensor/pebble-app-dashboard/releases/tag/v0.6.3) is a development prerelease.
