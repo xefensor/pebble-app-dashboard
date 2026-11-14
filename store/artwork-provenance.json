@@ -1,37 +1,46 @@
 {
   "schemaVersion": 1,
   "originalArtwork": true,
-  "family": "XOCE 2026-11-14",
-  "scope": "Original product marketing artwork; banners composite unmodified native capture bytes. Standalone screenshots remain native and unframed.",
+  "family": "XOCE tactile 2026-11-14",
+  "scope": "Original composition, outlined type and product symbols. Marketing embeds unchanged native screenshots and unchanged official frame bytes. Standalone Store screenshots remain raw and unframed.",
   "font": {
-    "name": "Inter",
-    "sourceSha256": "ea4e3d9970b9b6b566110a1b0e13635fe235280b83dd2443dcb3faca1e2456ef",
-    "licence": "SIL Open Font License 1.1",
-    "treatment": "Text outlined in SVG; no font dependency when rendering."
+    "name": "Fira Sans / Fira Sans Condensed",
+    "licence": "SIL OFL 1.1",
+    "treatment": "Outlined text; full pinned inputs in the identity review folder."
   },
   "files": {
-    "product-mark.svg": "d0b912e034df53efb4ea35003ede4b178525e946feced42d779b474e1dcc58c0",
-    "product-mark-144.png": "478cecdf3403fb4a7d093a0442b5ef9026f378aba6597b6ada78901580a6c4da",
-    "icon-source.svg": "d0b912e034df53efb4ea35003ede4b178525e946feced42d779b474e1dcc58c0",
-    "icon-large-144.png": "478cecdf3403fb4a7d093a0442b5ef9026f378aba6597b6ada78901580a6c4da",
-    "icon-small-80.png": "8ab3d3068a0f6b28aed8d3c5ddfa963a02d67d00708a947c1f9e30f084ca168c",
-    "emery-family-banner.svg": "57feb41ab53b980f0c981142b0d0f6c98599d66e6ab22cb9951d2788e1e5a23f",
-    "emery-family-banner.png": "17b03e98981f3082cb7c63bfb10d2c881abee9d112a41197a8d13db86ff6f3f9",
-    "gabbro-family-banner.svg": "11ef10658a1b8c62a9948f70db7893e3315c131266892f21ad0930bd8f8495e5",
-    "gabbro-family-banner.png": "58d51dfb9fb2b2b33d21eb7354524e50cf7c061148f77a950f473d22a79fac61"
+    "product-mark.svg": "46335cce459073abf9d48221a8010e9bbc6b2c0dbdf3c86310c349c2138851a3",
+    "product-mark-144.png": "a0642ae95c6958019a3d15abe84fe00046fdbee9901a8c703c34169d32b34f2c",
+    "icon-source.svg": "46335cce459073abf9d48221a8010e9bbc6b2c0dbdf3c86310c349c2138851a3",
+    "icon-large-144.png": "a0642ae95c6958019a3d15abe84fe00046fdbee9901a8c703c34169d32b34f2c",
+    "icon-small-80.png": "c9a2f10a3c0e04c1ac47f6e87b2c4b19a0f9fa625b8941d9f13cd5e0ab1c7654",
+    "emery-family-banner.svg": "da73f1e6077c50b01477a2cf0e02f6a39660ad4bcbfca38fb16abe2f5043a70a",
+    "emery-family-banner.png": "e50da6a88af79f36ae380f8102cd8d83d572509c40c4dcd51e2b98c05e6e96b0",
+    "gabbro-family-banner.svg": "57ce7d418de55fb96813423c1a07fa5064d026965c5c01b87c42f4944d956815",
+    "gabbro-family-banner.png": "fd10ed643c190938ec5333b5ebd1fd6103bb5d70ed71a87d5b04853ff5cf8c63"
   },
   "banners": {
     "emery": {
       "file": "emery-family-banner.png",
       "platform": "emery",
       "screenshot": "emery-store-20261114-overview.png",
-      "screenshotSha256": "b9af77d2c8af35741df6972b155b38307455f186fe6d3cf0d34b946cd63ddd50"
+      "screenshotSha256": "b9af77d2c8af35741df6972b155b38307455f186fe6d3cf0d34b946cd63ddd50",
+      "frame": "pebble-time-2.png",
+      "frameSha256": "ec5f810dda6cfa769df5421c3fcbebb5bd45a36839029a6c396ea4acc7609c54",
+      "frameSource": "https://apps.repebble.com/images/screenshot_slider_background_emery_v2.png",
+      "frameCredit": "Core Devices",
+      "composition": "Front view with strap cropping; complete native screen retained at original aspect ratio."
     },
     "gabbro": {
       "file": "gabbro-family-banner.png",
       "platform": "gabbro",
       "screenshot": "gabbro-store-20261114-overview.png",
-      "screenshotSha256": "791967ee1e1d7dcdb866955591d5231a7d220717928641af1d75624f60d9c931"
+      "screenshotSha256": "791967ee1e1d7dcdb866955591d5231a7d220717928641af1d75624f60d9c931",
+      "frame": "pebble-round-2.png",
+      "frameSha256": "d71fd23c4abfccff64415bb3fd5c22a9920c44f0a479544fab1529b79300ce50",
+      "frameSource": "https://apps.repebble.com/images/screenshot_slider_background_gabbro.png",
+      "frameCredit": "Core Devices",
+      "composition": "Front view with strap cropping; complete native screen retained at original aspect ratio."
     }
   }
 }

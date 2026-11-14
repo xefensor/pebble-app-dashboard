@@ -8,13 +8,15 @@ material, not extra screenshots.
 
 The raw native screenshots are unframed and retain their original pixels. Time 2 is 200×228; Round 2 is 260×260.
 
-The coordinated family artwork is original XOCE work. Inter text is outlined in
-SVG, with its SIL OFL notice in `ARTWORK-LICENSES.txt`. Official hardware frames
-are not used in these Store banners. Native app UI, UUID and version are unchanged.
+The approved tactile family uses cool silver, graphite, blue controls and Fira
+text outlines. Banners composite unchanged native captures with the official Core
+Devices frames. Standalone screenshots remain unframed. Artwork/font/frame credits
+are in `ARTWORK-LICENSES.txt`; native app UI, UUID and version are unchanged.
 
 Prepare/check a kit with `python3 scripts/store-kit.py --pbw /path/to/checked.pbw`
 and the same command with `--check`. Outputs stay under ignored `build/store/`.
-The six-product review bundle is `Watch/Store-Update-2026-11-14/` in the workspace.
+The current artwork-only review is `Watch/XOCE-Identity-2026-11-14/`.
+The previous full review `Watch/Store-Update-2026-11-14/` remains unchanged.
 Keep old `dist/`, `releases/` and prior review bundles unchanged.
 
 This preparation does not upload, publish or deploy anything. Existing review
