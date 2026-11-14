@@ -46,5 +46,6 @@
   "banners": {
     "emery": "emery-family-banner.png",
     "gabbro": "gabbro-family-banner.png"
-  }
+  },
+  "icon_tintable": true
 }
