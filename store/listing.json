@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "name": "Dashboard",
   "author": "Xef",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "uuid": "f76f9fc1-2944-4248-bcc5-3eea2af0183b",
   "type": "watchapp",
   "category": "Daily",
@@ -33,7 +33,7 @@
     ]
   },
   "remaining_publication_gates": [
-    "Verify Developer Dashboard ownership, existing listing and unused numeric version",
+    "Verify Developer Dashboard ownership, existing listing and availability of the new numeric version",
     "Verify live app-owned support/privacy URLs",
     "Publish exact checked GitHub and Store artifacts, then activate website links"
   ],

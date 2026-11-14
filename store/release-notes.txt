@@ -1,4 +1,4 @@
-Dashboard 1.0.0
+Dashboard 1.0.1
 
 First stable preparation for Pebble Time 2 and Round 2.
 

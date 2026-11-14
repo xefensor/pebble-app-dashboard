@@ -1,8 +1,8 @@
 {
-  "version": "1.0.0",
+  "version": "1.0.1",
   "nativePixelsModified": false,
-  "scope": "Fresh native emulator captures from the exact PBW; supported settings and synthetic example data; no physical-device claim.",
-  "candidateSha256": "a0c90d9965278b68b786ad84933767513f38371ad1065ae86a6d1ca09aca9363",
+  "scope": "Original native PNGs reused for the new patch after strict renderer/resource equality with the reviewed package was verified. Synthetic example data; no fresh capture or physical-device claim.",
+  "candidateSha256": "6f56f4d4451752c2c24ba98cd962ea65d430b398b8a45033dc158ed774574ed8",
   "renderer": {
     "emery": {
       "nativeRendererSha256": "26af80086a7968378a798a7cdd00a23f368d1c57029b0bc96904cada82c5b459",
@@ -19,7 +19,7 @@
       "sha256": "b9af77d2c8af35741df6972b155b38307455f186fe6d3cf0d34b946cd63ddd50",
       "source": "Store-Update-2026-11-14/verification/native/dashboard/emery/overview.png",
       "sourceReport": "Store-Update-2026-11-14/verification/native/dashboard/emery/report.json",
-      "rendererProof": "Raw native Screenshot-service PNG from this exact PBW; no pixel modifications.",
+      "rendererProof": "Original capture pixels unchanged; native renderer/resources match the new patch. See docs/qa/store-version-1.0.1/package-equivalence.json",
       "settings": "Small text; synthetic countdown deadline aligned to the emulator UTC time."
     },
     "gabbro-store-20261114-overview.png": {
@@ -27,8 +27,11 @@
       "sha256": "791967ee1e1d7dcdb866955591d5231a7d220717928641af1d75624f60d9c931",
       "source": "Store-Update-2026-11-14/verification/native/dashboard/gabbro/overview.png",
       "sourceReport": "Store-Update-2026-11-14/verification/native/dashboard/gabbro/report.json",
-      "rendererProof": "Raw native Screenshot-service PNG from this exact PBW; no pixel modifications.",
+      "rendererProof": "Original capture pixels unchanged; native renderer/resources match the new patch. See docs/qa/store-version-1.0.1/package-equivalence.json",
       "settings": "Small text; synthetic countdown deadline aligned to the emulator UTC time."
     }
-  }
+  },
+  "originalCaptureVersion": "1.0.0",
+  "sourceCaptureCandidateSha256": "a0c90d9965278b68b786ad84933767513f38371ad1065ae86a6d1ca09aca9363",
+  "reuseProof": "docs/qa/store-version-1.0.1/package-equivalence.json"
 }

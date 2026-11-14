@@ -3,6 +3,10 @@
 A stock PebbleOS app showing a current activity, the latest notification and two configurable
 pins.
 
+## Store update 1.0.1
+
+Current source prepares Dashboard 1.0.1 for the reviewed Store update. The new numeric version supersedes the existing public 1.0.0 binary without changing the public UUID. Its exact PBW, Store package, source and checksums are under `releases/`; earlier artifacts remain unchanged.
+
 ## Activities: see what is happening now
 
 Activities are live updates shown by compatible XOCE apps and watchfaces, such as a countdown, music or a new notification. This feature connects compatible XOCE products; support depends on the app or watchface you choose.
