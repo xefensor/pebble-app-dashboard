@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "originalArtwork": true,
+  "family": "XOCE 2026-11-14",
+  "scope": "Original product marketing artwork; banners composite unmodified native capture bytes. Standalone screenshots remain native and unframed.",
+  "font": {
+    "name": "Inter",
+    "sourceSha256": "ea4e3d9970b9b6b566110a1b0e13635fe235280b83dd2443dcb3faca1e2456ef",
+    "licence": "SIL Open Font License 1.1",
+    "treatment": "Text outlined in SVG; no font dependency when rendering."
+  },
+  "files": {
+    "product-mark.svg": "d0b912e034df53efb4ea35003ede4b178525e946feced42d779b474e1dcc58c0",
+    "product-mark-144.png": "478cecdf3403fb4a7d093a0442b5ef9026f378aba6597b6ada78901580a6c4da",
+    "icon-source.svg": "d0b912e034df53efb4ea35003ede4b178525e946feced42d779b474e1dcc58c0",
+    "icon-large-144.png": "478cecdf3403fb4a7d093a0442b5ef9026f378aba6597b6ada78901580a6c4da",
+    "icon-small-80.png": "8ab3d3068a0f6b28aed8d3c5ddfa963a02d67d00708a947c1f9e30f084ca168c",
+    "emery-family-banner.svg": "48900a6c8f1f1150d3d892e1928541c0e3235bcf653d5b72c297efd802823840",
+    "emery-family-banner.png": "90ebe34d0ac26f5242bd63eb0364c9defbda4423a3129f2942e2ec5f77d9f56b",
+    "gabbro-family-banner.svg": "cf534e0157e20813fcea8c8cfb20cbf833e94136844ff32f538964892a5e8321",
+    "gabbro-family-banner.png": "de431f1711b9ce532e211f6adabdcb2aa6442c3bb5465aa4f4d01bb01f2ca71e"
+  },
+  "banners": {
+    "emery": {
+      "file": "emery-family-banner.png",
+      "platform": "emery",
+      "screenshot": "emery-overview.png",
+      "screenshotSha256": "3b9e686ba98de2773c606b6f9eab2916f2286a8a13d7b570d1070f204c1b91a1"
+    },
+    "gabbro": {
+      "file": "gabbro-family-banner.png",
+      "platform": "gabbro",
+      "screenshot": "gabbro-overview.png",
+      "screenshotSha256": "efbe0ee4f97feba91c1b8f7fded975ef687f8157398c124756e0f1c57214d90a"
+    }
+  }
+}

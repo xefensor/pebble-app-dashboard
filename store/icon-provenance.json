@@ -1,12 +1,10 @@
 {
   "schemaVersion": 1,
-  "author": "Xef",
-  "kind": "Original vector artwork based on the app’s existing panel, hourglass or opening-arrow motif",
-  "source": "icon-source.svg",
-  "renderer": "rsvg-convert version 2.63.4\n\nlibraries used:\n  cairo 1.18.6\n  pango 1.58.2\n  harfbuzz 15.1.0\n  fontconfig 2.18.3",
+  "originalArtwork": true,
+  "family": "XOCE 2026-11-14",
   "files": {
-    "icon-source.svg": "3bdbed8ae9952f6617014293b966bd5231f9568d59236d231acb963686706f65",
-    "icon-small-80.png": "05c71c7e791813ffb736c11e639d0bd244207565d0a0f483de99d887ae0f1f88",
-    "icon-large-144.png": "14611a1efbf26992de67db6d80edb0bf51ef20e41ee3b5150b119099152ba97e"
+    "icon-source.svg": "d0b912e034df53efb4ea35003ede4b178525e946feced42d779b474e1dcc58c0",
+    "icon-small-80.png": "8ab3d3068a0f6b28aed8d3c5ddfa963a02d67d00708a947c1f9e30f084ca168c",
+    "icon-large-144.png": "478cecdf3403fb4a7d093a0442b5ef9026f378aba6597b6ada78901580a6c4da"
   }
 }

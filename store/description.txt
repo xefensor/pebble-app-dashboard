@@ -1,15 +1,15 @@
-Activities, notifications and your chosen pins together on Pebble.
+Your current activity, notifications and chosen pins in one Pebble overview.
 
-Activities are live updates shown by compatible XOCE apps and watchfaces, such as a countdown, music or a new notification.
+Open Dashboard when you want a quick look at what is happening. Its overview brings together one activity, a notification panel and two pinned items. Choose useful readings and shortcuts, then open the full collections when you need more.
 
-Start a countdown in Timer and open Dashboard to see its activity in the overview. Hold Up to browse all available activities. Dashboard has its own activity order and does not pause or resume timers; open Timer to change the countdown.
+- Hold Up to browse the available Activities.
+- Open Pinned to see your full collection of pins.
+- Choose what a pin displays, what Select does and which app Hold Select opens, where supported by the source.
+- Keep complete values and units together.
+- Choose Small, Medium, Large or Follow Pebble text, and a light, dark or following appearance. Available in 17 languages.
 
-Sharing activities between apps needs plugin support in the Pebble phone app, the required permissions and a connected phone.
+Activities are ongoing updates from compatible sources. For example, start a countdown in Timer and open Dashboard to see its remaining time. Dashboard has its own activity order. Open Timer to pause or resume the countdown; Dashboard does not provide those controls.
 
-The overview keeps one activity, a notification panel and two pins visible. Open Activities or Pinned for the full collection. Select runs the action declared by the selected item; hold Select to open its associated app. Complete values and units stay together.
+Shared activities and readings need the official Pebble phone app's plugin support, source permissions and a connected phone. Music and notification integration requires Android. Available actions depend on the source; missing or expired information is shown as unavailable.
 
-Choose Small, Medium, Large or Follow Pebble text, and a light, dark or following appearance. Available in 17 languages.
-
-Works with compatible Pebble activity and reading providers. Phone features need the current Pebble mobile app with Plugins / permissions preview enabled and the permissions you choose. Music and notification integration require Android. Missing, expired or disconnected sources remain unavailable instead of acting on stale information.
-
-Free. For Pebble Time 2 and Round 2. Round 2 has been validated in the emulator.
+Free. For Pebble Time 2 and Round 2.
