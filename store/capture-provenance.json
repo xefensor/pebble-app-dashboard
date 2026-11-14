@@ -1,7 +1,7 @@
 {
   "version": "1.0.0",
   "nativePixelsModified": false,
-  "scope": "Previously captured raw native PNGs reused after current PBW renderer identity equality was verified. Synthetic example data; no physical-device claim.",
+  "scope": "Fresh native emulator captures from the exact PBW; supported settings and synthetic example data; no physical-device claim.",
   "candidateSha256": "a0c90d9965278b68b786ad84933767513f38371ad1065ae86a6d1ca09aca9363",
   "renderer": {
     "emery": {
@@ -14,20 +14,21 @@
     }
   },
   "screenshots": {
-    "emery-overview.png": {
+    "emery-store-20261114-overview.png": {
       "platform": "emery",
-      "sha256": "3b9e686ba98de2773c606b6f9eab2916f2286a8a13d7b570d1070f204c1b91a1",
-      "source": "Activity-Education-Development/verification/native-emery-en/dashboard-store-overview.png",
-      "sourceReport": "Activity-Education-Development/verification/native-emery-en/report.json",
-      "rendererProof": "Exact development candidate captured in native emulator; original PNG bytes unchanged."
+      "sha256": "b9af77d2c8af35741df6972b155b38307455f186fe6d3cf0d34b946cd63ddd50",
+      "source": "Store-Update-2026-11-14/verification/native/dashboard/emery/overview.png",
+      "sourceReport": "Store-Update-2026-11-14/verification/native/dashboard/emery/report.json",
+      "rendererProof": "Raw native Screenshot-service PNG from this exact PBW; no pixel modifications.",
+      "settings": "Small text; synthetic countdown deadline aligned to the emulator UTC time."
     },
-    "gabbro-overview.png": {
+    "gabbro-store-20261114-overview.png": {
       "platform": "gabbro",
-      "sha256": "efbe0ee4f97feba91c1b8f7fded975ef687f8157398c124756e0f1c57214d90a",
-      "source": "Activity-Education-Development/verification/native-gabbro-en/dashboard-store-overview.png",
-      "sourceReport": "Activity-Education-Development/verification/native-gabbro-en/report.json",
-      "rendererProof": "Exact development candidate captured in native emulator; original PNG bytes unchanged."
+      "sha256": "791967ee1e1d7dcdb866955591d5231a7d220717928641af1d75624f60d9c931",
+      "source": "Store-Update-2026-11-14/verification/native/dashboard/gabbro/overview.png",
+      "sourceReport": "Store-Update-2026-11-14/verification/native/dashboard/gabbro/report.json",
+      "rendererProof": "Raw native Screenshot-service PNG from this exact PBW; no pixel modifications.",
+      "settings": "Small text; synthetic countdown deadline aligned to the emulator UTC time."
     }
-  },
-  "sourceCaptureCandidateSha256": "a0c90d9965278b68b786ad84933767513f38371ad1065ae86a6d1ca09aca9363"
+  }
 }
