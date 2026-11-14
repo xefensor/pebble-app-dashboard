@@ -1,0 +1,28 @@
+{
+  "slug": "dashboard",
+  "name": "Dashboard",
+  "version": "1.0.2",
+  "uuid": "f76f9fc1-2944-4248-bcc5-3eea2af0183b",
+  "pbw": "Dashboard-1.0.2.pbw",
+  "pbwSha256": "98e0c2098f769a6963b26a2f7003953aecf44a7a8c95ad76ef059d2776f63b72",
+  "platforms": [
+    "emery",
+    "gabbro"
+  ],
+  "nativeGalleryReuseProof": "store/final-gallery-reuse.json",
+  "baselineVersion": "1.0.1",
+  "sourceTests": "PASS",
+  "freshBuildAndArtifactAudit": "PASS",
+  "sdkVersion": "4.44",
+  "nodeVersion": "22.23.4",
+  "pythonVersion": "3.12.15",
+  "pebbleToolVersion": "5.1.2",
+  "nativeEmulatorRuns": 2,
+  "nativeScreenshots": "Fresh final-binary native smoke and launcher inspection; historical feature galleries reused only with byte compatibility proof.",
+  "syntheticBrowserEvidence": "Supplied six-page review and local regression suites; no real phone bridge claim.",
+  "physicalDeviceTest": false,
+  "liveProviderTest": false,
+  "storeSubmitted": false,
+  "inputFullArchiveSha256": "49b575ddc22e7dd990e1000d4dbdce900a899e7c4bde31fd8ee59a4a593f2b9f",
+  "inputHandoffArchiveSha256": "fcf494a1d87e86115f6af2161decd5a717b601b60d8a558daaee8dba6c157ace"
+}

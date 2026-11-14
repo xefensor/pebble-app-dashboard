@@ -1,0 +1,102 @@
+{
+  "schemaVersion": 1,
+  "result": "PASS",
+  "error": null,
+  "product": "dashboard",
+  "version": "1.0.2",
+  "platform": "gabbro",
+  "sourcePbw": "sources/dashboard/build/candidate/Dashboard-1.0.2.pbw",
+  "sourcePbwSha256": "98e0c2098f769a6963b26a2f7003953aecf44a7a8c95ad76ef059d2776f63b72",
+  "nativePayloadSha256": {
+    "gabbro/app_resources.pbpack": "8c964e0e4e51101f8fd70f6a068b8a9bbe9608c4b0721db7efce3d39bfbca7c1",
+    "gabbro/manifest.json": "a4973ef625b059e712b68b50ae221a5d35227c05c626b04121792547922e8cf5",
+    "gabbro/pebble-app.bin": "71cce8bc3d6c590c8a47af260c00a1597b515cb4c5c402dfd8c347cb077eec45"
+  },
+  "temporaryNativePbwSha256": "189899c4f44dff28a0879f99148005cb4bdd6b5887fbfbfaa6b42242dd276617",
+  "nativePayloadPreserved": true,
+  "nativeMenuIcon": {
+    "file": "resources/images/menu-icon.png",
+    "sha256": "4ec9a49d19542461299c5afdfbb0090c97a25fbbce5c873f9932e32f604b5a6d",
+    "unselectedIconRendered": true,
+    "matchingNativeGlyphLocations": {
+      "launcher-selected.png": [
+        {
+          "x": 12,
+          "y": 120,
+          "width": 22,
+          "height": 21
+        }
+      ],
+      "launcher-unselected.png": [
+        {
+          "x": 21,
+          "y": 75,
+          "width": 22,
+          "height": 21
+        }
+      ]
+    }
+  },
+  "firmware": "WatchVersionResponse(running=WatchFirmwareVersion(timestamp=1793831942, version_tag=v4.44.3, git_hash=2acda40, flags=0, hardware_platform=242, metadata_version=1), recovery=WatchFirmwareVersion(timestamp=1793831942, version_tag=v4.44.3, git_hash=2acda40, flags=1, hardware_platform=242, metadata_version=1), bootloader_timestamp=0, board=, serial=, bt_address=c923967bb7d7, resource_crc=1611980739, resource_timestamp=0, language=en_US, language_version=1, capabilities=526698239, is_unfaithful=True)",
+  "sdkVersion": "4.44",
+  "pebbleToolVersion": "5.1.2",
+  "capturedAtUtc": "2026-11-14T21:59:07.077393+00:00",
+  "clock": {
+    "baselineUtc": "2026-11-14T12:05:00Z",
+    "utcOffset": 3600,
+    "zone": "Europe/Prague"
+  },
+  "scope": "Native screenshot-service PNGs from the fresh candidate exact ARM/resource payload; real emulated button events. Native main UI and default-appearance launcher or watchface-picker icon visibility. Round 2 hides unselected watchface icons; other rows show icons in both states. Phone JavaScript omitted; no external provider/activity execution.",
+  "physicalDeviceTest": false,
+  "phoneRuntimeTest": false,
+  "osDarkLauncherTest": false,
+  "syntheticClock": true,
+  "renderedOrRepaintedUi": false,
+  "captures": [
+    {
+      "file": "native-main.png",
+      "sha256": "b9bef9e11acd97b145e2303839f268a425a9798e5f8ff4156ca23b2ee62850ec",
+      "width": 260,
+      "height": 260,
+      "description": "Fresh candidate main UI with its exact compiled native resources; no phone JavaScript."
+    },
+    {
+      "file": "launcher-selected.png",
+      "sha256": "45c6ec0d30cbb2c8bfc86df6b77ffc34a2d8d22b0892077112c4e047366f2142",
+      "width": 260,
+      "height": 260,
+      "description": "Candidate row selected in the actual native launcher."
+    },
+    {
+      "file": "launcher-unselected.png",
+      "sha256": "9f73f1002c763c70b67f0a829a34d4dc5ed80336ab6842b0b1e1f134fae69a04",
+      "width": 260,
+      "height": 260,
+      "description": "Candidate row unselected on the actual native default white background."
+    }
+  ],
+  "actions": [
+    {
+      "action": "set-clock",
+      "epoch": 1794657900,
+      "utcOffset": 3600
+    },
+    {
+      "action": "install-exact-native",
+      "nativeSha256": "189899c4f44dff28a0879f99148005cb4bdd6b5887fbfbfaa6b42242dd276617"
+    },
+    {
+      "action": "tap",
+      "button": "Back",
+      "count": 1
+    },
+    {
+      "action": "tap",
+      "button": "Down",
+      "count": 1
+    }
+  ],
+  "nativeLogs": [
+    "AppLogMessage(uuid=f76f9fc1-2944-4248-bcc5-3eea2af0183b, timestamp=1794657901, level=100, message_length=86, line_number=497, filename=ocess_manager.c, message=Heap Usage for App <Dashboard>: Total Size <75952B> Used <34904B> Still allocated <0B>)"
+  ]
+}

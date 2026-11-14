@@ -83,9 +83,16 @@ def payload(root,pbw):
             from platform_audit import audit_platforms
             audit_platforms(root,pbw)
             provenance=json.loads((store/'capture-provenance.json').read_text())
-            require(provenance['version']==version and provenance['nativePixelsModified'] is False,'Invalid native capture provenance')
+            require(provenance.get('representedReleaseVersion',provenance['version'])==version and provenance['nativePixelsModified'] is False,'Invalid native capture provenance')
+            represented=provenance['renderer']
+            if 'finalReuseProof' in provenance:
+                from gallery_reuse import verify
+                represented=verify(root,z,version)
+                require(provenance['representedPbwSha256']==sha(pbw.read_bytes()),'Gallery PBW hash differs')
+                entries['gallery-reuse-baseline.json']=(store/'gallery-reuse-baseline.json').read_bytes()
+                entries['final-gallery-reuse.json']=(store/'final-gallery-reuse.json').read_bytes()
             for platform in targets:
-                require(provenance['renderer'][platform]==render_identity(z,platform),'Screenshot renderer differs: '+platform)
+                require(represented[platform]==render_identity(z,platform),'Screenshot renderer differs: '+platform)
                 screenshots=listing['screenshots'][platform];require(1<=len(screenshots)<=5,'Expected one to five screenshots per target')
                 for name in screenshots:
                     require(Path(name).name==name,'Unsafe screenshot filename');data=(store/name).read_bytes();record=provenance['screenshots'][name]

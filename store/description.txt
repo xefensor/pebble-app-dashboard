@@ -1,15 +1,15 @@
-Your current activity, notifications and chosen pins in one Pebble overview.
+Your activity, notifications and pinned readings in one Pebble overview.
 
-Open Dashboard when you want a quick look at what is happening. Its overview brings together one activity, a notification panel and two pinned items. Choose useful readings and shortcuts, then open the full collections when you need more.
+Open Dashboard for a quick look at one activity, a notification panel and two pinned items. Browse the full collections when you need more detail.
 
-- Hold Up to browse the available Activities.
-- Open Pinned to see your full collection of pins.
-- Choose what a pin displays, what Select does and which app Hold Select opens, where supported by the source.
-- Keep complete values and units together.
-- Choose Small, Medium, Large or Follow Pebble text, and a light, dark or following appearance. Available in 17 languages.
+- Hold Up to browse Activities: ongoing updates such as a running Timer.
+- Open Pinned to browse your chosen readings and shortcuts.
+- Choose what each pin displays, its Select action and its Hold Select app shortcut, where supported by the source.
+- Confirm actions when required by the source or your pin settings.
+- Choose text size and a Light or Dark watch appearance. Available in 17 interface languages.
 
-Activities are ongoing updates from compatible sources. For example, start a countdown in Timer and open Dashboard to see its remaining time. Dashboard has its own activity order. Open Timer to pause or resume the countdown; Dashboard does not provide those controls.
+Start a countdown in Timer, then see its remaining time in Dashboard. Timer keeps control of the countdown and alarm; open Timer to pause or resume it. Available actions depend on the selected source.
 
-Shared activities and readings need the official Pebble phone app's plugin support, source permissions and a connected phone. Music and notification integration requires Android. Available actions depend on the source; missing or expired information is shown as unavailable.
+For Pebble Time 2 and Round 2. Shared readings and Activities require a connected phone, plugin support enabled in the official Pebble phone app, and permissions for the chosen sources. Built-in music and notifications require Android. Pinned items here are Dashboard readings and shortcuts, separate from Pebble timeline pins.
 
-Free. For Pebble Time 2 and Round 2.
+Free. Part of XOCE. No XOCE account, ads or analytics. Selected providers have their own requirements and privacy practices.

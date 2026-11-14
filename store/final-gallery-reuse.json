@@ -1,0 +1,104 @@
+{
+  "result": "PASS",
+  "version": "1.0.2",
+  "pbwSha256": "98e0c2098f769a6963b26a2f7003953aecf44a7a8c95ad76ef059d2776f63b72",
+  "previousVersion": "1.0.1",
+  "previousPbwSha256": "6f56f4d4451752c2c24ba98cd962ea65d430b398b8a45033dc158ed774574ed8",
+  "nativeRendererResourcesUnchanged": true,
+  "scope": "Executable/constants/relocations and every non-icon resource are byte-identical to the frozen baseline. Only launcher ID/resource binding and validated SDK CRC/timestamp/build ID may differ. This is verified historical image reuse, not new captures or physical phone/watch evidence.",
+  "freshCaptureClaimed": false,
+  "nativePixelsModified": false,
+  "renderer": {
+    "emery": {
+      "nativeRendererSha256": "7d22417804de971cd572ee5b91e87e74728779cb403fea9a965be7c85fa3d263",
+      "resourceRendererSha256": "8c964e0e4e51101f8fd70f6a068b8a9bbe9608c4b0721db7efce3d39bfbca7c1"
+    },
+    "gabbro": {
+      "nativeRendererSha256": "79d1d8cebc09f51afa964f8e804bf292fb17fc729fd40f1db2933599e22b3e22",
+      "resourceRendererSha256": "8c964e0e4e51101f8fd70f6a068b8a9bbe9608c4b0721db7efce3d39bfbca7c1"
+    }
+  },
+  "platforms": {
+    "emery": {
+      "normalizedNativeSha256": "5d614ab34e88eac0bd211243f9bfee28f91b39f72e2d884014962664ebbab309",
+      "nonIconResources": {
+        "2": "ccda82f92c7c54349676b53bd680bf0deaf169c42e3706e5805d56e300c11720"
+      },
+      "nativeBytes": 36224,
+      "loadedBytes": 35448,
+      "relocations": 194,
+      "resourceCount": 2
+    },
+    "gabbro": {
+      "normalizedNativeSha256": "62b2abda4694fc31fb4859b2ff58700f2519f395c3df044ac8ff3c06a1d8e576",
+      "nonIconResources": {
+        "2": "ccda82f92c7c54349676b53bd680bf0deaf169c42e3706e5805d56e300c11720"
+      },
+      "nativeBytes": 39856,
+      "loadedBytes": 39080,
+      "relocations": 194,
+      "resourceCount": 2
+    }
+  },
+  "additionalVerifiedCapturePbws": [
+    "a0c90d9965278b68b786ad84933767513f38371ad1065ae86a6d1ca09aca9363"
+  ],
+  "priorCaptureProvenance": {
+    "version": "1.0.1",
+    "nativePixelsModified": false,
+    "scope": "Original native PNGs reused for the new patch after strict renderer/resource equality with the reviewed package was verified. Synthetic example data; no fresh capture or physical-device claim.",
+    "candidateSha256": "6f56f4d4451752c2c24ba98cd962ea65d430b398b8a45033dc158ed774574ed8",
+    "renderer": {
+      "emery": {
+        "nativeRendererSha256": "26af80086a7968378a798a7cdd00a23f368d1c57029b0bc96904cada82c5b459",
+        "resourceRendererSha256": "61af70510ee20669081cbaa0256a509c332b5f2bcb53287122ff270fb00dd615"
+      },
+      "gabbro": {
+        "nativeRendererSha256": "8379ac16fe65d44deca1334e5222ecd5eb098e8996674c80a11478d59f0e0193",
+        "resourceRendererSha256": "61af70510ee20669081cbaa0256a509c332b5f2bcb53287122ff270fb00dd615"
+      }
+    },
+    "screenshots": {
+      "emery-store-20261114-overview.png": {
+        "platform": "emery",
+        "sha256": "b9af77d2c8af35741df6972b155b38307455f186fe6d3cf0d34b946cd63ddd50",
+        "source": "Store-Update-2026-11-14/verification/native/dashboard/emery/overview.png",
+        "sourceReport": "Store-Update-2026-11-14/verification/native/dashboard/emery/report.json",
+        "rendererProof": "Original capture pixels unchanged; native renderer/resources match the new patch. See docs/qa/store-version-1.0.1/package-equivalence.json",
+        "settings": "Small text; synthetic countdown deadline aligned to the emulator UTC time."
+      },
+      "gabbro-store-20261114-overview.png": {
+        "platform": "gabbro",
+        "sha256": "791967ee1e1d7dcdb866955591d5231a7d220717928641af1d75624f60d9c931",
+        "source": "Store-Update-2026-11-14/verification/native/dashboard/gabbro/overview.png",
+        "sourceReport": "Store-Update-2026-11-14/verification/native/dashboard/gabbro/report.json",
+        "rendererProof": "Original capture pixels unchanged; native renderer/resources match the new patch. See docs/qa/store-version-1.0.1/package-equivalence.json",
+        "settings": "Small text; synthetic countdown deadline aligned to the emulator UTC time."
+      }
+    },
+    "originalCaptureVersion": "1.0.0",
+    "sourceCaptureCandidateSha256": "a0c90d9965278b68b786ad84933767513f38371ad1065ae86a6d1ca09aca9363",
+    "reuseProof": "docs/qa/store-version-1.0.1/package-equivalence.json"
+  },
+  "priorReuseEvidence": {
+    "result": "PASS",
+    "version": "1.0.1",
+    "previousVersion": "1.0.0",
+    "pbwSha256": "6f56f4d4451752c2c24ba98cd962ea65d430b398b8a45033dc158ed774574ed8",
+    "previousPbwSha256": "a0c90d9965278b68b786ad84933767513f38371ad1065ae86a6d1ca09aca9363",
+    "platforms": {
+      "emery": {
+        "nativeRendererSha256": "26af80086a7968378a798a7cdd00a23f368d1c57029b0bc96904cada82c5b459",
+        "resourceRendererSha256": "61af70510ee20669081cbaa0256a509c332b5f2bcb53287122ff270fb00dd615"
+      },
+      "gabbro": {
+        "nativeRendererSha256": "8379ac16fe65d44deca1334e5222ecd5eb098e8996674c80a11478d59f0e0193",
+        "resourceRendererSha256": "61af70510ee20669081cbaa0256a509c332b5f2bcb53287122ff270fb00dd615"
+      }
+    },
+    "uuidUnchanged": true,
+    "nativeRendererResourcesUnchanged": true,
+    "pluginRuntimeAndSettingsUnchanged": false,
+    "scope": "Fresh SDK/public builds. Existing strict renderer identity ignores SDK timestamp, build ID and its derived CRC only; code, native version bytes, UUID and resources remain covered. Original captures reused without pixel changes; no fresh emulator or physical-device claim."
+  }
+}

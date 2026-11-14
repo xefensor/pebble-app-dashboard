@@ -1,7 +1,4 @@
-Dashboard 1.0.1
-
-First stable preparation for Pebble Time 2 and Round 2.
-
-The overview brings together one Activity, a notification panel and two pins. Browse the full Activities and Pinned collections, with source-provided actions and optional app shortcuts where available.
-
-See a Timer countdown as an Activity, then open Timer to pause or resume it. Dashboard does not provide those timer controls. Sharing needs Pebble plugin support and a connected phone.
+- Refreshed XOCE launcher icon.
+- Fixed late delivery checks interfering with edits and Save.
+- Reduced repeated status announcements and shortened setup help.
+- Clearer appearance choices preserve the saved Light or Dark fallback.

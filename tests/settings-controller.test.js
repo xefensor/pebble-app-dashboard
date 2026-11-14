@@ -7,12 +7,12 @@ const vm = require('node:vm');
 const settings = require('../src/pkjs/settings');
 const page = require('../src/pkjs/settings-page');
 
-function boot(initial, language = 'en') {
+function boot(initial, language = 'en', options = {}) {
   const all = [], byId = {}, events = {}, timers = new Map(); let timer = 0;
   class Element {
     constructor(tag, attrs = {}) { this.tagName = tag.toUpperCase(); this.attrs = attrs; this.children = []; this.value = attrs.value || ''; this.type = attrs.type || ''; this.checked = false; this.disabled = false; this.hidden = 'hidden' in attrs; this.style = {setProperty() {}}; this.textContent = ''; all.push(this); }
     appendChild(child) { child.parentNode = this; this.children.push(child); if (this.tagName === 'SELECT' && this.children.length === 1) this.value = child.value; return child; }
-    set textContent(value) { this._text = value; this.children = []; }
+    set textContent(value) { this.textWrites=(this.textWrites||0)+1;this._text = value; this.children = []; }
     get textContent() { return this._text; }
     setAttribute(name, value) { this.attrs[name] = value; }
     getAttribute(name) { return this.attrs[name] ?? null; }
@@ -29,12 +29,13 @@ function boot(initial, language = 'en') {
   }
   const body = new Element('body'), documentElement = new Element('html');
   const document = {body, documentElement, activeElement:body, title:'Dashboard settings', getElementById:id => {assert.ok(byId[id], id); return byId[id];}, createElement:tag => new Element(tag), createTreeWalker:() => ({nextNode:() => null}), querySelectorAll:selector => selector === '[data-edit]' ? all.filter(el => 'data-edit' in el.attrs) : []};
-  const state = {ui:{version:2,textSize:'follow',appearance:initial.dark?'dark':'light',lastExplicit:initial.dark?'dark':'light'},saved:structuredClone(initial), writes:[], reject:false, mismatch:false};
+  const state = {ui:{version:2,textSize:'follow',appearance:initial.dark?'dark':'light',lastExplicit:initial.dark?'dark':'light'},saved:structuredClone(initial), writes:[], reads:[], targetRequests:[], deferTargets:false, reject:false, mismatch:false};
+  if(options.ui)state.ui=structuredClone(options.ui);
   const location = {href:'preview://settings'};
   const window = {scrollX:0, scrollY:193, innerHeight:800, addEventListener() {}, scrollTo(x,y) {this.scrollX=x; this.scrollY=y;}};
-  const Pebble = {addEventListener:(type, fn) => {events[type] = fn;}, targets:async () => [{id:'plugin'}, {id:'pkjs'}], sendMessage:async (target, message) => {
+  const Pebble = {addEventListener:(type, fn) => {events[type] = fn;}, targets:() => state.deferTargets?new Promise(resolve=>state.targetRequests.push(resolve)):Promise.resolve([{id:'plugin'}, {id:'pkjs'}]), sendMessage:async (target, message) => {
     if (message.type === 'load_settings') return {ok:true,settings:state.saved,uiPreferences:{ok:true,settings:state.ui,saved:state.uiStored!==false,delivery:{applied:!!state.applied,pending:!state.applied}}};
-    if(message.type==='getUiPreferences'||message.type==='retryUiPreferences')return {ok:true,settings:state.ui,saved:state.uiStored!==false,delivery:{applied:!!state.applied,pending:!state.applied}};
+    if(message.type==='getUiPreferences'||message.type==='retryUiPreferences'){state.reads.push(message.type);return {ok:true,settings:state.ui,saved:state.uiStored!==false,delivery:{applied:!!state.applied,pending:!state.applied}};}
     if (message.type === 'catalogue') return {ok:true,catalogue:{plugins:[],instances:[],activities:[]}};
     if (message.type === 'save_settings') {
       state.writes.push({target, settings:structuredClone(message.settings)});
@@ -98,4 +99,23 @@ test('fresh display defaults are never labelled saved before verified phone pers
  assert.equal(ui.byId.save.disabled,false);assert.equal(ui.byId['display-status'].textContent,'Unsaved changes.');
  ui.byId.save.onclick();await ui.flush();assert.match(ui.byId['display-status'].textContent,/Saved on phone/);
  assert.equal(ui.byId.save.disabled,true);
+});
+
+test('delayed delivery target discovery cannot dispatch across edit and Save',async()=>{
+ const ui=boot(settings.defaults());await ui.flush();ui.state.deferTargets=true;
+ ui.byId['display-retry'].onclick();await ui.flush();assert.equal(ui.state.targetRequests.length,1);
+ ui.change('dark');ui.byId.save.onclick();await ui.flush();assert.equal(ui.state.targetRequests.length,2);
+ ui.state.deferTargets=false;ui.state.targetRequests[1]([{id:'plugin'},{id:'pkjs'}]);await ui.flush();
+ assert.equal(ui.byId.status.textContent,'✓ Saved');const reads=ui.state.reads.length;
+ ui.state.targetRequests[0]([{id:'plugin'},{id:'pkjs'}]);await ui.flush();
+ assert.equal(ui.state.reads.length,reads);assert.equal(ui.byId.status.textContent,'✓ Saved');
+ assert.equal(ui.byId.save.disabled,true);assert.equal(ui.byId.dark.disabled,false);
+});
+test('unchanged delivery polls do not rewrite the live status and loaded Follow stays compatible',async()=>{
+ const legacy={version:2,textSize:'follow',appearance:'follow',lastExplicit:'dark'},ui=boot(settings.defaults(),'en',{ui:legacy});await ui.flush();
+ assert.equal(ui.byId.dark.value,'follow');assert.equal(ui.byId['appearance-follow'].disabled,true);
+ assert.equal(ui.byId['appearance-follow'].textContent,'Follow Pebble — Dark');
+ const writes=ui.byId['display-status'].textWrites;ui.tick();await ui.flush();assert.equal(ui.byId['display-status'].textWrites,writes);
+ ui.byId['text-size'].value='large';ui.byId['text-size'].onchange();ui.byId.save.onclick();await ui.flush();
+ assert.equal(ui.state.ui.appearance,'follow');assert.equal(ui.state.ui.lastExplicit,'dark');
 });

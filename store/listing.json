@@ -2,10 +2,10 @@
   "schemaVersion": 1,
   "name": "Dashboard",
   "author": "Xef",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "uuid": "f76f9fc1-2944-4248-bcc5-3eea2af0183b",
   "type": "watchapp",
-  "category": "Daily",
+  "category": "Tools & Utilities",
   "price": "free",
   "target_platforms": [
     "emery",
@@ -19,17 +19,23 @@
   "publication_status": "preparation",
   "store_submission_allowed": false,
   "publication_rule_url": "https://developer.repebble.com/guides/appstore-publishing/preparing-a-submission/",
-  "publication_rule_checked_on": "2026-11-12",
+  "publication_rule_checked_on": "2026-11-14",
   "icons": [
     "icon-small-80.png",
     "icon-large-144.png"
   ],
   "screenshots": {
     "emery": [
-      "emery-store-20261114-overview.png"
+      "emery-store-demo-20261114-overview.png",
+      "emery-store-demo-20261114-activities-music.png",
+      "emery-store-demo-20261114-pinned-phone.png",
+      "emery-store-demo-20261114-action-confirmation.png"
     ],
     "gabbro": [
-      "gabbro-store-20261114-overview.png"
+      "gabbro-store-demo-20261114-overview.png",
+      "gabbro-store-demo-20261114-activities-music.png",
+      "gabbro-store-demo-20261114-pinned-phone.png",
+      "gabbro-store-demo-20261114-action-confirmation.png"
     ]
   },
   "remaining_publication_gates": [
@@ -47,5 +53,8 @@
     "emery": "emery-family-banner.png",
     "gabbro": "gabbro-family-banner.png"
   },
-  "icon_tintable": true
+  "icon_tintable": true,
+  "store_submission_scope": "Local release-preparation gate retained from the input package; this flag is not a claim that Pebble prohibits publication. Developer account access and release availability were not checked in this presentation refresh.",
+  "publication_guidance_note": "Current guide specifies optional 720x320 banners and exact-size, unframed native screenshots. Watchface store icon uploads are separate from watchapp icon fields.",
+  "website_url": "https://xefensor.github.io/xoce/projects/dashboard/"
 }

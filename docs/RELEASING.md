@@ -7,8 +7,11 @@ Routine checks are in [CONTRIBUTING](../CONTRIBUTING.md). Ordinary pushes run ch
 3. Freeze the reviewed milestone explicitly, then make its source snapshot last:
 
 ```sh
-npm run build:release
-npm run release:source
+npm run build
+npm run check:artifact
+npm run store:prepare
+npm run store:check
+python3 scripts/freeze-release.py
 ```
 
 Existing versions are refused. Never regenerate a historical archive after a documentation or

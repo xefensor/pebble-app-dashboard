@@ -20,7 +20,9 @@
       "source": "Store-Update-2026-11-14/verification/native/dashboard/emery/overview.png",
       "sourceReport": "Store-Update-2026-11-14/verification/native/dashboard/emery/report.json",
       "rendererProof": "Original capture pixels unchanged; native renderer/resources match the new patch. See docs/qa/store-version-1.0.1/package-equivalence.json",
-      "settings": "Small text; synthetic countdown deadline aligned to the emulator UTC time."
+      "settings": "Small text; synthetic countdown deadline aligned to the emulator UTC time.",
+      "captureVersion": "1.0.0",
+      "representedReleaseVersion": "1.0.2"
     },
     "gabbro-store-20261114-overview.png": {
       "platform": "gabbro",
@@ -28,10 +30,80 @@
       "source": "Store-Update-2026-11-14/verification/native/dashboard/gabbro/overview.png",
       "sourceReport": "Store-Update-2026-11-14/verification/native/dashboard/gabbro/report.json",
       "rendererProof": "Original capture pixels unchanged; native renderer/resources match the new patch. See docs/qa/store-version-1.0.1/package-equivalence.json",
-      "settings": "Small text; synthetic countdown deadline aligned to the emulator UTC time."
+      "settings": "Small text; synthetic countdown deadline aligned to the emulator UTC time.",
+      "captureVersion": "1.0.0",
+      "representedReleaseVersion": "1.0.2"
+    },
+    "emery-store-demo-20261114-overview.png": {
+      "platform": "emery",
+      "sha256": "d84c0d03940adf5d12c10a0e2a688c79666640a7b1a293fdfbe8bb082acf2fc4",
+      "captureVersion": "1.0.1",
+      "representedReleaseVersion": "1.0.2",
+      "sourcePbwSha256": "6f56f4d4451752c2c24ba98cd962ea65d430b398b8a45033dc158ed774574ed8",
+      "reuseProof": "final-gallery-reuse.json"
+    },
+    "emery-store-demo-20261114-activities-music.png": {
+      "platform": "emery",
+      "sha256": "4e117c0db0e4c5216a5afd7b56b734e5db3c2f659c556f176f30ec1a8fd69f1d",
+      "captureVersion": "1.0.1",
+      "representedReleaseVersion": "1.0.2",
+      "sourcePbwSha256": "6f56f4d4451752c2c24ba98cd962ea65d430b398b8a45033dc158ed774574ed8",
+      "reuseProof": "final-gallery-reuse.json"
+    },
+    "emery-store-demo-20261114-pinned-phone.png": {
+      "platform": "emery",
+      "sha256": "34f5257e809436817530e151aeacf687d728340991d0bd3bd2688150b80e368e",
+      "captureVersion": "1.0.1",
+      "representedReleaseVersion": "1.0.2",
+      "sourcePbwSha256": "6f56f4d4451752c2c24ba98cd962ea65d430b398b8a45033dc158ed774574ed8",
+      "reuseProof": "final-gallery-reuse.json"
+    },
+    "emery-store-demo-20261114-action-confirmation.png": {
+      "platform": "emery",
+      "sha256": "216ec3e46f7378659d05fc6603ba9916025d3ae659ec1a689fcf9366e779b247",
+      "captureVersion": "1.0.1",
+      "representedReleaseVersion": "1.0.2",
+      "sourcePbwSha256": "6f56f4d4451752c2c24ba98cd962ea65d430b398b8a45033dc158ed774574ed8",
+      "reuseProof": "final-gallery-reuse.json"
+    },
+    "gabbro-store-demo-20261114-overview.png": {
+      "platform": "gabbro",
+      "sha256": "2264ed55b2a85e35609eafe69826a3bc4db55b0f670925c5fa7b6b6d305f4493",
+      "captureVersion": "1.0.1",
+      "representedReleaseVersion": "1.0.2",
+      "sourcePbwSha256": "6f56f4d4451752c2c24ba98cd962ea65d430b398b8a45033dc158ed774574ed8",
+      "reuseProof": "final-gallery-reuse.json"
+    },
+    "gabbro-store-demo-20261114-activities-music.png": {
+      "platform": "gabbro",
+      "sha256": "32748116162da70f9d19df130e5f84a53650870d909663cfb5769ee46d767611",
+      "captureVersion": "1.0.1",
+      "representedReleaseVersion": "1.0.2",
+      "sourcePbwSha256": "6f56f4d4451752c2c24ba98cd962ea65d430b398b8a45033dc158ed774574ed8",
+      "reuseProof": "final-gallery-reuse.json"
+    },
+    "gabbro-store-demo-20261114-pinned-phone.png": {
+      "platform": "gabbro",
+      "sha256": "26f9bd4760d813969bbd24b0926d6814cc90b13749698931e343d366d0fe410f",
+      "captureVersion": "1.0.1",
+      "representedReleaseVersion": "1.0.2",
+      "sourcePbwSha256": "6f56f4d4451752c2c24ba98cd962ea65d430b398b8a45033dc158ed774574ed8",
+      "reuseProof": "final-gallery-reuse.json"
+    },
+    "gabbro-store-demo-20261114-action-confirmation.png": {
+      "platform": "gabbro",
+      "sha256": "4b670990c59519ab417f5bfa8aef3506bcea4b6215c0f4fcabfcfc7667260424",
+      "captureVersion": "1.0.1",
+      "representedReleaseVersion": "1.0.2",
+      "sourcePbwSha256": "6f56f4d4451752c2c24ba98cd962ea65d430b398b8a45033dc158ed774574ed8",
+      "reuseProof": "final-gallery-reuse.json"
     }
   },
   "originalCaptureVersion": "1.0.0",
   "sourceCaptureCandidateSha256": "a0c90d9965278b68b786ad84933767513f38371ad1065ae86a6d1ca09aca9363",
-  "reuseProof": "docs/qa/store-version-1.0.1/package-equivalence.json"
+  "reuseProof": "docs/qa/store-version-1.0.1/package-equivalence.json",
+  "representedReleaseVersion": "1.0.2",
+  "representedPbwSha256": "98e0c2098f769a6963b26a2f7003953aecf44a7a8c95ad76ef059d2776f63b72",
+  "finalReuseProof": "final-gallery-reuse.json",
+  "freshCaptureClaimed": false
 }
