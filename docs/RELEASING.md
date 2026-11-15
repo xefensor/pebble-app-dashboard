@@ -2,7 +2,7 @@
 
 Routine checks are in [CONTRIBUTING](../CONTRIBUTING.md). Ordinary pushes run checks only.
 
-1. Agree a release scope and a new version when changing artifact bytes. Preserve package entrypoints, UUIDs, dependency pins and licences unless that release explicitly changes them.
+1. Agree a release scope and a new version when changing artifact bytes. Preserve package entrypoints, UUIDs, dependency pins and licences unless that release explicitly changes them. For a new version, set `store/listing.json` back to `publication_status: "preparation"`, keep `store_submission_allowed: false`, remove `publication_record_file`, and record the actual remaining review/publication gates. Never reuse a previous version’s observed publication record.
 2. Run portable checks and a fresh candidate build/package audit. Complete the relevant emulator, phone and watch checks, recording any gaps.
 3. Freeze the reviewed milestone explicitly, then make its source snapshot last:
 
@@ -45,6 +45,12 @@ existing tag identity, never replaces an asset, resumes an interrupted draft usi
 assets, and accepts an identical published release as unchanged. Changed, incomplete or
 unexpected published assets fail. To clear stale local output, choose a new empty `--output`
 directory; never delete frozen inputs to make preparation pass.
+
+## Published Store reference snapshots
+
+`npm run store:prepare` and `npm run store:check` select the frozen PBW under `releases/` when the listing is published; preparation listings retain their candidate/dist input. Explicit `--pbw` inputs are subject to the same checks.
+
+After publication, `store/publication.json` records the verified Store/GitHub version, UUID and exact PBW bytes. Local Store-kit preparation can reproduce a reference snapshot from those frozen bytes; it does not upload, replace a release asset or claim a new native build. Its published path audits PBW integrity and provenance without a local ELF. Future preparation candidates still require the normal SDK/ELF binding.
 
 ## Verification scope
 

@@ -1,14 +1,15 @@
 # Choosing an associated watch app
 
-Dashboard 0.4.0 offers common destinations and name search without asking users
+Dashboard offers common destinations and name search without asking users
 to type a UUID. The saved destination remains the existing explicit
 `openApp:{watchAppUuid,label}` setting. Choosing an app does not install it,
 launch it, authorize a command, or change a provider's identity.
 
 ## Current stock API limit
 
-The official plugin guide identifies mobile **1.17.0.1** as its current version
-and marks the `watch/app` source for the **next release**. The shipped SDK has no
+Store name search in this release filters results by Emery compatibility. It does not verify Gabbro compatibility or installation on a connected watch. Round 2 users should choose a known supported destination or use Custom app with a verified installed-app UUID.
+
+The plugin-guide and mobile **1.17.0.1** sources checked on **2026-11-05** marked the `watch/app` source for a later release. The SDK snapshot used by this implementation has no
 configuration-page app picker. `enumeratePlugins()` enumerates phone plugins;
 its UUIDs do not establish that corresponding native watchapps exist. Keep the
 advanced UUID option for sideloaded/private apps and already saved destinations.
@@ -34,7 +35,7 @@ Internet grant. The verified destinations are:
 These come from mobile 1.17.0.1's
 [native locker list](https://github.com/coredevices/mobileapp/blob/89f31dca3fd344ae9923fe9ca2f27b0f1f8a0230/libpebble3/src/commonMain/kotlin/io/rebble/libpebblecommon/locker/SystemApps.kt#L15)
 and [SystemAppIDs](https://github.com/coredevices/mobileapp/blob/89f31dca3fd344ae9923fe9ca2f27b0f1f8a0230/libpebble3/src/commonMain/kotlin/io/rebble/libpebblecommon/SystemAppIDs.kt#L7),
-checked on 5 November 2026. These two files are unchanged on current main.
+checked on 5 November 2026. These immutable source links document the reviewed identities.
 They are known identities, not an installed-app scan. Native options omit the
 redundant Pebble author suffix inside their named group. This suite's Timer
 remains under **Other apps**, using the exact UUID in its manifest. A store Timer
@@ -47,8 +48,8 @@ and defined in its
 Do not substitute the phone Weather plugin ID or an internal negative OS registry
 number. Weather availability requires the phone's
 [Weather capability](https://github.com/coredevices/PebbleOS/blob/2acda4073252801f74c7a29c6480a7a6e53424f6/fw/services/weather/weather_service.c#L297).
-Mobile metadata excludes Aplite for Weather, Health and Workout; Dashboard targets
-Emery. Health visibility also has a firmware
+Mobile metadata excludes Aplite for Weather, Health and Workout. Dashboard targets
+Time 2 and Round 2. Health visibility also has a firmware
 [capability condition](https://github.com/coredevices/PebbleOS/blob/2acda4073252801f74c7a29c6480a7a6e53424f6/fw/apps/system/health/health.c#L173).
 The picker explains that availability depends on watch and PebbleOS version;
 it does not assert that every listed target is present or launchable now.

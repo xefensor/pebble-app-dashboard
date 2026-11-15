@@ -44,7 +44,7 @@ def elf_sections(data):
     return result
 
 
-def audit_platforms(root, path):
+def audit_platforms(root, path, elf_binding=True):
     package = json.loads((root / "package.json").read_text())
     require(path.stat().st_size <= 4_400_000, "PBW exceeds the Store upload limit")
     report = {}
@@ -83,16 +83,18 @@ def audit_platforms(root, path):
                 resource_id, offset, length, checksum = struct.unpack_from("<4I", resources, 12 + i * 16)
                 require(resource_id == i + 1 and 4108 + offset + length <= len(resources), "Invalid resource directory entry")
                 require(crc32(resources[4108 + offset:4108 + offset + length]) == checksum, "Resource entry checksum differs")
-            elf = (root / "build" / platform / "pebble-app.elf").read_bytes()
-            sections = elf_sections(elf)
-            require(max(row[3] + row[5] for _, row in sections) == virtual, "ELF static extent differs")
-            require(max(row[3] + row[5] for _, row in sections if row[1] != 8) == loaded, "ELF load extent differs")
-            for name, row in sections:
-                if row[1] != 8 and name != ".header":
-                    require(binary[row[3]:row[3] + row[5]] == elf[row[4]:row[4] + row[5]], "Linked native section differs: " + name)
+            if elf_binding:
+                elf = (root / "build" / platform / "pebble-app.elf").read_bytes()
+                sections = elf_sections(elf)
+                require(max(row[3] + row[5] for _, row in sections) == virtual, "ELF static extent differs")
+                require(max(row[3] + row[5] for _, row in sections if row[1] != 8) == loaded, "ELF load extent differs")
+                for name, row in sections:
+                    if row[1] != 8 and name != ".header":
+                        require(binary[row[3]:row[3] + row[5]] == elf[row[4]:row[4] + row[5]], "Linked native section differs: " + name)
             report[platform] = {"binaryBytes": len(binary), "loadedBytes": loaded,
                 "staticBytes": virtual, "runtimeMemoryBudgetBytes": LIMITS[platform] - virtual,
                 "resourceBytes": len(resources), "resources": count,
                 "nativeSha256": hashlib.sha256(binary).hexdigest(),
                 "resourceSha256": hashlib.sha256(resources).hexdigest()}
-    return {"platforms": report, "scope": "Exact SDK/ELF/PBW identity and limits; runtime heap and physical behavior need separate checks"}
+    scope = ("Exact SDK/ELF/PBW identity and limits" if elf_binding else "Published PBW integrity and limits; no fresh SDK build or ELF comparison")
+    return {"platforms": report, "elfBinding": elf_binding, "scope": scope + "; runtime heap and physical behavior need separate checks"}

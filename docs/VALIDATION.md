@@ -1,5 +1,7 @@
 # Dashboard validation
 
+For the current published **1.0.2** evidence and publication status, use [release readiness](RELEASE-READINESS.md) and its hash-bound release validation. The chronological records below retain their original candidate versions, dates and test gaps; an old “unpublished” observation does not describe the current release.
+
 ## Development localization — 8 November 2026
 
 The development checkout supports 17 languages for native screens and phone

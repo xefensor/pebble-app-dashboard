@@ -1,12 +1,11 @@
 # Dashboard implementation contract
 
-Local stock-SDK Emery app, UUID `f76f9fc1-2944-4248-bcc5-3eea2af0183b`.
+Stock-SDK Time 2 and Round 2 app, UUID `f76f9fc1-2944-4248-bcc5-3eea2af0183b`.
 The approved Snapshot and contextual input rules in README.md take precedence
 over older suite drafts. Timer commands remain deferred; Back stays ordinary.
 No sibling app, firmware or mobile-app changes are required.
 
-The current 0.6.1 readability correction is described at the end of this file
-and in [REDESIGN.md](REDESIGN.md); the earlier 0.6.0 trial remains historical.
+This file records the DSH1 protocol and its implementation history. Current native geometry, type roles and display-preference delivery are defined by [UI](UI.md) and [maintenance contracts](MAINTENANCE.md). The 0.5.0/0.6.0/0.6.1 rendering sections below are historical stages, not the current font or layout reference.
 
 ## Historical 0.6.0 trial
 
@@ -302,6 +301,8 @@ never a bare enlarged summary. Pin default action remains a direct tap.
 
 ## Native presentation/lifecycle
 
+The source/capability rules below remain applicable. The original DSH1 colour path described here is now complemented by the verified UI-preference adapter: native key 3 and its exact persistence receipt take precedence over snapshot colours. See [current preference ownership](MAINTENANCE.md#ui-preferences-delivery).
+
 Snapshot reserves one large activity card, one latest-notification card and two
 mixed pin rows, with a right-side contextual action bar. Missing sections show
 useful empty states; do not inject fake data. Built-in Weather and battery pins
@@ -363,7 +364,9 @@ Group Back restores overview selection; controls Back restores the originating i
 Native loading/offline/permission failures stay navigable. New view requests
 invalidate old responses; timed-out requests cannot leave an indefinite spinner.
 
-## Readability revision 0.6.1
+<span id="readability-revision-061"></span>
+
+## Historical readability revision 0.6.1
 
 The review branch uses Roboto Condensed Bold 26/24/22/20 utility roles and Fredoka
 numeric values. `dashboard_layout.h` isolates compact exact-PFO ink bounds and

@@ -2,6 +2,8 @@
 
 ## On the watch
 
+Install **Dashboard 1.0.2** from [Pebble Store](https://apps.repebble.com/603d814e961c40308c98ce63) or its matching [GitHub PBW](https://github.com/xefensor/pebble-app-dashboard/releases/download/v1.0.2/Dashboard-1.0.2.pbw).
+
 Snapshot shows one current activity, one latest notification and the first
 two Pinned items. The activity can come from any supported source. Fewer visible
 items make room for larger text, clocks and icons. A right-side action bar shows
@@ -175,5 +177,5 @@ immediately. Old session frames, expired bindings and stale commands are rejecte
   watch. It opens the whole app. A dispatched platform action cannot be recalled.
 - Back keeps stock behavior. PebbleOS reserves held Back to exit to the launcher;
   custom Back shortcuts remain deferred. No global success-exit override is set.
-- This is a development testing build, not an appstore publication or a claim that every
-  arbitrary plugin schema/action has been tested on a real phone.
+- Dashboard is published in Pebble Store. That status does not claim that every
+  arbitrary plugin schema/action has been tested on a real phone. See [release readiness](RELEASE-READINESS.md) for the exact evidence scope.

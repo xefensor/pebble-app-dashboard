@@ -65,7 +65,7 @@ needs explicit scope.
 
 Interface translations live in `src/common/translations.json`. `nativeWords` provides
 compact watch wording; `@header:` entries fit the narrow utility headers without
-shortening body text. `nativeLayout` retains the earlier custom-font width expectations for historical tooling. Development watch rendering uses the exact native PebbleOS role profiles.
+shortening body text. `nativeLayout` retains the earlier custom-font width expectations for historical tooling. Current watch rendering uses the exact native PebbleOS role profiles.
 After editing the catalogue, run `python3 scripts/generate-localization.py` and
 `node scripts/generate-config.cjs`. Native strings load one language at a time from
 a bounded resource buffer. `npm test` checks catalogue/placeholder parity and
@@ -92,5 +92,6 @@ kit bytes and make the standalone source ZIP. It refuses an existing version
 and writes `releases/SHA256SUMS-VERSION.txt`; old root checksums and artifacts
 remain untouched. Commit these files locally, then run `npm run release:prepare`
 to validate committed HEAD. No build, tag, upload or publication happens during
-freezing or preparation. The current candidate's physical-device and account
-gates remain in `docs/RELEASE-READINESS.md`.
+freezing or preparation. Current publication status and the actual evidence gaps
+remain in `docs/RELEASE-READINESS.md`. A future version needs its own reviewed
+scope; completed publication does not imply physical-device testing.

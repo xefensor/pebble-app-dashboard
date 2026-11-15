@@ -1,66 +1,60 @@
 # Dashboard
 
-A stock PebbleOS app showing a current activity, the latest notification and two configurable
-pins.
+A current activity, the latest available notification and two configurable pins in one overview.
 
-## Store update 1.0.1
+![Dashboard XOCE banner with green structured panels and a native overview example.](store/emery-family-banner.png)
 
-Current source prepares Dashboard 1.0.1 for the reviewed Store update. The new numeric version supersedes the existing public 1.0.0 binary without changing the public UUID. Its exact PBW, Store package, source and checksums are under `releases/`; earlier artifacts remain unchanged.
-
-## Activities: see what is happening now
-
-Activities are live updates shown by compatible XOCE apps and watchfaces, such as a countdown, music or a new notification. This feature connects compatible XOCE products; support depends on the app or watchface you choose.
-
-Start a countdown in Timer and open Dashboard to see its activity in the overview. Hold Up to browse all available activities. Dashboard has its own activity order and does not pause or resume timers; open Timer to change the countdown.
-
-Sharing needs plugin support in the official Pebble phone app, the required permissions and a connected phone. Weather and battery readings use separate reading settings. Music and notification integration requires Android. Open Activity is optional; you can always open Timer from the watch’s app list.
+[Artwork provenance](store/artwork-provenance.json). Native emulator example capture.
 
 ## Download
 
-[Version 0.6.3](https://github.com/xefensor/pebble-app-dashboard/releases/tag/v0.6.3) is a development prerelease.
+**Dashboard 1.0.2 is published in [Pebble Store](https://apps.repebble.com/603d814e961c40308c98ce63).**
+The [product page](https://xefensor.github.io/xoce/projects/dashboard/) provides installation, setup, support and privacy links.
 
-[PBW](https://github.com/xefensor/pebble-app-dashboard/releases/download/v0.6.3/Dashboard-0.6.3.pbw),
-[source](https://github.com/xefensor/pebble-app-dashboard/releases/download/v0.6.3/Dashboard-0.6.3-source.zip),
-[debug files](https://github.com/xefensor/pebble-app-dashboard/releases/download/v0.6.3/Dashboard-0.6.3-debug.zip), and
-[checksums](https://github.com/xefensor/pebble-app-dashboard/releases/download/v0.6.3/SHA256SUMS.txt).
+Matching [GitHub release v1.0.2](https://github.com/xefensor/pebble-app-dashboard/releases/tag/v1.0.2):
 
-Install the PBW through the Pebble phone app. No separate library installation is needed.
+- [PBW](https://github.com/xefensor/pebble-app-dashboard/releases/download/v1.0.2/Dashboard-1.0.2.pbw)
+- [Source](https://github.com/xefensor/pebble-app-dashboard/releases/download/v1.0.2/Dashboard-1.0.2-source.zip)
+- [Debug files](https://github.com/xefensor/pebble-app-dashboard/releases/download/v1.0.2/Dashboard-1.0.2-debug.zip)
+- [Checksums](https://github.com/xefensor/pebble-app-dashboard/releases/download/v1.0.2/SHA256SUMS.txt)
 
-Choose activity sources and pins in the phone settings. Each pin has separate reading, Select
-action and Hold Select destination choices. Enable the permissions needed by your chosen
-sources. Timer Pause/Resume from Dashboard remains deferred.
-
-[Usage and controls](docs/USAGE.md) · [Current UI](docs/UI.md).
+Install one PBW through the Pebble phone app. It includes the watchapp and its phone-side components; no separate library installation is needed. Earlier releases remain available in [release history](https://github.com/xefensor/pebble-app-dashboard/releases).
 
 ## Compatibility
 
-The release candidate targets **Pebble Time 2 / Emery** and **Round 2 / Gabbro**, using **Pebble SDK 4.44**. Duo is deferred. Portable and
-emulator evidence is versioned; physical phone/watch checks retain their documented gaps.
-Existing screenshots keep their original version and provenance.
+The published release targets **Pebble Time 2 / Emery** and **Round 2 / Gabbro**, built with **Pebble SDK 4.44**. Duo is excluded.
+
+Sharing readings and activities needs plugin support in the official Pebble phone app, the permissions required by your sources and a connected phone. Built-in music and notifications require Android.
 
 ## Setup and use
 
-Install the PBW, connect the phone and configure sources and pins in its settings. Tap Select for the declared action, hold Select for the exact associated app, and hold Up/Down from Snapshot for Activities/Pinned. See [controls and safety rules](docs/UI.md).
+Choose your activity sources and pins in the phone settings. Each pin has separate reading, Select action and Hold Select destination choices. Tap Select for an available action and hold Select for its associated app. Hold Up or Down from Snapshot to browse Activities or Pinned. Dashboard does not pause or resume Timer; open Timer to change its countdown.
 
-The version notes below describe the published download. Development candidates
-remain separate; use [CONTRIBUTING](CONTRIBUTING.md) for local builds.
+[Usage and controls](docs/USAGE.md) · [Current UI](docs/UI.md) · [Troubleshooting and support](SUPPORT.md).
 
-## Version 0.6.3
+## Activities: see what is happening now
 
-- Adopt shared XOCE headers, readable rows, full-height action rails, icons and stock Pebble action-bar feedback.
-- Keep immediate selection, complete first-use help, safe Cancel-first confirmations and exact tap/hold action bindings.
-- Bundle UI 0.1.1 and the confirmed stay-open phone settings page.
+Activities are updates about something happening now, such as a countdown, music or a notification. Compatible XOCE products decide how to display them.
 
-## Version 1.0.0 — stable release preparation
+Start a countdown in Timer and open Dashboard to see its activity in the overview. Hold Up to browse available activities. Dashboard has its own source order and visibility choices, separate from either watchface. Available actions depend on the selected source.
 
-Add Time 2 and Round 2 SDK 4.44 builds, compact overview fitting and current permission disclosures.
+Weather and battery readings use separate reading settings. Open Activity is optional; an app can always be opened from the watch's app list.
 
-Xef accepted the reviewed implementation for stable release preparation on 2026-11-13. Actual test coverage remains recorded separately; no physical-device result is implied. Publication is a separate step.
+## Display settings and languages
+
+The phone settings provide **Text Size** and **Light/Dark** watch appearance. Follow Pebble text size uses the watch's preference. Automatic Follow Pebble appearance is unavailable in this build; the page explains the saved Light/Dark fallback. Phone-page appearance follows the phone independently.
+
+A confirmed Save means the choices were stored on the phone. Pending watch delivery and Applied on watch are separate states. Saving stays open on the supported embedded settings route; the legacy return-URL route follows its documented closing behaviour.
+
+The release supports English, Czech, Slovak, German, French, Spanish, Italian, Portuguese, Dutch, Polish, Danish, Swedish, Norwegian, Finnish, Hungarian, Romanian and Turkish. Unsupported languages use English. Provider text, user labels and saved bindings keep their original values.
+
+## Verification scope
+
+[Release readiness](docs/RELEASE-READINESS.md) links the version-bound source, package and emulator evidence. Publication is complete; no physical phone/watch or live-provider result is implied by that status. Earlier captures retain their actual versions and provenance.
 
 ## Development
 
-Use Node 22, Python 3.12 and a C compiler. SDK builds additionally need Pebble SDK 4.44 on
-PATH.
+Use the pinned Node 22.23.4 and Python 3.12.15 runtimes and a C compiler. Native builds additionally need Pebble SDK 4.44; the [contributor guide](CONTRIBUTING.md) documents its isolated bootstrap.
 
 ```sh
 npm ci --ignore-scripts
@@ -69,17 +63,19 @@ npm run build
 npm run check:artifact
 ```
 
-[Contributor guide](CONTRIBUTING.md) · [Release preparation](docs/RELEASING.md) · [History index](docs/history/index.md).
-Development outputs belong in ignored `build/`; published archives stay frozen.
+[Contributor guide](CONTRIBUTING.md) · [Release workflow](docs/RELEASING.md) · [History index](docs/history/index.md).
+Development outputs belong in ignored `build/`; published archives stay frozen. The current bundled UI package is 0.1.3; Activities is bundled at 0.4.5.
 
 ## Licence
 
-[PolyForm Noncommercial 1.0.0](LICENSE). Preserve bundled third-party notices and attribution.
+[PolyForm Noncommercial 1.0.0](LICENSE). Preserve [third-party notices](THIRD-PARTY-NOTICES.md) and attribution. See [privacy](PRIVACY.md) for app-owned data handling.
 
-The development checkout supports English, Czech, Slovak, German, French, Spanish,
-Italian, Portuguese, Dutch, Polish, Danish, Swedish, Norwegian, Finnish, Hungarian,
-Romanian and Turkish on watch screens and phone settings. Watch text follows the
-watch language; settings follow the phone language. Regional locale codes and
-Norwegian nb/nn are accepted; unsupported languages use English. Provider text,
-user labels and saved bindings keep their original values. Frozen release downloads
-retain their original language coverage until a new release is published.
+## Earlier release notes
+
+<span id="store-update-101"></span>
+
+<span id="version-063"></span>
+
+<span id="version-100--stable-release-preparation"></span>
+
+The earlier Store-update preparation, development download and version notes remain in the [README snapshot before this documentation refresh](https://github.com/xefensor/pebble-app-dashboard/blob/415410e782b5aedbb9cfa03724aedc5dab785305/README.md). Those notes describe their original versions and evidence, not the current installation.

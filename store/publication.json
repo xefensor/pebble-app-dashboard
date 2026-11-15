@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "publication_status": "published",
+  "version": "1.0.2",
+  "uuid": "f76f9fc1-2944-4248-bcc5-3eea2af0183b",
+  "store_url": "https://apps.repebble.com/603d814e961c40308c98ce63",
+  "github_release_url": "https://github.com/xefensor/pebble-app-dashboard/releases/tag/v1.0.2",
+  "pbw_url": "https://github.com/xefensor/pebble-app-dashboard/releases/download/v1.0.2/Dashboard-1.0.2.pbw",
+  "pbw_sha256": "98e0c2098f769a6963b26a2f7003953aecf44a7a8c95ad76ef059d2776f63b72",
+  "verified_on": "2026-11-15"
+}

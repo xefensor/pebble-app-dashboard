@@ -8,7 +8,7 @@
   "runtimeSourceCommit": "511b4175020d66efc012207613acac34716c06dc",
   "storeSourceCommit": "511b4175020d66efc012207613acac34716c06dc",
   "publicStoreVersionCheckedOn20261114": "1.0.0",
-  "binaryAction": "New Release: upload the exact final GitHub PBW after publication",
+  "binaryAction": "Published reference: this version is already available. Do not reupload or replace its frozen PBW; publication.json records the verified current publication.",
   "description": "description.txt",
   "releaseNotes": "release-notes.txt",
   "screenshotsInUploadOrder": {
@@ -47,5 +47,6 @@
   "descriptionHashes": {
     "description.txt": "8e490478318097a94947e46d8776ae35fc93077f9c680fb382d6ba4ab9b208ff"
   },
-  "sourceCommitRecord": "../docs/qa/release-1.0.2/source-commit.json"
+  "sourceCommitRecord": "../docs/qa/release-1.0.2/source-commit.json",
+  "publicationRecord": "publication.json"
 }

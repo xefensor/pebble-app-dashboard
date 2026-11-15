@@ -1,11 +1,8 @@
 # Dashboard: current UI
 
-The current release is 0.6.3. Earlier downloads and frozen evidence retain
-their original versions and interfaces.
+The current published release is **1.0.2**. [Install it](../README.md#download) or read [release readiness](RELEASE-READINESS.md) for version-bound evidence. Earlier downloads and frozen evidence retain their original versions and interfaces.
 
-The published 0.6.3 download keeps its original interface. The local development
-candidate uses native PebbleOS type roles and navigation, with the same SDK
-version label and public identities. See [native navigation verification](native-navigation-checkpoint.md).
+The published release uses native PebbleOS type roles and navigation. The unchanged UUID and compatible storage/wire formats retain existing settings. Earlier native work is recorded in [native navigation verification](native-navigation-checkpoint.md).
 
 Tap Select performs the selected declared action or Notifications shortcut;
 hold Select opens only the exact associated app. Hold Up/Down opens
@@ -38,7 +35,7 @@ needed. Non-media command detail and Cancel-first confirmation use measured
 MenuLayers, including scrollable context and complete command labels. Media
 retains its artwork and three icon controls.
 
-The pinned shared UI candidate supplies the exact PebbleOS Header,
+The bundled `pebble-xoce-ui` 0.1.3 package supplies the exact PebbleOS Header,
 MenuCellTitle, MenuCellSubtitle and Footer font profiles for Emery's three OS
 sizes. The app resolves the launch-time size once and uses it for both measure
 and paint. No custom font resources are bundled. Dominant timer numbers use
@@ -66,7 +63,7 @@ Ordinary confirmation tests wait for the actual new Window before testing
 Cancel; receipt of the phone response alone is not watch-window readiness.
 Rapid-input checks remain separate and require no wrong-target dispatch.
 
-The development settings page adds Text Size (Follow Pebble / Small / Medium /
+The phone settings page includes Text Size (Follow Pebble / Small / Medium /
 Large) and Appearance (Follow Pebble / Light / Dark) to the existing Save flow.
 Pins, source bindings and the DSH1 protocol retain their current schema. The
 display status distinguishes saved phone choices from watch-confirmed application.
@@ -101,20 +98,20 @@ fresh browser checks remain explicitly separate.
 Supporting/help text uses the normal foreground colour rather than blended grey.
 This keeps black text on white and white text on black readable without changing
 type sizes or layouts. See the [contrast checkpoint](text-contrast-checkpoint.md)
-for the current candidate and verification scope.
+for that checkpoint’s candidate and verification scope.
 
 The compact-layout implementation and current verification scope are recorded in
 [the compact layout checkpoint](compact-layout-checkpoint.md).
 
 
-## Round 2 development layout
+<span id="round-2-development-layout"></span>
+
+## Round 2 layout
 
 Gabbro uses the complete 260×260 physical display. Text and artwork are fitted
 inside the chord for their vertical band; the shared UI library owns only
 geometry and drawing. Time 2 retains its established rectangular composition.
-The SDK 4.44 reference and disposable candidate evidence are in the workspace's
-`Round2-Development/` directory. This is development work; frozen release files
-and historical QA are unchanged. No physical Round 2 or Android result is implied.
+The released Gabbro implementation uses SDK 4.44. Earlier disposable reference evidence was recorded under `Round2-Development/` in its original review workspace; the version-bound release validation is linked from [release readiness](RELEASE-READINESS.md). Historical QA remains unchanged. No physical Round 2 or Android result is implied.
 
 The overview reserves all four panels without scrolling. Complete values and
 units take precedence over icons and optional labels. Native collections and

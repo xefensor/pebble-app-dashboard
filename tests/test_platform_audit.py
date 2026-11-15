@@ -42,6 +42,15 @@ class Platforms(unittest.TestCase):
             with self.subTest(platform=platform),tempfile.TemporaryDirectory() as d:
                 root=Path(d);report=a.audit_platforms(root,write(root,fixture(root,platform)))
                 self.assertEqual(report['platforms'][platform]['staticBytes'],71000)
+    def test_integrity_only_mode_needs_no_local_elf_but_default_keeps_binding(self):
+        with tempfile.TemporaryDirectory() as d:
+            root=Path(d);files=fixture(root);path=write(root,files)
+            (root/'build/emery/pebble-app.elf').unlink()
+            with self.assertRaises(FileNotFoundError):a.audit_platforms(root,path)
+            report=a.audit_platforms(root,path,elf_binding=False)
+            self.assertFalse(report['elfBinding']);self.assertIn('no fresh SDK build',report['scope'])
+            files['emery/pebble-app.bin'][150]^=1
+            with self.assertRaisesRegex(ValueError,'checksum'):a.audit_platforms(root,write(root,files),elf_binding=False)
     def test_flint_retains_64k_limit(self):
         with tempfile.TemporaryDirectory() as d:
             root=Path(d);path=write(root,fixture(root,'flint'))
